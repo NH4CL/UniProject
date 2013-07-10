@@ -1,0 +1,10 @@
+﻿@{
+    Layout = null;
+}
+
+<span id="first" onclick="first()"> << </span>
+<span id="last" onclick="last()"> < </span>
+<span id="inputNow"><input readonly="readonly" id="pageNow" type="text" value="@ViewBag.page" /></span>
+<span id="next" onclick="next()"> > </span>
+<span id="tail" onclick="tail()"> >> </span>
+<span id="total">共 @ViewBag.total 页</span>

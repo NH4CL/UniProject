@@ -1,0 +1,1375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B2DD90AD-939C-434D-A2D1-989BCBD87BBF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LiveAzure.Resource</RootNamespace>
+    <AssemblyName>LiveAzure.Resource</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Common.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Finance\FinanceInvoice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FinanceInvoice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Finance\FinancePayment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FinancePayment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Finance\FinancePayType.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FinancePayType.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralAction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralAction.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralConfig.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralCultureUnit.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralCultureUnit.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralErrorReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralErrorReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralLargeItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralLargeItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralLargeObject.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralLargeObject.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralMeasureUnit.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralMeasureUnit.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralMessagePending.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralMessagePending.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralMessageReceive.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralMessageReceive.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralMessageTemplate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralMessageTemplate.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralOptional.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralOptional.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralOptItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralOptItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralPrivateCategory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralPrivateCategory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralPrivItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralPrivItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralPrivTemplate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralPrivTemplate.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralProgNode.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralProgNode.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralProgram.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralProgram.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralRegion.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralRegion.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralResItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralResItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralStandardCategory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralStandardCategory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\General\GeneralTodoList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralTodoList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Mall\MallArticle.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallArticle.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Mall\MallArtPosition.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallArtPosition.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Mall\MallArtPublish.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallArtPublish.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Mall\MallCart.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallCart.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Mall\MallDisabledIp.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallDisabledIp.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Mall\MallSensitiveWord.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MallSensitiveWord.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberAddress.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberAddress.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberChannel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberChannel.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberLevel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberLevel.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberOrganization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberOrganization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberOrgAttribute.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberOrgAttribute.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberOrgChannel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberOrgChannel.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberOrgCulture.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberOrgCulture.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberOrgCulture.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberOrgCulture.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberPoint.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberPoint.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberPrivilege.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberPrivilege.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberPrivItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberPrivItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberRole.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberRole.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberSubscribe.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberSubscribe.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberUsePoint.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberUsePoint.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberUser.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberUser.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberUserAttribute.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberUserAttribute.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberUserEvent.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberUserEvent.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\MemberUserShortcut.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberUserShortcut.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member\OrganizationBase.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrganizationBase.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ModelBase.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelBase.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\OrderAttribute.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderAttribute.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\OrderHisItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderHisItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\OrderHistory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderHistory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\OrderInformation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderInformation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\OrderItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\OrderProcess.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderProcess.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\OrderShipping.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderShipping.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\OrderSplitPolicy.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderSplitPolicy.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\PromotionCoupon.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PromotionCoupon.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\PromotionInformation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PromotionInformation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\PromotionMutex.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PromotionMutex.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Order\PromotionProduct.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PromotionProduct.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductExtendAttribute.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductExtendAttribute.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductExtendCategory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductExtendCategory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductGallery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductGallery.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductInfoItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductInfoItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductInformation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductInformation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnAdjust.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnAdjust.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnLevelDiscount.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnLevelDiscount.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnPayment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnPayment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnRelation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnRelation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnSale.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnSale.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnShipArea.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnShipArea.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnShipping.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnShipping.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnTemplate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnTemplate.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product\ProductOnUnitPrice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductOnUnitPrice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Purchase\PurchaseHisItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseHisItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Purchase\PurchaseHistory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseHistory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Purchase\PurchaseInformation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseInformation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Purchase\PurchaseInspection.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseInspection.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Purchase\PurchaseInspItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseInspItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Purchase\PurchaseItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Purchase\PurchaseSupplier.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseSupplier.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Shipping\ShippingArea.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShippingArea.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Shipping\ShippingEnvelope.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShippingEnvelope.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Shipping\ShippingInformation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShippingInformation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseInformation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseInformation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseInItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseInItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseInventory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseInventory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseInvItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseInvItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseLedger.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseLedger.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseMoveItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseMoveItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseMoving.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseMoving.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseOutDelivery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseOutDelivery.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseOutItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseOutItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseOutSacn.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseOutSacn.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseRegion.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseRegion.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseShelf.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseShelf.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseShipping.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseShipping.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseSkuShelf.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseSkuShelf.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseStockIn.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseStockIn.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Warehouse\WarehouseStockOut.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseStockOut.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stage\CategoryController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CategoryController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\CategoryController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CategoryController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\ConfigController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\ConfigController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\FinanceController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FinanceController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\FinanceController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FinanceController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\HomeController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HomeController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\HomeController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HomeController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\OptionalController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OptionalController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\OptionalController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OptionalController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\OrderController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\OrganizationController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrganizationController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\OrganizationController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrganizationController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\PrivilegeController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrivilegeController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\ProductController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\ProductController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\ProgramController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProgramController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\ProgramController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProgramController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\PromotionController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PromotionController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\PurchaseController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\PurchaseController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\RegionController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RegionController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\RegionController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RegionController.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\OrderController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\ResourceController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\UserController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\WarehouseController.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Stage\WarehouseController.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseController.zh-CN.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Portal\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Finance\FinanceInvoice.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FinanceInvoice.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Finance\FinanceInvoice.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Finance\FinancePayment.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FinancePayment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Finance\FinancePayment.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Finance\FinancePayType.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FinancePayType.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Finance\FinancePayType.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralAction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralAction.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralConfig.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralConfig.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralCultureUnit.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralCultureUnit.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralCultureUnit.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralErrorReport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralErrorReport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralErrorReport.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralLargeItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralLargeItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralLargeItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralLargeObject.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralLargeObject.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralLargeObject.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralMeasureUnit.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralMeasureUnit.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralMeasureUnit.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralMessagePending.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralMessagePending.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralMessagePending.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralMessageReceive.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralMessageReceive.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralMessageReceive.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralMessageTemplate.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralMessageTemplate.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralMessageTemplate.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralOptional.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralOptional.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralOptItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralOptItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralPrivateCategory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralPrivateCategory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralPrivateCategory.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralPrivItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralPrivItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralPrivItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralPrivTemplate.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralPrivTemplate.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralPrivTemplate.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralProgNode.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralProgNode.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralProgNode.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralProgram.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralProgram.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralProgram.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralRegion.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralRegion.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralRegion.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralResItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralResItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralResItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralResource.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralOptional.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralOptItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralStandardCategory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralStandardCategory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralStandardCategory.zh-CN.resx" />
+    <EmbeddedResource Include="Model\General\GeneralTodoList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralTodoList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\General\GeneralTodoList.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Mall\MallArticle.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MallArticle.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Mall\MallArticle.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Mall\MallArtPosition.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MallArtPosition.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Mall\MallArtPosition.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Mall\MallArtPublish.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MallArtPublish.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Mall\MallArtPublish.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Mall\MallCart.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MallCart.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Mall\MallCart.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Mall\MallDisabledIp.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MallDisabledIp.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Mall\MallDisabledIp.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Mall\MallSensitiveWord.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MallSensitiveWord.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Mall\MallSensitiveWore.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberAddress.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberAddress.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberAddress.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberChannel.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberChannel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberChannel.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberLevel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberLevel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberLevel.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberOrganization.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberOrganization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberOrganization.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberOrgAttribute.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberOrgAttribute.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberOrgAttribute.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberOrgChannel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberOrgChannel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberOrgChannel.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberOrgCulture.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberOrgCulture.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberOrgCulture.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberOrgCulture.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberPoint.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberPoint.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberPoint.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberPrivilege.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberPrivilege.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberPrivilege.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberPrivItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberPrivItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberPrivItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberRole.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberRole.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberRole.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberSubscribe.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberSubscribe.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberSubscribe.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberUsePoint.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberUsePoint.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberUsePoint.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberUser.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberUser.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberUser.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberUserAttribute.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberUserAttribute.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberUserAttribute.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberUserEvent.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberUserEvent.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberUserEvent.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\MemberUserShortcut.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemberUserShortcut.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\MemberUserShortcut.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Member\OrganizationBase.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrganizationBase.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Member\OrganizationBase.zh-CN.resx" />
+    <EmbeddedResource Include="Model\ModelBase.zh-CN.resx" />
+    <EmbeddedResource Include="Model\ModelBase.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModelBase.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderHisItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderHisItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderAttribute.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderAttribute.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderAttribute.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\OrderHisItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\OrderHistory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderHistory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderHistory.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\OrderInformation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderInformation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderInformation.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\OrderItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\OrderProcess.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderProcess.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderProcess.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\OrderShipping.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderShipping.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderShipping.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\OrderSplitPolicy.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderSplitPolicy.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\OrderSplitPolicy.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\PromotionCoupon.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PromotionCoupon.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\PromotionCoupon.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\PromotionInformation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PromotionInformation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\PromotionInformation.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\PromotionMutex.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PromotionMutex.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\PromotionMutex.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Order\PromotionProduct.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PromotionProduct.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Order\PromotionProduct.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductExtendAttribute.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductExtendAttribute.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductExtendAttribute.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductExtendCategory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductExtendCategory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductExtendCategory.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductGallery.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductGallery.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductGallery.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductInfoItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductInfoItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductInfoItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductInformation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductInformation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductInformation.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnAdjust.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnAdjust.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnAdjust.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnLevelDiscount.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnLevelDiscount.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnLevelDiscount.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnPayment.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnPayment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnPayment.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnRelation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnRelation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnRelation.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnSale.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnSale.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnSale.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnShipArea.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnShipArea.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnShipArea.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnShipping.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnShipping.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnShipping.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnTemplate.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnTemplate.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnTemplate.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Product\ProductOnUnitPrice.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductOnUnitPrice.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Product\ProductOnUnitPrice.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Purchase\PurchaseHisItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseHisItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Purchase\PurchaseHisItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Purchase\PurchaseHistory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseHistory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Purchase\PurchaseHistory.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Purchase\PurchaseInformation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseInformation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Purchase\PurchaseInformation.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Purchase\PurchaseInspection.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseInspection.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Purchase\PurchaseInspection.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Purchase\PurchaseInspItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseInspItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Purchase\PurchaseInspItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Purchase\PurchaseItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Purchase\PurchaseItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Purchase\PurchaseSupplier.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseSupplier.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Purchase\PurchaseSupplier.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Shipping\ShippingArea.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShippingArea.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Shipping\ShippingArea.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Shipping\ShippingEnvelope.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShippingEnvelope.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Shipping\ShippingEnvelope.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Shipping\ShippingInformation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShippingInformation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Shipping\ShippingInformation.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseInformation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseInformation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseInformation.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseInItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseInItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseInItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseInventory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseInventory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseInventory.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseInvItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseInvItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseInvItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseLedger.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseLedger.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseLedger.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseMoveItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseMoveItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseMoveItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseMoving.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseMoving.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseMoving.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseOutDelivery.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseOutDelivery.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseOutDelivery.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseOutItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseOutItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseOutItem.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseOutSacn.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseOutSacn.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseOutScan.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseRegion.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseRegion.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseRegion.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseShelf.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseShelf.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseShelf.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseShipping.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseShipping.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseShipping.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseSkuShelf.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseSkuShelf.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseSkuShelf.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseStockIn.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseStockIn.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseStockIn.zh-CN.resx" />
+    <EmbeddedResource Include="Model\Warehouse\WarehouseStockOut.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseStockOut.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Warehouse\WarehouseStockOut.zh-CN.resx" />
+    <EmbeddedResource Include="Stage\CategoryController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CategoryController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\CategoryController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CategoryController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\ConfigController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfigController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\ConfigController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfigController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\FinanceController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FinanceController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\FinanceController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FinanceController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\HomeController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>HomeController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\HomeController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>HomeController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\OptionalController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OptionalController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\OptionalController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OptionalController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\OrderController.zh-CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\OrganizationController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrganizationController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\OrganizationController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrganizationController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\PrivilegeController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrivilegeController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\PrivilegeController.zh-CN.resx" />
+    <EmbeddedResource Include="Stage\ProductController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\ProductController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\ProgramController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProgramController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\ProgramController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProgramController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\PromotionController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PromotionController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\PromotionController.zh-CN.resx" />
+    <EmbeddedResource Include="Stage\PurchaseController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\PurchaseController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchaseController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\RegionController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RegionController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\RegionController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RegionController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\OrderController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\ResourceController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\ResourceController.zh-CN.resx" />
+    <EmbeddedResource Include="Stage\UserController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\UserController.zh-CN.resx" />
+    <EmbeddedResource Include="Stage\WarehouseController.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stage\WarehouseController.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WarehouseController.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

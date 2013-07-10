@@ -1,0 +1,17 @@
+﻿@using MVC.Controls.Tab;
+@using MVC.Controls;
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Tab(new TabControl()
+            .SetCacheTabs(true)
+            .AddTabItem(new TabItem()
+                    .SetContent(MVC.Controls.ContentType.RemoteAction, "StandardCategoryIndex")
+                    .SetTitle(@LiveAzure.Resource.Stage.CategoryController.StandarCategory))
+                
+            .AddTabItem(new TabItem()
+                .SetContent(MVC.Controls.ContentType.RemoteAction, "PrivateCategoryIndex")
+                .SetTitle(@LiveAzure.Resource.Stage.CategoryController.PrivateCategory)))
+
+

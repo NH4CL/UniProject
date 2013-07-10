@@ -1,0 +1,39 @@
+﻿@using LiveAzure.Controls.LiveEditor
+@using System.Globalization
+@using LiveAzure.Controls.LiveEditor
+@model LiveAzure.Models.General.GeneralLargeObject
+@Html.HiddenFor(model => model.Gid)
+@Html.HiddenFor(model => model.Culture)
+@{
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id= Guid.NewGuid().ToString();
+    }
+    LiveEditor editor = ViewBag.Editor as LiveEditor;
+    if (editor == null)
+    {
+        editor = new LiveEditor();
+    }
+}
+<img src="@Url.Content("~/Content/themes/base/images/name_" + Model.Culture + ".jpg")"
+    alt="@(Model.CultureName)" title="@(Model.CultureName)" />
+<br />
+@Html.TextAreaFor(model => model.CLOB, new { id = id })
+@Html.LiveEditor(editor.SetName(id))
+@{
+    int i = -1;
+    foreach(LiveAzure.Models.General.GeneralLargeItem item in Model.LargeItems)
+    {
+        i++;
+        @Html.Hidden(string.Format("LargeItems[{0}].Gid", i), item.Gid)
+        @Html.Hidden(string.Format("LargeItems[{0}].Culture", i), item.Culture)
+        <img src="@Url.Content("~/Content/themes/base/images/name_" + item.Culture + ".jpg")"
+            alt="@(item.CultureName)" title="@(item.CultureName)"/>
+        <br />
+        @Html.TextArea(string.Format("LargeItems[{0}].CLOB", i),
+            Model.LargeItems.ElementAt(i).CLOB, new { id = id + "_item_" + i })
+        @Html.LiveEditor(editor.SetName(id + "_item_" + i))
+        <br />
+    }
+}

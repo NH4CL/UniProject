@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+@using System.Globalization
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/demo/demoStyle/demo.css")" rel="stylesheet" type="text/css" />
+    <link href="../../demo/start.css" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/demo/zTreeStyle/zTreeStyle.css")" rel="stylesheet" type="text/css" />
+    <link href="../../demo/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+    <link href="../../demo/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/LiveTree/treeObject.js" type="text/javascript"></script>
+    <script src="../../Scripts/LiveTree/jquery.ztree-2.6.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/LiveResourceEditor/CashEditor.js" type="text/javascript"></script>
+    @MVC.Controls.MVCControlsScriptManager.Instance.SetUseJqCustom(true, "1.8.2").RegisterScriptsAndStyles()
+</head>
+<body>
+    <div class="page">
+        <div id="header">
+            <div id="title">
+                <h1>我的 MVC 应用程序</h1>
+            </div>
+            <div id="logindisplay">
+                @Html.Partial("_LogOnPartial")
+            </div>
+            <div id="menucontainer">
+                <ul id="menu">
+                    <li>@Html.ActionLink("主页", "Index", "Home")</li>
+                    <li>@Html.ActionLink("关于", "About", "Home")</li>
+                    <li>@Html.ActionLink("树", "Index", "Tree")</li>
+                </ul>
+            </div>
+        </div>
+        <div id="main">
+            @RenderBody()
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+</body>
+</html>

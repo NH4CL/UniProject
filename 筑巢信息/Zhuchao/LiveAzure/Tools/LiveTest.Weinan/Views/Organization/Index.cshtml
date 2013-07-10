@@ -1,0 +1,66 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Member.MemberOrganization
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+    }
+    
+@*<h2>Index</h2>*@
+@Html.Grid(new GridControl()
+        .SetName("grid")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Organization/List")
+        .SetHeight("200")
+        .SetColumns<LiveAzure.Models.Member.MemberOrganization>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+                cs.Add(x => x.FullName.Matter).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.FullName);
+                cs.Add(x => x.ShortName.Matter).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.ShortName);
+                cs.Add(x => x.Ostatus).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Ostatus);
+                cs.Add(x => x.Sorting).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Sorting);
+            })
+       )
+       <br />
+       @*<input type="button" value="language" onclick="language()" />*@
+        <br />
+          <input type="button" value="Add" onclick="add()"/>
+          <input type="button" value="Edit" id="edit" onclick="edit()"/>
+          @*<input type="button" value="GoTab" id="gotab" onclick="goTab()"/>*@
+         
+      @{string s = @Html.GridDeleteButton(buttonText: "Delete", gridName: "grid", actionUrl: "/Organization/Delete");          
+              var aaa =new HtmlString(s);@aaa}
+       
+        <script type="text/javascript">
+            function language() {
+                window.open("/Organization/AddCulture");
+            }
+
+            function add() {
+                //                window.open("/Organization/OrganizationDefination");
+                window.location.href = "/Organization/OrganizationDefination";
+            }
+
+            function edit() {
+                var id = $("#grid").jqGrid("getGridParam", "selrow");
+//                alert("id = " + id);
+                if (id == null)
+                    alert("请选中一行");
+                else
+                    window.location.href = "/Organization/OrganizationDefination?id=" + id;
+//                    window.open("/Organization/OrganizationDefination?id=" + id);
+//                var rowData = $("#grid").jqGrid("getRowData", id);
+                //                $.getJSON("/Organization/Edit/id="+id, null, function(json))
+//                window.open("/Organization/OrganizationDefination?id=" + id);
+            }
+//            function goTab() {
+//                window.open("/Organization/OrganizationDefination?id=" + "333")
+//            }    
+//        
+           
+         </script>

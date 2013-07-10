@@ -1,0 +1,17 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Tab;
+
+
+@Html.Tab( new TabControl()
+    //.SetCacheTabs(false)
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "OrgDetail")
+            .SetTitle("OrgDetail"))
+    .AddTabItem(new TabItem()         
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "OrgChannel")
+            .SetTitle("OrgChannel"))
+    .AddTabItem(new TabItem()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "OrgAttribute")
+            .SetTitle("OrgAttribute"))
+        )

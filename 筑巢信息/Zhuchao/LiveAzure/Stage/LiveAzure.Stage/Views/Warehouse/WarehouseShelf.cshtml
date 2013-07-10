@@ -1,0 +1,176 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@{
+    ViewBag.Title = "WarehouseShelf";
+}
+<div>
+    Code<input type="text" id="SearchCode" />
+    Barcode<input type="text" id="SearchBarcode" />
+    Name<input type="text" id="SearchName" />
+    <input type="button" id="btnSearch" value="搜索" />
+</div>
+<span id="spanOrgSelect">
+    <select id="WarehouseOrgSelect" disabled="disabled"></select>
+</span>
+<span id="spanWarehouseSelect">
+    <select id="WarehouseSelect" disabled="disabled"></select>
+</span>
+<br />
+@Html.Grid(
+    new GridControl()
+        .SetName("ShelfGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl("/Warehouse/WarehouseShelfList")
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseShelf>(cs=>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code);
+                cs.Add(x => x.Barcode).SetEditable(true);
+                cs.Add(x => x.Name).SetEditable(true);
+                cs.Add(x => x.Brief).SetEditable(true);
+                cs.Add(x => x.Remark).SetEditable(true);
+            })
+            .UpdateDefaultPager(pager=>
+                pager
+                    .ShowSearch(false,false)
+            )
+    )
+    <input type="button" id="btnViewSKU" value="ViewSKU" />
+    <input type="button" id="btnAddShelf" value="Add" />
+    <input type="button" id="btnEditShelf" value="Update" />
+    @Html.Raw(Html.GridDeleteButton(
+        buttonText: "Delete",
+        gridName: "grid",
+        actionUrl: Url.Action("DeleteWarehouseShelf")))
+    @*//Edit还需要在处理一下*@
+    <input type="button" id="ExcelImporting" value="Excel数据导入" />
+<br />
+<div id="fileUpload" style="display:none">
+    @using (Html.BeginForm("UpdateXls", "Warehouse", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" id="uploadFile" name="uploadFile" value="请选择Excel文件" /><br/>
+        <input type="hidden" name="WhlID" id="WhlID"/>
+        <input type="submit" id="btnUpload" value="开始导入"/>
+        <input type="button" id="btnCancelImport" value="取消" />
+        <a href="@Url.Content("~/Content/Files/ImportWarehouseShelf.xls")">下载导入模板(2003)</a>
+        <a href="@Url.Content("~/Content/Files/ImportWarehouseShelf.xlsx")">下载导入模板(2007/2010)</a>
+    }
+</div>
+@*<script src="../../Scripts/jquery-1.4.4-vsdoc.js" type="text/javascript"></script>*@
+<script type="text/javascript">
+    $("#btnViewSKU").click(function () {
+        var id = $("#ShelfGrid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert("请先选择要查看的货架");
+            return false;
+        }
+        else {
+            document.location.replace("/Warehouse/WarehouseSKUShelf?shelfID=" + id);
+        }
+    });
+    $("#btnEditShelf").click(function () {
+        var shelfID = $("#ShelfGrid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert("请先选择要编辑的货架");
+        }
+        else {
+            document.location.replace("/Warehouse/WarehouseShelfEdit?shelfID=" + shelfID);
+        }
+    });
+    $("#btnAddShelf").click(function () {
+        var whID = $("#WarehouseSelect").val();
+        document.location.replace("/Warehouse/WarehouseShelfAdd?whID=" + whID);
+    });
+    $("#btnDelete").click(function () {
+        var id = $("#grid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert("请先选择要删除的货架");
+            return false;
+        }
+    });
+    $("#ExcelImporting").click(function () {
+        $("#ShelfSKU").empty();
+        $("#fileUpload").fadeIn("slow");
+    });
+    $("#btnUpload").click(function () {
+        var fileName = $("#uploadFile").val();
+        var seat = fileName.lastIndexOf(".");
+        var extension = fileName.substring(seat).toLowerCase();
+        var ddlWarehouse = $("#WarehouseSelect");
+        var hidWarehouse = $("#WhlID");
+        if (extension != ".xls" && extension != ".xlsx") {
+            alert("请选择Excel文件");
+            return false;
+        } else {
+            hidWarehouse.val(ddlWarehouse.val());
+            alert("开始上传");
+            return true;
+        }
+    });
+    $("#btnCancelImport").click(function () {
+        $("#fileUpload").fadeOut();
+    });
+    $("#btnSearch").click(function () {
+        var code = $("#SearchCode").val();
+        var barcode = $("#SearchBarcode").val();
+        var name = $("#SearchName").val();
+        var param = "";
+        if (code != "") param += ("&code=" + code);
+        if (barcode != "") param += ("&barcode=" + barcode);
+        if (name != "") param += ("&name=" + name);
+        $("#ShelfGrid").jqGrid('setGridParam',
+            { url: "/Warehouse/WareHouseShelfList?whID=" + $("#WarehouseSelect").val() + param });
+        $("#ShelfGrid").trigger("reloadGrid");
+    });
+</script>
+
+<script type="text/javascript">
+    function onChangeWarehouse() {
+        var whID = $("#WarehouseSelect").val();
+        var grid = $("#ShelfGrid");
+        grid.jqGrid("setGridParam", { url: "/Warehouse/WareHouseShelfList?whID=" + whID });
+        grid.trigger("reloadGrid");
+    }
+    function updateWarehouseList() {
+        var warehouseSelect = $("#WarehouseSelect");
+        var spanWarehouseSelect = $("#spanWarehouseSelect");
+        var orgSelect = $("#OrgSelect");
+        var orgID = orgSelect.val();
+        warehouseSelect.unbind("change");
+        warehouseSelect.attr("disabled", "disabled");
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseSelect",
+            data: { id: 'WarehouseSelect', orgID: orgID },
+            async: false,
+            success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+        });
+        warehouseSelect = $("#WarehouseSelect");
+        warehouseSelect.change(onChangeWarehouse());
+    }
+    $(function () {
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseOrgSelect",
+            data: { id: "OrgSelect" },
+            async: false,
+            success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+        });
+        var orgSelect = $("#OrgSelect");
+        orgSelect.change(function () {
+            updateWarehouseList();
+        });
+        updateWarehouseList();
+    });
+</script>

@@ -1,0 +1,64 @@
+﻿@{
+    Layout = null;
+}
+<div>
+    <span>@LiveAzure.Resource.Model.Product.ProductInfoItem.Code :</span> <span style="font-weight: bold">@ViewBag.SKUCode</span>
+    <span>@LiveAzure.Resource.Model.Product.ProductOnItem.FullName :</span> <span style="font-weight: bold">@ViewBag.OnSkuName</span>
+</div>
+<div>
+    <table id="UnitPrice"></table>
+    <div id="UnitPricePager"></div>
+    <input type="button" onclick="Add();" value="@LiveAzure.Resource.Common.Add" />
+    <input type="button" onclick="Edit();" value="@LiveAzure.Resource.Common.Edit" />
+</div>
+
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    var mydata;
+    $.ajax({
+        type: "POST",
+        url: "/Product/GetColumnSettings",
+        success: function (data) {
+            var dataSettings = data.split("!");
+            var columnModelSettings = eval('(' + dataSettings[0] + ')');
+            var dataColname = eval('(' + dataSettings[1] + ')');
+            $.post("/Product/GetGridData", {}, back);
+            function back(json) {
+                mydata = eval('(' + json + ')');
+                jQuery("#UnitPrice").jqGrid({
+                    data: mydata,
+                    datatype: "Local",
+                    height: 150,
+                    pager: '#UnitPricePager',
+                    colNames: dataColname,
+                    colModel: columnModelSettings,
+                    caption: "",
+                    multiselect:false
+                });
+            }
+        }
+    });
+    function Add() {
+        UnitPricePanel.OpenPanel();
+        $.post("/Product/ProductOnsalePriceUnitAddOrEdit", { bAddOrEdit: true }, function(html) {
+            UnitPricePanel.EditPageHtml(html);
+        });
+    }
+    function Edit() {
+        var testRow = $("#UnitPrice").jqGrid("getGridParam", "selrow");
+        if (testRow != null) {
+            UnitPricePanel.OpenPanel();
+            var Rowdata = $("#UnitPrice").jqGrid("getRowData", testRow);
+            $.post("/Product/ProductOnsalePriceUnitAddOrEdit", { bAddOrEdit: false, unitPriceGid: Rowdata["Gid"] }, function(html) {
+                UnitPricePanel.EditPageHtml(html);
+            });
+        }
+        else
+            alert("@Html.Raw(@LiveAzure.Resource.Common.PleaseSelectRow)");
+    }
+</script>

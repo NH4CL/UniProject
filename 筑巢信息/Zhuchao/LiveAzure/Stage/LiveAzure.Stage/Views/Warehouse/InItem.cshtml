@@ -1,0 +1,144 @@
+﻿@using CommonResource = LiveAzure.Resource.Common
+@using StockInResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockIn
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@using LiveAzure.Models
+@model LiveAzure.Models.Warehouse.WarehouseStockIn       
+
+@{
+    ViewBag.Title = "WarehouseInItem";
+}
+
+<h2>WarehouseInItem</h2>
+<table>
+    <tr>
+        <th>@StockInResource.Warehouse</th>
+        <td>@Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "warehouseName" })</td>
+        <th>@StockInResource.Code</th>
+        <td>@Html.TextBoxFor(model => model.Code, new { disabled = "disabled" })</td>
+        <th>@StockInResource.InType</th>
+        <td>@Html.DisplayFor(model => model.InType, "StandardCategory", new { ID = "InType" })</td>
+    </tr>
+    <tr>
+        <th>@StockInResource.RefType</th>
+        <td>@Html.TextBoxFor(model => model.RefTypeName, new { disabled = "disabled" })</td>
+        <th>@StockInResource.RefID</th>
+        <td>@Html.DisplayFor(model => model.RefID, "RefID", new { ID = "RefCode", RefType = Model.RefType })</td>
+        <th>@StockInResource.Total</th>
+        <td>@Html.TextBoxFor(model => model.Total, new { disabled = "disabled" })</td>
+    </tr>
+    <tr>
+        <th>@StockInResource.Prepared</th>
+        <td>@Html.DisplayFor(model => model.Prepared, "UserName", new { ID = "PreparedName" })</td>
+        <th>@StockInResource.Approved</th>
+        <td>@Html.DisplayFor(model => model.Approved, "UserName", new { ID = "ApprovedName" })</td>
+        <th>@StockInResource.ApproveTime</th>
+        <td>@Html.DisplayFor(model => model.ApproveTime, "Time", new { ID = "ApproveTime" })</td>
+    </tr>
+    <tr>
+        <th>@StockInResource.Istatus</th>
+        <td>@Html.TextBoxFor(model => model.InStatusName, new { disabled = "disabled" })</td>
+    </tr>
+</table>
+<div id="InItemList"></div>
+@if (ViewBag.privEnableApprove == "1")
+{//允许确认
+    <input type="button" id="btnConfirm" value="@CommonResource.Confirm" />
+}
+else
+{
+    <input type="button" value="@CommonResource.Confirm" disabled="disabled" />
+}
+<input type="button" id="btnBack" value="@CommonResource.Back" />
+@if (ViewBag.privEnablePrepare == "1")
+{//允许制表
+    <input type="button" id="btnEditStock" value="@CommonResource.Edit" />
+}
+else
+{
+    <input type="button" value="@CommonResource.Edit" disabled="disabled" />
+}
+@if (ViewBag.privEnableDelete == "1")
+{//允许删除
+    <input type="button" id="btnDelete" value="@CommonResource.Delete" />
+}
+else
+{
+    <input type="button" value="@CommonResource.Delete" disabled="disabled" />
+}
+@{
+    if (Model.Istatus == (byte)ModelEnum.StockInStatus.CONFIRMED)
+    {
+        <script type="text/javascript">
+            $("#btnConfirm").click(function () {
+                alert("该单据已确认");
+            });
+            $("#btnEditStock").click(function () {
+                alert("该单据已确认");
+            });
+            $("#btnDelete").click(function () {
+                alert("该单据已确认");
+            });
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            $("#btnConfirm").click(function () {
+                if (confirm("是否确认？") == false) return false;
+                $.ajax({
+                    type: "post",
+                    url: "/Warehouse/StockInConfirmDB",
+                    data: { inID: "@Model.Gid" },
+                    async: false,
+                    success: function (result) {
+                        switch (result) {
+                            case "NoPrivilege": alert("@LiveAzure.Resource.Common.NoPermission"); break;
+                            case 0:
+                                alert("@WCResource.ConfirmSuccess");
+                                $("#btnConfirm").attr("disabled", "disabled");
+                                $("#btnEditStock").attr("disabled", "disabled");
+                                break;
+                            case 1: alert("@WCResource.NotExistOrStateError"); break;
+                            case 2: alert("入库单货位尚未明确!"); break;
+                            case 3: alert("还未添加任何明细"); break;
+                            default: alert("@WCResource.Error"); break;
+                        }
+                    }
+                });
+            });
+            $("#btnEditStock").click(function () {
+                document.location.replace("/Warehouse/StockInEdit?inID=@Model.Gid");
+            });
+            $("#btnDelete").click(function () {
+                if (confirm("@WCResource.ConfirmDelete")) {
+                    $.post("/Warehouse/StockInDeleteDB", { inID : "@Model.Gid" },
+                        function (result) {
+                            if (result == "NoPrivilege") {
+                                alert("@LiveAzure.Resource.Common.NoPermission")
+                            }
+                            else if (result) {
+                                alert("@WCResource.DeleteSuccess");
+                                document.location.replace("/Warehouse/StockIn");
+                            } else {
+                                alert("@WCResource.Error");
+                            }
+                        });
+                }
+            });
+        </script>
+    }
+}
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Warehouse/InItemGrid",
+        data: { inID: "@Model.Gid" },
+        async: false,
+        success: function (html) {
+            $("#InItemList").html(html);
+        }
+    });
+    $("#btnBack").click(function () {
+        document.location.replace("/Warehouse/StockIn");
+    });
+</script>

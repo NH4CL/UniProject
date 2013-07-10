@@ -1,0 +1,66 @@
+﻿@{
+    Layout = null ;
+}
+<script type="text/javascript">
+
+    var zTree1, zTree2;
+    var setting;
+
+    setting = {
+        checkable: true,
+        checkType: { "Y": "", "N": "" },
+        checkedCol: "nodeChecked",
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "/Privilege/PrivSupplierExpand", 									//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        callback: {
+            click: zTreeOnClick,
+            change: zTreeOnChange
+        }
+    };
+
+    $(document).ready(function () {
+        reloadTree();
+    });
+
+    var preSelectedNode1;
+
+    function zTreeOnClick(event, treeId, treeNode) {
+
+    }
+
+
+    function reloadTree() {
+        $.ajax({
+            type: "POST",
+            url: "../Privilege/PrivSupplierLoad",
+            success: function (data) {
+                var testdata = jQuery.parseJSON(data);
+                zTree1 = $("#Suppliertree").zTree(setting, testdata);
+            }
+        });
+    }
+
+    function zTreeOnChange(event, treeId, treeNode) {
+        if (treeNode.nodeChecked == true)
+            $.ajax({
+                type: "POST",
+                url: "/Privilege/PrivSupplier",
+                data: { id: treeNode.id }
+            });
+        else
+            $.ajax({
+                type: "POST",
+                url: "/Privilege/DeleteSupplier",
+                data: { id: treeNode.id }
+            });
+    }
+
+</script>
+<div >
+<ul id ="Suppliertree" class="tree" style="width:230px; overflow:auto;" >
+        </ul>
+</div>

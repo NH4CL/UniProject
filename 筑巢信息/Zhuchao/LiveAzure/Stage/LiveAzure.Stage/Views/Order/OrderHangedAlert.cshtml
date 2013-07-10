@@ -1,0 +1,33 @@
+﻿@{   
+    Layout = null;
+}
+<script type="text/javascript">
+    /*-------------------------------
+    提交
+    -------------------------------*/
+    function Submit() {
+        var nHangType = document.getElementById("hangType").value;
+        var strReason = document.getElementById("hangReason").value;
+        ChangeOrderInfo(nHangType, strReason);
+        OrderHanged_Panel.CloseEditPanel();
+    }
+    /*-------------------------------
+    重置
+    -------------------------------*/
+    function Reset() {
+        document.getElementById("hangReason").value = "";
+    }
+</script>
+
+<div>
+@Html.Label(LiveAzure.Resource.Model.Order.OrderHistory.Htype)
+@Html.DropDownList("hangType", (List<SelectListItem>)ViewBag.HtypeList, new { id = "hangType" })
+</div>
+<div>
+@Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.HangReason)
+<textarea id="hangReason" rows="5" cols="20" ></textarea>
+</div>
+<div>
+<input type="button" id="submit" value="submit" onclick="Submit()" />
+<input type="button" id="reset" value="reset" onclick="Reset()" />
+</div>

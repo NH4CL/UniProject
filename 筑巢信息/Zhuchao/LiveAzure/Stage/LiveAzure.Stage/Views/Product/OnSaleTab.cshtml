@@ -1,0 +1,139 @@
+﻿@{
+    Layout = null;
+}
+<input type="button" value="@LiveAzure.Resource.Stage.ProductController.ShowGrid" id="showGrid" onclick="GridSwich();" />
+<input type="button" value="@LiveAzure.Resource.Stage.ProductController.SaveTemplate" onclick="showTemplateList();" />
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-PuOnSaleBaseInfo" onclick="">@LiveAzure.Resource.Stage.ProductController.ProductOnsaleBaseInfo</a></li>
+        <li><a href="#tabs-ProductSkuOnSale" onclick="SKUOnsale()" id="tab_skuonsale">@LiveAzure.Resource.Stage.ProductController.SKUOnsale</a></li>
+        <li><a href="#tabs-OnsaleShipping" onclick="showProductOnsaleShipping();">@LiveAzure.Resource.Stage.ProductController.ProductOnsaleShipping</a></li>
+        <li><a href="#tabs-OnsalePayment" onclick="showProductOnsalePayment();">@LiveAzure.Resource.Stage.ProductController.ShippingPayment</a></li>
+        <li><a href="#tabs-RelationPU" onclick="RelationPU();">@LiveAzure.Resource.Stage.ProductController.RelationPU</a></li>
+        <li><a href="#tabs-ProductOnLevelDiscount" onclick="showProductOnLevelDiscount();">@LiveAzure.Resource.Stage.ProductController.ProductOnLevelDiscount</a></li>
+    </ul>
+    <div id="tabs-PuOnSaleBaseInfo">
+    </div>
+    <div id="tabs-ProductSkuOnSale">
+    </div>
+    <div id="tabs-OnsaleShipping">
+    </div>
+    <div id="tabs-OnsalePayment">
+    </div>
+    <div id="tabs-RelationPU">
+    </div>
+    <div id="tabs-ProductOnLevelDiscount">
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#tabs").tabs();
+    });
+
+    //====================================================
+    //显示上架产品承运商信息
+    function showProductOnsaleShipping() {
+        $.post("/Product/isKeyNull", { key: "selectedPuOnSaleGuid" }, function (i) {
+            if (i == "False") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/ProductOnsaleShipping",
+                    success: function (html) {
+                        //需要将其他的tab页清空
+                        // $("#tabs-PuOnSaleBaseInfo").html("");Base页不清空
+                        $("#tabs-OnsalePayment").html("");
+                        $("#tabs-ProductSkuOnSale").html("");
+                        $("#tabs-RelationPU").html("");
+                        $("#tabs-ProductOnLevelDiscount").html("");
+                        $("#tabs-OnsaleShipping").html(html);
+                    }
+                });
+            }
+        });
+        
+    }
+    function showProductOnsalePayment() {
+        $.post("/Product/isKeyNull", { key: "selectedPuOnSaleGuid" }, function (i) {
+            if (i == "False") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/ProductOnsalePayment",
+                    success: function (html) {
+                        //需要将其他的tab页清空
+                        // $("#tabs-PuOnSaleBaseInfo").html("");Base页不清空
+                        $("#tabs-OnsaleShipping").html("");
+                        $("#tabs-ProductSkuOnSale").html("");
+                        $("#tabs-RelationPU").html("");
+                        $("#tabs-ProductOnLevelDiscount").html("");
+                        $("#tabs-OnsalePayment").html(html);
+                    }
+                });
+            }
+        });
+    }
+    function SKUOnsale() {
+        $.post("/Product/isKeyNull", { key: "selectedPuOnSaleGuid" }, function (i) {
+            if (i == "False") {
+                $.post("/Product/ProductSKUOnsale", {}, function success(html) {
+                    //需要将其他的tab页清空
+                    // $("#tabs-PuOnSaleBaseInfo").html("");Base页不清空
+                    $("#tabs-OnsaleShipping").html("");
+                    $("#tabs-OnsalePayment").html("");
+                    $("#tabs-RelationPU").html("");
+                    $("#tabs-ProductOnLevelDiscount").html("");
+                    $("#tabs-ProductSkuOnSale").html(html);
+                });
+            }
+        });
+    }
+    function RelationPU() {
+        $.post("/Product/isKeyNull", { key: "selectedPuOnSaleGuid" }, function (i) {
+            if (i == "False") {
+                $.post("/Product/RelationPU", {}, function success(html) {
+                    //需要将其他的tab页清空
+                    // $("#tabs-PuOnSaleBaseInfo").html("");Base页不清空
+                    $("#tabs-OnsaleShipping").html("");
+                    $("#tabs-OnsalePayment").html("");
+                    $("#tabs-ProductSkuOnSale").html("");
+                    $("#tabs-ProductOnLevelDiscount").html("");
+                    $("#tabs-RelationPU").html(html);
+                });
+            }
+        });
+    }
+    function showProductOnLevelDiscount() {
+        $.post("/Product/isKeyNull", { key: "selectedPuOnSaleGuid" }, function (i) {
+            if (i == "False") {
+                $.post("/Product/ProOnLevelDiscount", {}, function (html) {
+                    $("#tabs-OnsaleShipping").html("");
+                    $("#tabs-OnsalePayment").html("");
+                    $("#tabs-ProductSkuOnSale").html("");
+                    $("#tabs-RelationPU").html("");
+                    $("#tabs-ProductOnLevelDiscount").html(html);
+                });
+            }
+        });
+    }
+    //显示上架弹出窗
+    function showTemplateList() {
+        $.post("/Product/isKeyNull", { key: "selectedPuOnSaleGuid" }, function (i) {
+            if(i == "False") {
+                OnTemplatePanel.OpenPanel();
+                $.post("/Product/ProductOnsaleTemplateAdd", { }, function(html) {
+                    OnTemplatePanel.EditPageHtml(html);
+                });
+            }
+            else {
+                alert("Please save Product!");
+            }
+        });
+    }
+    //上架弹出窗
+    var OnTemplatePanel = new OpenPanel();
+    OnTemplatePanel.bLoading = true;
+    OnTemplatePanel.width = 400;
+    OnTemplatePanel.height = 600;
+    OnTemplatePanel.title = "Add Template";
+    OnTemplatePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+</script>

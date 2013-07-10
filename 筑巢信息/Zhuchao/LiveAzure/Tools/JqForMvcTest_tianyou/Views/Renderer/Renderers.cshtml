@@ -1,0 +1,70 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+
+@{
+    ViewBag.Title = "Index"; 
+   // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+        <div id="header">
+                <div id="main">
+                    <h2> Renderers</h2>
+                        @Html.Grid(new GridControl()
+                            .SetName("grid1")
+                            .SetPageSize(15)
+                            .SetIsAutoSize(true)
+                            .SetListUrl("/Renderer/ListProgs")
+                            .SetEditUrl("/Renderer/EditProg")
+                            .SetHeight("200")
+                            .SetWidth("200")
+                            //.UseColumns(JqForMvcTest_tianyou.Models.Columns.ProColumns)
+                                     .SetColumns<LiveAzure.Models.General.GeneralProgram>(cs =>
+                                         {
+                                             cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                                             cs.Add(x => x.Name.Matter).SetCaption("名称").AddEvent("click", "doCascade");
+                                             cs.Add(x => x.Code).SetCaption("代码");
+                                             cs.Add(x => x.ProgUrl).SetCaption("链接");
+                                             
+                                         })
+                            //.CreateSubGrid(new GridControl()
+                            //.SetPageSize(10)
+                            //.SetListUrl("Home/ChildList?productId=")
+                            //.SetIsAutoSize(true)
+                            //         .SetColumns<LiveAzure.Models.General.GeneralProgram>(cs =>
+                            //    {
+                            //        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                            //        cs.Add(x => x.Name.Matter).SetCaption("名称").AddEvent("change", "doCascade");
+                            //        cs.Add(x => x.Code).SetCaption("代码");
+                            //        cs.Add(x => x.ProgUrl).SetCaption("链接");
+                            //    })
+                            .UpdateDefaultPager(pager =>
+                                pager
+                                .ShowAdd(true)
+                                .ShowDel(true, deleteUrl: "Renderer/DeleteProg")
+                                .ShowEdit(true)
+                                .ShowView(true)
+                            
+                                     ))
+                        <br />
+                        @*@Html.Raw(Html.GridUpdateButton(buttonText: "Update", gridName: "grid1"))*@
+               @{
+                   string s = @Html.GridAddButton(buttonText: "Add", gridName: "grid1") + 
+                    @Html.GridUpdateButton(buttonText: "Update", gridName: "grid1") +
+                    @Html.GridSaveButton(buttonText: "Save", gridName: "grid1") +
+                    @Html.GridCancelButton(buttonText: "Cancel", gridName: "grid1") +
+                    @Html.GridDeleteButton(buttonText: "Delete", gridName: "grid1", actionUrl: "/Renderer/DeleteProg") +
+                    @Html.GridCancelButton(buttonText: "Cancel All", gridName: "grid1", allRows: true);
+                    
+                    var wrapper = new HtmlString(s);
+                  <div>@wrapper</div>
+                }
+                </div>
+        </div>
+
+<script type="text/javascript">
+    function doCascade() {
+        alert("1");
+    }
+</script>
+
+
+

@@ -1,0 +1,90 @@
+﻿@using LiveAzure.Models.General;
+@model GeneralRegion
+<script type="text/javascript">
+//    function regionEditFormSubmit() {
+//        $("#regionEditForm").submit();
+//    }
+
+    function refreshTree() {
+//        document.getElementById("showResult").style.display = "none";
+        $.ajax({
+            type: "GET",
+            url: "../Tree/TestPartialTree",
+            data: {},
+            success: function (html) {
+                $("#testPartialTree").html(html);
+            }
+        });
+    }
+</script>
+<div id="regionEditMain">
+    @using (@Ajax.BeginForm("EditRegion", "Tree", new { id = Model.Gid }, new AjaxOptions { OnSuccess = "refreshTree" }, new { id = "regionEditForm" }))
+    {
+        <h2>@LiveAzure.Resource.Stage.RegionController.Edit</h2>
+        <div style="margin: 2px;">
+            <table>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.General.GeneralRegion.Parent
+                    </td>
+                    @if (Model.Parent != null)
+                    {
+                        <td>@Html.LabelForModel(Model.Parent.FullName)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@Html.LabelForModel("")
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.General.GeneralRegion.Code
+                    </td>
+                    <td>@Html.EditorFor(model => model.Code)
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.General.GeneralRegion.FullName
+                    </td>
+                    <td>@Html.EditorFor(model => model.FullName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.General.GeneralRegion.ShortName
+                    </td>
+                    <td>@Html.EditorFor(model => model.ShortName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.General.GeneralRegion.Sorting
+                    </td>
+                    <td>@Html.EditorFor(model => model.Sorting)
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.General.GeneralRegion.RegionLevel
+                    </td>
+                    <td>@Html.EditorFor(model => model.RegionLevel)
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.General.GeneralRegion.Remark
+                    </td>
+                    <td>@Html.EditorFor(model => model.Remark)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="确认" />
+                    </td>
+                    <td>
+                        <input type="reset" value="重置" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    
+    }
+</div>
+<div id="testRegion">
+</div>

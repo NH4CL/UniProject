@@ -1,0 +1,172 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@{
+    ViewBag.Title = "PrivSupplier";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/jquery-1.4.2.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/jquery.ztree-2.6.js")"></script>
+
+<h2>PrivSupplier</h2>
+<script type="text/javascript">
+
+    var zTree1, zTree2;
+    var setting;
+
+    setting = {
+        checkable: true,
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "../Privilege/PrivSupplierExpand", 												//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        callback: {
+            click: zTreeOnClick
+        }
+    };
+    subsetting = {
+        checkable: true,
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "../Privilege/SubSupplierExpand", 												//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        callback: {
+            click: zTreeOnClick
+        }
+    };
+
+
+    $(document).ready(function () {
+        reloadTree();
+    });
+
+    var preSelectedNode1;
+    var preSelectedNode2;
+
+    function zTreeOnClick(event, treeId, treeNode) {
+
+    }
+
+
+    function reloadTree() {
+        $.ajax({
+            type: "POST",
+            url: "../Privilege/PrivSupplierLoad",
+            success: function (data) {
+                var testdata = jQuery.parseJSON(data);
+                zTree1 = $("#Suppliertree").zTree(setting, testdata);
+                $.ajax({
+                    type: "POST",
+                    url: "../Privilege/SubSupplierLoad",
+                    success: function (data1) {
+                        var testdata1 = jQuery.parseJSON(data1);
+                        zTree2 = $("#SubSuppliertree").zTree(subsetting, testdata1);
+                    }
+                });
+            }
+        });
+    }
+    function getCount() {
+        var tmp = zTree1.getCheckedNodes(true);
+        for (var i = 0; i < tmp.length; i++) {
+            alert(tmp[i].name + ",open:" + tmp[i].open + ",Gid" + tmp[i].id);
+        }
+    }
+    function strcat() {
+        var result = "";
+        var open = "";
+        var tmp = zTree1.getCheckedNodes(true);
+        for (var i = 0; i < tmp.length; i++) {
+            result += tmp[i].id + ",";
+            open += tmp[i].open + ",";
+
+        }
+        alert(result);
+        alert(open);
+        $.post("/Privilege/PrivSupplier", { Result: result, Open: open }, function (data) {
+        });
+    }
+    function del() {
+        var result = "";
+        var open = "";
+        var tmp = zTree2.getCheckedNodes(true);
+        for (var i = 0; i < tmp.length; i++) {
+            result += tmp[i].id + ",";
+            open += tmp[i].open + ",";
+
+        }
+        alert(result);
+        alert(open);
+        $.post("/Privilege/DeleteSupplier", { Result: result, Open: open }, function (data) {
+        });
+    }
+    function ablebutton() {
+        if ($("#StatusSup").attr('checked')) {
+            $("#AddSup").attr("disabled", false);
+            $("#DeleteSup").attr("disabled", false);
+        }
+        else {
+            $("#AddSup").attr("disabled", true);
+            $("#DeleteSup").attr("disabled", true);
+        }
+        $.ajax({
+
+            type: "POST",
+
+            url: "/Privilege/DelAllSup",
+
+            data: {},
+
+            datatype: "html",
+
+            success: function (data) {
+
+                //$("#gridPrivWare").trigger('reloadGrid');
+
+            },
+
+            error: function () {
+
+                alert("处理失败!");
+
+            }
+
+        });
+    }
+
+    $(document).ready(function () {
+        if ('@(ViewBag.status)' == 1) {
+            $("#StatusSup").attr('checked', true);
+            $("#AddSup").attr("disabled", false);
+            $("#DeleteSup").attr("disabled", false);
+        }
+        else {
+            $("#StatusSup").attr('checked', false);
+            $("#AddSup").attr("disabled", true);
+            $("#DeleteSup").attr("disabled", true);
+        }
+    });
+</script>
+
+
+<div>
+<input type="checkbox" id="StatusSup"  onclick="ablebutton()"/>
+@Html.Label("启用")
+
+</div>
+
+<div id="PrivSupplier"  >
+        <ul id ="Suppliertree" class="tree" style="width:230px; overflow:auto;" >
+        </ul>
+        <input type="button" value="Add" id="AddSup" onclick="strcat()" />
+</div>
+<div id="SubPrivSupplier">
+      <ul id ="SubSupplierTree" class="tree"  >
+        </ul>
+        <input type="button" id="DeleteSup"value="Delete" onclick="del()" />
+      </div>

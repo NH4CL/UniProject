@@ -1,0 +1,83 @@
+﻿@{
+    Layout =null;  
+}
+<link href="@Url.Content("~/Content/themes/base/css/main_css.css")" rel="stylesheet" type="text/css" />
+    <div class="List_left">
+        <div class="List">
+            <span>产品分类</span>
+            <dl>
+                <dt><a href="#">强化地板</a></dt>
+	                <dd>
+	                <ul>
+		                <li><a href="#">论坛社区</a></li>
+		                <li><a href="#">新闻文章</a></li>
+		                <li><a href="#">企业网站</a></li>
+	                </ul>
+	                </dd>
+                <dt><a href="#">实木地板</a></dt>
+	                <dd>
+	                <ul>
+		                <li><a href="#">论坛社区</a></li>
+		                <li><a href="#">博客主页</a></li>
+	                </ul>
+	                </dd>
+                <dt><a href="#">多层地板</a></dt>
+	                <dd>
+	                <ul>
+		                <li><a href="#">AJAX</a></li>
+		                <li><a href="#">JQUERY</a></li>
+		                <li><a href="#">JAVASCRIPT</a></li>
+	                </ul>
+	                </dd>
+            </dl>
+         </div>
+
+          <div class="Form">
+            <span class="list_title">最近浏览</span>
+            <table>
+                <tr>
+                <td><img src="@Url.Content("~/Content/img/123.jpg")" alt="" /></td>
+                <td></td>
+                </tr>
+                <tr>
+                <td><img src="@Url.Content("~/Content/img/123.jpg")" alt="" /></td>
+                <td></td>
+                
+                </tr>
+            </table>
+          </div>
+          <div class="Form">
+            <span class="list_title">用户评论</span>
+            <ul>
+		        <li>1</li>
+		        <li><span class="user">46021653</span><span>评价于2011-08-15</span></li>
+		    </ul>
+            <ul>
+		        <li>1</li>
+		        <li><span class="user">46021653</span><span>评价于2011-08-15</span></li>
+		    </ul>
+          </div>
+          <div class="left_ad">
+          <img src="@Url.Content("~/Content/img/left_ad.jpg")" alt="" />
+          </div>
+          <div class="left_show">
+
+          </div>
+
+
+     </div>
+
+<script src="@Url.Content("~/Content/jquery-1.4.2.min.js")" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+        $("dd:not(:first)").hide(); //隐藏 dd不是第一个的. E:first:相当于E:eq(0) 
+        // $("dd:not(:last)").hide();  //试试$("dd:not(:last)").hide();
+        $("dt a").click(function () {
+            $("dd:visible").slideUp("slow");
+            $(this).parent().next().slideDown("slow");
+            return false;
+        });
+    });
+	</script> 
+

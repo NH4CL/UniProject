@@ -1,0 +1,76 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseMoveItem
+@{
+    Layout = null;
+}
+@using CommonResource = LiveAzure.Resource.Common
+@using WarehouseMoveItemResource = LiveAzure.Resource.Model.Warehouse.WarehouseMoveItem
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@ControlManager.SKUSelect()
+@{
+    IEnumerable<SelectListItem> OldShelves = ViewBag.OldShelves as IEnumerable<SelectListItem>;
+    IEnumerable<SelectListItem> NewShelves = ViewBag.NewShelves as IEnumerable<SelectListItem>;
+}
+@using (Html.BeginForm("MoveItemAddDB", "Warehouse", FormMethod.Post, new { id = "MoveItemAddForm" }))
+{
+    <table>
+        <tr>
+            <th>@WarehouseMoveItemResource.SkuItem</th>
+            <td>
+                @Html.HiddenFor(model => model.MoveID)
+                @Html.EditorFor(model => model.SkuID, "SKUSelect", new { ID = "SKU", OrgID = Model.Moving.OldWarehouse.aParent })
+            </td>
+        </tr>
+        <tr>
+            <th>@WarehouseMoveItemResource.ShelfOld</th>
+            <td>@Html.DropDownListFor(model => model.OldShelf, OldShelves)</td>
+        </tr>
+        <tr>
+            <th>@WarehouseMoveItemResource.ShelfNew</th>
+            <td>@Html.DropDownListFor(model => model.NewShelf, NewShelves)</td>
+        </tr>
+        <tr>
+            <th>@WarehouseMoveItemResource.Quantity</th>
+            <td>@Html.TextBoxFor(model => model.Quantity, new { id = "txtQuantity" })</td>
+        </tr>
+        <tr>
+            <th>@WarehouseMoveItemResource.TrackLot</th>
+            <td>@Html.TextBoxFor(model => model.TrackLot, new { id = "txtTrackLot" })</td>
+        </tr>
+    </table>
+    <input type="submit" id="btnAdd" value="@CommonResource.Add" />
+    <input type="reset" value="@CommonResource.Reset" />
+}
+<script type="text/javascript">
+    var RegxNum = /^[0-9]+(\.[0-9]+)?$/;
+    $("#txtQuantity").blur(function () {
+        var input = $(this);
+        var value = input.val();
+        if (!RegxNum.test(value)) {
+            alert("@WCResource.WrongNum");
+            input.val("@Model.Quantity");
+        }
+        if (value == "0") {
+            alert("@WCResource.NumMustGreaterThanZero");
+        }
+    });
+    $("#txtTrackLot").blur(function () {
+        var input = $(this);
+        var value = input.val();
+        if (!RegxNum.test(value)) {
+            alert("@WCResource.WrongNum");
+            input.val("@Model.TrackLot");
+        }
+    });
+    $("#MoveItemAddForm").submit(function (e) {
+        if ($("#SKU_val").val() == "") {
+            alert("@WCResource.SKURequired");
+            e.preventDefault();
+        }
+    });
+    $("#btnAdd").click(function () {
+        if ($("#txtQuantity").val() == 0) {
+            alert("数量不能为0");
+            return false;
+        }
+    });
+</script>

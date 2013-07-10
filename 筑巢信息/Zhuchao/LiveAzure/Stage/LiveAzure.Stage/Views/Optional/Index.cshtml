@@ -1,0 +1,158 @@
+﻿@model LiveAzure.Models.General.GeneralOptional
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using LiveAzure.Resource.Stage;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <table>
+        <tr>
+            <td>
+                @LiveAzure.Resource.Model.General.GeneralOptional.Organization        
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.Organization, (List<SelectListItem>)ViewBag.OrgSelectList, new { Onchange = "ChangeOrganization(this.value)" })
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="optionals">
+</div>
+
+    <input type="button" id="conf" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddOptionalPage();" />
+    <input type="button" id="btnUpdate" value="@LiveAzure.Resource.Common.Edit" disabled="disabled" onclick="ShowEditOptionalPage();" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemoveOptional()" />
+    <input type="button" id="showOptionalItems" value="@OptionalController.Show"  disabled="disabled" onclick="ShowOptonalItems();" />
+
+<div id="optionalItemList">
+
+</div>
+
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.OptionalController.EditOptional";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    $.post("/Optional/OptionalListTable", {}, function (html) {
+        $("#optionals").html(html);
+    });
+
+    function ShowAddOptionalPage() {
+        UnitPricePanel.OpenPanel();
+        document.getElementById("optionalItemList").style.display = "none";
+        $.ajax({
+            type: "POST",
+            url: "/Optional/AddNewOptional",
+            success: function (data) {
+                UnitPricePanel.EditPageHtml(data);
+            }
+        });
+     }
+
+        function ShowEditOptionalPage() {
+            UnitPricePanel.OpenPanel();
+            document.getElementById("optionalItemList").style.display = "none";
+            var oRowId = $("#Optionalgrid").jqGrid("getGridParam", "selrow");
+            $.ajax({
+                type: "POST",
+                url: "/Optional/EditOptional",
+                data: { oGid: oRowId },
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);                    
+                }
+            });
+        }
+
+        function RefreshOptionalGrid() {
+            $('#Optionalgrid').trigger('reloadGrid');
+        }
+
+        function RefreshOptionalItemsGrid() {
+            $('#optionalItemgrid').trigger('reloadGrid');
+        }
+
+        function GetButton() {
+            var rowid = $("#Optionalgrid").jqGrid("getGridParam", "selrow");
+            var inputmode = $("#Optionalgrid").jqGrid("getCell", rowid, "InputMode");
+
+            $("#btnUpdate").removeAttr("disabled");
+
+            if (inputmode == 1) {
+                $("#showOptionalItems").removeAttr("disabled");
+            }
+            else {
+                $("#showOptionalItems").attr("disabled", "disabled");
+            }
+        }
+
+        function RemoveOptional() {
+            var optionalRowId = $("#Optionalgrid").jqGrid("getGridParam", "selrow");
+            if (optionalRowId == null) {
+                alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            }
+            else {
+                if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+                    $("#optionalItemList").hide();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Optional/RemoveOptional",
+                        data: { optionalGid: optionalRowId },
+                        success: RefreshOptionalGrid()
+                    });
+                }
+            }
+            }
+
+        function ShowAddOptionalItemPage() {
+            UnitPricePanel.OpenPanel();
+            var rowid = $("#Optionalgrid").jqGrid("getGridParam", "selrow");
+            document.getElementById("optionalItemList").style.display = "block";
+            $.ajax({
+                type: "POST",
+                url: "/Optional/AddOptionalItem",
+                data: { optGid: rowid },
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);
+                }
+            });
+        }
+        function ShowOptonalItems() {
+            var rowid = $("#Optionalgrid").jqGrid("getGridParam", "selrow");
+            if (rowid == null) {
+                alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            }
+            else {
+                $("#optionalItemList").show();
+                $.ajax({
+                    type: "POST",
+                    url: "/Optional/OptionalItemListTable",
+                    data: { optGid: rowid },
+                    success: function (data) {
+                        $("#optionalItemList").html(data);
+                    }
+                });
+            }
+        }
+
+        function ChangeOrganization(orgId)
+        {
+           $.ajax({
+                    type: "POST",
+                    url: "/Optional/ChangeOrganization",
+                    data: { orgGid: orgId },
+                    success: function()
+                    {
+                        RefreshOptionalGrid();
+                        $("#optionalItemList").hide();
+                    } 
+                });
+        }
+</script>
+
+
+
+

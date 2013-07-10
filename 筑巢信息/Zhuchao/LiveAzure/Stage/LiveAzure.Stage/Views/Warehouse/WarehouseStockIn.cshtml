@@ -1,0 +1,143 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@{
+    ViewBag.Title = "WarehouseStockIn";
+}
+<div>
+    状态 @Html.DropDownList("SearchStatus", ViewBag.InStatus as IEnumerable<SelectListItem>)
+    类型 @Html.DropDownList("SearchType", ViewBag.RefType as IEnumerable<SelectListItem>)
+    <input type="button" id="btnSearch" value="搜索" />
+</div><br />    
+<span id="spanOrgSelect">
+    <select id="WarehouseOrgSelect" disabled="disabled"></select>
+</span>
+<span id="spanWarehouseSelect">
+    <select id="WarehouseSelect" disabled="disabled"></select>
+</span>
+<br />
+<br />
+@Html.Grid(
+    new GridControl()
+        .SetName("StockInGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("WarehouseStockInList"))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseStockIn>(cs =>
+        {
+            cs.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(p => p.Code).SetEditable(false);
+            cs.Add(p => p.Istatus)
+                .SetCaption(LiveAzure.Resource.Model.Warehouse.WarehouseStockIn.Istatus)
+                .SetColumnRenderer(new ComboColumnRenderer(Url.Action("GetInStatusType")));
+            cs.Add(p => p.StockInType.Code)
+                .SetCaption(LiveAzure.Resource.Model.Warehouse.WarehouseStockIn.InType);
+            cs.Add(p => p.RefType)
+                .SetCaption(LiveAzure.Resource.Model.Warehouse.WarehouseStockIn.RefType)
+                .SetColumnRenderer(new ComboColumnRenderer(Url.Action("GetInRefType")));
+            cs.Add(p => p.Total)
+                .SetCaption(LiveAzure.Resource.Model.Warehouse.WarehouseStockIn.Total);
+            cs.Add(p => p.Prepared).SetEditable(false)
+                .SetCaption(LiveAzure.Resource.Model.Warehouse.WarehouseStockIn.Prepared);
+            cs.Add(p => p.Approved).SetEditable(false)
+                .SetCaption(LiveAzure.Resource.Model.Warehouse.WarehouseStockIn.Approved);
+            cs.Add(p => p.ApproveTime).SetEditable(false)
+                .SetCaption(LiveAzure.Resource.Model.Warehouse.WarehouseStockIn.ApproveTime);
+            cs.Add(p => p.PrintInSheet).SetEditable(false)
+                .SetCaption(LiveAzure.Resource.Model.Warehouse.WarehouseStockIn.PrintInSheet);
+        })
+    )
+    <input type="button" id="btnStockInAdd" value="Add" />
+    <input type="button" id="btnStockInEdit" value="Edit" />
+    @Html.Raw(Html.GridDeleteButton(
+        buttonText: "Delete",
+        gridName: "StockInGrid"))
+    <input type="button" id="btnStockInDetail" value="查看明细" />
+    <input type="button" value="打印" />
+    <script type="text/javascript">
+        $("#btnStockInAdd").click(function () {
+            var whID = $("#WarehouseSelect").val();
+            document.location.replace("/Warehouse/WarehouseStockInAdd?whID=" + whID);
+        });
+        $("#btnStockInEdit").click(function () {
+            var inID = $("#StockInGrid").jqGrid("getGridParam", "selrow");
+            if (inID == null) {
+                alert("请选择要编辑的入库单");
+            } else {
+                document.location.replace("/Warehouse/WarehouseStockInEdit?inID=" + inID);
+            }
+        });
+        $("#btnDelete").click(function () {
+            var id = $("#StockInGrid").jqGrid("getGridParam", "selrow");
+            if (id == null) {
+                alert("请选择要编辑的入库单");
+                return false;
+            }
+        });
+        $("#btnStockInDetail").click(function () {
+            var id = $("#StockInGrid").jqGrid("getGridParam", "selrow");
+            if (id == null) {
+                alert("请选择要编辑的入库单");
+            } else {
+                document.location.replace("/Warehouse/WarehouseInItem?inID=" + id);
+            }
+        });
+        $("#btnSearch").click(function () {
+            var status = $("#SearchStatus").val();
+            var type = $("#SearchType").val();
+            var param = "";
+            if (status != "") param += ("&status=" + status);
+            if (type != "") param += ("&type=" + type);
+            alert(param);
+            $("#StockInGrid").jqGrid('setGridParam', { url: "/Warehouse/WarehouseStockInList?whID=" + $("#WarehouseSelect").val() + param });
+            $("#StockInGrid").trigger("reloadGrid");
+        });
+   </script>
+   <script type="text/javascript">
+       function onChangeWarehouse() {
+           var whID = $("#WarehouseSelect").val();
+           var grid = $("#StockInGrid");
+           grid.jqGrid("setGridParam", { url: "/Warehouse/WarehouseStockInList?whID=" + whID });
+           grid.trigger("reloadGrid");
+       }
+       function updateWarehouseList() {
+           var warehouseSelect = $("#WarehouseSelect");
+           var spanWarehouseSelect = $("#spanWarehouseSelect");
+           var orgSelect = $("#OrgSelect");
+           var orgID = orgSelect.val();
+           warehouseSelect.unbind("change");
+           warehouseSelect.attr("disabled", "disabled");
+           $.ajax({
+               type: "post",
+               url: "/Warehouse/WarehouseSelect",
+               data: { id: 'WarehouseSelect', orgID: orgID },
+               async: false,
+               success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+           });
+           warehouseSelect = $("#WarehouseSelect");
+           warehouseSelect.change(onChangeWarehouse());
+       }
+       $(function () {
+           $.ajax({
+               type: "post",
+               url: "/Warehouse/WarehouseOrgSelect",
+               data: { id: "OrgSelect" },
+               async: false,
+               success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+           });
+           var orgSelect = $("#OrgSelect");
+           orgSelect.change(function () {
+               updateWarehouseList();
+           });
+           updateWarehouseList();
+       });
+</script>

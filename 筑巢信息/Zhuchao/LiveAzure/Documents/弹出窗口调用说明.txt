@@ -1,0 +1,33 @@
+大家看下，现在的弹出窗口用下面的方法来调用。
+此方法是动态创建的窗口，因此不需要在页面添加隐藏窗口再填充，便于使用和维护。
+关闭时也是直接动态删除，即-关闭后 页面上不会存在这个弹出窗口的。
+
+var testPanel = new OpenPanel();//初始化窗口实例
+testPanel.width = 500;//弹出框的宽 单位px
+testPanel.height = 600;//弹出框的高
+testPanel.title = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.UnitPrice)";//弹出窗口的标题，用资源文件
+testPanel.closeurl = "@Html.Raw(Url.Content("~/Content/themes/base/images/close.gif"))";//弹出窗口的关闭按钮，直接复制这句
+
+调用的时候如下:
+
+/*------------定义弹出窗口-----------*/
+var choosePuPanel = new OpenPanel();//初始化窗口实例
+choosePuPanel.width = 500;
+choosePuPanel.height = 600;
+choosePuPanel.title = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.UnitPrice)";
+choosePuPanel.closeurl = "@Html.Raw(Url.Content("~/Content/themes/base/images/close.gif"))";
+function choosePu() {
+	choosePuPanel.OpenPanel();//动态创建弹出窗口，默认是加在当前body下
+	$.post("/Product/ChoosePu", {}, function (html) {alert(html);
+	   choosePuPanel.EditPageHtml(html);//html为成功返回的弹出窗口填充数据，将要弹出的页面内容填入到弹出窗口
+	});
+}
+
+function xxxsubmit(){//页面方法执行完毕
+	...
+	...
+	choosePuPanel.CloseEditPanel();//关闭  本身自带手动关闭按钮，但如果是要自动关闭，可用此方法
+}
+
+具体方法可详见 Stage/Scripts/Commen/Panel.js
+原方法暂且保留，但希望大家尽快修改过来。

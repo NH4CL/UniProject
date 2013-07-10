@@ -1,0 +1,61 @@
+﻿@{
+    Layout = null;
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script> 
+<script type="text/javascript">
+    function ImportSubmit() {
+        $("#btnImport").attr("onclick", "");
+        var coverpage = window.parent.document.getElementById("CoverPage");
+        var waittingpage = window.parent.document.getElementById("WaittingPage");
+        coverpage.setAttribute("style", "background-color:#000;position:absolute;width:100%;height:100%;top:0;left:0;filter:alpha(opacity=20);       /* IE */-moz-opacity:0.2;              /* Moz + FF */opacity: 0.2;z-index:1");
+        coverpage.style.height = window.parent.document.body.scrollHeight;
+        waittingpage.setAttribute("style", "position:absolute;width:300px;height:200px;top:50%;left:50%;margin:-100px -150px;background-image:url('/Content/wbox/loading.gif');background-repeat:no-repeat;background-position:center;z-index:1");
+        $("#ImportForm").submit();
+    };
+</script>
+
+<div id="regionEditMain">
+     @using (@Html.BeginForm("ImportRegion", "Region",FormMethod.Post, new { id = "ImportForm", enctype = "multipart/form-data" }))
+     {
+        @Html.ValidationSummary(true)
+        <h2>@LiveAzure.Resource.Stage.RegionController.Import</h2>
+        <div style="margin: 2px;">
+            <table>
+                <tr>
+                    <td>
+                        @LiveAzure.Resource.Stage.RegionController.ImportChina
+                    </td>
+                    <td>
+                        <input type="file" name="ImportChina" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @LiveAzure.Resource.Stage.RegionController.ImportUSA
+                    </td>
+                    <td>
+                        <input type="file" name="ImportUSA" disabled="disabled" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @LiveAzure.Resource.Stage.RegionController.ImportEurope
+                    </td>
+                    <td>
+                        <input type="file" name="ImportEurope" disabled="disabled" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="button" id="btnImport" name="btnImport" value="@LiveAzure.Resource.Common.Submit" onclick="ImportSubmit();" />
+                    </td>
+                    <td>
+                        <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+</div>

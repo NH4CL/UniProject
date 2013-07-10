@@ -1,0 +1,31 @@
+﻿@using SKUShelf = LiveAzure.Models.Warehouse.WarehouseSkuShelf
+@using SKUresource = LiveAzure.Resource.Model.Product.ProductInfoItem
+@using SKUShelfResource = LiveAzure.Resource.Model.Warehouse.WarehouseSkuShelf
+@using ShelfResource = LiveAzure.Resource.Model.Warehouse.WarehouseShelf
+@model IEnumerable<SKUShelf>
+@{
+    Layout = null;
+}
+<table class="DIY_table">
+    <tr>
+        <th>@SKUresource.Code</th>
+        <th>@SKUresource.FullName</th>
+        <th>@SKUShelfResource.Shelf+@ShelfResource.Code</th>
+        <th>@SKUShelfResource.TrackLot</th>
+        <th>@SKUShelfResource.Quantity</th>
+        <th>@SKUShelfResource.LockQty</th>
+    </tr>
+@{
+    foreach(SKUShelf s in Model)
+    {
+        <tr>
+            <td>@s.SkuItem.Code</td>
+            <td>@s.SkuItem.FullName.Matter</td>
+            <td>@s.Shelf.Code</td>
+            <td>@s.TrackLot</td>
+            <td>@s.Quantity</td>
+            <td>@s.LockQty</td>
+        </tr>
+    }   
+}
+</table>

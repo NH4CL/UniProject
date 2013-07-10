@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Editor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editor</h2>
+请输入：<input type="text" id="editor"  />
+<input type="button" id="add" value="添加" onclick="edit()" />
+<script type="text/javascript">
+    function edit() {
+        Editresult = $("#editor").val();
+        alert(Editresult);
+        $.post("/Privilege/PrivProgram", { Editresult: Editresult }, function (data) {
+        });
+    }
+</script>

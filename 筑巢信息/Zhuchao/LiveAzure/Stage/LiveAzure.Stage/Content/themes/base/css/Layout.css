@@ -1,0 +1,109 @@
+﻿body { min-width:1000px; margin:0; padding:0; font-size:13px !important}
+#body_frame { min-width:0}
+header { min-width:1000px !important;
+}
+input[type=button] { background:url("/Content/themes/base/images/submit.jpg"); border:none}
+input[type=button]:hover { background:url("/Content/themes/base/images/submit_mouseon.jpg"); border:none}
+input[type=submit] { background:url("/Content/themes/base/images/submit.jpg"); border:none}
+input[type=submit]:hover { background:url("/Content/themes/base/images/submit_mouseon.jpg"); border:none}
+input[type=reset] { background:url("/Content/themes/base/images/submit.jpg"); border:none}
+input[type=reset]:hover { background:url("/Content/themes/base/images/submit_mouseon.jpg"); border:none}
+input[type=text] { height:17px !important; width:150px !important}
+select { height:23px !important; width:156px !important}
+a {}
+a :hover { cursor:pointer}
+.ui-datepicker-month { width:auto !important; }
+.ui-datepicker-year { width:auto !important; }
+
+/*登陆页面*/
+.Login_back,
+.Login_content {margin:0 auto;padding:0;width:980px;height:100px;display:block;float:none;}
+
+.Login_back { width:100%; height:100%; background-image:url("/Content/themes/base/images/Login_back.jpg"); background-repeat:repeat-x}
+.Login_content { height:768px; width:546px; background-image:url("/Content/themes/base/images/Login_content.jpg"); background-repeat:no-repeat; }
+
+.Login_content_part01 { width:546px; height:450px;}
+.Login_content_part02 { width:546px; height:110px;}
+    .Login_content_part02 dl { height:30px; margin-bottom:0px}
+    .dd input { width:180px !important; float:left; margin:0 0 0 -20px}
+    .dt { width:200px; float:left; text-align:right; font-family: georgia; font-size: 18px;  letter-spacing: -2px; text-transform: lowercase;}
+    .dd { width:310px; float:right; margin-right:20px}
+    .resetbutton{ width:50px; height:22px; margin:0 0 0 80px; background-image:url("/Content/themes/base/images/submit.jpg"); border:none}
+    .resetbutton:hover{ background-image:url("/Content/themes/base/images/submit_mouseon.jpg");}
+    .submitbutton { width:50px; height:22px; margin:0 0 0 110px; background-image:url("/Content/themes/base/images/submit.jpg"); border:none}
+    .submitbutton:hover{ background-image:url("/Content/themes/base/images/submit_mouseon.jpg");}
+    .Login_button { margin:10px 0 0 0; text-align:center; font-size:14px}
+        #rememberLoginName { margin:0 0 0 -30px; font-size:12px}
+        #rememberUser { margin:10px 0 0 80px; font-size:12px}
+.Login_content_part03 { width:546px; height:230px;}
+ 
+/*内部页面头部样式*/
+#e_header { width:90%; height:130px; background-color:#f9a90a; margin-left:5%;}
+.e_header_part_01 { width:100%; height:96px; padding:5px 0 0 10px}
+    
+        #e_logo { width:auto; height:auto; float:left}
+    
+        .e_header_culture { width:50%; height:43px; float:right; text-align:right; padding:5px 10px 0 0;}
+            .e_header_culture img { border:0}
+        .e_header_login { width:50%; height:43px; float:right; text-align:right; padding:20px 20px 0 0;}
+            .log_off { width:71px; height:22px; background-image:url("/Content/themes/base/images/button.jpg") !important; border:0; margin:0 0 0 0; font:"Trebuchet MS", Verdana, Helvetica, Sans-Serif; color:Orange;}
+.e_header_part_02 { width:100%; height:34px; background-image:url("/Content/themes/base/images/e_header_part_02.jpg"); background-repeat:repeat}
+.shortcut_button { background:url("/Content/themes/base/images/shortcut_button.gif")}
+
+.e_content { width:90%; height:auto; margin-left:5%; }
+    .e_left_content { width:20%; height:auto; border:2px solid orange; float:left; }
+        .tree_left { float:left; width:95%; height:auto; overflow:auto}
+            .tree_left ul { width:auto}
+        #click_left { width:8px; height:100%; background-color:orange; float:right}
+
+    .e_right_content { width:79%; height:2535px; float:right; position:relative}
+        .content_right { float:right; display:inline; width:99%; height:inherit}
+        #frame_page { height:inherit !important; float:right; }
+            #frame_index_div { border:2px solid orange; padding-left:10px; padding-right:10px; width:98%; float:right;}
+        #click_right { width:8px; background-color:orange; float:left; display:none}
+        
+/*内页内容样式*/
+.content_header { width:100%; height:30px; margin:-20px 0 20px 0;}
+    .content_header p { font-size:15px; font-weight:bold; margin:0 0 10px 0; padding:0 0 0 10px}
+    .content_header_bottom { width:100%; height:3px; background-color:#f9a90a; margin:-10px 0 20px -5px }
+    .content_header_top { width:100%; height:3px; background-color:#f9a90a; margin:30px 0 0 -5px }
+#program { margin-left:5px}
+    .content_main_left { width:35%; float:left}
+    .content_main_right { width:60%; float:right}
+#progMain { float:left; width:100%}
+    #progMain ul {width:auto}
+
+
+.DIY_table { border:1px solid orange; width:100%; font-size:12px; padding:0; margin:0; border-collapse:collapse; position:relative }
+.DIY_table th, .DIY_table td { border-right:1px solid orange; border-bottom:1px solid orange; height:23px; padding:3px; margin:0; }    
+.DIY_table td .name_line {width:100%}
+.DIY_table th input[type=text], 
+.DIY_table th input[type=password], 
+.DIY_table td input[type=text] { height:17px !important; width:70% !important}
+.DIY_table th select,.DIY_table td select { height:23px !important; width:70% !important}
+
+#OrderBaseInfo th { max-width:10%; width:10%; }
+#OrderBaseInfo td { max-width:22%; width:22%; }
+ 
+/*多语言名称编辑框*/
+.culture_name img { height:23px; width:34px}
+.input_name { display:inline}
+.picture_name { display:inline}
+.name_line { display:inline-block; width:auto}
+.down_AddorEdit { left:4%; width:90%}
+.down_AddorEdit th { width:auto; min-width:100px; display:block; text-align:right}
+.AddorEditNameTitle, 
+.AddorEditNameMain { height:100%; width:100%; }
+
+
+/*遮罩层及编辑框*/
+img {border:0px}
+.EditPage { z-index:10; min-width:400px; width:35%; height:auto !important; background:white; border:#336699 1px solid; position:absolute; font-size:12px; display: none; padding-bottom:10px}
+.EditPage span { font-size:13px; font-weight:bold}
+.CoverPage { z-index:9; width:100% !important; display: none; position: absolute; top: 0px; left: 0px; right:0px; background-color: #777;  filter:alpha(opacity=60);  /* IE */ -moz-opacity:0.6;  /* Moz + FF */ opacity: 0.6;}
+
+/*订单打印css*/
+.print_table { font-size:13px; }
+    .print_table th { font-size:13px; }
+    .print_table td { font-size:13px; }
+div.page { page-break-after: auto; }

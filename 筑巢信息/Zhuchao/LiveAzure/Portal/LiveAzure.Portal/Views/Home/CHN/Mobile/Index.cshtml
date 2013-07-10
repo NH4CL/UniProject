@@ -1,0 +1,91 @@
+﻿@{
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml";
+}
+<head>
+ <style type="text/css">
+     
+ </style>
+ </head>
+<table class="table">
+    <tr>
+        <td>
+            <h4>用户名</h4>
+        </td>
+        <td>
+            <input type="text" id="UserName" value="" />
+        </td>
+        <td>
+            <h4>密码</h4>
+        </td>
+        <td>
+            <input type="password" id="UserPsd" value="" />
+        </td>
+        <td>
+            <input type="button" id="Login" value="登陆" onclick="Check()" />
+        </td>
+        <td>
+            <input type="button" id="Register" value="注册" onclick="" />
+        </td>
+        <td>
+            <a href="/">论坛</a>
+        </td>
+    </tr>
+</table>
+
+<div>
+    搜索模块
+</div>
+<div id="Menu">
+
+</div>
+<div id="Container">
+</div>
+<div id="Bottom">
+</div>
+<script type="text/javascript">
+    function Check() {
+        var username = $("#UserName").val();
+        var userpsd = $("#UserPsd").val();
+        $.post("/Home/CheckUser", { username: username, userpsd: userpsd }, postback);
+    }
+
+    function postback(nResult) {
+        alert(nResult);
+        switch (nResult) {
+            case "0": alert("用户信息不能为空"); break;
+            case "1": alert("用户名错误"); break;
+            case "2": alert("密码错误"); break;
+            case "3": alert("登陆成功");
+        }
+    }
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Home/main",
+            data: {},
+            success: function (html) {
+                $("#Container").html(html);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/Head",
+                    data: {},
+                    success: function (Headhtml) {
+                        $("#Menu").html(Headhtml);
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/Home/bottom",
+                            data: {},
+                            success: function (Bottomhtml) {
+                                $("#Bottom").html(Bottomhtml);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+
+    });
+</script>

@@ -1,0 +1,59 @@
+﻿@{
+    Layout=null;
+}
+@model LiveAzure.Models.Order.OrderItem
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
+@using (@Ajax.BeginForm("EditOrderItemAdd", "Order", new AjaxOptions { OnSuccess = "alert('11');AddOrderItemPanel.CloseEditPanel();$.post('/Order/OrderEditInfo', {}, function (html) {$('#OrderEditInfoMainPage').html(html);});" }, new { id = "EditOrderItemAddForm" }))
+{
+@Html.ValidationSummary(true)
+<table class="DIY_table" style="width:40%;left:30%">
+        @Html.HiddenFor(model => model.OnSkuID)
+        @Html.HiddenFor(model => model.SkuID)
+    <tr>
+        <td>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderItem.Name)
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderItem.Quantity)
+            @Html.EditorFor(model => model.Quantity)
+            @Html.ValidationMessageFor(model => model.Quantity)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderItem.ExecutePrice)
+            @Html.EditorFor(model => model.ExecutePrice)
+            @Html.ValidationMessageFor(model => model.ExecutePrice)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderItem.MarketPrice)
+            @Html.DisplayFor(model => model.MarketPrice)
+            @Html.HiddenFor(model => model.MarketPrice)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderItem.SalePrice)
+            @Html.DisplayFor(model => model.SalePrice)
+            @Html.HiddenFor(model => model.SalePrice)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label(LiveAzure.Resource.Model.ModelBase.Remark)
+            @Html.TextAreaFor(model => model.Remark)
+            @Html.ValidationMessageFor(model => model.Remark)
+        </td>
+    </tr>
+</table>
+    @*<input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="$('#EditOrderItemAddForm').submit();" />*@
+    <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+}

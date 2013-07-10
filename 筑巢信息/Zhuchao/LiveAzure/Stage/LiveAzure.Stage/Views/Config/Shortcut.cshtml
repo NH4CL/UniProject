@@ -1,0 +1,31 @@
+﻿@using MVC.Controls.Tab;
+@using MVC.Controls;
+@using LiveAzure.Resource.Stage
+@using LiveAzure.Resource.Model.Member;
+@model LiveAzure.Models.Member.MemberUserShortcut
+@{
+    ViewBag.Title = "Shortcut";
+}
+
+<div>
+@Html.Tab(new TabControl()
+            .SetCacheTabs(true)
+            .AddTabItem(new TabItem()
+                    .SetContent(MVC.Controls.ContentType.RemoteAction, "ProgramShortcut")
+                        .SetTitle(@ConfigController.ProgramShortcut))
+                
+            .AddTabItem(new TabItem()
+                .SetContent(MVC.Controls.ContentType.RemoteAction, "UrlShortcut")
+                    .SetTitle(@ConfigController.UrlShortcut)))
+</div>
+
+    <script type="text/javascript">
+        
+        function RefreshProgramGrid() {
+            $('#ProgramGrid').trigger('reloadGrid');
+        }
+
+        function RefreshUrlGrid() {
+            $('#UrlGrid').trigger('reloadGrid');
+        }
+    </script>

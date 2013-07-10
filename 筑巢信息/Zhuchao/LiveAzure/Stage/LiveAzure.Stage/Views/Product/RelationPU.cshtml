@@ -1,0 +1,91 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models;
+@model LiveAzure.Models.Product.ProductOnSale
+<script type="text/javascript">var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function addRelationPU() {
+        UnitPricePanel.OpenPanel();
+        $.post("/Product/RelationOnsalePu", {}, function (html) {
+            UnitPricePanel.EditPageHtml(html);
+        });
+    }
+    //    function editRelationPU() {
+    //        $("#listShow").fadeOut("fast");
+    //        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.alertMessage)";
+    //        var id = $("#grid").jqGrid("getGridParam", "selrow");
+    //        if (id == null) {
+    //            alert(alertMessage);
+    //            return false;
+    //        } else {
+    //            $.ajax({
+    //                type: "POST",
+    //                url: "/Product/editProductInfo",
+    //                data: { proGidSelect: id },
+    //                success: function (html) {
+    //                    $("#tabShow").html(html);
+    //                }
+    //            });
+    //        }
+    //    }
+    function deleteRelationPU() {
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.alertMessage)";
+        var id = $("#gridRelationPU").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        } else {
+            var deleteInfo = $("#gridRelationPU").jqGrid("getRowData", id);
+            var isDelete = confirm("@Html.Raw(LiveAzure.Resource.Stage.ProgramController.isDelete) " + deleteInfo["Name.Matter"] + "?");
+            if (isDelete == false) {
+                return false;
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/RelationPUDelete",
+                    data: { RelationPUGid: id },
+                    success: function () {
+                        $('#gridRelationPU').trigger('reloadGrid');
+                    }
+                });
+            }
+        }
+    }
+</script>
+<div>
+    <span>@LiveAzure.Resource.Model.Product.ProductOnSale.Code :</span> <span style="font-weight: bold">@Html.DisplayFor(model => model.Code)</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+    <span>@LiveAzure.Resource.Model.Product.ProductOnSale.Name :</span> <span style="font-weight: bold">@ViewBag.OnsaleSKUName</span>
+</div>
+@Html.Grid(new GridControl()
+            .SetName("gridRelationPU")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Product/ListRelationPU")
+            .SetHeight("'100%'")
+            .SetWidth("200")
+            .SetColumns<LiveAzure.Models.Product.ProductOnRelation>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.OnRelation.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductOnRelation.OnRelation).SetName("RelationName");
+                cs.Add(x => x.Rtype).SetCaption(LiveAzure.Resource.Model.Product.ProductOnRelation.Rtype);
+                cs.Add(x => x.OnSale.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductOnSale.Name).SetName("OnSaleName");
+                cs.Add(x => x.OnSale.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductOnSale.Code);
+                cs.Add(x => x.OnSale.MarketPrice.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductOnSale.MarketPrice).SetName("MarketPrice.Matter");
+                cs.Add(x => x.OnSale.SalePrice.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductOnSale.SalePrice).SetName("SalePrice.Matter");
+                cs.Add(x => x.OnSale.Validity).SetCaption(LiveAzure.Resource.Model.Product.ProductOnSale.Validity).SetName("Validity");
+            })
+
+    )
+<div>
+    <input type="button" name="add" value="@LiveAzure.Resource.Common.Add" onclick="addRelationPU() " />
+    <input type="button" name="delete" value="@LiveAzure.Resource.Common.Delete" onclick="deleteRelationPU()" />
+</div>
+<div id="RelationPUAdd">
+</div>

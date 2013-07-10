@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Region";
+}
+@model List<LiveAzure.Models.Member.MemberAddress>
+
+@using LiveAzure.Controls.LiveRegionSelector
+@ControlManager.RegionSelect()
+<!--RegionSelectorManeger必须放在body内部或其子元素内，而且整个页面只能出现一次-->
+
+<h2>测试地区选择器</h2>
+注意：直接绑定Region的Guid字段（考虑到后台处理方便，以及一些表中无对应对象字段）<br />
+直接保存即可<br />
+<b style="color:Red">下面演示的是两个地区选择同时存在时的情况。已经过测试多个地区选择器不会冲突</b><br />
+
+选择器1
+@Html.EditorFor(model => model[0].aLocation, "RegionSelect", new { ID = "Region1" })
+
+<br />
+<br />
+
+选择器2
+@Html.EditorFor(model => model[1].aLocation, "RegionSelect", new { ID = "Region2", OnClick = "onRegionSelect" })
+
+<script type="text/javascript">
+    //region为选中的地区，fullName为完整地区名称
+    function onRegionSelect(regionID, fullName) {
+        alert(regionID);
+        alert(fullName);
+    }
+</script>

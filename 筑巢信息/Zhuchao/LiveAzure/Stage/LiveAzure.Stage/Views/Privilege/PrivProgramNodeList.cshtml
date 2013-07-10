@@ -1,0 +1,34 @@
+﻿@{
+    Layout = null;
+}
+<div id="grid">
+    <table id="gridlist"></table>
+    <div id="pager3"></div>
+</div>
+<script type="text/javascript">
+    var mydata;
+    $.ajax({
+        type: "POST",
+        url: "/Privilege/GetColumnSettings",
+        success: function (data) {
+            var testSettings = data.split("!");
+            var columnModelSettings = eval('(' + testSettings[0] + ')');
+            var testcolname = eval('(' + testSettings[1] + ')');
+            $.post("/Privilege/GetGridData", {}, function (json) {
+                mydata = eval('(' + json + ')');
+                $("#gridlist").jqGrid({
+                    data: mydata,
+                    datatype: "Local",
+                    height: 100,
+                    rowNum: 5,
+                    rowList: [5],
+                    pager: '#pager3',
+                    colNames: testcolname,
+                    colModel: columnModelSettings,
+                    multiselect: false,
+                    caption: "授权节点列表"
+                });
+            });
+        }
+    });
+</script>

@@ -1,0 +1,90 @@
+﻿@using LiveAzure.Models.General
+@using LiveAzure.Resource.Stage;
+@using LiveAzure.Resource.Model;
+@using System.Globalization;
+@using MVC.Controls.Grid;
+@using MVC.Controls;
+@model GeneralPrivateCategory
+@using (@Ajax.BeginForm("SavePrivateCategoryNode", "Category", new AjaxOptions { UpdateTargetId = "privateCategoryTable", OnSuccess = "RefreshPrivateTree()" }, new { id = "editPrivateCategoryForm" }))
+{
+<script type="text/javascript">
+
+    function submitForm() {
+        $("#editPrivateCategoryForm").submit();
+        $("#editPrivateCategory").hide();
+    }
+    
+</script>
+<div id="Pro" style="margin: 2px;">
+    <h2>@CategoryController.EditPrivateCategory</h2>
+    <div class="down_AddorEdit">
+        <table>
+            <tr>
+                @Html.HiddenFor(model => model.Gid)
+                <th>
+                    @ProgramController.parent
+                </th>
+                @if (Model.Parent != null)
+                {
+                    <td>
+                        @Model.Parent.Name.Matter
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.Label("")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.General.GeneralPrivateCategory.Code)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Code)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.General.GeneralPrivateCategory.Name)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Name, "Matter")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.General.GeneralPrivateCategory.Sorting)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Sorting)
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.Label(@LiveAzure.Resource.Model.General.GeneralPrivateCategory.Show)</th>
+                <td>@Html.DropDownListFor(model => model.Show,(List<SelectListItem>)ViewBag.IsShow)
+                    @Html.ValidationMessageFor(model => model.Show)
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.Label(@LiveAzure.Resource.Model.General.GeneralPrivateCategory.StdUnit)</th>
+                <td>@Html.DropDownListFor(model => model.StdUnit,(List<SelectListItem>)ViewBag.UnitList)
+                    @Html.ValidationMessageFor(model => model.StdUnit)
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.Label(@LiveAzure.Resource.Model.ModelBase.Remark)</th>
+                <td>@Html.EditorFor(model => model.Remark)
+                    @Html.ValidationMessageFor(model => model.Remark)
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="submitForm();" />                
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+        
+    </div>
+</div>
+}

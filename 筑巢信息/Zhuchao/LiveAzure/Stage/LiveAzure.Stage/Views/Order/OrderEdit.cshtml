@@ -1,0 +1,658 @@
+﻿<script type="text/javascript">
+    var Status = "@ViewBag.status";
+    var UseFn = "Status" + Status;
+    $(document).ready(function () {
+        eval(UseFn + "()");
+        LogAction();
+        $.ajax({
+            type: "POST",
+            url: "/Order/OrderEditInfo",
+            success: function (html) {
+                $("#OrderEditInfoMainPage").html(html);
+            }
+        });
+    });
+
+    /*---------------------------------------------------------
+    判断 取消-退货 状态转换
+    ---------------------------------------------------------*/
+    function CancelOrReturn(){
+        if("@ViewBag.change"=="true"){
+                document.getElementById("orderDisable").value="@Html.Raw(LiveAzure.Resource.Stage.OrderController.ReturnGoods)";
+            }else{
+                document.getElementById("orderDisable").value="@Html.Raw(LiveAzure.Resource.Stage.OrderController.CancelOrder)";
+            }
+    }
+    /*---------------------------------------------------------
+    初始未锁定状态*10 0000 0000 0000
+    ---------------------------------------------------------*/
+    function Status2000() {
+        document.getElementById("lock").removeAttribute("disabled");
+        document.getElementById("unlock").setAttribute("disabled", "disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").setAttribute("disabled", "disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    锁定状态*01 1010 0000 0011
+    ---------------------------------------------------------*/
+    function Status1A03() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").removeAttribute("disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").removeAttribute("disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").removeAttribute("disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    取消状态*01 0000 0000 0010
+    ---------------------------------------------------------*/
+    function Status1002() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    挂起状态*01 0001 0000 0010
+    ---------------------------------------------------------*/
+    function Status1102() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").removeAttribute("disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    确定状态*款到发货*01 0100 0010 0010
+    ---------------------------------------------------------*/
+    function Status1432() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").removeAttribute("disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").removeAttribute("disabled");
+        document.getElementById("paid").removeAttribute("disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    收款状态*款到发货*01 0100 0000 1010
+    ---------------------------------------------------------*/
+    function Status140A() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").removeAttribute("disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").removeAttribute("disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+
+    /*---------------------------------------------------------
+    已付款*未排单状态*款到发货*01 0100 1000 1010
+    ---------------------------------------------------------*/
+    function Status148A() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").removeAttribute("disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").removeAttribute("disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").removeAttribute("disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").removeAttribute("disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    已排单状态*款到发货*01 0100 0100 1110
+    ---------------------------------------------------------*/
+    function Status144E() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").removeAttribute("disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").removeAttribute("disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").removeAttribute("disabled");
+        document.getElementById("balance").removeAttribute("disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    确定状态*货到付款*01 0100 1000 0010
+    ---------------------------------------------------------*/
+    function Status1482() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").removeAttribute("disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").removeAttribute("disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    已排单状态*货到付款*01 0100 0110 0010
+    ---------------------------------------------------------*/
+    function Status1472() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").removeAttribute("disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").removeAttribute("disabled");
+        document.getElementById("noticeCash").removeAttribute("disabled");
+        document.getElementById("paid").removeAttribute("disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    通知收款状态*货到付款*01 0100 0100 1010
+    ---------------------------------------------------------*/
+    function Status144A() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").removeAttribute("disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").removeAttribute("disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").removeAttribute("disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+
+    /*---------------------------------------------------------
+    锁定状态*00 0000 0000 0000
+    ---------------------------------------------------------*/
+    function Status0000() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").setAttribute("disabled", "disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").setAttribute("disabled", "disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+     /*---------------------------------------------------------
+    状态*01 0000 0000 1111
+    ---------------------------------------------------------*/
+    function Status100F() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").removeAttribute("disabled");
+        document.getElementById("balance").removeAttribute("disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").removeAttribute("disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    状态*01 0000 0001 0111
+    ---------------------------------------------------------*/
+    function Status1017() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").removeAttribute("disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").removeAttribute("disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").removeAttribute("disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    状态*01 0000 0000 1010
+    ---------------------------------------------------------*/
+    function Status100A() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").removeAttribute("disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").setAttribute("disabled", "disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    状态*01 0000 0000 1011
+    ---------------------------------------------------------*/
+    function Status100B() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").setAttribute("disabled", "disabled");
+        document.getElementById("unpay").removeAttribute("disabled");
+        document.getElementById("balance").setAttribute("disabled", "disabled");
+        document.getElementById("talk").removeAttribute("disabled");
+        document.getElementById("orderDisable").removeAttribute("disabled");
+        CancelOrReturn();
+    }
+    /*---------------------------------------------------------
+    状态*01 0000 0001 0101
+    ---------------------------------------------------------*/
+    function Status1015() {
+        document.getElementById("lock").setAttribute("disabled", "disabled");
+        document.getElementById("unlock").removeAttribute("disabled");
+        document.getElementById("confirm").setAttribute("disabled", "disabled");
+        document.getElementById("unconfirm").setAttribute("disabled", "disabled");
+        document.getElementById("hange").setAttribute("disabled", "disabled");
+        document.getElementById("unhange").setAttribute("disabled", "disabled");
+        document.getElementById("arrange").setAttribute("disabled", "disabled");
+        document.getElementById("unarrange").setAttribute("disabled", "disabled");
+        document.getElementById("noticeCash").setAttribute("disabled", "disabled");
+        document.getElementById("paid").removeAttribute("disabled");
+        document.getElementById("unpay").setAttribute("disabled", "disabled");
+        document.getElementById("balance").removeAttribute("disabled");
+        document.getElementById("talk").setAttribute("disabled", "disabled");
+        document.getElementById("orderDisable").removeAttribute("disabled");
+        CancelOrReturn();
+    }
+    /*--------------------------------------------------------------
+    点击锁定按钮
+    --------------------------------------------------------------*/
+    function Lock() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderLocking",
+            data: { bLocking: true },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击解锁按钮
+    --------------------------------------------------------------*/
+    function Unlock() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderLocking",
+            data: { bLocking: false },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击确定按钮
+    --------------------------------------------------------------*/
+    function Confirm() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderStatus",
+            data: { nStatus: 1 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击未确定按钮
+    --------------------------------------------------------------*/
+    function Unconfirm() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderStatus",
+            data: { nStatus: 0 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击挂起按钮
+    --------------------------------------------------------------*/
+    //新建弹出窗
+    var OrderHanged_Panel = new OpenPanel();
+    OrderHanged_Panel.width = 500;
+    OrderHanged_Panel.height = 600;
+    OrderHanged_Panel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+    OrderHanged_Panel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function Hange() {
+        OrderHanged_Panel.OpenPanel();        
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderHanged",
+            data: { bHanged: true },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/OrderHangedAlert",                    
+                    success: function (html) {
+                        OrderHanged_Panel.EditPageHtml(html);
+                    }
+                });
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击解挂按钮
+    --------------------------------------------------------------*/
+    function Unhange() {  
+        $.ajax({
+            type:"post",
+            url:"/Order/CanUnhange",
+            success:function(data){
+                if(data.toString()=="True"){
+                    $.ajax({
+                        type: "POST",
+                        url: "/Order/UpdateOrderHanged",
+                        data: { bHanged: false },
+                        success: function (Status) {
+                            eval("Status" + Status + "()");
+                            LogAction();
+                        }
+                    });
+                }else{
+                    alert("确认保存完订单编辑信息");
+                    return false;
+                }
+            }
+        });    
+        
+    }
+    /*--------------------------------------------------------------
+    点击排单按钮
+    --------------------------------------------------------------*/
+    function Arrange() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderStatus",
+            data: { nStatus: 2 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击未排单按钮
+    --------------------------------------------------------------*/
+    function Unarrange() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderStatus",
+            data: { nStatus: 1 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击通知收款按钮
+    --------------------------------------------------------------*/
+    function NoticeCash() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderPayStatus",
+            data: { nPayStatus: 2 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击未付款按钮
+    --------------------------------------------------------------*/
+    function Unpay() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderPayStatus",
+            data: { nPayStatus: 0 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击已付款按钮
+    --------------------------------------------------------------*/
+    function Paid() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderPayStatus",
+            data: { nPayStatus: 3 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击结算按钮
+    --------------------------------------------------------------*/
+    function Balance() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderStatus",
+            data: { nStatus: 4 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+    /*--------------------------------------------------------------
+    点击沟通按钮
+    --------------------------------------------------------------*/
+    //新建弹出窗
+    var OrderTalk_Panel = new OpenPanel();
+    OrderTalk_Panel.width = 500;
+    OrderTalk_Panel.height = 600;
+    OrderTalk_Panel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+    OrderTalk_Panel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function Talk() {
+        OrderTalk_Panel.OpenPanel();
+        $.ajax({
+            type: "POST",
+            url: "/Order/OrderTalkAlert",            
+            success: function (html) {
+                OrderTalk_Panel.EditPageHtml(html);
+            }
+        });
+    }
+    /*---------------------------
+    点击取消订单按钮
+    ---------------------------*/
+    function OrderDisable() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderStatus",
+            data: { nStatus: 5 },
+            success: function (Status) {
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+
+    /*------------------------------
+    调用操作日志
+    -------------------------------*/
+    function LogAction(){
+        $.ajax({
+                type: "POST",
+                url: "/Order/LogAction",                
+                success: function (html) {
+                    $("#LogAction").html(html);
+                }
+            });
+    }
+
+    function ChangeOrderInfo( nHangType, strReason) {
+        $.ajax({
+            type: "POST",
+            url: "/Order/SaveOldOrderVersion",
+            data: { nHangType: nHangType, strReason: strReason },
+            success: function () {
+                $("#OrderEditInfoMainPage").html("");
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/OrderEditInfo",
+                    success: function (html) {
+                        $("#OrderEditInfoMainPage").html(html);
+                    }
+                });
+            }
+        });
+    }
+    function test() {
+        window.print("123");
+    }
+</script>
+<div id="OrderEditMainPage">
+    <div>
+        <div>
+            <input type="button" value="打印订单" onclick="test()" />
+            <input type="button" value="@LiveAzure.Resource.Stage.OrderController.InfoChange" onclick="ChangeOrderInfo();" />
+        </div>
+    </div>
+    <div id="OrderEditInfoMainPage">
+    </div>
+    <div>
+        @LiveAzure.Resource.Stage.OrderController.OperateInfo
+        <div>
+            <input id="lock" type="button" value="@LiveAzure.Resource.Common.LockStatus.Split(',')[1]" onclick="Lock()" />
+            <input id="unlock" type="button" value="@LiveAzure.Resource.Common.LockStatus.Split(',')[0]" disabled="disabled" onclick="Unlock()" />
+            <input id="confirm" type="button" value="@LiveAzure.Resource.Common.OrderStatus.Split(',')[1]" disabled="disabled" onclick="Confirm()" />
+            <input id="unconfirm" type="button" value="@LiveAzure.Resource.Common.OrderStatus.Split(',')[0]" disabled="disabled" onclick="Unconfirm()" />
+            <input id="noticeCash" type="button" value="@LiveAzure.Resource.Common.PayStatus.Split(',')[2]" disabled="disabled" onclick="NoticeCash()" />
+            <input id="paid" type="button" value="@LiveAzure.Resource.Common.PayStatus.Split(',')[0]" disabled="disabled" style=" display:none" @*onclick="Paid()"*@ />
+            <input id="unpay" type="button" value="@LiveAzure.Resource.Common.PayStatus.Split(',')[3]" disabled="disabled" style=" display:none" @*onclick="Unpay()"*@ />
+            <input id="arrange" type="button" value="@LiveAzure.Resource.Common.OrderStatus.Split(',')[2]" disabled="disabled" onclick="Arrange()" />
+            <input id="unarrange" type="button" value="@LiveAzure.Resource.Stage.OrderController.Unarrange" disabled="disabled" onclick="Unarrange()" />
+            <input id="hange" type="button" value="@LiveAzure.Resource.Common.HangStatus.Split(',')[1]" disabled="disabled" onclick="Hange()" />
+            <input id="unhange" type="button" value="@LiveAzure.Resource.Common.HangStatus.Split(',')[0]" disabled="disabled" onclick="Unhange()" />
+            <input id="balance" type="button" value="@LiveAzure.Resource.Common.OrderStatus.Split(',')[4]" disabled="disabled" onclick="Balance()" />
+            <input id="talk" type="button" value="@LiveAzure.Resource.Stage.OrderController.TalkWithSelf" disabled="disabled" onclick="Talk()" />
+            <input id="orderDisable" type="button" value="@LiveAzure.Resource.Stage.OrderController.CancelOrder" disabled="disabled" onclick="OrderDisable()" />
+        </div>
+    </div>
+    <div id="LogAction">
+    </div>
+</div>

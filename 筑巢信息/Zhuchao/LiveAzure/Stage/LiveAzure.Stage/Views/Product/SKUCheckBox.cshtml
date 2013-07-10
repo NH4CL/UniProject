@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    function SKUSaveSuccess() {
+        $("#SKUOnsaleAdd").fadeOut("fast");
+        $("#SKUOnsaleEdit").fadeOut("fast");
+        $("#grid3").trigger('reloadGrid');
+        $("#SKUOnsaleGrid").fadeIn("fast");
+    }
+</script>
+@using (@Ajax.BeginForm("SKUOnsaleSave", "Product", new AjaxOptions { OnSuccess = "SKUSaveSuccess" }, new { id = "SKUOnsaleSave" }))
+{
+<table style="width: 100%">
+                <tr>
+                    @{
+    int cnt = 0;
+    List<LiveAzure.Models.Product.ProductInfoItem> sku = ViewBag.SKU;
+
+    foreach (var item in sku)
+    {
+        if (cnt++ % 3 == 0)
+        {
+                                @:  </tr> <tr> 
+                            }
+                            @: <td> 
+                                <input type="checkbox" 
+                                       name="selectedSKU" 
+                                       value="@item.Gid" 
+                                       checked = "checked" /> 
+                                @item.Code  @:&nbsp @item.ShortName.Matter
+                            @:</td>
+                        }
+                        @: </tr>
+                    }
+ </table>
+    <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+}

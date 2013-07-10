@@ -1,0 +1,150 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    Layout = null;  
+}
+<div id="divAddSku">
+    <table>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <p>
+                    @LiveAzure.Resource.Stage.UserController.keyword: @Html.TextBox("SearchString")
+                    &nbsp;
+                    <input type="button" id = "searchuser" value="@LiveAzure.Resource.Stage.UserController.search" onclick="searchSku()" />
+                </p>
+            </td>
+        </tr>
+    </table>
+    <div id="divGridSku" style="display: none">
+        @Html.Grid(new GridControl()
+    .SetName("gridSku")
+    .SetPageSize(10)
+    .SetIsAutoSize(false)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Purchase/listSku")
+    .SetHeight("'100%'")
+    .SetColumns<LiveAzure.Models.Product.ProductInfoItem>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Code);
+            cs.Add(x => x.Product.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Name).SetName("Name");
+            cs.Add(x => x.Barcode).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode);
+        })
+    )
+        <!--计费方式 -->
+        @if (ViewBag.calMode == 0)
+        {
+            <span>
+                <label>@LiveAzure.Resource.Model.Purchase.PurchaseItem.Quantity</label>
+                <input type="text" id="pQuantity" />
+                <label>@LiveAzure.Resource.Model.Purchase.PurchaseItem.Amount</label>
+                <input type="text" id="pAmount" />
+            </span>
+        }
+        else
+        {
+            <span>
+                <label>@LiveAzure.Resource.Model.Purchase.PurchaseItem.Price</label>
+                <input type="text" id="pPrice" />
+                <label>@LiveAzure.Resource.Model.Purchase.PurchaseItem.Quantity</label>
+                <input type="text" id="Quantity" />
+            </span>
+        }
+        <br />
+        <input type="button" id = "addsku" value="@LiveAzure.Resource.Common.Add" onclick="addSku()" />
+    </div>
+</div>
+<script type="text/javascript">
+    var lastid;
+    function addSku() {
+        var quantity; var amount; var price;
+        if ("@ViewBag.calMode" == "0") {
+            quantity = document.getElementById("pQuantity").value;
+            if (quantity == "null"||quantity=="") {
+                alert("input quantity");                
+                $("#pQuantity").focus();
+                return false;
+            }
+            amount = document.getElementById("pAmount").value;
+            if (amount == null||amount=="") {
+                alert("input amount");                
+                $("#pAmount").focus();
+                return false;
+            }
+        } else {
+            price = document.getElementById("pPrice").value;
+            if (price == null||price=="") {
+                alert("input price");                
+                $("#pPrice").focus();
+                return false;
+            }
+            quantity = document.getElementById("Quantity").value;
+            if (quantity == null||quantity=="") {
+                alert("input quantity");                
+                $("#Quantity").focus();
+                return false;
+            }
+        }
+        var skuid = $("#gridSku").jqGrid("getGridParam", "selrow");
+        var skuinfor;
+        var ids = $("#gridPurItem").jqGrid('getDataIDs');
+        var pos = ids.length;
+        var addgid;
+        var addname;
+        var addcode;
+        var addbarcode;
+        
+        if (skuid == null) {
+            alert('@LiveAzure.Resource.Stage.OrganizationController.selRowAlert');
+            return false;
+        }
+        else {
+            skuinfor = $("#gridSku").jqGrid("getRowData", skuid);
+            addgid = skuinfor.Gid;
+            addname = skuinfor.Name;
+            addcode = skuinfor.Code;
+            addbarcode = skuinfor.Barcode;
+           
+            $("#gridPurItem").jqGrid("addRowData", pos, { Name: addname });
+            $("#gridPurItem").jqGrid("setRowData", pos, { Code: addcode });
+            //            $("#gridPurItem").jqGrid("setRowData", pos, { Gid: addgid });
+            $("#gridPurItem").jqGrid("setRowData", pos, { Barcode: addbarcode });
+            if ("@ViewBag.calMode" == "0") {
+                price = amount / quantity;
+                $("#gridPurItem").jqGrid("setRowData", pos, { Price: price });
+                $("#gridPurItem").jqGrid("setRowData", pos, { Amount: amount });
+                $("#gridPurItem").jqGrid("setRowData", pos, { Quantity: quantity });
+            } else {
+                amount = price * quantity;
+                $("#gridPurItem").jqGrid("setRowData", pos, { Price: price });
+                $("#gridPurItem").jqGrid("setRowData", pos, { Amount: amount });
+                $("#gridPurItem").jqGrid("setRowData", pos, { Quantity: quantity });
+            }
+            $("#divGridSku").css("display", "none");
+
+        }
+        savePurItem(true);
+    }
+
+
+
+    function searchSku() {
+
+        var searchStr = $("#SearchString").val();
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setSearchString",
+            data: { searchStr: searchStr },
+            success: function (data) {
+                $("#divGridSku").css("display", "block");
+                $("#gridSku").trigger('reloadGrid');
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+</script>

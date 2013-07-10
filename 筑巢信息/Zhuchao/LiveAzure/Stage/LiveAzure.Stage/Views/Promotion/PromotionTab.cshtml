@@ -1,0 +1,103 @@
+﻿<script type="text/javascript">
+    $(function () {
+        document.getElementById("promotionMutexPage").innerHTML = "";
+        document.getElementById("promotionProductPage").innerHTML = "";
+        document.getElementById("promotionCouponPage").innerHTML = "";
+        $("#promotionTabs").tabs();
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/PromotionInfoEditPage",
+            success: function (html) {
+                $("#promotionInfoPage").html(html);
+            }
+        });
+    });
+    //获取促销信息页面
+    function GetPromotionInfoPage() {
+        document.getElementById("promotionMutexPage").innerHTML = "";
+        document.getElementById("promotionProductPage").innerHTML = "";
+        document.getElementById("promotionCouponPage").innerHTML = "";
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/PromotionInfoEditPage",
+            success: function (html) {
+                $("#promotionInfoPage").html(html);
+            }
+        });
+    }
+    //返回列表页面
+    function backToList() {
+        window.location.href = "/Promotion/Index";
+    }
+    //返回促销互斥页面
+    function GetPromotionMutexPage() {
+        document.getElementById("promotionInfoPage").innerHTML = "";
+        document.getElementById("promotionProductPage").innerHTML = "";
+        document.getElementById("promotionCouponPage").innerHTML = "";
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/PromotionMutexIndex",
+            success: function (html) {
+                $("#promotionMutexPage").html(html);
+            }
+        });
+    }
+    //返回促销商品信息
+    function GetPromotionProductPage() {
+        document.getElementById("promotionInfoPage").innerHTML = "";
+        document.getElementById("promotionMutexPage").innerHTML = "";
+        document.getElementById("promotionCouponPage").innerHTML = "";
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/PromotionProductIndex",
+            success: function (html) {
+                $("#promotionProductPage").html(html);
+            }
+        });
+    }
+    //返回促销券信息页面
+    function GetPromotionCouponPage() {
+        document.getElementById("promotionInfoPage").innerHTML = "";
+        document.getElementById("promotionMutexPage").innerHTML = "";
+        document.getElementById("promotionProductPage").innerHTML = "";
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/PromotionCouponIndex",
+            success: function (html) {
+                $("#promotionCouponPage").html(html);
+            }
+        });
+    }
+
+</script>
+<div>
+    <div class="redmond">
+        <div id="promotionTabs">
+            <ul>
+                <li><a href="#promotionInfoTab" onclick="GetPromotionInfoPage();">@LiveAzure.Resource.Stage.PromotionController.PromotionInfo</a></li>
+                <li><a href="#promotionMutexTab" onclick="GetPromotionMutexPage();">@LiveAzure.Resource.Stage.PromotionController.PromotionMutex</a></li>
+                <li><a href="#promotionProductTab" onclick="GetPromotionProductPage();">@LiveAzure.Resource.Stage.PromotionController.PromotionProduct</a></li>
+                <li><a href="#promotionCouponTab" onclick="GetPromotionCouponPage();">@LiveAzure.Resource.Stage.PromotionController.PromotionCoupon</a></li>
+            </ul>
+            <div id="promotionInfoTab">
+                <div id="promotionInfoPage">
+                </div>
+            </div>
+            <div id="promotionMutexTab">
+                <div id="promotionMutexPage">
+                </div>
+            </div>
+            <div id="promotionProductTab">
+                <div id="promotionProductPage">
+                </div>
+            </div>
+            <div id="promotionCouponTab">
+                <div id="promotionCouponPage">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <input type="button" value="@LiveAzure.Resource.Common.Close" onclick="backToList();" />
+    </div>
+</div>

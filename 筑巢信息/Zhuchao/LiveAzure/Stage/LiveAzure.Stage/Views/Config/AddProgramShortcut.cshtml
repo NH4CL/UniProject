@@ -1,0 +1,56 @@
+﻿@using LiveAzure.Resource.Stage
+@using LiveAzure.Resource.Model.Member;
+@model LiveAzure.Models.Member.MemberUserShortcut
+@ControlManager.ProgramSelect()         
+@{
+    Layout = null;
+}
+@using (@Ajax.BeginForm("AddShortcut", "Config", new AjaxOptions { OnSuccess = "RefreshProgramGrid(); ClosePanel();" }, new { Id = "AddProgramShortcutForm" }))
+{
+    <div class="down_AddorEdit">
+        <table>
+            <tr>
+                <th>
+                    @MemberUserShortcut.Program
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.ProgID, "ProgramSelect")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @MemberUserShortcut.Sorting
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Sorting)
+                    @Html.ValidationMessageFor(model => model.Sorting)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @MemberUserShortcut.Icon
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Icon)
+                    @Html.ValidationMessageFor(model => model.Icon)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.ModelBase.Remark
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Remark)
+                    @Html.ValidationMessageFor(model => model.Remark)
+                </td>
+            </tr>
+        </table>
+        <input type="button" value="@ConfigController.Confirm" onclick="SubmitPorgramShortcutForm()" />
+        <input type="reset" value="@ConfigController.Reset" />
+    </div>
+    <script type="text/javascript">
+        function SubmitPorgramShortcutForm() {
+            $("#AddProgramShortcutForm").submit();
+        }
+    </script>
+}

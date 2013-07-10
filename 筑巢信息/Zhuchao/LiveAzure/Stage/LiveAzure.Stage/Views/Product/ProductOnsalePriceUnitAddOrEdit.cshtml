@@ -1,0 +1,151 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Product
+@model ProductOnUnitPrice
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    function savePriceUnitSuccess(data) {
+        if (data == "success") {
+            var successTips = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.SaveOK)";
+            alert(successTips);
+            var OnSkuId = $("#hidden_OnSkuId").val();
+            var SkuId = $("#hidden_SkuId").val();
+            alert("OnSkuId:" + OnSkuId + "  SkuId:" + SkuId);
+            $.post("/Product/PriceUnit", { SkuId: SkuId, SkuOnSaleId: OnSkuId }, function back(html) {
+                $("#tabs-OnsaleShipping").html("");
+                $("#tabs-OnsalePayment").html("");
+                $("#tabs-ProductSkuOnSale").html(html);
+            });
+            //            CloseEditPanel("CoverPage_UnitPrice", "EditPage_UnitPrice");
+            UnitPricePanel.CloseEditPanel();
+        }
+        else {
+            var lowerTips = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.LowerThanLowest)";
+            var truthBeTold = window.confirm(lowerTips);
+            if (truthBeTold) {
+                $("#ProductOnsaleUnitPriceForm").submit();
+            }
+        }
+    }
+    function adjustLowestPrice() {
+        $("#ProductOnsaleUnitPriceForm").submit();
+    }
+</script>
+@Html.ValidationSummary(true)
+@using (Ajax.BeginForm("SaveSKUOnsalePriceUnit", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "savePriceUnitSuccess" }, new { id = "ProductOnsaleUnitPriceForm" }))
+{
+    <div class="down_AddorEdit">
+        <div>
+            @Html.HiddenFor(model => model.Gid)
+            @Html.HiddenFor(model => model.OnSkuID)
+            @{ViewBag.OnSkuId = Model.OnSkuID;
+              ViewBag.SkuId = Model.OnSkuItem.SkuID;
+            }
+            <input type="hidden" value="@ViewBag.OnSkuId" id="hidden_OnSkuId"/>
+            <input type="hidden" value="@ViewBag.SkuId" id="hidden_SkuId"/>
+        </div>
+        <table>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductInformation.Code)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.OnSkuItem.SkuItem.Product.Code)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.Code)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.OnSkuItem.SkuItem.Code)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnUnitPrice.OnSkuItem)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.OnSkuItem.FullName.Matter)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnUnitPrice.ShowUnit)
+                </th>
+                <td>
+                    @if (ViewBag.bAddOrEdit)
+                    {                
+                        @Html.DropDownListFor(model => model.ShowUnit.Name.Matter, (List<SelectListItem>)ViewBag.oMeasureUnitList)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.ShowUnit.Name.Matter)
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.StdUnit)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.OnSkuItem.SkuItem.StandardUnit.Name.Matter)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnUnitPrice.UnitRatio)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.UnitRatio)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnUnitPrice.Percision)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Percision)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnUnitPrice.SalePrice)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.SalePrice, "Cash")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnUnitPrice.MarketPrice)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.MarketPrice, "Cash")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnUnitPrice.IsDefault)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.IsDefault, (List<SelectListItem>)ViewBag.oIsDefaultList)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.ModelBase.Remark)
+                </th>
+                <td>
+                    @Html.TextAreaFor(model => model.Remark)
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="button" onclick="adjustLowestPrice()" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    </div>
+}

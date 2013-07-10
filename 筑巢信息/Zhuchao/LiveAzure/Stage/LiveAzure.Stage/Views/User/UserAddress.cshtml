@@ -1,0 +1,178 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using LiveAzure.Controls.LiveRegionSelector
+@ControlManager.RegionSelect()
+@model LiveAzure.Models.Member.MemberAddress
+@{
+    Layout = null;
+}
+
+<div id = "divAddress" >
+@Html.Grid(new GridControl()
+        .SetName("gridAddress")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/User/listAddress")
+        .SetHeight("'100%'")
+        .SetWidth("600")
+        .SetColumns<LiveAzure.Models.Member.MemberAddress>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.Code);
+                cs.Add(x => x.DisplayName).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.DisplayName);
+                cs.Add(x => x.FullAddress).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.FullAddress);
+                cs.Add(x => x.PostCode).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.PostCode).SetHidden(true);
+                cs.Add(x => x.CellPhone).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.CellPhone);
+                //cs.Add(x => x.WorkPhone).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.WorkPhone).SetHidden(true);
+                cs.Add(x => x.WorkFax).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.WorkFax).SetHidden(true);
+                cs.Add(x => x.HomePhone).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.HomePhone).SetHidden(true);
+                cs.Add(x => x.Email).SetCaption(LiveAzure.Resource.Model.Member.MemberAddress.Email);
+            })
+       )
+<br />
+    <input type="button" value="@LiveAzure.Resource.Common.Add" id = "addaddress" onclick="addAddress();"/>
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" id = "editaddress" onclick="editAddress()"/>
+   
+</div>
+
+@using (Html.BeginForm("UserAddress", "User"))
+{
+<div id = "divAddressDetail" style = "display : none">
+    <div class="down_AddorEdit">
+        <div id = "divGid">
+            @Html.HiddenFor(model => model.Gid)
+        </div>
+
+        <table>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberAddress.Code
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Code)
+                    @Html.ValidationMessageFor(model => model.Code)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberAddress.DisplayName
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.DisplayName)
+                    @Html.ValidationMessageFor(model => model.DisplayName)
+                </td>
+            </tr>
+           
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberAddress.FullAddress
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.FullAddress)
+                    @Html.ValidationMessageFor(model => model.FullAddress)
+                </td>
+            </tr>
+         @*   <div>
+                @LiveAzure.Resource.Model.Member.MemberAddress.PostCode
+                @Html.EditorFor(model => model.PostCode)
+                @Html.ValidationMessageFor(model => model.PostCode)
+            </div>*@
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.OrganizationBase.Location
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.aLocation, "RegionSelect")
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberAddress.CellPhone
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.CellPhone)
+                    @Html.ValidationMessageFor(model => model.CellPhone)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberAddress.WorkFax
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.WorkFax)
+                    @Html.ValidationMessageFor(model => model.WorkFax)
+                </td>
+            </tr>
+            <tr>
+                <th>    
+                    @LiveAzure.Resource.Model.Member.MemberAddress.HomePhone
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.HomePhone)
+                    @Html.ValidationMessageFor(model => model.HomePhone)
+                </td>   
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberAddress.Email
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Email)
+                    @Html.ValidationMessageFor(model => model.Email)
+                </td> 
+            </tr>
+        </table>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset"  value="@LiveAzure.Resource.Common.Reset"  />
+        </div>
+    </div>
+    
+</div>
+}
+<script type ="text/javascript">
+    function test() {
+        alert("haha");
+        document.getElementsByName("nameDisplay")[0].value = "ssss";
+        alert("haha");
+    }
+    function addAddress() {
+        $("#divUserinformation").html("");
+        $("#Code").val("");
+        $("#DisplayName").val("");
+        $("#FullAddress").val("");
+        $("#PostCode").val("");
+        $("#CellPhone").val("");
+        $("#WorkFax").val("");
+        $("#HomePhone").val("");
+        $("#Email").val("");
+        $("#divAddressDetail").css("display","block");
+    }
+    function editAddress() {
+        $("#divUserinformation").html("");
+        var id = $("#gridAddress").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert('@LiveAzure.Resource.Common.PleaseSelectRow');
+        }
+        else {
+            var arrayinfor = $("#gridAddress").jqGrid("getRowData", id);
+            $("#Gid").val(id);
+            $("#DisplayName").val(arrayinfor.DisplayName);
+            $("#Code").val(arrayinfor.Code);
+            $("#FullAddress").val(arrayinfor.FullAddress);
+            $("#PostCode").val(arrayinfor.PostCode);
+            $("#CellPhone").val(arrayinfor.CellPhone);
+            $("#WorkFax").val(arrayinfor.WorkFax);
+            $("#HomePhone").val(arrayinfor.HomePhone);
+            $("#Email").val(arrayinfor.Email);
+            $("#divAddressDetail").css("display", "block");
+        }
+ 
+    }
+    function doHidden() {
+        $("#divAddressDetail").css("display", "none");
+        $("#gridAddress").trigger('reloadGrid');
+    }
+</script>

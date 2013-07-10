@@ -1,0 +1,33 @@
+PictureBLL
+
+public class PictureBLL
+{
+
+    const strPrefix = "http://img.zhuchao.com/images/"
+
+    // 构造函数，图片的路径，需要递归循环子文件夹
+    public PictureBLL(string strPath)
+
+    // 调用主程序，一般可从配置文件中读取信息
+    public Process()
+    {
+        PictureCutter("Small", 100, 100);
+        PictureCutter("Middle", 130, 130);
+        PictureCutter("Large", 600, 600);
+        PictureCutter("X-Large", 1000, 1000);
+        ....
+    }
+
+    // sCode  该类图片的统一代码，例如"Small"等
+    // nHeight, nWidth 目标图片的尺寸
+    public PictureCutter(string sCode, int nHeight, int nWidth)
+
+
+    示例
+    "/100100001/100010001.jpg"                  -- 原始图
+    "/100100001/100010001_100x100.jpg"
+    "/100100001/100010001_50x50.jpg"
+    "/100100001/100010001_s.jpg"
+    "/100100001/100010001_m.jpg"
+    "/100100001/100010001_l.jpg"
+}

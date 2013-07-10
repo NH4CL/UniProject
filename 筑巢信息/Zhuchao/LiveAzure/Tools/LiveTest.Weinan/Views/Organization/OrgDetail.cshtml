@@ -1,0 +1,396 @@
+﻿@using System.Globalization;
+@using LiveAzure.Models;
+@model LiveAzure.Models.Member.MemberOrganization
+           
+@{
+    ViewBag.Title = "编辑";
+   
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.6.2.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/jquery.ztree-2.6.js")"></script>
+@*<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/treeObject.js")"></script>*@
+<script type="text/javascript">
+    function treeObject() {
+
+        var tree;
+        var treesetting;
+        var currentProgUrl;
+        this.selectNode;
+
+        this.createTree = function (treeId, loadUrl, asyncUrl, changeUrl, rmenuId, checkable) {
+            //树状结构的对象
+            var zTree1;
+
+            //树属性的设定
+            var setting;
+
+            var bCheckable = checkable;
+            var strAsyncUrl = asyncUrl;
+            //var strAsyncParam = asyncParam;													//异步参数不需要，直接指定为对象的Guid        
+            var strRmenuId = rmenuId;
+            var strChangeUrl = changeUrl;
+            var strLoadUrl = loadUrl;
+            var strTreeId = treeId;
+
+            //设定数结构的参数
+            setting = {
+                editable: false, 															    //树不可删除
+                edit_renameBtn: false, 															//编辑按钮不可用，不需要用户指定
+                edit_removeBtn: false, 															//删除按钮不可用，不需要用户指定
+                checkable: bCheckable, 															//用户指定是否需要checkbox，需要用户指定
+                keepParent: true, 																//默认值，不需要用户指定
+                keepLeaf: true, 																//默认值，不需要用户指定
+                async: true, 																	//默认值，不需要用户指定
+                asyncUrl: strAsyncUrl, 															//用户指定url
+                asyncParam: ["id"], 															//用户指定参数
+                callback: {
+                    rightClick: rightClick, 												    //右键事件是否可用，根据editable设定，需要用户指定页面右键菜单id
+                    change: zTreeOnChange, 													//如果checkable为true，则需要指定url。
+                    click: zTreeOnClick
+                }
+            };
+
+            //获取树节点信息
+            $.ajax({
+                type: "GET",
+                url: strLoadUrl,
+                success:
+				function (data) {
+				    //将获取的json字符串转换为json对象
+				    var testdata = jQuery.parseJSON(data);
+				    //生成树状结构
+				    zTree1 = $("#" + strTreeId).zTree(setting, testdata);
+				    //设定全局变量，给对象内部其它函数调用
+				    tree = zTree1;
+				    treesetting = setting;
+				}
+            });
+
+            //绑定右键
+            $(document).ready(function () {
+                //获取右键菜单
+                var rMenu = document.getElementById(rmenuId);
+                //绑定右键菜单，当在div中点击时，将右键菜单隐藏
+                $("div").bind("mousedown",
+				function (event) {
+				    if (!(event.target.id == rmenuId || $(event.target).parents("#" + rmenuId).length > 0)) {
+				        rMenu.style.visibility = "hidden";
+				        document.getElementById("m_add").style.visibility = "hidden";
+				        document.getElementById("m_edit").style.visibility = "hidden";
+				        document.getElementById("m_delete").style.visibility = "hidden";
+				    }
+				});
+            });
+
+            //用户将checkbox的状态改变后调用
+            function zTreeOnChange(event, treeId, treeNode) {
+                $.ajax({
+                    type: "POST",
+                    url: strChangeUrl,
+                    data: { id: treeNode.id }
+                });
+            }
+
+            //指定多少层的树节点不能再展开，参数为10
+            function beforeAsync(treeId, treeNode) {
+                if (treeNode.level > 10) {
+                    return false;
+                }
+                return true;
+            }
+
+            //点击树节点事件
+            function zTreeOnClick(event, treeId, treeNode) {
+                alert("treeNode.name =" + treeNode.name);
+
+                document.getElementById("aLocation").value = treeNode.id;
+                document.getElementById("Location_Name").value = treeNode.name;
+                alert("sss");
+                target.style.display = "none";
+                //                alert("document.getElementById.value = " + document.getElementById("Location_FullName").value);
+                //                alert(" treeNode.progUrl = " + treeNode.progUrl);
+                //                currentProgUrl = treeNode.progUrl;
+                //                this.selectNode = treeNode;
+                //to do 
+
+            }
+
+            //右击生成菜单
+            function rightClick(event, treeId, treeNode) {
+                if (!treeNode && event.target.tagName.toLowerCase() != "button" && $(event.target).parents("a").length == 0) {
+                    tree.cancelSelectedNode();
+                    showRMenu("root", event.clientX, event.clientY);
+                } else if (treeNode) {
+                    tree.selectNode(treeNode);
+                    if (treeNode.name == "root") {
+                        showRMenu("root", event.clientX, event.clientY);
+                    }
+                    else {
+                        showRMenu("node", event.clientX, event.clientY);
+                    }
+                }
+            }
+
+            //显示右键菜单
+            function showRMenu(type, x, y) {
+                $("#" + strRmenuId + " ul").show();
+                document.getElementById("m_add").style.visibility = "visible";
+                document.getElementById("m_edit").style.visibility = "visible";
+                document.getElementById("m_delete").style.visibility = "visible";
+                if (type == "root") {
+                    document.getElementById("m_edit").style.visibility = "hidden";
+                    document.getElementById("m_delete").style.visibility = "hidden";
+                }
+                else {
+                    document.getElementById("m_edit").style.visibility = "visible";
+                    document.getElementById("m_delete").style.visibility = "visible";
+                }
+                $("#" + strRmenuId).css({ "top": y + "px", "left": x + "px", "visibility": "visible" });
+            }
+
+        };
+
+        //添加树节点
+        this.add_TreeNode = function (rmenuId) {
+            document.getElementById(rmenuId).style.visibility = "hidden";
+            document.getElementById("m_add").style.visibility = "hidden";
+            document.getElementById("m_edit").style.visibility = "hidden";
+            document.getElementById("m_delete").style.visibility = "hidden";
+
+            this.selectNode = tree.getSelectedNode();
+        }
+
+        //编辑树节点
+        this.edit_TreeNode = function (rmenuId) {
+            document.getElementById(rmenuId).style.visibility = "hidden";
+            document.getElementById("m_add").style.visibility = "hidden";
+            document.getElementById("m_edit").style.visibility = "hidden";
+            document.getElementById("m_delete").style.visibility = "hidden";
+
+            this.selectNode = tree.getSelectedNode();
+        }
+
+        //删除指定的节点
+        this.del_TreeNode = function (treeId, removeUrl, reloadUrl, rmenuId) {
+            document.getElementById(rmenuId).style.visibility = "hidden";
+            document.getElementById("m_add").style.visibility = "hidden";
+            document.getElementById("m_edit").style.visibility = "hidden";
+            document.getElementById("m_delete").style.visibility = "hidden";
+
+            var treeNode = tree.getSelectedNode();
+            this.selectNode = tree.getSelectedNode();
+            var truthBeTold = window.confirm("\u786e\u5b9a\u8981\u5220\u9664" + treeNode.name + "?");
+            if (truthBeTold) {
+                $.ajax({
+                    type: "POST",
+                    url: removeUrl,
+                    data: { id: treeNode.id },
+                    success:
+                    //删除成功之后，重新加载树节点
+						function (data) {
+						    $.ajax({
+						        type: "GET",
+						        url: reloadUrl,
+						        success:
+								 function (data) {
+								     var testdata = jQuery.parseJSON(data);
+								     tree = $("#" + treeId).zTree(treesetting, testdata);
+								 }
+						    });
+						}
+                });
+
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+    }
+
+
+
+   
+    var nTreeObject = new treeObject();
+    //    nTreeObject.createTree("tree", "/Organization/RegionTreeLoad", "/Organization/RegionTreeExpand", "", "", false, "");
+    nTreeObject.createTree("tree", "/Organization/RegionTreeLoad", "/Organization/RegionTreeExpand", "", "", false);
+    var target;
+    function link() {
+        //        window.open("/Organization/RegionTree")
+//        target = document.getElementById(id);
+        //        target.style.display = "block";
+
+        target = document.getElementById("PrivProduct");
+//        alert("link2");
+//        alert(id);
+        if (target.style.display == "none")
+        { target.style.display = "block"; }
+        else
+        { target.style.display = "none"; }
+        }
+
+</script>
+
+
+@using (Html.BeginForm("OrgDetail", "Organization", FormMethod.Post))
+{
+     @Html.HiddenFor(model => model.Gid)
+     
+     
+     @*@Html.HiddenFor(model => model.aLocation)*@
+     @Html.HiddenFor(model => model.aIntroduction)
+     @Html.HiddenFor(model => model.aParent)
+     @*@Html.HiddenFor(model => model.ExtendType)*@
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Code
+    @Html.EditorFor(model => model.Code)
+    @Html.ValidationMessageFor(model => model.Code)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.ExCode
+    @Html.EditorFor(model => model.ExCode)
+    @Html.ValidationMessageFor(model => model.ExCode)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Ostatus
+    @Html.DropDownListFor(model => model.Ostatus, (List<SelectListItem>)ViewBag.ostatuslist, new { type = "width:150px" })
+    @Html.ValidationMessageFor(model => model.Ostatus)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Otype
+    @Html.DropDownListFor(model => model.Otype, (List<SelectListItem>)ViewBag.otypelist, new { type = "width:150px" })
+    @Html.ValidationMessageFor(model => model.Otype)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.ExType
+    @Html.HiddenFor(model => model.ExType)
+    @*@Html.HiddenFor(model => model.ExtendType.Name)*@
+    @*@Html.HiddenFor(model => model.ExtendType)*@
+    @Html.HiddenFor(model => model.ExtendType.aName)
+    @Html.EditorFor(model => model.ExtendType.Name.Matter)
+    @Html.ValidationMessageFor(model => model.ExType)
+    </div>
+    
+    
+    @*<div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.FullName
+    @Html.HiddenFor(model => model.aFullName)   
+    @Html.EditorFor(model => model.FullName.Matter)
+    @Html.ValidationMessageFor(model => model.FullName.Matter)
+    </div>
+    
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName
+    @Html.HiddenFor(model => model.aShortName)
+    @Html.EditorFor(model => model.ShortName.Matter)
+    @Html.ValidationMessageFor(model => model.ShortName.Matter)
+    </div>*@
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.FullName
+    @Html.HiddenFor(model => model.aFullName)
+    @Html.TextBoxFor(model => model.FullName.Matter)
+    @ResourceHelper.MatterEditor(ViewData["fullResId"].ToString(), "FullName", enableAdd: true, enableEdit: true, enableDelete: true)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName
+@*    @Html.HiddenFor(model => model.aShortName)
+    @Html.EditorFor(model => model.ShortName.Matter)*@
+    @Html.HiddenFor(model => model.aShortName)
+    @Html.EditorFor(model => model.ShortName.Matter)
+
+   @* <input id="shortname" type="text" value="@Model.ShortName.Matter" />*@
+    @ResourceHelper.MatterEditor(ViewData["shortResId"].ToString(), "ShortName", enableAdd: true, enableEdit: true, enableDelete: true)
+    </div>
+
+    <div id="PrivProduct" style="display: none">
+        <ul id ="tree" class="tree" style="width:230px; overflow:auto" >
+        </ul>
+    </div>
+ 
+    
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Location
+    @Html.HiddenFor(model => model.aLocation)
+    @{
+        if(Model != null && Model.aLocation != null)   
+        {<input id="Location_Name" type="text" value="@Model.Location.FullName" readonly="readonly"/>}
+        else
+        {<input id="Location_Name" type="text" value="请选择" readonly="readonly"/>}
+     }
+    
+    <input type="button" value="选择" onclick="link()" />
+    @Html.ValidationMessageFor(model => model.Location.FullName)
+    </div>
+
+
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.FullAddress
+    @Html.EditorFor(model => model.FullAddress)
+    @Html.ValidationMessageFor(model => model.FullAddress)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Contact
+    @Html.EditorFor(model => model.Contact)
+    @Html.ValidationMessageFor(model => model.Contact)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.WorkPhone
+    @Html.EditorFor(model => model.WorkPhone)
+    @Html.ValidationMessageFor(model => model.WorkPhone)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.CellPhone
+    @Html.EditorFor(model => model.CellPhone)
+    @Html.ValidationMessageFor(model => model.CellPhone)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.WorkFax
+    @Html.EditorFor(model => model.WorkFax)
+    @Html.ValidationMessageFor(model => model.WorkFax)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Email
+    @Html.EditorFor(model => model.Email)
+    @Html.ValidationMessageFor(model => model.Email)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.HomeUrl
+    @Html.EditorFor(model => model.HomeUrl)
+    @Html.ValidationMessageFor(model => model.HomeUrl)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Sorting
+    @Html.EditorFor(model => model.Sorting)
+    @Html.ValidationMessageFor(model => model.Sorting)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Brief
+    @Html.EditorFor(model => model.Brief)
+    @Html.ValidationMessageFor(model => model.Brief)
+    </div>
+    
+    <div>
+    <input type="submit" value="@LiveAzure.Resource.Stage.OrganizationController.submit" />
+    <input type="reset" value="@LiveAzure.Resource.Stage.OrganizationController.reset"  />
+    </div>
+}
+   

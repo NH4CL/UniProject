@@ -1,0 +1,55 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Mall.MallArtPublish
+@{
+    ViewBag.Title = "ArticlePublish";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+@Html.Grid(new GridControl()
+.SetName("PublishList")
+.SetPageSize(10)
+.SetIsAutoSize(false)
+.SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Mall/ArticlePublishList")
+    .SetHeight("'100%'")
+    .SetWidth("'30%'")
+    .SetColumns<LiveAzure.Models.Mall.MallArtPublish>(cs=>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.Article.Code).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.ArtID);
+        cs.Add(x => x.Channel.Code).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.ChlID);
+        cs.Add(x => x.Position.Code).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.PosID);
+        cs.Add(x => x.Sorting).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.Sorting);
+        cs.Add(x => x.Show).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.Show);
+        cs.Add(x => x.TotalRank).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.TotalRank);
+        cs.Add(x => x.MatterRank).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.MatterRank);
+        cs.Add(x => x.LayoutRank).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.LayoutRank);
+        cs.Add(x => x.ComfortRank).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.ComfortRank);
+        cs.Add(x => x.StartTime).SetName("StartTime").SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.StartTime);
+        cs.Add(x => x.EndTime).SetName("EndTime").SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPublish.EndTime);
+    }))
+</div>
+<input type="button" value="@LiveAzure.Resource.Common.Add" onclick="add()"/>
+<input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="edit()"/>
+<input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="del()"/>
+
+<script type="text/javascript">
+function add() {
+    window.location.href="/Mall/ArtPublishAddOrEdit";
+}
+    function edit() {
+        var id = $("#PublishList").jqGrid("getGridParam", "selrow");
+        if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Mall/ArtPublishAddOrEdit?id=" + id;
+        }
+    }
+    function del() {
+        var id = $("#PublishList").jqGrid("getGridParam", "selrow");
+        if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Mall/ArtPublishDelete?id="+id;
+        }
+   }
+</script>

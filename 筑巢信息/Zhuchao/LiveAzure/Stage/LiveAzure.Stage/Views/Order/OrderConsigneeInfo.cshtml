@@ -1,0 +1,111 @@
+﻿<div id="orderConsigneePage">
+    @using MVC.Controls.Grid
+    @using MVC.Controls
+    @using LiveAzure.Models.Member
+    @using LiveAzure.Models.Order
+    @model OrderInformation
+    <script type="text/javascript">
+
+        function openDlg() {
+            OpenEditPanel("CoverPage_OrderUserInfo", "EditPage_OrderUserInfo", "PartialPage_OrderUserInfo", null, "Draggable_OrderUserInfo", false);
+
+        }
+
+        function addUser() {
+            var selectGid = $("#OrderUserGrid").jqGrid("getGridParam", "selrow");
+            if (selectGid == null) {
+                var strDeleteTip = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteTips)";
+                alert(strDeleteTip);
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/OrderConsigneeInfo",
+                    data: { bSelectAddress: true, memberAddressGid: selectGid },
+                    success: function (html) {
+                        $("#orderConsigneePage").html(html);
+                    }
+                });
+            }
+        }
+
+    </script>
+    <div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Consignee)
+            @Html.EditorFor(model => model.Consignee)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Location)
+            @Html.EditorFor(model => model.Location.FullName)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.FullAddress)
+            @Html.EditorFor(model => model.FullAddress)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PostCode)
+            @Html.EditorFor(model => model.PostCode)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Telephone)
+            @Html.EditorFor(model => model.Telephone)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Mobile)
+            @Html.EditorFor(model => model.Mobile)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Email)
+            @Html.EditorFor(model => model.Email)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.BestDelivery)
+            @Html.TextAreaFor(model => model.BestDelivery)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.BuildingSign)
+            @Html.EditorFor(model => model.BuildingSign)
+        </div>
+        <div>
+            <input type="button" value="open" onclick="openDlg();" />
+        </div>
+    </div>
+    <div id="EditPage_OrderUserInfo" class="EditPage">
+        <p id="Draggable_OrderUserInfo" style="background-color: Orange; width: 100%; height: 30px;
+            margin-top: 0;" class="Draggalbe">
+            <span id="PageTitle_OrderUserInfo" class="Title">@LiveAzure.Resource.Stage.ProductController.OnSaleBaseInfo</span>
+            <span id="Close_OrderUserInfo" class="Close" onclick="CloseEditPanel('CoverPage_OrderUserInfo','EditPage_OrderUserInfo');"
+                style="float: right;">
+                <img alt="close" src="@Url.Content("~/Content/themes/base/images/close.gif")" /></span>
+        </p>
+        <div id="PartialPage_OrderUserInfo" class="PartialPage">
+            <div id="orderUserList">
+                @Html.Grid(
+                new GridControl()
+                .SetName("OrderUserGrid")
+                .SetPageSize(10)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Order/ListOrderUser")
+                .SetEditUrl("")
+                .SetHeight("'100%'")
+                .SetWidth("300")
+                .SetColumns<LiveAzure.Models.Member.MemberAddress>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.User.LoginName).SetCaption("LoginName");
+                    cs.Add(x => x.User.LastName).SetCaption("LastName");
+                    cs.Add(x => x.User.FirstName).SetCaption("FirstName");
+                    cs.Add(x => x.Code).SetCaption("Code");
+                    cs.Add(x => x.FullAddress).SetCaption("FullAddress");
+                })
+            )
+            </div>
+            <div>
+                <input type="button" value="ADD" onclick="addUser();" />
+            </div>
+        </div>
+    </div>
+    <div id="CoverPage_OrderUserInfo" class="CoverPage">
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using CommonResource = LiveAzure.Resource.Common
+@using WarehouseInventoryResource = LiveAzure.Resource.Model.Warehouse.WarehouseInventory
+@using WarehouseInvItemResource =  LiveAzure.Resource.Model.Warehouse.WarehouseInvItem
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@model LiveAzure.Models.Warehouse.WarehouseInventory
+
+<h2>WarehouseInventoryAdd</h2>
+@using (Html.BeginForm("InventoryAddDB", "Warehouse", FormMethod.Post))
+{
+    <table id="OrderBaseInfo" class="DIY_table">
+        <tr>
+            <th>@WarehouseInventoryResource.Organization</th>
+            <td>
+                @Html.HiddenFor(model => model.OrgID)
+                @Html.DisplayFor(model => model.Organization.FullName, "LocaleMatter", new { ID = "orgName" })
+            </td>
+        </tr>
+        <tr>
+            <th>@WarehouseInventoryResource.Warehouse</th>
+            <td>
+                @Html.HiddenFor(model => model.WhID)
+                @Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "warehouseName" })
+            </td>
+        </tr>
+        <tr>
+            <th>@WarehouseInventoryResource.Code</th>
+            <td><input type="text" value="@WCResource.AutoGenerate" disabled="disabled" /></td>
+        </tr>
+        <tr>
+            <th>@WarehouseInventoryResource.Quantity</th>
+            <td>@Html.TextBoxFor(model => model.Quantity, new { disabled = "disabled" })</td>
+        </tr>
+        <tr>
+            <th>@WarehouseInventoryResource.Remark</th>
+            <td>@Html.TextAreaFor(model => model.Remark)</td>
+        </tr>
+    </table>
+    <input type="submit" value="@WCResource.NextStep" />
+    <input type="button" value="@CommonResource.Cancel" id="btnCancel" />
+}
+<script type="text/javascript">
+    $("#btnCancel").click(function () {
+        document.location.replace("/Warehouse/Inventory?whID=@Model.WhID");
+    });
+</script>

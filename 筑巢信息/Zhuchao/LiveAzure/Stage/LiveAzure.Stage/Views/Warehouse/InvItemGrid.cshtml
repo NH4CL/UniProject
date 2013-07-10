@@ -1,0 +1,28 @@
+﻿@using SKUResource = LiveAzure.Resource.Model.Product.ProductInfoItem
+@using MVC.Controls
+@using MVC.Controls.Grid
+@using WarehouseInvItemResource =  LiveAzure.Resource.Model.Warehouse.WarehouseInvItem
+@Html.Grid(
+    new GridControl()
+        .SetName("InvItemGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("InvItemList", new { invID = ViewBag.InvID }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseInItem>(cs =>
+            {
+                cs.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.SkuItem).SetCaption(WarehouseInvItemResource.SkuItem);
+                cs.Add(x => x.SkuItem.Code).SetCaption(SKUResource.Code);
+                cs.Add(x => x.Shelf).SetCaption(WarehouseInvItemResource.Shelf);
+                cs.Add(x => x.TrackLot).SetCaption(WarehouseInvItemResource.TrackLot);
+                cs.Add(x => x.Quantity).SetCaption(WarehouseInvItemResource.Quantity);
+                cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+            })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )

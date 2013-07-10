@@ -1,0 +1,86 @@
+﻿<script type="text/javascript">
+    var zTree1;
+    var setting;
+
+    setting = {
+        checkable: true,
+        checkType: { "Y": "", "N": "" },
+        checkedCol: "nodeChecked",                                                      //自定义勾选框状态的字段名
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "../Tree/ShippingRegionTreeExpand", 												//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        callback: {
+            change: zTreeOnChange
+        }
+    };
+
+    $(document).ready(function () {
+        reloadTree();
+    });
+
+    var preSelectedNode1;
+
+    //重新加载树
+    function reloadTree() {
+        $.ajax({
+            type: "POST",
+            url: "../Tree/ShippingRegionTreeLoad",
+            success: function (data) {
+                var testdata = jQuery.parseJSON(data);
+                zTree1 = $("#ShippingRegionTree").zTree(setting, testdata);
+            }
+        });
+    }
+
+    function zTreeOnChange(event, treeId, treeNode) {
+        if (treeNode.nodeChecked == true) {
+            $.ajax({
+                type: "POST",
+                url: "../Tree/AddShippingRegion",
+                data: { id: treeNode.id },
+                success: function (data) {
+                    if (data == 'success') {
+                        alert("Add Success!");
+                    }
+                    else {
+                        alert("Add failue!");
+                        treeNode.nodeChecked = false;
+                    }
+                }
+            });
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "../Tree/DeleteShippingRegion",
+                data: { id: treeNode.id }
+            });
+        }
+    }
+
+    function setShipArea() {
+        $.ajax({
+            type: "POST",
+            url: "../Tree/SetInShipArea",
+            success: function (data) {
+                if (data == "True") {
+                    $("#setShipAreaID").val("Set False");
+                }
+                else {
+                    $("#setShipAreaID").val("Set True");
+                }
+            }
+        });
+    }
+
+</script>
+<div>
+    <ul id="ShippingRegionTree" class="tree">
+    </ul>
+</div>
+<div>
+    <input type="button" id="setShipAreaID" name="setShiparea" onclick="setShipArea();" value="true" />
+</div>

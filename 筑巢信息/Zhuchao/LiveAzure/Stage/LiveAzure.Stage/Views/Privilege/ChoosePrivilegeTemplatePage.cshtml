@@ -1,0 +1,29 @@
+﻿@{
+    Layout = null;
+}
+<div>
+<input type="hidden" value="@ViewBag.UserID" id="hidden_UserID" />
+<span>@Html.Label(LiveAzure.Resource.Model.Member.MemberUser.DisplayName)</span>
+<span>@ViewBag.UserName</span>
+<span>@Html.Label(LiveAzure.Resource.Model.General.GeneralPrivTemplate.Code)</span>
+<span>@Html.DropDownList("SelectTamplate", (List<SelectListItem>)ViewBag.Template, new { id = "SelectTemplateCode"})</span>
+</div>
+<div>
+<input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SaveAsTemplate();" />
+<input type="button" value="@LiveAzure.Resource.Common.Back" onclick="PrivilegeTemplatePannel.CloseEditPanel();" />
+</div>
+<script type="text/javascript">
+    function SaveAsTemplate() {
+        var UserID = $("#hidden_UserID").val();
+        var SelectTemplateCode = $("#SelectTemplateCode").val();
+        $.post("/Privilege/SetPrivilegeByTemplate", { UserID: UserID, SelectTemplateCode: SelectTemplateCode }, function (backdata) {
+            if (backdata == "True") {
+                alert("@LiveAzure.Resource.Common.SaveSuccess");
+                PrivilegeTemplatePannel.CloseEditPanel();
+            }
+            else {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+</script>

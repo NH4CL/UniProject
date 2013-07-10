@@ -1,0 +1,41 @@
+﻿@using WarehouseShelfResource = LiveAzure.Resource.Model.Warehouse.WarehouseShelf
+@model LiveAzure.Models.Warehouse.WarehouseShelf
+
+@{
+    ViewBag.Title = "WarehouseShelfAdd";
+}
+
+<h2>WarehouseShelfAdd</h2>
+
+@using (Html.BeginForm("WarehouseShelfAddDB", "Warehouse", FormMethod.Post))
+{
+    @WarehouseShelfResource.Warehouse
+    @Html.HiddenFor(model => model.WhID)
+    @Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "WarehouseName" })<br />
+    @WarehouseShelfResource.Code
+    @Html.TextBoxFor(model => model.Code, new { id = "txtCode" })<br />
+    @WarehouseShelfResource.Barcode
+    @Html.TextBoxFor(model => model.Barcode, new { id = "txtBarcode" })<br />
+    @WarehouseShelfResource.Name
+    @Html.TextBoxFor(model => model.Name, new { id = "txtName" })<br />
+    @WarehouseShelfResource.Brief
+    @Html.TextAreaFor(model => model.Brief, new { id = "txtBrief" })<br />
+    @LiveAzure.Resource.Model.ModelBase.Remark
+    @Html.TextAreaFor(model => model.Remark, new { id = "txtRemark" })<br />
+    <input type="submit" value="Add" />
+    <input type="button" id="btnReset" value="Reset" />
+    <input type="button" id="btnCancel" value="Cancel" />
+}
+
+<script type="text/javascript">
+    $("#btnReset").click(function () {
+        $("#txtCode").val("");
+        $("#txtBarcode").val("");
+        $("#txtName").val("");
+        $("#txtBrief").val("");
+        $("#txtRemark").val("");
+    });
+    $("btnCancel").click(function () {
+        document.location.replace("/Warehouse/WarehouseShelf");
+    });
+</script>

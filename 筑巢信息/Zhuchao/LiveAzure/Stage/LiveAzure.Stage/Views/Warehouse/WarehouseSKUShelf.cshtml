@@ -1,0 +1,40 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using SkuShelfResource = LiveAzure.Resource.Model.Warehouse.WarehouseSkuShelf
+@using CommonResource = LiveAzure.Resource.Common
+@{
+    ViewBag.Title = "WarehouseSKUShelf";
+}
+
+<h2>WarehouseSKUShelf</h2>
+
+@model LiveAzure.Models.Warehouse.WarehouseShelf
+
+@Html.Grid(
+    new GridControl()
+        .SetName("SKU")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl("/Warehouse/ShelfSKUList?id="+Model.Gid)
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseSkuShelf>(cs=>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.SkuItem).SetCaption(SkuShelfResource.SkuItem);
+                cs.Add(x => x.TrackLot).SetCaption(SkuShelfResource.TrackLot);
+                cs.Add(x => x.Quantity).SetCaption(SkuShelfResource.Quantity);
+                cs.Add(x => x.LockQty).SetCaption(SkuShelfResource.LockQty);                  
+            })
+            .UpdateDefaultPager(pager=>
+                pager
+                    .ShowSearch(false,false)
+            )
+        )
+<input type="button" id="btnCancel" value="@CommonResource.Cancel" />
+<script type="text/javascript">
+    $("#btnCancel").click(function () {
+        document.location.replace("/Warehouse/WarehouseShelf?gid=@Model.Gid");
+    });
+</script>

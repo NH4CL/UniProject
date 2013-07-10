@@ -1,0 +1,122 @@
+﻿@{
+    Layout = null;
+    }
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Member
+@using LiveAzure.Models.Order
+@model OrderInformation
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Tree/OrderUserList",
+            success: function (html) {
+                $("#orderUserList").html(html);
+            }
+        });
+   
+        $("#selectUserDlg").dialog({
+            modal: true,
+            hide: 'slide',
+            show: 'slide',
+            autoOpen: false
+        });
+
+    });
+
+    function openDlg() {        
+        $("#selectUserDlg").dialog("open");
+    }
+
+    function addUser() {
+        var selectGid = $("#OrderUserGrid").jqGrid("getGridParam", "selrow");
+        if (selectGid == null) {
+            var strDeleteTip = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteTips)";
+            alert(strDeleteTip);
+        }
+        else {
+            $("#selectUserDlg").dialog("close");
+            $("#orderConsigneePage").html("");
+            $.ajax({
+                type: "POST",
+                url: "/Tree/OrderConsignee",
+                data: { bSelectAddress: true, memberAddressGid: selectGid },
+                success: function (html) {
+                    $("#orderConsigneePage").html(html);
+                }
+            });
+        }
+    }
+
+</script>
+<div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Consignee)
+        @Html.EditorFor(model => model.Consignee)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Location)
+        @Html.EditorFor(model => model.Location.FullName)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.FullAddress)
+        @Html.EditorFor(model => model.FullAddress)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PostCode)
+        @Html.EditorFor(model => model.PostCode)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Telephone)
+        @Html.EditorFor(model => model.Telephone)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Mobile)
+        @Html.EditorFor(model => model.Mobile)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Email)
+        @Html.EditorFor(model => model.Email)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.BestDelivery)
+        @Html.TextAreaFor(model => model.BestDelivery)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.BuildingSign)
+        @Html.EditorFor(model => model.BuildingSign)
+    </div>
+
+    <div>
+        <input type="button" value="open" onclick="openDlg();" />
+    </div>
+</div>
+<div id="selectUserDlg" title="Test User">
+    <div id="orderUserList">
+         @Html.Grid(
+                new GridControl()
+                .SetName("OrderUserGrid")
+                .SetPageSize(10)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Tree/ListOrderUser")
+                .SetEditUrl("")
+                .SetHeight("'100%'")
+                .SetWidth("300")
+                .SetColumns<LiveAzure.Models.Member.MemberAddress>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.User.LoginName).SetCaption("LoginName");
+                    cs.Add(x => x.User.LastName).SetCaption("LastName");
+                    cs.Add(x => x.User.FirstName).SetCaption("FirstName");
+                    cs.Add(x => x.Code).SetCaption("Code");
+                    cs.Add(x => x.FullAddress).SetCaption("FullAddress");
+                })
+                
+        ) 
+        <div>
+            <input type="button" value="ADD" onclick="addUser();" />
+        </div>   
+    </div>
+</div>
+

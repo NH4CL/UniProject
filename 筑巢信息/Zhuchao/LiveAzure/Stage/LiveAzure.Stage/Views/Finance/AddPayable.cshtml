@@ -1,0 +1,146 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Finance.FinancePayment
+@using (@Ajax.BeginForm("SaveNewPayable", "Finance", new AjaxOptions { OnSuccess = "RefreshPayableGrid();ClosePanel();" }, new { id = "addPayableForm" }))
+{
+<div class="down_AddorEdit">
+    <table>
+            <tr>
+                <th>    
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.Organization
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.OrgID, (List<SelectListItem>)ViewBag.organizationList)
+                </td>
+            </tr>
+            <tr>
+                <th>   
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.Ptype
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Ptype, (List<SelectListItem>)ViewBag.payTypeList)
+                </td>
+            </tr>
+            <tr>
+                <th>   
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.PayTo
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.PayTo, (List<SelectListItem>)ViewBag.payToList)
+                </td>
+            </tr>
+            @*<tr>
+                <th>   
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.Pstatus
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Pstatus, (List<SelectListItem>)ViewBag.payStatusList)
+                </td>
+            </tr>*@
+            <tr>
+                <th>   
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.RefType
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.RefType, (List<SelectListItem>)ViewBag.refTypeList)
+                </td>
+            </tr>
+            <tr>
+                <th>   
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.RefID
+                </th>
+                <td>
+                    @Html.TextBox("RefID", "", new { onblur = "ShowCurrency(this)" })</td>
+                <td>
+                    <div id="showNotice" style="display:inline-block"></div>    
+                </td>
+            </tr>
+            <tr>
+                <th>    
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.PayDate
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.PayDate).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>    
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.Reason
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Reason)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.Currency
+                </th>
+                <td>
+                    <div id="showCurrency"></div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Finance.FinancePayment.Amount
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Amount)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.ModelBase.Remark
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Remark)
+                </td>
+            </tr>
+    </table>
+    <div>
+        <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SumbitAddPayableForm()" />
+    </div>
+</div>
+    <script type="text/javascript">
+        function ShowCurrency(str) {
+            var rType = document.getElementById("RefType").value;
+            $.ajax({
+                type: "POST",
+                url: "/Finance/ShowNotice",
+                data: {
+                    orderId: str.value,
+                    refType: rType
+                         },
+                success: function (data) {
+                    $("#showNotice").html(data);
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Finance/ShowCurrency",
+                data: { orderId: str.value,
+                        refType: rType
+                },
+                success: function (data) {
+                    $("#showCurrency").html(data);
+                }
+            });
+        }
+
+        function SumbitAddPayableForm() {
+            var refId = document.getElementById("RefID");
+            var check = document.getElementById("CheckedResult");
+            if (check == null) {
+                $("#addPayableForm").submit();
+            }
+            else {
+                if (check.value == 0) {
+                    $("#addPayableForm").submit();
+                }
+                else {
+                    ShowCurrency(refId);
+                }
+            }
+        }
+    </script>
+}

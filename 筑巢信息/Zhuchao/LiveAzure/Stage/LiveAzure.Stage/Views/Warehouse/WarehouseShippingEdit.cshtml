@@ -1,0 +1,69 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseInformation
+
+<h2>WarehouseShippingEdit</h2>
+
+<div id="ShippingTree" class="tree"></div>
+<input type="button" id="btnAdd" value="添加" />
+<script type="text/javascript">
+    function WareHouseShippingTree() {
+        this.createTree = function (treeId, whID, loadUrl, addUrl, deleteUrl) {
+            //树状结构的对象
+            var zTree1;
+            var strTreeId = treeId;
+
+            //设定数结构的参数
+            var setting = {
+                checkable: true, 															//用户指定是否需要checkbox，需要用户指定
+                checkType: { "Y": "", "N": "" },                                                //树结构的勾选框不影响父，不影响子
+                checkStyle: "checkbox",
+                checkedCol: "nodeChecked",                                                      //自定义勾选框状态的字段名
+                callback: {
+                    beforeChange: zTreeBeforeChange											//如果checkable为true，则需要指定url。
+                }
+            };
+
+            //获取树节点信息
+            $.post(loadUrl, { whID: whID },
+                    function (data) {
+                        //将获取的json字符串转换为json对象
+                        var testdata = $.parseJSON(data);
+                        //生成树状结构
+                        zTree1 = $("#" + strTreeId).zTree(setting, testdata);
+                    });
+            function zTreeBeforeChange(treeId, treeNode) {
+                var state;
+                if(treeNode.nodeChecked) {
+                    //删除
+                    $.post(deleteUrl, { whID: whID, shipID: treeNode.id },
+                    function(result){
+                        state = result;
+                        if(!result) {
+                            alert("Error!");
+                        }
+                    });
+                }
+                else {
+                    //添加
+                     $.post(addUrl, { whID: whID, shipID: treeNode.id },
+                    function(result){
+                        if(result){
+                            state = result;
+                            if(!result) {
+                                alert("Error!");
+                            }
+                        }
+                    });
+                }
+                return state;
+            }
+        }
+    }
+    var shippingTree = new WareHouseShippingTree();
+    shippingTree.createTree("ShippingTree", "@Model.Gid",
+        "@Url.Action("WarehouseShippingTreeLoad")",
+        "@Url.Action("WarehouseShippingAdd")",
+        "@Url.Action("WarehouseShippingDelete")");
+    $("#btnAdd").click(function(){
+        document.location.replace("/Warehouse/WarehouseShipping");
+    });
+</script>

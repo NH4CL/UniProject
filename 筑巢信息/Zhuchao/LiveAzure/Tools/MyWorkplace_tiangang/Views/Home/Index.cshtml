@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>@ViewBag.a</p>
+
+<div>@Html.ActionLink("Home", "Index", new { a = "lll" })</div>
+<div>@Html.ActionLink("Optional", "Index", "Optional")</div>
+<div>@Html.ActionLink("StandardCategory", "Index", "StandardCategory")</div>
+<div>@Html.ActionLink("PrivateCategory", "Index", "PrivateCategory")</div>

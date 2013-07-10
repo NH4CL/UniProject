@@ -1,0 +1,30 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using ItemResource = LiveAzure.Resource.Model.Warehouse.WarehouseMoveItem
+@{
+    Guid moveID = (Guid)ViewBag.MoveID;
+}
+@Html.Grid(
+    new GridControl()
+        .SetName("MovItemGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("MoveItemList", new { moveID = moveID }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseMoveItem>(cs =>
+        {
+            cs.Add(m => m.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(m => m.SkuItem).SetCaption(ItemResource.SkuItem);
+            cs.Add(m => m.ShelfOld).SetCaption(ItemResource.ShelfOld);
+            cs.Add(m => m.ShelfNew).SetCaption(ItemResource.ShelfNew);
+            cs.Add(m => m.Quantity).SetCaption(ItemResource.Quantity);
+            cs.Add(m => m.TrackLot).SetCaption(ItemResource.TrackLot);
+            cs.Add(m => m.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+        })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )

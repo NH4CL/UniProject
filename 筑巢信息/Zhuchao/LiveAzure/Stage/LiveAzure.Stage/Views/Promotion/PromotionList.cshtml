@@ -1,0 +1,34 @@
+﻿@{
+    Layout = null;
+    }
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Order
+<script type="text/javascript">
+</script>
+<div>
+    @Html.Grid(
+            new GridControl()
+            .SetName("PromotionInfoGrid")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Promotion/ListPromotionInfomation")
+            .SetEditUrl("")
+            .SetHeight("'100%'")
+            .SetWidth("300")
+            .SetColumns<LiveAzure.Models.Order.PromotionInformation>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.Code);
+                cs.Add(x => x.Name.Matter).SetName("PromotionName").SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.Name);
+                cs.Add(x => x.Matter).SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.Matter);
+                cs.Add(x => x.Pstatus).SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.Pstatus);
+                cs.Add(x => x.IssueType).SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.IssueType);
+                cs.Add(x => x.IssueStart).SetName("IssueStart").SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.IssueStart);
+                cs.Add(x => x.IssueEnd).SetName("IssueEnd").SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.IssueEnd);
+                cs.Add(x => x.StartTime).SetName("StartName").SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.StartTime);
+                cs.Add(x => x.EndTime).SetName("EndTime").SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.EndTime);
+                cs.Add(x => x.EffectDays).SetCaption(LiveAzure.Resource.Model.Order.PromotionInformation.EffectDays);
+            })
+    )
+</div>

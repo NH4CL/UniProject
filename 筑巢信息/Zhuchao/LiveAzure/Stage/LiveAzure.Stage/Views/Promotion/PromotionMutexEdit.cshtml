@@ -1,0 +1,68 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Order
+@model PromotionMutex
+<script type="text/javascript">
+    function saveMutexSuccess(data) {
+        if (data == "exist") {
+            var confirmTips = "@LiveAzure.Resource.Stage.PromotionController.MutexCoverTips";
+            var templateConfirm = window.confirm(confirmTips);
+            if (templateConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Promotion/SetMutexCover",
+                    success: function () {
+                        $("#PromotionMutexForm").submit();
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+        }
+        else if (data == "fail") {
+            alert("@LiveAzure.Resource.Common.OperationFailed");
+        }
+        else {
+            alert("@LiveAzure.Resource.Common.SaveSuccess");
+            promotionMutexPanel.CloseEditPanel();
+            $("#PromotionMutexGrid").trigger('reloadGrid');
+        }
+    }
+</script>
+<div>
+    @using (Ajax.BeginForm("SavePromotionMutexRelation", "Promotion", new AjaxOptions { HttpMethod = "POST", OnSuccess = "saveMutexSuccess" }, new { id = "PromotionMutexForm" }))
+    {
+        @Html.HiddenFor(model => model.Gid)
+        @Html.HiddenFor(model => model.PromID)
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionMutex.Promotion
+            @ViewBag.promotionName
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionMutex.Mutex
+            @if (ViewBag.bMutexEdit == false)
+            {
+                @Html.DropDownListFor(model => model.MutexID, (List<SelectListItem>)ViewBag.oMutexList) 
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.MutexID)
+                @ViewBag.mutexName
+            }
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionMutex.Relation
+            @Html.DropDownListFor(model => model.Relation, (List<SelectListItem>)ViewBag.oRelationList)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.ModelBase.Remark
+            @Html.TextAreaFor(model => model.Remark)
+        </div>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    }
+</div>

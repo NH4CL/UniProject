@@ -1,0 +1,34 @@
+﻿@model LiveAzure.Models.Member.MemberOrganization
+           
+@{
+    ViewBag.Title = "Add Culture";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Culture</h2>
+
+
+@using (Html.BeginForm())
+{
+    
+  <div class="editor-label">
+       @LiveAzure.Resource.Model.Member.OrganizationBase.Code:
+  </div>
+  <div class="editor-field">
+        @Html.EditorFor(model => model.Code)
+        @Html.ValidationMessageFor(model => model.Code)
+  </div>
+
+  <div class="editor-label">
+       @LiveAzure.Resource.Model.Member.MemberOrganization.Cultures:
+  </div>
+  <div class="editor-field">
+    @foreach (var item in ViewBag.aCulture as SelectList)
+    {
+       <input type="checkbox" name="selectedCulture" value ="@item.Value" />
+       @item.Text
+    }
+  </div>
+    
+     <input type="submit" value =@LiveAzure.Resource.Stage.OrganizationController.link />
+}

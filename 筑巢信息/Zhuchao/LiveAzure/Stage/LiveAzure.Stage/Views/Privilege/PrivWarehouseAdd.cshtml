@@ -1,0 +1,55 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Warehouse.WarehouseInformation
+@{
+    ViewBag.Title = "PrivWarehouseAdd";
+    Layout = null;
+    string listUrl = "/Privilege/ListmemWarehouse?wareSearchString=" + ViewBag.wareSearchStr;
+}
+@using (Ajax.BeginForm("PrivWarehouseAdd", "Privilege", new AjaxOptions { OnSuccess = "grid3Reload" }))
+{
+    <div id="WareList">
+ @Html.Grid(new GridControl()
+        .SetName("wareList")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl(@listUrl)
+        .SetHeight("'100%'")
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseInformation>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Stage.OrganizationController.warehouse + @LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+            cs.Add(x => x.ShortName.Matter).SetCaption(@LiveAzure.Resource.Stage.OrganizationController.warehouse + @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName);
+        })
+            )
+</div>
+    <div>
+      <input type="button" id="wadd" name="wadd" value="@LiveAzure.Resource.Stage.PrivilegeController.add" onclick="add()"/>
+    </div>
+    
+    <script type="text/javascript">
+        function add() {
+            var id = $("#wareList").jqGrid("getGridParam", "selrow");
+            if (id != null) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Privilege/PrivWarehouse",
+                    data: { selectedOrg: id },
+                    datatype: "html",
+                    success: function (data) {
+                        showPrivWarehouse();
+                        UnitPricePanel.CloseEditPanel();
+                    },
+                    error: function () {
+                        alert("@LiveAzure.Resource.Common.OperationFailed");
+
+                    }
+                });
+            }
+            else {
+                confirm('@LiveAzure.Resource.Stage.PrivilegeController.addWareConfirm');
+            }
+        }
+     </script>
+}

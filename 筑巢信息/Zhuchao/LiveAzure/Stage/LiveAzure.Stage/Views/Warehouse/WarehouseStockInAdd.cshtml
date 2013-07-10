@@ -1,0 +1,68 @@
+﻿@using CategoryType = LiveAzure.Models.ModelEnum.StandardCategoryType
+@using CommonResource = LiveAzure.Resource.Common
+@using WarehouseStockInResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockIn
+@model LiveAzure.Models.Warehouse.WarehouseStockIn
+@ControlManager.StandardCategorySelect()
+@ControlManager.RefIDSelect()
+
+@using (Html.BeginForm("WarehouseStockInAddDB", "Warehouse"))
+{
+    @WarehouseStockInResource.Code
+    <input type="text" value="自动生成" disabled="disabled" />
+    <br /><br />
+    @Html.HiddenFor(model => model.WhID, new { id = "hidWHID" })
+    @WarehouseStockInResource.InType
+    @Html.EditorFor(model => model.InType, "StandardCategorySelect",
+        new { Type = CategoryType.STOCKIN, OnClick = "setRefType" })
+    <br /><br />
+    @WarehouseStockInResource.RefType
+    <input id="RefType_txt" disabled="disabled" />
+    @Html.HiddenFor(model => model.RefType, new { id = "RefType_val" })
+    <br /><br />
+    @WarehouseStockInResource.RefID
+    @Html.EditorFor(model => model.RefID, "RefIDSelect", new { ID = "RefID", OnError = "refIdError" })
+
+    <br /><br />
+    @WarehouseStockInResource.Total
+    @Html.TextBoxFor(model => model.Total)
+    <br />
+    <input type="submit" value="@CommonResource.Add" />
+    <input type="button" value="reset" />
+    <input type="button" id="btnCancel" value="@CommonResource.Cancel" />
+}
+<script type="text/javascript">
+    $("#btnCancel").click(function () {
+        var whID = $("#hidWHID").val();
+        document.location.replace("/Warehouse/WarehouseStockIn?whID=" + whID);
+    });
+    function setRefType(typeID, typeName) {
+        $.post("/Warehouse/GetRefTypeJson", { typeID: typeID },
+            function (data) {
+                if (data.State == true) {
+                    //需要单据
+                    $("#RefType_val").val(data.Value);
+                    $("#RefType_txt").val(data.Name);
+                    objRefID.create(parseInt($("#RefType_val").val()));
+                } else {
+                    //不需要单据
+                    $("#RefType_val").val("");
+                    $("#RefType_txt").val("");
+                    objRefID.destroy();
+                }
+            });
+    }
+    function refIdError() {
+        alert("Error!");
+    }
+    $.ajax({
+        type: "post",
+        url: "/Warehouse/GetRefTypeJson",
+        data: { typeID: "@Model.InType" },
+        async: false,
+        success: function (data) {
+            $("#RefType_val").val(data.Value);
+            $("#RefType_txt").val(data.Name);
+        }
+    });
+    objRefID.create(1);
+</script>

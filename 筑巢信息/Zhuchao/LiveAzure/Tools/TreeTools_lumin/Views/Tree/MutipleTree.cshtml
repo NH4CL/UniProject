@@ -1,0 +1,147 @@
+﻿<script type="text/javascript" src="../../demo/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="../../demo/jquery.ztree-2.6.js"></script>
+<script type="text/javascript">
+<!--
+    var zTree1, zTree2;
+    var setting;
+
+    setting = {
+        checkable: true,
+        checkType: { "Y": "", "N": "" },
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "../Tree/TreeExpand", 												//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        dragCopy: true,
+        dragMove: true,
+        callback: {
+            click: zTreeOnClick,
+            drop: zTreeOnDrop
+        }
+    };
+
+    $(document).ready(function () {
+        reloadTree();
+    });
+
+    var preSelectedNode1;
+    var preSelectedNode2;
+
+    function zTreeOnClick(event, treeId, treeNode) {
+        if (treeId == "treeDemo") {
+            if (preSelectedNode1 == treeNode) {
+                zTree1.cancelSelectedNode();
+                preSelectedNode1 = null;
+            } else {
+                preSelectedNode1 = treeNode;
+            }
+        } else {
+            if (preSelectedNode2 == treeNode) {
+                zTree2.cancelSelectedNode();
+                preSelectedNode2 = null;
+            } else {
+                preSelectedNode2 = treeNode;
+            }
+        }
+    }
+
+    function zTreeOnDrop(event, treeId, treeNode, targetNode, moveType) {
+        preSelectedNode1 = zTree1.getSelectedNode();
+        preSelectedNode2 = zTree2.getSelectedNode();
+    }
+
+    function moveTreeL2R() {
+        moveTreeNode(zTree1, zTree2);
+    }
+
+    function moveTreeR2L() {
+        moveTreeNode(zTree2, zTree1);
+    }
+
+    function moveTreeNode(srcTree, targetTree) {
+        var srcNode = srcTree.getSelectedNode();
+        if (!srcNode) {
+            alert("请先选择需要移动的节点！");
+            return;
+        }
+        var targetNode = targetTree.getSelectedNode();
+        srcTree.removeNode(srcNode);
+        targetTree.addNodes(targetNode, [srcNode]);
+        targetTree.selectNode(srcNode);
+    }
+
+    function reloadTree() {
+        $.ajax({
+            type: "POST",
+            url: "../Tree/TreeGeneration",
+            success: function (data) {
+                var testdata = jQuery.parseJSON(data);
+                zTree1 = $("#treeDemo").zTree(setting, testdata);
+                $.ajax({
+                    type: "POST",
+                    url: "../Tree/TestMutipleTreeGeneration",
+                    success: function (data1) {
+                        var testdata1 = jQuery.parseJSON(data1);
+                        zTree2 = $("#treeDemo2").zTree(setting, testdata1);
+
+                    }
+                });
+            }
+        });
+    }
+
+    function clone(jsonObj, newName) {
+        var buf;
+        if (jsonObj instanceof Array) {
+            buf = [];
+            var i = jsonObj.length;
+            while (i--) {
+                buf[i] = clone(jsonObj[i], newName);
+            }
+            return buf;
+        } else if (typeof jsonObj == "function") {
+            return jsonObj;
+        } else if (jsonObj instanceof Object) {
+            buf = {};
+            for (var k in jsonObj) {
+                if (k != "parentNode") {
+                    buf[k] = clone(jsonObj[k], newName);
+                    if (newName && k == "name") buf[k] += newName;
+                }
+            }
+            return buf;
+        } else {
+            return jsonObj;
+        }
+    }
+
+    function getCount() {
+        var tmp = zTree1.getCheckedNodes(true);
+        for (var i = 0; i < tmp.length; i++) {
+            alert(tmp[i].name + ",open:" + tmp[i].open);
+        }
+    }
+
+  //-->
+</script>
+<table>
+    <tr>
+        <td>
+            <div class="zTreeDemoBackground">
+                <ul id="treeDemo" class="tree">
+                </ul>
+            </div>
+        </td>
+        <td align="center" valign="top">
+            <div class="zTreeDemoBackground">
+                <ul id="treeDemo2" class="tree">
+                </ul>
+            </div>
+        </td>
+    </tr>
+</table>
+<div>
+    <input name="getcount" type="button" value="getcount" onclick="getCount();" />
+</div>

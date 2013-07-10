@@ -1,0 +1,91 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Tab;
+@model LiveAzure.Models.Member.MemberPrivilege
+
+@{
+    ViewBag.Title = "PrivilegeDefinition";
+}
+<script type="text/javascript">
+   
+</script>
+<h2>PrivilegeDefinition</h2>
+
+<div class="editor-label">
+       @LiveAzure.Resource.Stage.HomeController.LoginName:
+</div>
+<div class="editor-field">
+       @Html.TextBox("userName")
+</div>
+    
+    <div>
+    <input type = "button" id = "validate" value="用户验证" onclick="checkUser()"/>
+    <span id="error"></span>
+    </div>
+    
+<div class="editor-label">
+       @LiveAzure.Resource.Stage.HomeController.Gid:
+</div>
+<div class="editor-field">
+       @Html.EditorFor(model => model.UserID)
+       @Html.ValidationMessageFor(model => model.UserID)
+
+</div>
+    
+
+<div id="tab" style="display:none">
+@Html.Tab(new TabControl()
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "")
+        .SetTitle("程序授权"))
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "PrivOrganization")
+        .SetTitle("组织授权"))
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "PrivChannel")
+        .SetTitle("渠道授权"))
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "PrivWarehouse")
+        .SetTitle("仓库授权"))
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "")
+        .SetTitle("商品类别授权"))
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "")
+        .SetTitle("供应商类别授权"))
+
+)
+</div>
+
+    
+<script type="text/javascript">
+    function checkUser() {
+        alert("OK?");
+        var userName = $("#userName").val();
+        $.post("/Privilege/checkUser", { strUserName: userName }, function (data) {
+            //            if (data == 4) {
+            //                document.getElementById("error").innerHTML = "验证通过！";
+            //                alert("@Session["userID"]");
+            //                document.getElementById("UserID").value = "@Session["userID"]";
+            //            }
+            //            else {
+            //                document.getElementById("error").innerHTML = "请输入正确用户名！";
+            //            }
+            if (data == "") {
+                document.getElementById("error").innerHTML = "请输入正确用户名！";
+            }
+            else {
+                document.getElementById("error").innerHTML = "验证通过！";
+                alert(data);
+                $("#UserID").val(data);
+            }
+        }
+
+        );
+    };
+</script>

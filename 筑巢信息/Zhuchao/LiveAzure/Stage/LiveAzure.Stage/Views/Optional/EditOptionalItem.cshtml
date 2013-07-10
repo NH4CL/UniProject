@@ -1,0 +1,91 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using LiveAzure.Resource.Stage;
+@*    <div>
+        @Html.TextBox("OptionalItem.OptID", null, new { id = "optid" })
+    </div>*@
+    <div id="OptionalItemTable">
+    @Html.Grid(new GridControl()
+        .SetName("Itemgridold")
+        .SetPageSize(10)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Optional/OptionalItemList")
+        .SetIsAutoSize(true)
+        .SetColumns<LiveAzure.Models.General.GeneralOptItem>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetEditable(false).SetHidden(true);
+            cs.Add(x => x.Optional).SetCaption(LiveAzure.Resource.Model.General.GeneralOptItem.Optional);
+            cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.General.GeneralOptItem.Code);
+            cs.Add(x => x.Name).SetCaption(LiveAzure.Resource.Model.General.GeneralOptItem.Name);
+            cs.Add(x => x.Sorting).SetCaption(LiveAzure.Resource.Model.General.GeneralOptItem.Sorting);
+        }))
+        <input type="button" value="@OptionalController.Delete" onclick="RemoveOptionalItem()" />
+        <script type="text/javascript">
+            function RemoveOptionalItem() {
+
+                if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm')) {
+
+                    var itemrowid = $("#Itemgridold").jqGrid("getGridParam", "selrow");
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Optional/RemoveOptionalItems",
+                        data: { optItemGid: itemrowid },
+                        success: function (data) {
+                            $("#OptionalItemTable").html(data);
+                        }
+                    });
+                }
+            }
+        </script>
+    </div>
+
+    <div class="display-field">
+        @LiveAzure.Resource.Model.General.GeneralOptional.Code
+        @Html.TextBox("OptionalItem.Code")
+    </div>
+   
+    <div class="display-field" >
+        @LiveAzure.Resource.Model.General.GeneralOptional.Sorting
+        @Html.TextBox("OptionalItem.Sorting")
+    </div>
+    
+    <div class="display-field" >
+        @LiveAzure.Resource.Model.General.GeneralOptional.Name
+        @ViewBag.mainCulture.Culture.CultureName
+        @Html.TextBox("OptionalItem.Name.Matter")
+
+    @{
+        int i = 0;
+        foreach (var item in ViewBag.orgCultures)
+        {
+            var cultureName = item.Culture.CultureName;
+            @cultureName;
+            @Html.TextBox("ResourceItems[" + i + "].Matter");
+            i++;
+        }
+}
+    </div>
+
+    <div><input type="button" value="@OptionalController.Add" onclick="submitForm();" />
+    
+    </div>
+
+    <script type="text/javascript">
+
+        function submitForm() {
+            $("#opionalItemForm").submit();
+        }
+    
+    </script>
+
+
+    <script type="text/javascript">
+        function clile() {
+            document.getElementById("optionalItemsEdit").style.display = "none";
+        }    
+    </script>
+    <div>
+        <input type="button" value="@OptionalController.Confirm" onclick="clile()" /> 
+    </div>
+    

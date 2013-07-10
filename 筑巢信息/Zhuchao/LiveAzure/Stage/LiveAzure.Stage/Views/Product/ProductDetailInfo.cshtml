@@ -1,0 +1,23 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Product.ProductInformation
+@using LiveAzure.Controls.LiveEditor
+<div>
+    <span>@LiveAzure.Resource.Model.Product.ProductInformation.Code :</span> <span style="font-weight: bold">@ViewBag.ProductCode</span>
+    <span>@LiveAzure.Resource.Model.Product.ProductInformation.Name :</span> <span style="font-weight: bold">@ViewBag.ProductName</span>
+</div>
+@using (Ajax.BeginForm("saveProductInfoDetail", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "alert('1');" }))
+{ 
+    @Html.HiddenFor(model => model.Gid)
+    <p id="briefDescription">
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Brief </span>
+        @Html.EditorFor(model => model.Brief, "Matter")
+    </p>
+    <p id="detailedDescription">
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Matter </span>
+        @Html.EditorFor(model => model.Matter, "LargeMatter", new { ID = "PUDescription", Editor = new LiveEditor().SetSkin(LiveEditorSkin.Office2003) })
+    </p>
+    <input type="submit" value="@LiveAzure.Resource.Common.Save" id="descriptionSubmit" />
+    <input type="reset" value="@LiveAzure.Resource.Common.Reset" id="descriptionReset" />
+}

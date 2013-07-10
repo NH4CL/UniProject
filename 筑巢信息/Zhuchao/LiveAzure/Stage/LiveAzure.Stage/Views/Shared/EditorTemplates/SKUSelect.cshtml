@@ -1,0 +1,19 @@
+﻿@model Guid?
+
+@{
+    //唯一性标识符
+    string id = ViewBag.ID == null ? Guid.NewGuid().ToString() : (string)ViewBag.ID;
+    string ValueID = string.Concat(id, "_val");
+    string TextID = string.Concat(id,"_txt");
+    string MenuID = string.Concat(id, "_menu");
+    Guid? orgID = ViewBag.OrgID as Guid?;
+}
+@Html.HiddenFor(model => model,new { id = ValueID })
+<input id="@TextID" type="text" />
+<ul id="@MenuID" class="SKUSelect" style="display:none; list-style:none; position:fixed; border:solid 1px;">
+</ul>
+<script type="text/javascript">
+    $(function(){
+        initSKUSelect("@orgID", "@id");
+    });
+</script>

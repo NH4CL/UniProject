@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.General.GeneralOptional
+ 
+<div id="editOptional" style="display:none" >
+    
+<div class="display-field" id="editdrowdowndiv" >
+    @LiveAzure.Resource.Model.General.GeneralOptional.Otype
+    @Html.DropDownListFor(model => model.Otype, (List<SelectListItem>)ViewBag.editOptionalTypeList, new { OnChange = "editShowRefID(this.value)" })
+    @Html.ValidationMessageFor(model => model.Otype)
+</div>
+    
+<script type="text/javascript">
+    //向控制器传回用户选中的属性类型
+    function editShowRefID(str) {
+        if (str == 3) {
+            document.getElementById("editRefIDDiv").style.display = "block";
+
+        }
+        else {
+            document.getElementById("editRefIDDiv").style.display = "none";
+        }
+    }
+</script>
+    
+<div class="display-field">
+    @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.Code)
+    @Html.EditorFor(model => model.Code)
+    @Html.ValidationMessageFor(model => model.Code)
+</div>
+    
+<div class="display-field" id="editRefIDDiv" style="display:none" >
+    @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.RefID)
+    @Html.DropDownListFor(model => model.RefID, (List<SelectListItem>)ViewBag.editRefIdList, String.Empty)
+    @Html.ValidationMessageFor(model => model.RefID)
+</div>
+   
+<div class="display-field" >
+    @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.Sorting)
+    @Html.EditorFor(model => model.Sorting)
+    @Html.ValidationMessageFor(model => model.Sorting)
+</div>
+    
+<div>
+    <dl>
+        <dt>
+            @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.Name)
+        </dt>
+        <dd>
+            @ViewBag.editMainCulture.Culture.CultureName        
+            @Html.EditorFor(model => model.Name.Matter)
+        </dd>
+@{
+    int i = 0;
+    foreach (var item in ViewBag.editOrgCulture)
+    {
+        <dd>
+        @{
+            var cultureName = item.Culture.CultureName;
+            @cultureName;
+            @Html.TextBox("ResourceItems[" + i + "].Matter");
+            i++;
+        }
+        </dd>
+    }
+}
+    </dl>
+</div>
+  
+<div class="display-field" >
+    @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.InputMode)
+    @Html.DropDownListFor(model => model.InputMode, (List<SelectListItem>)ViewBag.editOptionalInputMode)
+</div>
+<div><input type="submit" value="@LiveAzure.Resource.Stage.OptionalController.Confirm" /></div>
+    
+</div>

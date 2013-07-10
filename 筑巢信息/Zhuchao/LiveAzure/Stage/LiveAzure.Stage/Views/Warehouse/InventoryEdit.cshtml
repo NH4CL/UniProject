@@ -1,0 +1,107 @@
+﻿@using CommonResource = LiveAzure.Resource.Common
+@using WarehouseInventoryResource = LiveAzure.Resource.Model.Warehouse.WarehouseInventory
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@model LiveAzure.Models.Warehouse.WarehouseInventory
+
+@using (Html.BeginForm("InventoryEditDB", "Warehouse", FormMethod.Post))
+{
+    <input type="submit" value="@CommonResource.Save" />
+    <input type="reset" id="btnInvEditReset" value="@CommonResource.Reset" />
+    @Html.HiddenFor(model => model.Gid)
+    <table>
+        <tr>
+            <th>@WarehouseInventoryResource.Organization</th>
+            <td>@Html.DisplayFor(model => model.Organization.FullName, "LocaleMatter", new { ID = "orgName" })</td>
+            <th>@WarehouseInventoryResource.Warehouse</th>
+            <td>@Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "warehouseName" })/td>
+            <th>@WarehouseInventoryResource.Code</th>
+            <td>@Html.TextBoxFor(model => model.Code, new { disabled = "disabled" })</td>
+        </tr>
+        <tr>
+            <th>@WarehouseInventoryResource.Quantity</th>
+            <td>@Html.TextBoxFor(model => model.Quantity, new { disabled = "disabled" })</td>
+            <th>@WarehouseInventoryResource.Istatus</th>
+            <td>@Html.TextBoxFor(model => model.InventoryStatusName, new { disabled = "disabled" })</td>
+            <th>@WarehouseInventoryResource.Remark</th>
+            <td>@Html.TextAreaFor(model => model.Remark)</td>
+        </tr>
+    </table>
+}
+<br />
+<fieldset>
+    <legend>@CommonResource.EditItem</legend>
+    <div id="ItemEdit"></div>
+    <input type="button" id="btnInvItemAdd" value="@CommonResource.Add" />
+    <input type="button" id="btnInvItemEdit" value="@CommonResource.Edit" />
+    <input type="button" id="btnInvItemDelete" value="@CommonResource.Delete" />
+</fieldset>
+<script type="text/javascript">
+    $("#btnInvEditCancel").click(function () {
+        document.location.replace("/Warehouse/Inventory");
+    });
+</script>
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Warehouse/InvItemGrid",
+        data: { invID: "@Model.Gid" },
+        async: false,
+        success: function (html) {
+            $("#ItemEdit").html(html);
+        }
+    });
+    var InvItemPanel = new OpenPanel();
+        InvItemPanel.bLoading = true;
+        InvItemPanel.width = 600;
+        InvItemPanel.height = 700;
+        InvItemPanel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+        InvItemPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+        $("#btnInvItemAdd").click(function () {
+            InvItemPanel.OpenPanel();
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/InvItemAdd",
+                data: { invID: "@Model.Gid" },
+                async: false,
+                success: function (html) {
+                    InvItemPanel.EditPageHtml(html);
+                }
+            });
+        });
+        $("#btnInvItemEdit").click(function () {
+            var itemID = $("#InvItemGrid").jqGrid("getGridParam", "selrow");
+            if (itemID == null) {
+                alert("@WCResource.SelectOneRow");
+                return;
+            }
+            InvItemPanel.OpenPanel();
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/InvItemEdit",
+                data: { itemID: itemID },
+                async: false,
+                success: function (html) {
+                    InvItemPanel.EditPageHtml(html);
+                }
+            });
+        });
+        $("#btnInvItemDelete").click(function() {
+            var grid = $("#InvItemGrid");
+            var itemID = grid.jqGrid("getGridParam", "selrow");
+            if (itemID == null) {
+                alert("@WCResource.SelectOneRow");
+            } else {
+                if (confirm("@WCResource.ConfirmDelete")) {
+                    $.post("/Warehouse/InvItemDeleteDB", { itemID: itemID },
+                    function (result) {
+                        if (result) {
+                            grid.jqGrid("delRowData", itemID);
+                        } else {
+                            alert("@WCResource.Error");
+                        }
+                    });
+                }
+            }
+        });
+</script>

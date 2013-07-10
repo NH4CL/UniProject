@@ -1,0 +1,34 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    function Change(sele) {
+        var province = document.getElementById("province").value;
+        var city = document.getElementById("city").value;
+        if (sele == 1) {
+            $.ajax({
+                type: "post",
+                url: "/Account/Select",
+                data: { pro: province },
+                success: function (html) {
+                    $("#select").html(html);
+                }
+            })
+        } else {
+            $.ajax({
+                type: "post",
+                url: "/Account/Select",
+                data: { pro: province, cit: city },
+                success: function (html) {
+                    $("#select").html(html);
+                }
+            })
+        }
+    }    
+</script>
+<span>省</span>
+@Html.DropDownList("Select1", ViewBag.province as IEnumerable<SelectListItem>, new { id = "province", name = "province", onchange = "Change(1)" })
+<span>市</span>
+@Html.DropDownList("Select2", ViewBag.city as IEnumerable<SelectListItem>, new { id = "city", name = "city", onchange = "Change(2)" })
+<span>县</span>
+@Html.DropDownList("Select3", ViewBag.town as IEnumerable<SelectListItem>, new { id = "town", name = "town" })

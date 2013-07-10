@@ -1,0 +1,122 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Order
+@using MVC.Controls;
+@model LiveAzure.Models.Order.PromotionInformation
+<script type="text/javascript">
+    function promotionBaseInfoSave(data) {
+        if (data == "exist") {
+            var confirmTips = "@LiveAzure.Resource.Stage.PromotionController.PromotionCoverTips";
+            var templateConfirm = window.confirm(confirmTips);
+            if (templateConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Promotion/SetPromotionCover",
+                    success: function () {
+                        $("#savePromotionInfoForm").submit();
+                    }
+                });
+            }
+        }
+        else if (data == "fail") {
+            alert("@LiveAzure.Resource.Common.OperationFailed");
+        }
+        else {
+            alert("@LiveAzure.Resource.Common.SaveSuccess");
+        }
+    }
+</script>
+<div>
+    @using (Ajax.BeginForm("SavePromotionInfo", "Promotion", new AjaxOptions { HttpMethod = "POST", OnSuccess = "promotionBaseInfoSave" }, new { id = "savePromotionInfoForm" }))
+    {
+        @Html.HiddenFor(model => model.Gid)
+        @Html.HiddenFor(model => model.OrgID)
+        @Html.HiddenFor(model => model.ChlID)
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.Organization:
+            @ViewBag.orgFullName
+            @LiveAzure.Resource.Model.Order.PromotionInformation.Channel:
+            @ViewBag.chlFullName
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.Code
+            @if (ViewBag.bEdit == false)
+            {
+                @Html.EditorFor(model => model.Code)
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.Code) 
+            }
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.Name
+            @Html.EditorFor(model => model.Name, "Matter")
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.Matter
+            @Html.EditorFor(model => model.Matter)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.Pstatus
+            @Html.DropDownListFor(model => model.Pstatus, (List<SelectListItem>)ViewBag.oPstatusList)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.IssueType
+            @Html.DropDownListFor(model => model.IssueType, (List<SelectListItem>)ViewBag.oIssueTypeList)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.Sorting
+            @Html.EditorFor(model => model.Sorting)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.Ptype
+            @Html.DropDownListFor(model => model.Ptype, (List<SelectListItem>)ViewBag.oPtypeList)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.ConditionA
+            @Html.EditorFor(model => model.ConditionA)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.ConditionB
+            @Html.EditorFor(model => model.ConditionB)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.ConditionC
+            @Html.EditorFor(model => model.ConditionC)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.ConditionD
+            @Html.EditorFor(model => model.ConditionD)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.IssueStart
+            @Html.TextBox("issueStartTime", ViewData["issueStartTime"]).AsDatePicker(new DatePicker())
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.IssueEnd
+            @Html.TextBox("issueEndTime", ViewData["issueEndTime"]).AsDatePicker(new DatePicker())
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.StartTime
+            @Html.TextBox("validateStartTime", ViewData["validateStartTime"]).AsDatePicker(new DatePicker())
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.EndTime
+            @Html.TextBox("validateEndTime", ViewData["validateEndTime"]).AsDatePicker(new DatePicker())
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionInformation.EffectDays
+            @Html.EditorFor(model => model.EffectDays)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.ModelBase.Remark
+            @Html.TextAreaFor(model => model.Remark)
+        </div>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    }
+</div>

@@ -1,0 +1,31 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using InvResource = LiveAzure.Resource.Model.Warehouse.WarehouseInventory
+@{
+    Guid whID = (Guid)ViewBag.WHID;
+}
+@Html.Grid(
+    new GridControl()
+        .SetName("InvGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("InventoryList", new { whID = whID }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseInventory>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Warehouse).SetCaption(InvResource.Warehouse);
+            cs.Add(x => x.Istatus).SetCaption(InvResource.Istatus);
+            cs.Add(x => x.Quantity).SetCaption(InvResource.Quantity);
+            cs.Add(x => x.Prepared).SetCaption(InvResource.Prepared);
+            cs.Add(x => x.Approved).SetCaption(InvResource.Approved);
+            cs.Add(x => x.ApproveTime).SetCaption(InvResource.ApproveTime);
+            cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+        })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )

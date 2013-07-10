@@ -1,0 +1,36 @@
+﻿@using CategoryType = LiveAzure.Models.ModelEnum.StandardCategoryType
+@using CommonResource = LiveAzure.Resource.Common
+@using WarehouseStockInResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockIn
+@model LiveAzure.Models.Warehouse.WarehouseStockIn
+@ControlManager.StandardCategorySelect()
+
+@using (Html.BeginForm("WarehouseStockInAddDB", "Warehouse"))
+{
+    @Html.HiddenFor(model => model.Gid)
+    @WarehouseStockInResource.Code
+    @Html.TextBoxFor(model => model.Code, new { disabled = "disabled" })
+    <br /><br />
+    @Html.HiddenFor(model => model.WhID, new { id = "hidWHID" })
+    @WarehouseStockInResource.InType
+    @Html.EditorFor(model => model.InType, "StandardCategorySelect",
+        new { Type = CategoryType.STOCKIN, OnClick = "setRefType" })
+    <br /><br />
+    <input id="RefType_txt" disabled="disabled" />
+    @Html.HiddenFor(Model => Model.RefType, new { id="RefType_val" })
+    <br /><br />
+    @WarehouseStockInResource.RefID
+    <input type="text" id="refID_txt" />
+    @Html.HiddenFor(model => model.RefID, new { id = "refID_val" })
+    <br /><br />
+    @WarehouseStockInResource.Total
+    @Html.TextBoxFor(model => model.Total)
+    <br />
+    <input type="submit" value="@CommonResource.Edit" />
+    <input type="button" value="reset" />
+    <input type="button" id="btnCancel" value="@CommonResource.Cancel" />
+}
+<script type="text/javascript">
+    $("#btnCancel").click(function () {
+        document.location.replace("/Warehouse/WarehouseStockIn");
+    });
+</script>

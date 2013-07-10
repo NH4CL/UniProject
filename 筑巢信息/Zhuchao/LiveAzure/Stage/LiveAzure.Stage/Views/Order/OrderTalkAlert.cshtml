@@ -1,0 +1,21 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    function TalkWithSelf() {
+        var content = document.getElementById("talkWith").value;
+        $.ajax({
+            type: "POST",
+            url: "/Order/UpdateOrderTalk",
+            data:{content:content},
+            success: function (Status) {
+                OrderHanged_Panel.CloseEditPanel();
+                eval("Status" + Status + "()");
+                LogAction();
+            }
+        });
+    }
+</script>
+<label>@LiveAzure.Resource.Stage.OrderController.TalkWithSelf :</label>
+<textarea id="talkWith" cols="30" rows="20"></textarea>
+<button id="submit"  onclick="TalkWithSelf()">@LiveAzure.Resource.Common.Submit</button>

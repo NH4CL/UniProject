@@ -1,0 +1,22 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@Html.Grid(new GridControl()
+    .SetName("CultureUnits")
+    .SetPageSize(20)
+    .SetIsAutoSize(true)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Config/CultureList")
+    .SetHeight("'100%'")
+    .SetColumns<LiveAzure.Models.General.GeneralCultureUnit>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.Culture).SetCaption(LiveAzure.Resource.Model.General.GeneralCultureUnit.CultureName);
+        cs.Add(x => x.Piece).SetCaption(LiveAzure.Resource.Model.General.GeneralCultureUnit.Piece);
+        cs.Add(x => x.Weight).SetCaption(LiveAzure.Resource.Model.General.GeneralCultureUnit.Weight);
+        cs.Add(x => x.Volume).SetCaption(LiveAzure.Resource.Model.General.GeneralCultureUnit.Volume);
+        cs.Add(x => x.Fluid).SetCaption(LiveAzure.Resource.Model.General.GeneralCultureUnit.Fluid);
+        cs.Add(x => x.Area).SetCaption(LiveAzure.Resource.Model.General.GeneralCultureUnit.Area);
+        cs.Add(x => x.Linear).SetCaption(LiveAzure.Resource.Model.General.GeneralCultureUnit.Linear);
+        cs.Add(x => x.Currency).SetCaption(LiveAzure.Resource.Model.General.GeneralCultureUnit.Currency);
+    })
+)

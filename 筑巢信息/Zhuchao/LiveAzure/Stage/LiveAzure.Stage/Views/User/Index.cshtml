@@ -1,0 +1,154 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using MVC.Controls.Tab;
+@model LiveAzure.Models.Member.MemberUser
+@{
+    ViewBag.Title = "Index";
+    
+}
+<script type="text/javascript">
+    /*------------------------------------------------
+    返回订单添加页面  凤凰添加
+    ------------------------------------------------*/
+    function ReturnOrder() {
+        var id = $("#gridUser").jqGrid("getGridParam", "selrow"); 
+         
+        if ("@ViewBag.fromOrder" == "True") {
+            window.location = "/Order/OrderWithUser?UserGuid=" + id;
+        } else {
+            return false;
+        }
+    }
+</script>
+<div id="orgMemUser">
+    @{
+        string listUrl = "/User/listUser?searchString=";
+    }
+    <table>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Stage.UserController.organization:
+            </th>
+            <td>
+                @Html.DropDownListFor(model=>model.OrgID, (List<SelectListItem>)ViewBag.organization, new { id = "orgCode", name = "orgCode", style = "width:270px;", onchange = "changeOrg()" })
+            </td>
+            <th>
+                @LiveAzure.Resource.Stage.UserController.keyword:
+            </th>
+            <td>
+                @Html.TextBox("SearchString") &nbsp;
+                <input type="button" id="search" name="search" value="@LiveAzure.Resource.Stage.UserController.search" onclick="searchUser()" />
+            </td>
+        </tr>
+    </table>
+    @Html.Grid(new GridControl()
+        .SetName("gridUser")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl(@listUrl)
+        .SetHeight("'100%'")
+        .SetWidth("600")
+        .SetColumns<LiveAzure.Models.Member.MemberUser>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Role.Name.Matter).SetCaption(LiveAzure.Resource.Model.Member.MemberUser.Role);
+                cs.Add(x => x.Channel.FullName.Matter).SetCaption(LiveAzure.Resource.Model.Member.MemberUser.Channel);
+                cs.Add(x => x.LoginName).SetCaption(LiveAzure.Resource.Model.Member.MemberUser.LoginName);
+                cs.Add(x => x.DisplayName).SetCaption(LiveAzure.Resource.Model.Member.MemberUser.DisplayName);
+                cs.Add(x => x.Gender).SetCaption(LiveAzure.Resource.Model.Member.MemberUser.Gender);
+                cs.Add(x => x.Email).SetCaption(LiveAzure.Resource.Model.Member.MemberUser.Email);
+            })
+            .SetOnSelectedRowEvent("ReturnOrder")
+       )
+    <br />
+    <input type="button" value="@LiveAzure.Resource.Stage.UserController.addUser" id="Add" onclick="add()"/>
+    <input type="button" value="@LiveAzure.Resource.Stage.UserController.editUser" id="Edit" onclick="edit()"/>
+</div>
+<script type="text/javascript">
+    function changeOrg() {
+
+        var id = $("#orgCode option:selected").val();
+        $.ajax({
+
+            type: "POST",
+
+            url: "/User/IndexTest1",
+
+            data: { currentid: id },
+
+            datatype: "html",
+
+            success: function (data) {
+
+                $("#gridUser").trigger('reloadGrid');
+
+            },
+
+            error: function () {
+
+                alert("处理失败!");
+
+            }
+
+        });
+    }
+
+    function searchUser() {
+        var searchStr = $("#SearchString").val();
+        var currentid = $("#orgCode option:selected").val();
+        //        var allids = $("#orgCode").val();
+        $.ajax({
+
+            type: "POST",
+
+            url: "/User/IndexTest1",
+
+            data: { currentid: currentid, searchStr: searchStr },
+
+            datatype: "html",
+
+            success: function (data) {
+
+                $("#gridUser").trigger('reloadGrid');
+            },
+
+            error: function () {
+
+                alert("处理失败!");
+
+            }
+
+        });
+    }
+
+    function add() {
+        window.location.href = "/User/UserDefination";
+    }
+
+    function edit() {
+        var id = $("#gridUser").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert('@LiveAzure.Resource.Stage.UserController.selAlert');
+        }
+        else {
+            window.location.href = "/User/UserDefination?id=" + id;
+        }
+    }
+
+    //    $(document).ready(function () {
+    //        var URLParams = new Array();
+    //        var all = new Array();
+    //        var aParams = document.location.search.substr(1).split('?').toString();
+    //        var aparams = aParams.split('*');
+    //        var currentid = aparams[0].split('=');
+    //        var allids = aparams[1].split('=');
+    //        URLParams[currentid[0]] = currentid[1];
+    //        all.push(allids[1]);
+    //        for (var i = 0; i < all.length; i++) {
+    //            alert(all[i]);
+    //        }
+    //        var currentid = URLParams["currentid"];
+    //        alert("currentid = " + currentid);
+    //    })
+</script>

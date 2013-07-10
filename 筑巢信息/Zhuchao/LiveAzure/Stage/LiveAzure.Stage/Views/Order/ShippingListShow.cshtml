@@ -1,0 +1,5 @@
+﻿@{
+    Layout=null;
+}
+@Html.Label(LiveAzure.Resource.Model.Order.OrderShipping.Shipper)
+@Html.DropDownList("shippingListSelect", (List<SelectListItem>)ViewBag.shippinglist, new { id = "shippingListSelect" })

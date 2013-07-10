@@ -1,0 +1,63 @@
+﻿@using LiveAzure.Controls.LiveEditor
+@model LiveAzure.Models.Member.OrganizationBase
+@ControlManager.LiveEditor()
+@{
+    ViewBag.Title = @LiveAzure.Resource.Model.Member.OrganizationBase.Introduction;
+}
+@using (@Ajax.BeginForm("saveOrgIntroduction", "Organization", new AjaxOptions { OnSuccess = "OrgIntroductionSaveSuccess" }))
+{
+    @Html.HiddenFor(model => model.Gid)
+    @Html.EditorFor(model => model.Introduction, "LargeMatter", new { ID = "OrgIntroduction" })
+    @Html.HiddenFor(model => model.Otype)
+     if (ViewBag.privEnableEdit == "1")
+     {
+        <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+     }
+     else
+     {
+        <input type="button" value="@LiveAzure.Resource.Common.Submit" disabled="disabled"/>
+     }
+    <input type="button" value="@LiveAzure.Resource.Common.Back" onclick="BackFunction();"/>
+}
+<script type="text/javascript">
+    function OrgIntroductionSaveSuccess(back) {
+        if (back == "NoPrivilege") {
+            alert("@LiveAzure.Resource.Common.NoPermission");
+        }
+        else if (back == "Success") {
+            alert("@LiveAzure.Resource.Common.SaveSuccess");
+            if ("@ViewBag.OrgType" == "organization") {
+                window.location.href = "/Organization/Index";
+            }
+            if ("@ViewBag.OrgType" == "channel") {
+                window.location.href = "/Organization/ChannelIndex";
+            }
+            if ("@ViewBag.OrgType" == "warehouse") {
+                window.location.href = "/Organization/WarehouseIndex?&ParentOrgID=@Model.aParent";
+            }
+            if ("@ViewBag.OrgType" == "supplier") {
+                window.location.href = "/Organization/SupplierIndex?&ParentOrgID=@Model.aParent";
+            }
+            if ("@ViewBag.OrgType" == "shipper") {
+                window.location.href = "/Organization/ShippingIndex?&ParentOrgID=@Model.aParent";
+            }
+        }
+    }
+    function BackFunction() {
+        if ("@ViewBag.OrgType" == "organization") {
+            window.location.href = "/Organization/Index";
+        }
+        if ("@ViewBag.OrgType" == "channel") {
+            window.location.href = "/Organization/ChannelIndex";
+        }
+        if ("@ViewBag.OrgType" == "warehouse") {
+            window.location.href = "/Organization/WarehouseIndex?&ParentOrgID=@Model.aParent";
+        }
+        if ("@ViewBag.OrgType" == "supplier") {
+            window.location.href = "/Organization/SupplierIndex?&ParentOrgID=@Model.aParent";
+        }
+        if ("@ViewBag.OrgType" == "shipper") {
+            window.location.href = "/Organization/ShippingIndex?&ParentOrgID=@Model.aParent";
+        }
+    }
+</script>

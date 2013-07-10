@@ -1,0 +1,47 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Tab;
+@model LiveAzure.Models.Member.MemberOrganization
+@{
+    ViewBag.Title = "OrganizationDefination";
+    //Layout = null;
+}
+
+<script type="text/javascript">
+
+    var URLParams = new Array();
+    var aParams = document.location.search.substr(1).split('?').toString();
+    var aParam = aParams.split('=');
+    URLParams[aParam[0]] = aParam[1];
+    var id = URLParams["id"];
+
+    var guid = '*' + '@(ViewBag.staticGuid)' + '*';
+    if (guid == "**") {
+        //        alert("1");    
+    }
+    else {
+        //        alert("2");
+        id = '@ViewBag.staticGuid';
+    }
+
+    $(document).ready(function () {
+        
+        $.ajax({
+            type: "POST",
+            url: "/Organization/GetTabpage",
+            data: { strId: id  },
+            datatype: "html",
+            success: function (data) {
+                $('#content').html(data);
+            },
+            error: function () {
+                alert('@LiveAzure.Resource.Stage.OrganizationController.errorAlert');
+            }
+        });
+    });
+
+</script>
+
+
+<div id='content'>
+
+</div>

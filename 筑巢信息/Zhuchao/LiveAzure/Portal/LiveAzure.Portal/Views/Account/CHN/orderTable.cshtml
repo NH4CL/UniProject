@@ -1,0 +1,148 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">    
+    function first() {
+        var pageNow = document.getElementById("pageNow").value;
+        $.ajax({
+            type: "post",
+            url: "/Account/orderTable",
+            data: { pNow: pageNow,type:"f"},
+            success: function (html) {
+                $("#Title_list").html(html);
+                $.ajax({
+                    type: "post",
+                    url: "/Account/First",
+                    data: { pNow: pageNow},
+                    success: function (html) {
+                        $("#foot").html(html);
+                    }
+                })
+            }
+        })
+        
+    }
+    function tail() {
+        var pageNow = document.getElementById("pageNow").value;
+        $.ajax({
+            type: "post",
+            url: "/Account/orderTable",
+            data: { pNow: pageNow,type:"t"},
+            success: function (html) {
+                $("#Title_list").html(html);
+                $.ajax({
+                    type: "post",
+                    url: "/Account/Tail",
+                    data: { pNow: pageNow },
+                    success: function (html) {
+                        $("#foot").html(html);
+                    }
+                })
+            }
+        })
+        
+    }
+    function last() {
+        var pageNow = document.getElementById("pageNow").value;
+        $.ajax({
+            type: "post",
+            url: "/Account/orderTable",
+            data: { pNow: pageNow,type:"l"},
+            success: function (html) {
+                $("#Title_list").html(html);
+                $.ajax({
+                    type: "post",
+                    url: "/Account/Last",
+                    data: { pNow: pageNow },
+                    success: function (html) {
+                        $("#foot").html(html);
+                    }
+                })
+            }
+        })        
+    }
+    function next() {
+        var pageNow = document.getElementById("pageNow").value;
+        $.ajax({
+            type: "post",
+            url: "/Account/orderTable",
+            data: { pNow: pageNow,type:"n"},
+            success: function (html) {
+                $("#Title_list").html(html);
+                $.ajax({
+                    type: "post",
+                    url: "/Account/Next",
+                    data: { pNow: pageNow },
+                    success: function (html) {
+                        $("#foot").html(html);
+                    }
+                })
+            }
+        })
+        
+    }
+</script>
+<table>
+                <tr>
+                    <th class="myorder_code">
+                        订单编号
+                    </th>
+                    <th class="myorder_Consignee">
+                        收货人
+                    </th>
+                    <th class="myorder_CreateTime">
+                        下单时间
+                    </th>
+                    <th class="myorder_PayType">
+                        支付方式
+                    </th>
+                    <th class="myorder_Ostatus">
+                        订单状态
+                    </th>
+                    <th class="myorder_operation">
+                        操作
+                    </th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="myorder_code">@item.Code</td>
+                        <td class="myorder_Consignee">@item.Consignee</td>
+                        <td class="myorder_CreateTime">@item.CreateTime</td>
+                        <td class="myorder_PayType">@item.PayType.Name.Matter</td>
+                        <td class="myorder_Ostatus">
+                        @if (0 == item.Ostatus)
+                        {
+                            <span>未确定</span>
+                        }
+                        else if (1 == item.Ostatus)
+                        {
+                            <span>已确定</span>
+                        }
+                        else if(2 == item.Ostatus)
+                        {
+                            <span>已排单</span>
+                        }
+                        else if (3 == item.Ostatus)
+                        {
+                            <span>已发货</span>
+                        }
+                        else if (4 == item.Ostatus)
+                        {
+                            <span>已结算</span>
+                        }
+                        else if (5 == item.Ostatus)
+                        {
+                            <span>取消</span>
+                        }
+                        else
+                        {
+                            <span>状态未知</span>
+                        }
+
+                        </td>
+                        <td class="myorder_operation">查看</td>
+                    </tr>
+                }
+                
+            </table>

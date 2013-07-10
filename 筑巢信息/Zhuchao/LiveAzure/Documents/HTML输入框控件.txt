@@ -1,0 +1,9 @@
+详见~/Views/Resource/TestHTMLEditor.cshtml
+
+在浏览器中输入 http://localhost:xxxx/Resource/TestHTMLEditor 查看效果
+
+
+目前只是初步效果，
+控件的属性有待摸索和完善。
+
+希望大家一起提提意见和建议

@@ -1,0 +1,252 @@
+﻿@model LiveAzure.Models.Member.MemberUser
+
+@{
+    ViewBag.Title = "EditUser";
+}
+
+<h2>EditUser</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>MemberUser</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.OrgID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.OrgID)
+            @Html.ValidationMessageFor(model => model.OrgID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RoleID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RoleID)
+            @Html.ValidationMessageFor(model => model.RoleID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ChlID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ChlID)
+            @Html.ValidationMessageFor(model => model.ChlID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LoginName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LoginName)
+            @Html.ValidationMessageFor(model => model.LoginName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.aManager)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.aManager)
+            @Html.ValidationMessageFor(model => model.aManager)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Ustatus)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Ustatus)
+            @Html.ValidationMessageFor(model => model.Ustatus)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NickName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.NickName)
+            @Html.ValidationMessageFor(model => model.NickName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FirstName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstName)
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastName)
+            @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DisplayName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DisplayName)
+            @Html.ValidationMessageFor(model => model.DisplayName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.aPasscode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.aPasscode)
+            @Html.ValidationMessageFor(model => model.aPasscode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Passcode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Passcode)
+            @Html.ValidationMessageFor(model => model.Passcode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SaltKey)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SaltKey)
+            @Html.ValidationMessageFor(model => model.SaltKey)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.aCulture)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.aCulture)
+            @Html.ValidationMessageFor(model => model.aCulture)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Title)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Gender)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Gender)
+            @Html.ValidationMessageFor(model => model.Gender)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.HeadPic)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.HeadPic)
+            @Html.ValidationMessageFor(model => model.HeadPic)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserSign)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserSign)
+            @Html.ValidationMessageFor(model => model.UserSign)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Brief)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Brief)
+            @Html.ValidationMessageFor(model => model.Brief)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Birthday)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Birthday)
+            @Html.ValidationMessageFor(model => model.Birthday)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastLoginTime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastLoginTime)
+            @Html.ValidationMessageFor(model => model.LastLoginTime)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastLoginIP)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastLoginIP)
+            @Html.ValidationMessageFor(model => model.LastLoginIP)
+        </div>
+
+        @Html.HiddenFor(model => model.Gid)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Deleted)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Deleted)
+            @Html.ValidationMessageFor(model => model.Deleted)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreateTime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreateTime)
+            @Html.ValidationMessageFor(model => model.CreateTime)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastModifiedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastModifiedBy)
+            @Html.ValidationMessageFor(model => model.LastModifiedBy)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastModifyTime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastModifyTime)
+            @Html.ValidationMessageFor(model => model.LastModifyTime)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Remark)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Remark)
+            @Html.ValidationMessageFor(model => model.Remark)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+

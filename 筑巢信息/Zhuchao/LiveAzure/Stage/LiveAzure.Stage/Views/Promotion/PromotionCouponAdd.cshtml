@@ -1,0 +1,78 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Order
+@using MVC.Controls;
+@model PromotionCoupon
+<script type="text/javascript">
+    function promotionCouponInfoSave(data) {
+        if (data == "success") {
+            promotionCouponPanel.CloseEditPanel();
+            $("#PromotionCouponGrid").trigger('reloadGrid');
+        }
+    }
+
+    function checkCouponCount() {
+        var couponCount = $("#CouponCount").val();
+        if (couponCount == null || couponCount == 0) {
+            alert("@LiveAzure.Resource.Stage.PromotionController.CouponCountTips");
+        }
+        else {
+            $("#savePromotionCouponForm").submit();
+        }
+    }
+
+</script>
+<div>
+    @using (Ajax.BeginForm("SavePromotionCouponInfo", "Promotion", new AjaxOptions { HttpMethod = "POST", OnSuccess = "promotionCouponInfoSave" }, new { id = "savePromotionCouponForm" }))
+    {
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.Promotion
+            @ViewBag.promotionCode
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.Cstatus
+            @Html.DropDownListFor(model => model.Cstatus, (List<SelectListItem>)ViewBag.oCstatusList)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.Currency
+            @Html.DropDownListFor(model => model.aCurrency, (List<SelectListItem>)ViewBag.oCurrencyList)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.Amount
+            @Html.EditorFor(model => model.Amount)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.MinCharge
+            @Html.EditorFor(model => model.MinCharge)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.Cashier
+            @Html.DropDownListFor(model => model.Cashier, (List<SelectListItem>)ViewBag.oCashierList)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.OnceUse
+            @Html.DropDownListFor(model => model.OnceUse, (List<SelectListItem>)ViewBag.oOnceUseList)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.StartTime
+            @Html.TextBox("StartTime", ViewData["StartTime"]).AsDatePicker(new DatePicker())
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionCoupon.EndTime
+            @Html.TextBox("EndTime", ViewData["EndTime"]).AsDatePicker(new DatePicker())
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.ModelBase.Remark
+            @Html.TextAreaFor(model => model.Remark)
+        </div>
+        <div>
+            @LiveAzure.Resource.Stage.PromotionController.PromotionCouponCount
+            @Html.Editor("CouponCount")
+        </div>
+        <div>
+            <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="checkCouponCount();" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    }
+</div>

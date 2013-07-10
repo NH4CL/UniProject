@@ -1,0 +1,946 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Member
+@using LiveAzure.Models.Order
+@using LiveAzure.Controls.LiveRegionSelector
+@ControlManager.RegionSelect()
+@model OrderInformation
+<style type="text/css">
+*{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+#OrderHeadMessage li
+{
+    float:left;
+    margin-left:20px;
+    position:relative;
+    top:10px;
+}
+#OrderHeadMessage ul
+{
+    clear:both;
+    width:100%;
+    height:40px;
+    border-bottom:2px solid #000;
+}
+
+#Message
+{
+    position:relative;
+}
+#Message p
+{
+    display:inline-block;
+    position:absolute;
+    width: 200px;
+    height:100%;
+}
+#Message p *
+{
+    margin-top:10px;
+    }
+#userMessage
+{
+    left:50%;
+    }
+#OrderStatuesInfo span
+{
+    margin-right:10px;
+    }
+#PriceMessageBlock li
+{
+    float:left;
+    margin-right:20px;
+}
+</style>
+<script type="text/javascript">
+    //弹出添加用户对话框
+    function openDlg() {
+        OpenEditPanel("CoverPage_OrderUserInfo", "EditPage_OrderUserInfo", "PartialPage_OrderUserInfo", null, "Draggable_OrderUserInfo", false);
+        $("#OrderUserGrid").trigger('reloadGrid');
+    }
+    //添加用户地址
+    function addUser() {
+        var selectGid = $("#OrderUserGrid").jqGrid("getGridParam", "selrow");
+        if (selectGid == null) {
+            var strSelectTip = "@Html.Raw(LiveAzure.Resource.Stage.OrderController.ChooseUserAddTips)";
+            alert(strSelectTip);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Order/OrderEditConsigneeInfo",
+                data: { bSelectAddress: true, memberAddressGid: selectGid },
+                success: function (html) {$("#OrderEditInfoMainPage").html("");
+                    $.ajax({
+                        type: "POST",
+                        url: "/Order/OrderEditInfo",
+                        success: function (html) {
+                            $("#OrderEditInfoMainPage").html(html);
+                        }
+                    });
+                }
+            });
+        }
+    }
+    //设置后台全局变量控制页面编辑状态
+    function setOrderBaseInfoEdit() {
+            //页面处于订单商品编辑状态
+            if ("@ViewBag.bOrderItemInfoEdit" == "True") {
+                var BaseInfotruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+                if (BaseInfotruthBeTold == true) {
+                    $("#saveEditOrderForm").submit();
+                }
+            else {
+                $.post("/Order/SetOrderBaseInfoEdit",{},function(){//将订单基本信息块作为当前编辑状态
+                    //撤销对全局变量的更改，即 把原oNewOrder的OrderItems重新赋给listNewOrderItem
+                        $.post("/Order/BacklistNewOrderItem", {}, function (html) {
+                            $("#OrderEditInfoMainPage").html(html);
+                        });
+                    });
+                }
+            }
+            //如果页面处于费用信息编辑状态
+            else if ("@ViewBag.bOrderFeeInfoEdit" == "True") {
+                var FeetruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+                if (FeetruthBeTold == true) {
+                    $("#saveEditOrderForm").submit();
+                }
+                else {
+                    $.post("/Order/SetOrderBaseInfoEdit",{},function(){//将订单基本信息块作为当前编辑状态
+                        $.ajax({
+                            type: "POST",
+                            url: "/Order/OrderEditInfo",
+                            success: function (html) {
+                                $("#OrderEditInfoMainPage").html("");
+                                $("#OrderEditInfoMainPage").html(html);
+                            }
+                        });
+                    });
+                }
+            }
+            else {
+                $.post("/Order/SetOrderBaseInfoEdit",{},function(){//将订单基本信息块作为当前编辑状态
+                    $.ajax({
+                        type: "POST",
+                        url: "/Order/OrderEditInfo",
+                        success: function (html) {$("#OrderEditInfoMainPage").html("");
+                            $("#OrderEditInfoMainPage").html(html);
+                        }
+                    });
+                });
+            }
+    }
+    //保存订单基本信息
+    function SaveOrderBaseInfo() {
+        $("#saveEditOrderForm").submit();
+    }
+    //设置后台全局变量控制页面订单商品编辑状态
+    function setOrderItemInfoEdit() {
+        //如果页面处于基本信息编辑状态
+        if ("@ViewBag.bOrderBaseInfoEdit" == "True") {
+            var BaseInfotruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+            if (BaseInfotruthBeTold == true) {
+                $("#saveEditOrderForm").submit();
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/SetOrderItemInfoEdit",
+                    success: function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Order/OrderEditInfo",
+                            success: function (html) {$("#OrderEditInfoMainPage").html("");
+                                $("#OrderEditInfoMainPage").html(html);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        else if ("@ViewBag.bOrderFeeInfoEdit" == "True") {
+            //如果页面处于费用信息编辑状态            
+            var FeeInfotruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+            if (FeeInfotruthBeTold == true) {
+                $("#saveEditOrderForm").submit();
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/SetOrderItemInfoEdit",
+                    success: function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Order/OrderEditInfo",
+                            success: function (html) {$("#OrderEditInfoMainPage").html("");
+                                $("#OrderEditInfoMainPage").html(html);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Order/SetOrderItemInfoEdit",
+                success: function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Order/OrderEditInfo",
+                        success: function (html) {$("#OrderEditInfoMainPage").html("");
+                            $("#OrderEditInfoMainPage").html(html);
+                        }
+                    });
+                }
+            });
+        }
+    }
+     function PageToPriceMessageEdit() {
+            //如果页面处于基本信息编辑状态
+            if ("@ViewBag.bOrderBaseInfoEdit" == "True") {
+                var BaseInfotruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+                if (BaseInfotruthBeTold == true) {
+                    $("#saveEditOrderForm").submit();
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Order/SetOrderFeeInfoEdit",
+                        success: function () {
+                            $.ajax({
+                                type: "POST",
+                                url: "/Order/OrderEditInfo",
+                                success: function (html) {
+                                    $("#OrderEditInfoMainPage").html(html);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+            else if ("@ViewBag.bOrderItemInfoEdit" == "True") {
+                //如果页面处于订单商品信息编辑状态            
+                var FeeInfotruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+                if (FeeInfotruthBeTold == true) {
+                    $("#saveEditOrderForm").submit();
+                }
+                else {
+                    $.post("/Order/SetOrderFeeInfoEdit",{},function(){
+                        //撤销对全局变量的更改，即 把原oNewOrder的OrderItems重新赋给listNewOrderItem
+                        $.post("/Order/BacklistNewOrderItem", {}, function (html) {
+                            $("#OrderEditInfoMainPage").html(html);
+                        });
+                    });
+                }
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/SetOrderFeeInfoEdit",
+                    success: function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Order/OrderEditInfo",
+                            success: function (html) {
+                                $("#OrderEditInfoMainPage").html(html);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    function SaveOrderItemInfo() {
+        $("#saveEditOrderForm").submit();
+    }
+    function SaveOrderFeeInfo() {
+        $("#saveEditOrderForm").submit();
+    }
+    //设置保存订单
+    function SaveAllOrderInfo() {
+        //判断是否存在未保存的项
+        if ("@ViewBag.bOrderBaseInfoEdit" == "True") {
+            var BaseInfotruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+            if (BaseInfotruthBeTold == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/SetSaveEditOrderInfo",
+                    success: function () {
+                        $("#saveEditOrderForm").submit();
+                    }
+                });
+            }
+        }
+        else if ("@ViewBag.bOrderItemInfoEdit" == "True") {
+            var ItemInfotruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+            if (ItemInfotruthBeTold == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/SetSaveEditOrderInfo",
+                    success: function () {
+                        $("#saveEditOrderForm").submit();
+                    }
+                });
+            }
+        }
+        else if ("@ViewBag.bOrderFeeInfoEdit" == "True") {alert("aa");
+            //如果页面处于费用信息编辑状态            
+            var FeetruthBeTold = window.confirm("@LiveAzure.Resource.Stage.OrderController.ExistChangesConfirm");
+            if (FeetruthBeTold == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/SetSaveEditOrderInfo",
+                    success: function () {
+                        $("#saveEditOrderForm").submit();
+                    }
+                });
+            }
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Order/SetSaveEditOrderInfo",
+                success: function () {
+                    $("#saveEditOrderForm").submit();
+                }
+            });
+        }
+    }
+    function DiscardAllChangeInfo(){
+        //撤销所有对订单的变更
+        if(confirm("@LiveAzure.Resource.Stage.OrderController.DiscardConfirm")){
+            $.post("/Order/DiscardAllChange",{},function(html){
+                $("#OrderEditInfoMainPage").html("");
+                $("#OrderEditInfoMainPage").html(html);
+            });
+        }
+    };
+    //保存订单信息成功后做的动作
+    function saveEditOrderSuccess() {
+        $.ajax({
+            type: "POST",
+            url: "/Order/OrderEditInfo",
+            success: function (html) {$("#OrderEditInfoMainPage").html("");
+                $("#OrderEditInfoMainPage").html(html);
+            }
+        });
+    }
+    //删除订单商品
+    function RemoveOrderItem(){
+        var ONSKUID = $("#OrderItemEditGrid").jqGrid("getGridParam", "selrow");
+        if(ONSKUID!=null){
+            if(confirm("@LiveAzure.Resource.Common.DeleteConfirm")){
+                $.post("/Order/OrderIremRemove",{ONSKUID:ONSKUID},function(back){
+                    if(back=="True")
+                    {
+                        $.post("/Order/OrderEditInfo",{},function(html){
+                            $("#OrderEditInfoMainPage").html("");
+                            $("#OrderEditInfoMainPage").html(html);
+                        });
+                    }
+                    else alert("@LiveAzure.Resource.Stage.OrderController.FailToDelete");
+                });
+            }
+        }
+        else alert("@Html.Raw(@LiveAzure.Resource.Common.PleaseSelectRow)");
+    }
+    //编辑订单商品
+    function EditOrderItem(){
+        var ONSKUID = $("#OrderItemEditGrid").jqGrid("getGridParam", "selrow");
+        if(ONSKUID!=null){
+            AddOrderItemPanel.title = "@LiveAzure.Resource.Model.Order.OrderInformation.OrderItems";
+            AddOrderItemPanel.OpenPanel();
+            $.post("/Order/OrderItemtoEdit",{ONSKUID:ONSKUID},function(html){
+                    AddOrderItemPanel.EditPageHtml(html);
+            });
+        }
+        else alert("@Html.Raw(@LiveAzure.Resource.Common.PleaseSelectRow)");
+    }
+    /*------------定义弹出窗口-----------*/
+    var AddOrderItemPanel = new OpenPanel(); //初始化窗口实例
+    AddOrderItemPanel.width = 800;
+    AddOrderItemPanel.height = 450;
+    AddOrderItemPanel.title = "订单产品添加";
+    AddOrderItemPanel.closeurl = "@Html.Raw(Url.Content("~/Content/themes/base/images/close.gif"))";
+    function ShowAddOrderItem() {
+        AddOrderItemPanel.OpenPanel();
+        $.post("/Order/OrderItemAddPage", {}, function (html) {
+            AddOrderItemPanel.EditPageHtml(html);
+        });
+    }
+
+</script>
+<div>
+    <div>
+        @using (@Ajax.BeginForm("SaveEditOrderInfo", "Order", new AjaxOptions { OnSuccess = "saveEditOrderSuccess" }, new { id = "saveEditOrderForm" }))
+        {
+            <div id="OrderHeadMessage">
+                <ul>
+                    <li style="float: right;">
+                        @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.DocVersion)
+                        @Html.DisplayFor(model => model.DocVersion)
+                    </li>
+                    <li style="float: right;">
+                        @Html.Label(@LiveAzure.Resource.Model.Member.MemberUser.DisplayName)
+                        @ViewBag.UserDisplayName
+                    </li>
+                    <li style="margin-left: 0;">
+                        @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Organization)
+                        @ViewBag.organization
+                    </li>
+                    <li>
+                        @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Channel)
+                        @ViewBag.channel
+                    </li>
+                </ul>
+            </div>
+            <div id="OrderBody">
+                <table id="OrderBaseInfo" class="DIY_table">
+                    <tr>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Ostatus)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(model => model.OrderStatusName)
+                        </td>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Locking)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(model => model.LockStatusName)
+                        </td>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.PayStatus)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(model => model.PayStatusName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.LinkCode)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.EditorFor(model => model.LinkCode)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.LinkCode)
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.TransType)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.DropDownListFor(model => model.TransType, (List<SelectListItem>)ViewBag.TransList)
+                            }
+                            else
+                            { 
+                                @Html.DisplayFor(model => model.TransTypeName)
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Currency)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.DropDownListFor(model => model.aCurrency, (List<SelectListItem>)ViewBag.Currency, new { onchange = "onCurrrencyChanged();" })
+                            }
+                            else
+                            {
+                                @ViewBag.orderCurrency;
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.PayID)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.DropDownListFor(model => model.PayID, (List<SelectListItem>)ViewBag.PayMode)
+                            }
+                            else
+                            {
+                                @ViewBag.orderPayType;
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.PayNote)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.EditorFor(model => model.PayNote)
+                            }
+                            else
+                            { 
+                                @Html.DisplayFor(model => model.PayNote)
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Consignee)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.EditorFor(model => model.Consignee)
+                                <input type="button" value="@LiveAzure.Resource.Stage.OrderController.OrderConsigneeAdd" onclick="openDlg();" style="display:inline-block" />
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.Consignee)
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Location)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.EditorFor(model => model.aLocation, "RegionSelect", new { ID = "orderRegion" })
+                            }
+                            else
+                            {
+                                @ViewBag.fullRegionName
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PostCode)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.EditorFor(model => model.PostCode)}
+                            else
+                            {
+                                @Html.DisplayFor(model => model.PostCode) 
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Telephone)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.EditorFor(model => model.Telephone)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.Telephone) 
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Mobile)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.EditorFor(model => model.Mobile)}
+                            else
+                            { 
+                                @Html.DisplayFor(model => model.Mobile)
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Email)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            { 
+                                @Html.EditorFor(model => model.Email)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.Email)
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.BuildingSign)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.EditorFor(model => model.BuildingSign)}
+                            else
+                            { 
+                                @Html.DisplayFor(model => model.BuildingSign)
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.FullAddress)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.TextAreaFor(model => model.FullAddress)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.FullAddress)
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.PostComment)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.TextAreaFor(model => model.PostComment)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.PostComment)
+                            }
+                        </td>
+                        <th>
+                            @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.LeaveWord)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.TextAreaFor(model => model.LeaveWord)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.LeaveWord)
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.BestDelivery)
+                        </th>
+                        <td>
+                            @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                            {
+                                @Html.TextAreaFor(model => model.BestDelivery)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.BestDelivery)
+                            }
+                        </td>
+                    </tr>
+                </table>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == false)
+                {
+                    <div>
+                        <input id="orderBaseInfoEditID" type="button" value="@LiveAzure.Resource.Common.Edit" onclick="setOrderBaseInfoEdit();" />
+                    </div>
+                }
+                else if (ViewBag.bChangeOrder == true && ViewBag.bOrderBaseInfoEdit == true)
+                {
+                    <div>
+                        <input id="orderBaseInfoSaveID" type="button" value="@LiveAzure.Resource.Common.Save" onclick="SaveOrderBaseInfo();" />
+                        <input id="orderBaseInfoResetID" type="reset" value="@LiveAzure.Resource.Common.Reset" />
+                    </div>
+                }
+            </div>
+
+            <div id="EditPage_OrderUserInfo" class="EditPage">
+                <p id="Draggable_OrderUserInfo" style="background-color: Orange; width: 100%; height: 30px;
+                    margin-top: 0;" class="Draggalbe">
+                    <span id="PageTitle_OrderUserInfo" class="Title">User</span> <span id="Close_OrderUserInfo"
+                        class="Close" onclick="CloseEditPanel('CoverPage_OrderUserInfo','EditPage_OrderUserInfo');"
+                        style="float: right;">
+                        <img alt="close" src="@Url.Content("~/Content/themes/base/images/close.gif")" /></span>
+                </p>
+                <div id="PartialPage_OrderUserInfo" class="PartialPage">
+                    <div id="orderUserList">
+                        @Html.Grid(
+                            new GridControl()
+                            .SetName("OrderUserGrid")
+                            .SetPageSize(10)
+                            .SetIsAutoSize(true)
+                            .SetListUrl("/Order/ListEditOrderUser")
+                            .SetEditUrl("")
+                            .SetHeight("'100%'")
+                            .SetWidth("300")
+                            .SetColumns<LiveAzure.Models.Member.MemberAddress>(cs =>
+                            {
+                                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                                cs.Add(x => x.User.LoginName).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.LoginName);
+                                cs.Add(x => x.User.LastName).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.LastName);
+                                cs.Add(x => x.User.FirstName).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.FirstName);
+                                cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Model.Member.MemberAddress.Code);
+                                cs.Add(x => x.FullAddress).SetCaption(@LiveAzure.Resource.Model.Member.MemberAddress.FullAddress);
+                            })
+                        )
+                    </div>
+                    <div>
+                        <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="addUser();" />
+                    </div>
+                </div>
+            </div>
+            <div id="CoverPage_OrderUserInfo" class="CoverPage">
+            </div>
+            <div id="OrderItemGridBlock">
+                @Html.Grid(new GridControl()
+                    .SetName("OrderItemEditGrid")
+                    .SetPageSize(10)
+                    .SetIsAutoSize(true)
+                    .SetHttpVerb(HttpVerbs.Get)
+                     .SetListUrl("/Order/OrderItemEditList")
+                    .SetHeight("'100%'")
+                    .SetWidth("200")
+                    .SetColumns<LiveAzure.Models.Order.OrderItem>(ps =>
+                    {
+                        ps.Add(p => p.OnSkuID).SetAsPrimaryKey().SetHidden(true);
+                        ps.Add(p => p.Name).SetCaption(@LiveAzure.Resource.Model.Order.OrderItem.Name);
+                        ps.Add(p => p.SkuItem.Code).SetCaption(@LiveAzure.Resource.Model.Product.ProductOnItem.SkuItem);
+                        ps.Add(p => p.SkuItem.Barcode).SetCaption(@LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode);
+                        ps.Add(p => p.ExecutePrice).SetCaption(@LiveAzure.Resource.Model.Order.OrderItem.ExecutePrice);
+                        ps.Add(p => p.SalePrice).SetCaption(@LiveAzure.Resource.Model.Order.OrderItem.SalePrice);
+                        ps.Add(p => p.Quantity).SetCaption(@LiveAzure.Resource.Model.Order.OrderItem.Quantity);
+                        ps.Add(p => p.SkuItem.StdUnit).SetName("StdUnit").SetCaption(@LiveAzure.Resource.Model.Product.ProductInfoItem.StdUnit);
+                        ps.Add(p => p.Shipped + "(" + p.TobeShip + ")").SetName("ShipMessage").SetCaption(@LiveAzure.Resource.Stage.OrderController.OrderShipMessage);
+                        ps.Add(p => p.Returned + "(" + p.BeReturn + ")").SetName("ReturnMessage").SetCaption(@LiveAzure.Resource.Stage.OrderController.OrderReturnMessage);
+                        ps.Add(p => p.ExecutePrice * p.Quantity).SetName("Amount").SetCaption("小计");
+                    })
+                )
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderItemInfoEdit == false)
+                {
+                    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="setOrderItemInfoEdit();" />
+                }
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderItemInfoEdit == true)
+                {
+                    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddOrderItem();"/>
+                    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="EditOrderItem();" />
+                    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemoveOrderItem();"/>
+                }
+            </div>
+            
+            <div>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderItemInfoEdit == true)
+                {
+                    <input type="submit" value="@LiveAzure.Resource.Common.Save" />
+                }
+            </div>
+            <div id="ShippingBlock">
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderShipping.Shipper)
+                @if (ViewBag.bChangeOrder == true)
+                {
+                @Html.DropDownList("shippingListSelect", (List<SelectListItem>)ViewBag.editShippingList, new { id = "editShippingListSelect" })
+                }
+                else
+                { 
+                @Html.DropDownList("disabled_shippingListSelect", (List<SelectListItem>)ViewBag.editShippingList, new { disabled = "disabled" })
+                }
+            </div>
+            <!-- ******************************************************PriceMessage BEGIN************************************************************ -->
+    <table class="DIY_table">
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.ShippingFee):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.ShippingFee)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.ShippingFee)
+                }
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.TaxFee):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.TaxFee)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.TaxFee)
+                }
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Insurance):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.Insurance)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.Insurance)
+                }
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PaymentFee):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.PaymentFee)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.PaymentFee)
+                }
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PackingFee):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.PackingFee)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.PackingFee)
+                }
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.ResidenceFee):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.ResidenceFee)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.ResidenceFee)
+                }
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.LiftGateFee):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.LiftGateFee)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.LiftGateFee) 
+                }
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.InstallFee):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.InstallFee)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.InstallFee)
+                }
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.OtherFee):
+            </th>
+            <td>
+                @if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                {
+                    @Html.EditorFor(model => model.OtherFee)
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.OtherFee)
+                }
+            </td>
+            <th></th><td></td>
+        </tr>
+    </table>
+                if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == false)
+                {
+        <div style="clear: both;">
+            <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="PageToPriceMessageEdit();" />
+        </div>
+                }
+                if (ViewBag.bChangeOrder == true && ViewBag.bOrderFeeInfoEdit == true)
+                { 
+        <div>
+            <input type="button" value="@LiveAzure.Resource.Common.Save" onclick="SaveOrderFeeInfo();" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+                }
+    <script type="text/javascript">
+       
+    </script>
+
+    <div>
+        <style>
+            fieldset p
+            {
+                float: right;
+                clear: both;
+            }
+        </style>
+        <fieldset>
+            <legend>@LiveAzure.Resource.Stage.OrderController.CashInformation</legend>
+            <p>
+                @Model.ExecuteAmount (@LiveAzure.Resource.Model.Order.OrderInformation.ExecuteAmount)
+                +
+                @Model.ShippingFee (@LiveAzure.Resource.Model.Order.OrderInformation.ShippingFee)
+                +
+                @Model.TaxFee (@LiveAzure.Resource.Model.Order.OrderInformation.TaxFee) +
+                @Model.Insurance (@LiveAzure.Resource.Model.Order.OrderInformation.Insurance) +
+                @Model.PaymentFee (@LiveAzure.Resource.Model.Order.OrderInformation.PaymentFee)
+                +
+                @Model.PackingFee (@LiveAzure.Resource.Model.Order.OrderInformation.PackingFee)
+                +
+                @Model.ResidenceFee (@LiveAzure.Resource.Model.Order.OrderInformation.ResidenceFee)
+                +
+                @Model.LiftGateFee (@LiveAzure.Resource.Model.Order.OrderInformation.LiftGateFee)
+                +
+                @Model.InstallFee (@LiveAzure.Resource.Model.Order.OrderInformation.InstallFee)
+                +
+                @Model.OtherFee (@LiveAzure.Resource.Model.Order.OrderInformation.OtherFee) =
+                @Model.TotalFee (@LiveAzure.Resource.Model.Order.OrderInformation.TotalFee)
+            </p>
+            <p>
+                @Model.PointPay (@LiveAzure.Resource.Model.Order.OrderInformation.PointPay) +
+                @Model.CouponPay (@LiveAzure.Resource.Model.Order.OrderInformation.CouponPay) +
+                @Model.BounsPay (@LiveAzure.Resource.Model.Order.OrderInformation.BounsPay) +
+                @Model.MoneyPaid (@LiveAzure.Resource.Model.Order.OrderInformation.MoneyPaid) =
+                @Model.TotalPaid (@LiveAzure.Resource.Model.Order.OrderInformation.TotalPaid)
+            </p>
+            <p>
+                @Model.TotalFee (@LiveAzure.Resource.Model.Order.OrderInformation.TotalFee) -
+                @Model.TotalPaid (@LiveAzure.Resource.Model.Order.OrderInformation.TotalPaid) +
+                @Model.Differ (@LiveAzure.Resource.Model.Order.OrderInformation.Differ) =
+                @Model.OrderAmount (@LiveAzure.Resource.Model.Order.OrderInformation.OrderAmount)
+            </p>
+        </fieldset>
+    </div>
+            if (ViewBag.bChangeOrder == true)
+            {
+                <div>
+                    <input type="button" value="@LiveAzure.Resource.Stage.OrderController.SaveEditOrderChange" onclick="SaveAllOrderInfo();" />
+                    <input type="button" value="@LiveAzure.Resource.Stage.OrderController.DiscardEditOrderChange" onclick="DiscardAllChangeInfo();" />
+                </div>
+            }
+        }
+    </div>
+    
+</div>

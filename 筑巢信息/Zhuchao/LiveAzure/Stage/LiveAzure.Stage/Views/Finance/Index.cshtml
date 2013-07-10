@@ -1,0 +1,110 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Finance.FinancePayType
+@{
+    ViewBag.Title = "Index";
+}
+
+<div>
+@Html.Grid(new GridControl()
+        .SetName("PayTypeGrid")
+        .SetPageSize(10)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Finance/PayTypeList")
+        .SetEditUrl("/Finance/SavePayType")
+        .SetWidth("1200")
+        .SetHeight("'100%'")
+            .SetColumns<LiveAzure.Models.Finance.FinancePayType>(cs =>
+            {
+                cs.Add(x => x.Gid)
+                    .SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Organization)
+                    .SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.Orgnization);
+                    //.SetColumnRenderer(new ComboColumnRenderer("/Finance/GetPayTypeOrganization"));
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.Code);
+                cs.Add(x => x.Name).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.Name);
+                cs.Add(x => x.Matter)
+                    .SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.Matter);
+                cs.Add(x => x.Pstatus)
+                    .SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.Pstatus)
+                    .SetColumnRenderer(new ComboColumnRenderer("/Finance/GetPstatus"));
+                cs.Add(x => x.Sorting)
+                    .SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.Sorting);
+                cs.Add(x => x.IsCod)
+                    .SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.IsCod)
+                    .SetColumnRenderer(new ComboColumnRenderer("/Finance/GetPayTypeIsCod"));
+                cs.Add(x => x.IsOnline)
+                    .SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.IsOnline)
+                    .SetColumnRenderer(new ComboColumnRenderer("/Finance/GetPayTypeIsOnline"));
+                cs.Add(x => x.Fee)
+                    .SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.Fee);
+                cs.Add(x => x.Config)
+                    .SetCaption(LiveAzure.Resource.Model.Finance.FinancePayType.Config);
+                cs.Add(x => x.Remark)
+                    .SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+            }))
+</div>
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddPage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="ShowEditPage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemovePayType()" />
+</div>
+
+
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.FinanceController.EditPayType";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function RefreshGrid() {
+        $('#PayTypeGrid').trigger('reloadGrid');
+    }
+
+    function ShowAddPage() {
+        UnitPricePanel.OpenPanel();
+        $.ajax({
+            type: "POST",
+            url: "/Finance/AddPayType",
+            success: function (data) {
+                UnitPricePanel.EditPageHtml(data);
+            }
+        });
+    }
+
+    function ShowEditPage() {
+        var oRowId = $("#PayTypeGrid").jqGrid("getGridParam", "selrow");
+        if (oRowId == null) {
+            alert("have no a selectd row");
+        }
+        else {
+        UnitPricePanel.OpenPanel();
+            $.ajax({
+                type: "POST",
+                url: "/Finance/EditPayType",
+                data: { fGid: oRowId },
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);
+                }
+            });
+        }
+    }
+
+    function RemovePayType() {
+        var oRowId = $("#PayTypeGrid").jqGrid("getGridParam", "selrow");
+        if (oRowId == null) {
+            alert("have no a selectd row");
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Common.Delete')) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Finance/RemovePayType",
+                    data: { fGid: oRowId },
+                    Success: RefreshGrid()
+                });
+            }
+        }
+    }
+</script>

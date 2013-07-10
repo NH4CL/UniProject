@@ -1,0 +1,102 @@
+﻿@{
+    Layout = null;
+    }
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Welcom to Zhuchao</title>
+<link rel="shortcut icon" href="@Url.Content("~/Content/themes/base/images/e_logo.gif")">
+<link href="@Url.Content("~/Content/themes/base/css/Layout.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/jquery-1.6.2.min.js")" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="Login_back">
+        <div class="Login_content">
+            <div class="Login_content_part01"></div>
+
+            <div class="Login_content_part02">
+                <dl>
+                    <div class="dt">
+                        @LiveAzure.Resource.Stage.HomeController.LoginName: 
+                    </div>
+
+                    <div class="dd">
+                    <dd>
+                        <input type="text" id="userName" value="@ViewBag.userLoginName"/>
+                    </dd>
+                    </div>
+                </dl>
+
+                <dl>
+                    <div class="dt">
+                        @LiveAzure.Resource.Stage.HomeController.Passcode:
+                    </div>
+            
+                    <div class="dd">
+                    <dd>
+                        <input type="password" id="passCode" value=""/>
+                    </dd>    
+                    </div>    
+                </dl>
+                    <div class="Login_button">
+                        <input type="submit" value="@LiveAzure.Resource.Stage.HomeController.Login" class="submitbutton" id="loginSubmitButton" onclick="checkUser();"/>
+                        <input type="reset" value="@LiveAzure.Resource.Stage.HomeController.Reset" class="resetbutton" />
+                        <br/>
+                        <input type="checkbox" id="rememberLoginName" checked=checked/>
+                        <span>
+                            @LiveAzure.Resource.Stage.HomeController.RememberLoginName
+                        </span>
+                        <input type="checkbox" id="rememberUser" />
+                        <span>
+                            @LiveAzure.Resource.Stage.HomeController.AutoLogOn
+                        </span>
+                    </div>
+            </div>
+
+            <div class="Login_content_part03">
+            
+            </div>
+        </div>
+    </div>
+    <div id="hiddenDiv_1"></div>
+    <div id="hiddenDiv_2"></div>
+</body>
+<script type="text/javascript">
+    function checkUser() {
+        var hiddenDiv_1 = document.getElementById("hiddenDiv_1");
+        var hiddenDiv_2 = document.getElementById("hiddenDiv_2");
+        hiddenDiv_1.setAttribute("style", "background-color:#000;position:absolute;width:100%;height:100%;top:0;left:0;filter:alpha(opacity=20);       /* IE */-moz-opacity:0.2;              /* Moz + FF */opacity: 0.2;z-index:1");
+        hiddenDiv_1.style.height = document.body.scrollHeight;
+        hiddenDiv_2.setAttribute("style", "position:absolute;width:300px;height:200px;top:50%;left:50%;margin:-100px -150px;background-image:url('/Content/wbox/loading.gif');background-repeat:no-repeat;background-position:center;z-index:1");
+        $("#loginSubmitButton").attr("onclick", "");
+        var userName = $("#userName").val();
+        var passCode = $("#passCode").val();
+        var isRmemeberLoginName = $("#rememberLoginName").attr("checked");
+        var isRememberUser = $("#rememberUser").attr("checked");
+        $.post("/Home/checkUser", { strUserName: userName, strPassCode: passCode, rememberLoginName: isRmemeberLoginName, rememberUser: isRememberUser }, backResut);
+    };
+    function backResut(result) {
+        if (result < 4) {
+            $("#hiddenDiv_1").attr("style", "");
+            $("#hiddenDiv_2").attr("style", "");
+        }
+        switch (result) {
+            case "0": alert("@Html.Raw(@LiveAzure.Resource.Stage.HomeController.LoginInformationEmpty)"); window.location = "/Home/Index"; break; 
+            case "1": alert("@Html.Raw(@LiveAzure.Resource.Stage.HomeController.LoginNameError)"); window.location = "/Home/Index"; break; 
+            case "2": alert("@Html.Raw(@LiveAzure.Resource.Stage.HomeController.PassCodeError)"); window.location = "/Home/Index"; break; 
+            case "3": alert("@Html.Raw(@LiveAzure.Resource.Stage.HomeController.NotInternalUser)"); window.location = "/Home/Index"; break; 
+            case "4": alert("Success"); window.location="/Home/HomePage";
+        }
+    };
+</script>
+<script type="text/javascript">
+//    $(function () {
+//        //用于自动登录
+//        //正式使用时请注释掉
+//        $("#userName").val("admin");
+//        $("#passCode").val("izhuchao.com");
+//        $("#loginSubmitButton").click();
+//    });
+</script>
+</html>

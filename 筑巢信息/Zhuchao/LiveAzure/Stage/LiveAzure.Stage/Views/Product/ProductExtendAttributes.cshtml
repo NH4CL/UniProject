@@ -1,0 +1,146 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Product
+@using MVC.Controls.Grid
+@using MVC.Controls
+@model LiveAzure.Models.Product.ProductExtendAttribute
+<script type="text/javascript">
+    //删除扩展分类
+    function deleteExtendAtrribute() {
+        var selectGid = $("#productAttributeGrid").jqGrid("getGridParam", "selrow");
+        if (selectGid == null) {
+            var strDeleteTip = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteTips)";
+            alert(strDeleteTip);
+        }
+        else {
+            var strConfirm = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteConfirm)";
+            var strDeleteSuccess = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteSuccess)";
+            var deleteInfo = $("#productAttributeGrid").jqGrid("getRowData", selectGid);
+            var truthBeTold = window.confirm(strConfirm + " " + deleteInfo["Name.Matter"] + "?");
+            if (truthBeTold) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/DeleteExtendAttribute",
+                    data: { gid: selectGid },
+                    success: function () {
+                        alert(strDeleteSuccess);
+                        $("#productAttributeGrid").trigger('reloadGrid');
+                    }
+                });
+            }
+        }
+    }
+    //刷新表格
+    function productExtendAttributeSave() {
+        $("#productAttributeGrid").trigger('reloadGrid');
+    }
+    //选择option时修改输入框或者下拉框的状态
+    function optionalChanged() {
+        var optionalGid = $("#OptID").val();
+        if (optionalGid != null && optionalGid != "") {
+            $.ajax({
+                type: "POST",
+                url: "/Product/GetOptionalInputType",
+                data: { id: optionalGid },
+                success: function (data) {
+                    if (data == 1) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Product/GetGeneralOptionalItem",
+                            data: { gid: optionalGid },
+                            success: function (html) {
+                                document.getElementById("optionalEdit").style.display = "none";
+                                document.getElementById("optionalResult").style.display = "block";
+                                $("#optionalResult").html(html);
+                            }
+                        });
+                    }
+                    else {
+                        $("#optionalResult").html("");
+                        document.getElementById("optionalResult").style.display = "none";
+                        document.getElementById("optionalEdit").style.display = "block";
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+<div>
+    <div>
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Code :</span> <span style="font-weight: bold">@ViewBag.ProductCode</span>
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Name :</span> <span style="font-weight: bold">@ViewBag.ProductName</span>
+    </div>
+    <div>
+        @Html.Grid(new GridControl()
+                .SetName("productAttributeGrid")
+                .SetPageSize(10)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Product/ProductAttributeList")
+                .SetHeight("'100%'")
+                .SetWidth("300")
+                .SetColumns<LiveAzure.Models.Product.ProductExtendAttribute>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.Optional.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductExtendAttribute.OptID);
+                    cs.Add(x => x.OptionalResult != null ? x.OptionalResult.Name.Matter : String.Empty).SetName("OptionalResult").SetCaption(LiveAzure.Resource.Model.Product.ProductExtendAttribute.OptResult);
+                    cs.Add(x => x.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductExtendAttribute.Matter);
+                })
+        )
+    </div>
+    <div>
+        <input name="productExtendAttributeDeleteBtn" type="button" value="@LiveAzure.Resource.Stage.ProductController.DeleteAttribute" onclick="deleteExtendAtrribute();" />
+    </div>
+    <div>
+        @using (Ajax.BeginForm("SaveExtendAttribute", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "productExtendAttributeSave" }, new { id = "savePrivateAttributeform" }))
+        {
+            <div>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductExtendAttribute.OptID)
+                @Html.DropDownListFor(model => model.OptID, (List<SelectListItem>)ViewBag.oPrivateAttributeList, new { onchange = "optionalChanged();" })
+            </div>
+            <div id="optionalResult" style="display: none">
+            </div>
+            <div id="optionalEdit" style="display: none">
+                <div>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductExtendAttribute.OptResult)
+                    <input name="extendAttributeValue" type="text" />
+                </div>
+            </div>
+            <div>
+                <input name="productExtendAttributeSaveBtn" type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            </div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    var optionalStartGid = $("#OptID").val();
+
+    if (optionalStartGid != null && optionalStartGid != "") {
+        //页面加载的时候刷新下拉框或者输入框
+        $.ajax({
+            type: "POST",
+            url: "/Product/GetOptionalInputType",
+            data: { id: optionalStartGid },
+            success: function (data) {
+                if (data == "1") {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Product/GetGeneralOptionalItem",
+                        data: { gid: optionalStartGid },
+                        success: function (html) {
+                            document.getElementById("optionalEdit").style.display = "none";
+                            document.getElementById("optionalResult").style.display = "block";
+                            $("#optionalResult").html(html);
+                        }
+                    });
+                }
+                else {
+                    $("#optionalResult").html("");
+                    document.getElementById("optionalResult").style.display = "none";
+                    document.getElementById("optionalEdit").style.display = "block";
+                }
+            }
+        });
+    }
+</script>

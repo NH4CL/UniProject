@@ -1,0 +1,84 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using LiveAzure.Resource.Stage
+@using LiveAzure.Resource.Model.Member;
+@{
+    Layout = null;
+}
+@Html.Grid(new GridControl()
+        .SetName("UrlGrid")
+        .SetPageSize(10)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Config/UrlShortcutList")
+        .SetEditUrl("/Config/EditShortcut")
+        .SetWidth("600")
+        .SetHeight("'100%'")
+        .SetColumns<LiveAzure.Models.Member.MemberUserShortcut>(cs =>
+        {
+            cs.Add(x => x.Gid).SetHidden(true);
+            cs.Add(x => x.LinkUrl)
+                .SetCaption(MemberUserShortcut.LinkUrl);
+            cs.Add(x => x.Sorting)
+                .SetCaption(MemberUserShortcut.Sorting);
+            cs.Add(x => x.Icon)
+                .SetCaption(MemberUserShortcut.Icon);
+        }))
+        @{
+            if (ViewBag.EnableEdit)
+            {
+                <input type="button" value="@ConfigController.Add" onclick="ShowAddUrlShortcutPage()" />
+                <input type="button" value="@ConfigController.Edit" onclick="ShowEditUrlShortcutPage()" />
+                <input type="button" value="@ConfigController.Delete" onclick="RemoveUrlShortcut()" />
+            }
+            }
+    <script type="text/javascript">
+        var UnitPricePanel = new OpenPanel();
+        UnitPricePanel.bLoading = true;
+        UnitPricePanel.width = 500;
+        UnitPricePanel.height = 600;
+        UnitPricePanel.title = "@LiveAzure.Resource.Stage.ConfigController.UrlShortcut";
+        UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+        function ShowAddUrlShortcutPage() {
+            UnitPricePanel.OpenPanel();
+            $.post("/Config/AddUrlShortcut", {}, function (data) {
+                UnitPricePanel.EditPageHtml(data);
+            });
+        }
+
+        function ShowEditUrlShortcutPage() {
+            var urlShortcutRowId = $("#UrlGrid").jqGrid("getGridParam", "selrow",null,null);
+            if (urlShortcutRowId == null) {
+                alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            }
+            else {
+                UnitPricePanel.OpenPanel();
+                $.ajax({
+                    type: "POST",
+                    url: "/Config/EditUrlShortcut",
+                    data: { shortcutGid: urlShortcutRowId },
+                    success: function (data) {
+                        UnitPricePanel.EditPageHtml(data);
+                    }
+                });
+            }
+        }
+
+        function RemoveUrlShortcut() {
+            var urlShortcutRowId = $("#UrlGrid").jqGrid("getGridParam", "selrow");      //选中行的Gid
+            if (urlShortcutRowId == null) {
+                alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            }
+            else {
+                if (confirm('@OptionalController.DeleteConfirm')) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Config/RemoveShortcut",
+                        data: { shortcutGid: urlShortcutRowId },
+                        success: RefreshUrlGrid()
+                    });
+                }
+            }
+        }
+    </script>

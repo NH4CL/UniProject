@@ -1,0 +1,54 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Product
+@if (ViewBag.ImportSuccess)
+           { 
+               <script type='text/javascript'>
+                   window.parent.document.getElementById("CoverPage").setAttribute("style", "");
+                   window.parent.document.getElementById("WaittingPage").setAttribute("style", "");
+               </script>
+           }
+<script type="text/javascript">
+    function ImportProductSubmit() {
+        $("#productTemplateImport").attr("onclick", "");
+        var coverpage = window.parent.document.getElementById("CoverPage");
+        var waittingpage = window.parent.document.getElementById("WaittingPage");
+        coverpage.setAttribute("style", "background-color:#000;position:absolute;width:100%;height:100%;top:0;left:0;filter:alpha(opacity=20);       /* IE */-moz-opacity:0.2;              /* Moz + FF */opacity: 0.2;z-index:1");
+        coverpage.style.height = window.parent.document.body.scrollHeight;
+        waittingpage.setAttribute("style", "position:absolute;width:300px;height:200px;top:50%;left:50%;margin:-100px -150px;background-image:url('/Content/wbox/loading.gif');background-repeat:no-repeat;background-position:center;z-index:1");
+        $("#ImportProductForm").submit();
+    };
+</script>
+<div>
+    @Html.Grid(
+                new GridControl()
+                .SetName("ProductOnTemplateGrid")
+                .SetPageSize(10)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Product/ListOnsaleTemplate")
+                .SetEditUrl("")
+                .SetHeight("'100%'")
+                .SetWidth("300")
+                .SetColumns<LiveAzure.Models.Product.ProductOnTemplate>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductOnTemplate.Code);
+                    cs.Add(x => x.Name.Matter).SetName("TemplateName").SetCaption(LiveAzure.Resource.Model.Product.ProductOnTemplate.Name);
+                    cs.Add(x => x.ShipPolicy).SetCaption(LiveAzure.Resource.Model.Product.ProductOnTemplate.ShipPolicy);
+                    cs.Add(x => x.PayPolicy).SetCaption(LiveAzure.Resource.Model.Product.ProductOnTemplate.PayPolicy);
+                    cs.Add(x => x.Relation).SetCaption(LiveAzure.Resource.Model.Product.ProductOnTemplate.Relation);
+                    cs.Add(x => x.LevelDiscount).SetCaption(LiveAzure.Resource.Model.Product.ProductOnTemplate.LevelDiscount);
+                    cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+                })
+
+    )
+    @using (@Html.BeginForm("ImportProductUsingTemplate", "Product", FormMethod.Post, new { id = "ImportProductForm", enctype = "multipart/form-data" }))
+    {
+        <div>
+            <input type="file" name="ImportProduct" />
+        </div>
+        <div>
+            <input type="button" id="productTemplateImport" value="@LiveAzure.Resource.Common.Submit" onclick="ImportProductSubmit();" />
+        </div>
+    }
+</div>

@@ -1,0 +1,126 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models;
+<script type="text/javascript">
+    /*-----------------------------
+    增加产品基础信息-PU
+    -----------------------------*/
+    function addProductInfo() {
+        $("#listShow").fadeOut("fast");
+        $.ajax({
+            type: "POST",
+            url: "/Product/addProductInfo",
+            success: function (html) {
+                $("#tabShow").fadeIn("fast");
+                $("#tabShow").html("");
+                $("#tabShow").html(html);
+            }
+        });
+    }
+    /*-----------------------------
+    编辑产品基础信息-PU
+    -----------------------------*/
+    function editProductInfo() {        
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.alertMessage)";
+        var id = $("#grid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        } else {
+            $("#listShow").fadeOut("fast");
+            $.ajax({
+                type: "POST",
+                url: "/Product/editProductInfo",
+                data: { proGidSelect: id },
+                success: function (html) {
+                    $("#tabShow").fadeIn("fast");
+                    $("#tabShow").html("");
+                    $("#tabShow").html(html);
+                }
+            });
+        }
+    }
+    /*-----------------------------
+    删除产品基础信息-PU
+    -----------------------------*/
+    function deleteProductInfo() {
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.alertMessage)";
+        var id = $("#grid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        } else {
+         var deleteInfo = $("#grid").jqGrid("getRowData", id);
+         var isDelete = confirm("@Html.Raw(LiveAzure.Resource.Stage.ProgramController.isDelete) " + deleteInfo["Name.Matter"] + "?");
+         if (isDelete == false) {
+             return false;
+         } else {
+             $.ajax({
+                 type: "POST",
+                 url: "/Product/deleteProductInfo",
+                 data: { proGidSelect: id },
+                 success: function (html) {
+                     $("#gridpanel").html(html);
+                 }
+             });
+         }
+        }
+    }
+    /*-----------------------------
+    产品上架
+    -----------------------------*/
+    function onSale() {        
+        var id = $("#grid").jqGrid("getGridParam", "selrow");
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.alertMessage)";
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        } else {            
+            ProductTemplatePanel.OpenPanel();
+            $.post("/Product/ProductTemplateOnsale", { productGid: id }, function(html) {
+                ProductTemplatePanel.EditPageHtml(html);
+            });
+        }
+    }
+
+    //商品上架使用模板弹出窗
+    var ProductTemplatePanel = new OpenPanel();
+    ProductTemplatePanel.bLoading = true;
+    ProductTemplatePanel.width = 400;
+    ProductTemplatePanel.height = 600;
+    ProductTemplatePanel.title = "Product On Sale";
+    ProductTemplatePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+</script>
+ @Html.Grid(new GridControl()
+            .SetName("grid")            
+            .SetIsAutoSize(true)
+            .SetListUrl("/Product/ListProductInformation") 
+            .SetPageSize(10)                 
+            .SetHeight("'100%'")
+            .SetWidth("600")
+            .SetColumns<LiveAzure.Models.Product.ProductInformation>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Code);
+                cs.Add(x => x.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Name);
+                cs.Add(x => x.StandardCategory.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.StdCatID).SetName("Category.Matter");
+                cs.Add(x => x.OnSales.ToList().Count).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.OnSales).SetName("OnSaleCount");
+                cs.Add(x => x.ProductModeName).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Mode);
+                cs.Add(x => x.Mode).SetCaption(LiveAzure.Resource.Stage.ProductController.Price).SetName("Price");
+                cs.Add(x => x.MinQuantity).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.MinQuantity);
+                cs.Add(x => x.ProductionCycle).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.ProductionCycle);
+                cs.Add(x => x.GuaranteeDays).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.GuaranteeDays);
+            }) 
+                      
+           
+    )
+    <div>
+        <input type="button" name="add" value="@LiveAzure.Resource.Common.Add" onclick="addProductInfo() "/>
+        <input type="button" name="edit" value="@LiveAzure.Resource.Common.Edit" onclick="editProductInfo()" />
+        <input type="button" name="delete" value="@LiveAzure.Resource.Common.Delete" onclick="deleteProductInfo()" />
+        <input type="button" name="onSale" value="@LiveAzure.Resource.Stage.ProductController.PUOnsale" onclick="onSale()" />
+    </div>

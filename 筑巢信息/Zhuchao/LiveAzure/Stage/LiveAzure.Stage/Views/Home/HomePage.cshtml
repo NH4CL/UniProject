@@ -1,0 +1,216 @@
+﻿@{
+    Layout = null;
+    }
+<!DOCTYPE html>
+@using LiveAzure.Stage.Controllers
+@using LiveAzure.Models
+@using System.Globalization
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="shortcut icon" href="@Url.Content("~/Content/themes/base/images/e_logo.gif")" />
+    <link href="@Url.Content("~/Content/themes/base/css/Layout.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/css/new_grid.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/LiveTree/rightMenuStyle/rightMenu.css")" rel="Stylesheet", type="text/css" />
+    <link href="@Url.Content("~/Content/LiveTree/zTreeStyle/zTreeStyle.css")" rel="Stylesheet", type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.6.2.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/LiveTree/treeObject.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/LiveTree/jquery.ztree-2.6.js")" type="text/javascript"></script>
+    
+    @MVC.Controls.MVCControlsScriptManager.Instance.SetUseJqCustom(true, "1.8.2").RegisterScriptsAndStyles()
+</head>
+
+<body>
+<div id="CoverPage" style="display:none"></div>
+<div id="WaittingPage"></div>
+<div id="main">          
+<div id="title" style="text-shadow:1px 1px 2px #111111;color:#fff;display:inline-block; width:100%;">
+    <div id="e_header">
+        <div class="e_header_part_01">
+            <div id="e_logo">
+                <a href="/Home/HomePage"><img alt="logo" src="@Url.Content("~/Content/themes/base/images/e_logo.gif")" /></a>
+            </div>
+            
+            <div class="e_header_culture">
+            @{
+                if (Session["userOrganizationCulture"] != null)
+                {
+                    foreach (var culture in (List<LiveAzure.Models.General.GeneralCultureUnit>)Session["userOrganizationCulture"])
+                    {
+                        string c = "~/Content/themes/base/images/culture_" + culture.Culture + ".jpg";
+                        string nativeName = culture.CultureName;
+                        <a href = "@Url.Content("~/Home/SetCulture?LCID=" + culture.Culture)"><img src="@Url.Content(c)" alt="DefaultLanguage" title="@nativeName"/></a>
+                    }
+                }
+                else
+                {
+                    foreach (var culture in (List<LiveAzure.Models.General.GeneralCultureUnit>)Session["systemCulture"])
+                    {
+                        string c = "~/Content/themes/base/images/culture_" + culture.Culture + ".jpg";
+                        string nativeName = culture.CultureName;
+                        <a href = "@Url.Content("~/Home/SetCulture?LCID=" + culture.Culture)"><img src="@Url.Content(c)" alt="DefaultLanguage" title="@nativeName"/></a>
+                    }
+                }
+            }
+            </div>
+
+            <div class="e_header_login">
+                @using (Html.BeginForm("Logoff", "Home"))
+                {
+                    @Html.ValidationSummary(true)
+                    if (ViewBag.userNickName != null)
+                    {
+                        @ViewBag.userNickName
+                    }
+                    else
+                    {
+                        @Session["userLoginName"]
+                    }
+                    @LiveAzure.Resource.Stage.HomeController.Welcome
+                    <input type="button" value="@LiveAzure.Resource.Stage.HomeController.LogOff" class="log_off" id="logoff" onclick="LogOff();"/>
+                }
+            </div>
+        </div>
+        <div class="e_header_part_02" id="e_header_part_02">
+        </div>
+    </div>
+</div>
+
+<div class="e_content" id="e_content" style="clear:both;">
+    <div class="e_left_content" id = "e_left_tree">
+        <div class="tree_left">
+            <div>
+                <ul id="HomeNavigationTree" class="tree"></ul>
+            </div>
+        </div>
+
+        <a href="#" onclick="hid_div()" id="click_left" class="click_left">
+                <img id="click_left_pic" alt="" src="@Url.Content("~/Content/themes/base/images/click_left.gif")" style="width:8px" />
+        </a>
+    </div>
+
+    <div class="e_right_content" id="mainpage">
+        <a href="#" onclick="show_div()" id="click_right" class="click_right">
+                <img id="click_right_pic" alt="" src="@Url.Content("~/Content/themes/base/images/click_right.gif")" style="width:8px" />
+        </a>
+        <div class="content_right" id="main_content_right">
+            <iframe id="frame_page" scrolling="auto" frameborder="0" style="width:100%;height:100%;margin:0 0 0 20px; clear:both">
+            </iframe>
+        </div>
+    </div> 
+    <form action="" id="changeMainPage"></form>
+</div>
+</div>
+<script type="text/javascript">
+
+    $.post("/Home/ProgramShortCutList", {}, function (html) {
+        $("#e_header_part_02").html(html);
+    });
+    $("#frame_page").attr("src", "/Home/HomePageIndex");
+    var nTreeObject = new homeTreeObject();
+    nTreeObject.createTree("HomeNavigationTree", "/Home/TreeLoad", "/Home/TreeExpand", "", "", false);
+
+    function homeTreeObject() {
+        // debugger;
+        var tree;
+        var treesetting;
+        var currentProgUrl;
+        this.selectNode;
+
+        this.createTree = function (treeId, loadUrl, asyncUrl, changeUrl, rmenuId, checkable) {
+            //树状结构的对象
+            var zTree1;
+
+            //树属性的设定
+            var setting;
+
+            var bCheckable = checkable;
+            var strAsyncUrl = asyncUrl;
+            //var strAsyncParam = asyncParam;													//异步参数不需要，直接指定为对象的Guid        
+            var strRmenuId = rmenuId;
+            var strChangeUrl = changeUrl;
+            var strLoadUrl = loadUrl;
+            var strTreeId = treeId;
+
+            //设定数结构的参数
+            setting = {
+                editable: false, 															    //树不可删除
+                edit_renameBtn: false, 															//编辑按钮不可用，不需要用户指定
+                edit_removeBtn: false, 															//删除按钮不可用，不需要用户指定
+                checkable: bCheckable, 															//用户指定是否需要checkbox，需要用户指定
+                async: true, 																	//默认值，不需要用户指定
+                asyncUrl: strAsyncUrl, 															//用户指定url
+                asyncParam: ["id"], 															//用户指定参数
+                callback: {
+                    click: zTreeOnClick
+                }
+            };
+
+            //获取树节点信息
+            $.ajax({
+                type: "POST",
+                url: strLoadUrl,
+                success:
+                function (data) {
+                    //将获取的json字符串转换为json对象
+                    var testdata = jQuery.parseJSON(data);
+                    //生成树状结构
+                    zTree1 = $("#" + strTreeId).zTree(setting, testdata);
+                    //设定全局变量，给对象内部其它函数调用
+                    tree = zTree1;
+                    treesetting = setting;
+                }
+            });
+
+            //指定多少层的树节点不能再展开，参数为10
+            function beforeAsync(treeId, treeNode) {
+                if (treeNode.level > 10) {
+                    return false;
+                }
+                return true;
+            }
+
+            //点击树节点事件
+            function zTreeOnClick(event, treeId, treeNode) {
+                this.selectNode = treeNode;
+                $.post("/Home/getCurrentPath", { programId: treeNode.id }, treeback);
+                //to do 
+                function treeback(i) {
+                    if (!treeNode.isParent) {
+                        currentProgUrl = treeNode.progUrl;
+                        //$("#changeMainPage").attr("action", currentProgUrl).submit();
+                        $("#frame_page").attr("src", currentProgUrl);
+                    }
+                };
+            }
+        };
+    }
+
+    function show_div() {
+        document.getElementById('e_left_tree').style.display = 'block';
+        document.getElementById('mainpage').style.width = '79%';
+        document.getElementById('click_right').style.display = 'none';
+    };
+
+    function hid_div() {
+        document.getElementById('e_left_tree').style.display = 'none';
+        document.getElementById('click_right').style.display = 'block';
+        document.getElementById('mainpage').style.width = '100%';
+        document.getElementById("click_right_pic").style.height = window.frames[0].document.getElementById("frame_index_div").offsetHeight + "px";
+
+    };
+    function LogOff() {
+        var logoff = document.getElementById("logoff");
+        logoff.parentNode.submit();
+    }
+</script>
+<script type="text/javascript">
+    document.getElementById("e_left_tree").style.minHeight = window.screen.height - 350 + "px";
+    document.getElementById("frame_page").style.minHeight = document.getElementById("e_left_tree").style.minHeight;
+    document.getElementById("click_right_pic").style.height = document.getElementById("e_left_tree").style.minHeight;
+    document.getElementById("click_left_pic").style.height = document.getElementById("e_left_tree").style.minHeight;
+ 
+</script> 
+</body>
+</html>

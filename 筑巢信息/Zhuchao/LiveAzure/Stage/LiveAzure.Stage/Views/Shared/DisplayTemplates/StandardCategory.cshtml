@@ -1,0 +1,26 @@
+﻿@model Guid?
+@{
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id = Guid.NewGuid().ToString();  
+    }
+}
+<input type="text" id="@id" disabled="disabled" />
+@{
+    if(Model.HasValue)
+    {
+        <script type="text/javascript">
+            $.ajax({
+                type: "post",
+                url: "/Resource/GetStandardCategoryName",
+                data: { cid: "@Model.Value" },
+                async: false,
+                success: function (data) {
+                    var name = data.toString();
+                    $("#@id").val(name);
+                }
+            });
+        </script>
+    }
+}

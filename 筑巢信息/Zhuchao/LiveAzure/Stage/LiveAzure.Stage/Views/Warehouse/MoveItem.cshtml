@@ -1,0 +1,168 @@
+﻿@using CommonResource = LiveAzure.Resource.Common
+@using MovingResource = LiveAzure.Resource.Model.Warehouse.WarehouseMoving
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@using LiveAzure.Models
+@model LiveAzure.Models.Warehouse.WarehouseMoving
+@{
+    ViewBag.Title = "WarehouseMoveItem";
+}
+<table>
+    <tr>
+        <th>@MovingResource.Organization
+        </th>
+        <td>@Html.DisplayFor(model => model.Organization.FullName, "LocaleMatter", new { ID = "orgName" })
+        </td>
+        <th>@MovingResource.OldWarehouse
+        </th>
+        <td>@Html.DisplayFor(model => model.OldWarehouse.FullName, "LocaleMatter", new { ID = "oldWHName" })
+        </td>
+        <th>@MovingResource.NewWarehouse
+        </th>
+        <td>@Html.DisplayFor(model => model.NewWarehouse.FullName, "LocaleMatter", new { ID = "newWHName" })
+        </td>
+    </tr>
+    <tr>
+        <th>@MovingResource.Code
+        </th>
+        <td>@Html.TextBoxFor(model => model.Code, new { disabled = "disabled" })
+        </td>
+        <th>@MovingResource.Mstatus
+        </th>
+        <td>@Html.TextBoxFor(model => model.MoveStatusName, new { disabled = "disabled" })
+        </td>
+        <th>@MovingResource.Mtype
+        </th>
+        <td>@Html.TextBoxFor(model => model.MoveTypeName, new { disabled = "disabled" })
+        </td>
+    </tr>
+    <tr>
+        <th>@MovingResource.Reason
+        </th>
+        <td>@Html.TextAreaFor(model => model.Reason, new { disabled = "disabled" })
+        </td>
+        <th>@MovingResource.Total
+        </th>
+        <td>@Html.TextBoxFor(model => model.Total, new { disabled = "disabled" })
+        </td>
+        <th>@MovingResource.Shipper
+        </th>
+        <td>@Html.DisplayFor(model => model.Shipper.FullName, "LocaleMatter", new { ID = "shipperName" })
+        </td>
+    </tr>
+    <tr>
+        <th>@MovingResource.Prepared
+        </th>
+        <td>@Html.DisplayFor(model => model.Prepared, "UserName", new { ID = "PreparedName" })
+        </td>
+        <th>@MovingResource.Approved
+        </th>
+        <td>@Html.DisplayFor(model => model.Approved, "UserName", new { ID = "ApprovedName" })
+        </td>
+        <th>@MovingResource.ApproveTime
+        </th>
+        <td>@Html.DisplayFor(model => model.ApproveTime, "Time", new { ID = "ApprovedTime" })
+        </td>
+    </tr>
+</table>
+<div id="MovItemList"></div>
+@if (ViewBag.privEnableApprove == "1")
+{
+<input type="button" id="btnConfirm" value="@CommonResource.Confirm" />
+}
+else
+{
+<input type="button" value="@CommonResource.Confirm" disabled="disabled" />
+}
+<input type="button" id="btnBack" value="@CommonResource.Back" />
+@if (ViewBag.privEnablePrepare == "1")
+{
+<input type="button" id="btnEditStock" value="@CommonResource.Edit" />
+}
+else
+{
+<input type="button" value="@CommonResource.Edit" disabled="disabled" />
+}
+@if (ViewBag.privEnableDelete == "1")
+{
+<input type="button" id="btnDelete" value="@CommonResource.Delete" />
+}
+else
+{
+<input type="button" value="@CommonResource.Delete" disabled="disabled" />
+}
+@{
+    if (Model.Mstatus == (byte)ModelEnum.MovingStatus.CONFIRMED)
+    {
+        <script type="text/javascript">
+             $("#btnConfirm").click(function () {
+                 alert("该单据已确认");
+             });
+             $("#btnEditStock").click(function () {
+                 alert("该单据已确认");
+             });
+             $("#btnDelete").click(function () {
+                 alert("该单据已确认");
+             });
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            $("#btnConfirm").click(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/Warehouse/MovingConfirmDB",
+                    data: { moveID: "@Model.Gid" },
+                    async: false,
+                    success: function (result) {
+                        switch (result) {
+                            case 0:
+                                alert("@WCResource.ConfirmSuccess");
+                                $("#btnConfirm").attr("disabled", "disabled");
+                                $("#btnEditStock").attr("disabled", "disabled");
+                                break;
+                            case 1: alert("@WCResource.NotExistOrStateError");
+                                break;
+                            case 2: alert("库存不足!");
+                                break;
+                            case 3: alert("移库单货位尚未明确!");
+                                break;
+                            default: alert("@WCResource.Error");
+                                break;
+                        }
+                    }
+                });
+            });
+            $("#btnEditStock").click(function () {
+                document.location.replace("/Warehouse/MovingEdit?moveID=@Model.Gid");
+            });
+            $("#btnDelete").click(function () {
+                if (confirm("@WCResource.ConfirmDelete")) {
+                    $.post("/Warehouse/MovingDeleteDB", { moveID : "@Model.Gid" },
+                        function (result) {
+                            if (result) {
+                                alert("@WCResource.DeleteSuccess");
+                                document.location.replace("/Warehouse/Moving");
+                            } else {
+                                alert("@WCResource.Error");
+                            }
+                        });
+                }
+            });
+        </script>
+    }
+}
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Warehouse/MoveItemGrid",
+        data: { moveID: "@Model.Gid" },
+        async: false,
+        success: function (html) {
+            $("#MovItemList").html(html);
+        }
+    });
+    $("#btnBack").click(function () {
+        document.location.replace("/Warehouse/Moving");
+    });
+</script>

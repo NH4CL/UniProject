@@ -1,0 +1,271 @@
+﻿@{
+    ViewBag.Title = "购物车";
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml"; 
+}
+@using LiveAzure.Portal.Models
+<div class="cart_main_page">
+    <div class="page_root">
+        <div class="page_root_pic">
+            <img alt="" src="@Url.Content("/Content/img/root.png")" />
+        </div>
+        <div class="page_root_content">
+            当前位置：
+        </div>
+    </div>
+    <div id="listOrgProduct">
+        @{
+            string[] strOrgList = ((string)ViewBag.strOrgList).Split(',');
+            for (int i = 0; i < strOrgList.Length;i++ )
+            {                
+                <div id="@strOrgList[i]">
+                </div>
+            }
+        }
+    </div>
+    <div class="cart_settlement">
+        <input type="button" value="继续购物" />
+        <input type="button" value="清空购物车" onclick="deleteAllMallCart();" />
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var orgGid = "@ViewBag.strOrgList";
+        var orgGidList = orgGid.split(',');
+        if (orgGidList != "") {
+            var i = 0;
+            getOrgProductPartial(orgGidList, i);
+        }
+    });
+    //递归获取购物车中不同组织的商品
+    function getOrgProductPartial(orgGidList, o) {
+        $.ajax({
+            type: "POST",
+            url: "/Order/MallCartTablePartial",
+            data: { currentOrgGid: orgGidList[o] },
+            success: function (html) {
+                $("#" + orgGidList[o]).html(html);
+                o = o + 1;
+                if (o < orgGidList.length) {
+                    getOrgProductPartial(orgGidList, o);
+                }
+                else {
+                    return false;
+                }
+            }
+        });
+    }
+    //获取选中商品的信息
+    function getSelectProduct() {
+        var input = document.getElementsByTagName("input");
+        var deleteGidList = '';
+        for (var i = 0; i < input.length; i++) {
+            if (input[i].type == "checkbox") {
+                if (input[i].checked) {
+                    deleteGidList = deleteGidList + input[i].id + '|';
+                }
+            }
+        }
+        if (deleteGidList == '') {
+            alert("请选择要删除的商品！");
+        }
+        else {
+            var confirmTips = "确定要删除选中的商品吗？";
+            var templateConfirm = window.confirm(confirmTips);
+            if (templateConfirm) {
+                deleteGidList = deleteGidList.substring(0, deleteGidList.length - 1);
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/DeleteSingleProduct",
+                    data: { deleteMallCartGid: deleteGidList },
+                    success: function () {
+                        window.location.href = "/Order/Index";
+                    }
+                });
+            }
+        }
+    }
+    //当复选框变化时候
+    function changePageCheckBox(data) {
+        var input = document.getElementsByTagName("input");
+        for (var i = 0; i < input.length; i++) {
+            if (input[i].type == "checkbox" && input[i].name == data.name) {
+                input[i].checked = data.checked;
+            }
+        }
+    }
+    //清空购物车
+    function deleteAllMallCart() {
+        var confirmTips = "确定要清空购物车吗？";
+        var templateConfirm = window.confirm(confirmTips);
+        if (templateConfirm) {
+            $.ajax({
+                type: "POST",
+                url: "/Order/DeleteAllProduct",
+                success: function () {
+                    window.location.href = "/Order/Index";
+                }
+            });
+        }
+        else {
+            return false;
+        }
+    }
+    //页面跳转到结算
+    function gotoCart(obj) {
+        $.ajax({
+            type: "POST",
+            url: "/Order/SetGlobleOrgGid",
+            data: { orgGid: obj.name },
+            success: function () {
+                window.location.href = "/Order/Cart";
+            }
+        });
+    }
+    //通过+，-修改数量
+    function changeProductCount(obj, method) {
+        if (method == "-") {
+            if (($("input[name=" + obj.name + "text]").val() - 1) <= 0) {
+                alert("商品数量不能小于等于0!");
+            }
+            else {
+                var minusNum = $("input[name=" + obj.name + "text]").val();
+                minusNum = parseFloat(minusNum) - 1;
+                //传入后台，比较组织支持的仓库的可销售总数
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/CheckCanSaleQty",
+                    data: { skuGid: obj.name, saleQty: minusNum },
+                    success: function (data) {
+                        if (data == 'success') {
+                            $("input[name=" + obj.name + "text]").val(minusNum.toFixed(2));
+                            //将减少的数量传入后台
+                            $.ajax({
+                                type: "POST",
+                                url: "/Order/ChangeMallCartNum",
+                                data: { mallCartGid: obj.name, changeNum: minusNum },
+                                success: function (data) {
+                                    var productPrice = data.split('|');
+                                    $("#" + obj.name + "factNum").html(productPrice[0]);
+                                    $("#" + obj.name + "tdPrice").html(productPrice[1]);
+                                    //修改总数量和价格
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Order/GetMallCartPriceSum",
+                                        data: { mallCartGid: obj.name },
+                                        success: function (data) {
+                                            var strBack = data.split('|');
+                                            $("#" + strBack[1] + "priceSum").html(strBack[0]);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            alert("可销售数量不足！");
+                        }
+                    }
+                });
+            }
+        }
+        else {
+            var plusNum = (parseFloat($("input[name=" + obj.name + "text]").val()) + 1).toFixed(2);
+            //传入后台，比较组织支持的仓库的可销售总数
+            $.ajax({
+                type: "POST",
+                url: "/Order/CheckCanSaleQty",
+                data: { skuGid: obj.name, saleQty: plusNum },
+                success: function (data) {
+                    if (data == 'success') {
+                        $("input[name=" + obj.name + "text]").val(plusNum);
+                        //将修改后的数据传入后台
+                        $.ajax({
+                            type: "POST",
+                            url: "/Order/ChangeMallCartNum",
+                            data: { mallCartGid: obj.name, changeNum: plusNum },
+                            success: function (data) {
+                                var productPrice = data.split('|');
+                                $("#" + obj.name + "factNum").html(productPrice[0]);
+                                $("#" + obj.name + "tdPrice").html(productPrice[1]);
+                                //修改总数量和价格
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Order/GetMallCartPriceSum",
+                                    data: { mallCartGid: obj.name },
+                                    success: function (data) {
+                                        var strBack = data.split('|');
+                                        $("#" + strBack[1] + "priceSum").html(strBack[0]);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        alert("可销售数量不足！");
+                    }
+                }
+            });
+        }
+    }
+
+    //记录输入框改变之前的数字
+    var presentNum = 0;
+    //当输入框失去焦点的时候检查和变更数量
+    function checkProductNum(obj) {
+        var productNum = obj.value;
+        //var reg = RegExp('/^\d+$/');
+        if (!isNaN(productNum)) {
+            if (productNum > 0) {
+                //截取获得MallCart的Gid
+                var gid = obj.name.substr(0, obj.name.length - 4);
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/CheckCanSaleQty",
+                    data: { skuGid: gid, saleQty: productNum },
+                    success: function (data) {
+                        if (data == 'success') {
+                            //将修改后的数据传入后台
+                            $.ajax({
+                                type: "POST",
+                                url: "/Order/ChangeMallCartNum",
+                                data: { mallCartGid: gid, changeNum: productNum },
+                                success: function (data) {
+                                    var productPrice = data.split('|');
+                                    $("#" + gid + "factNum").html(productPrice[0]);
+                                    $("#" + gid + "tdPrice").html(productPrice[1]);
+                                    presentNum = productNum;
+                                    //修改总数量和价格
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Order/GetMallCartPriceSum",
+                                        data: { mallCartGid: gid },
+                                        success: function (data) {
+                                            var strBack = data.split('|');
+                                            $("#" + strBack[1] + "priceSum").html(strBack[0]);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            alert("可销售数量不足！");
+                            obj.value = presentNum;
+                        }
+                    }
+                });
+            }
+            else {
+                alert("商品数量不小于等于0!");
+                obj.value = presentNum;
+            }
+        }
+        else {
+            alert("请输入正确的数字！");
+            obj.value = presentNum;
+        }
+    }
+    //获取输入框之前的数字
+    function getPresentNum(obj) {
+        presentNum = obj.value;
+    }
+</script>

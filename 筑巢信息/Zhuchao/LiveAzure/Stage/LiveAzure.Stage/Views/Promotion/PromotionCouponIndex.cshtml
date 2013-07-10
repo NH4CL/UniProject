@@ -1,0 +1,80 @@
+﻿@{
+    Layout = null;
+    }
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Order
+<script type="text/javascript">
+    var promotionCouponPanel = new OpenPanel();
+    promotionCouponPanel.bLoading = true;
+    promotionCouponPanel.width = 500;
+    promotionCouponPanel.height = 600;
+    promotionCouponPanel.title = "@LiveAzure.Resource.Model.Order.PromotionCoupon.Promotion";
+    promotionCouponPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+    function addPromotionCoupon() {
+        promotionCouponPanel.OpenPanel();
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/PromotionCouponAdd",
+            success: function (html) {
+                promotionCouponPanel.EditPageHtml(html);
+            }
+        });          
+    }
+
+    function invalidCoupons() {
+        var selectedIds = $("#PromotionCouponGrid").jqGrid("getGridParam", "selarrrow");
+        var couponList = selectedIds.toString();
+        if (selectedIds == null || selectedIds == "") {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        }
+        else {
+            var invalidConfirm = window.confirm("@LiveAzure.Resource.Stage.PromotionController.ComfirmInvalidCoupon");
+            if (invalidConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Promotion/InvalidCouponInfo",
+                    data: { couponGid: couponList },
+                    success: function () {
+                        alert("@LiveAzure.Resource.Common.OperationSucceed");
+                        $("#PromotionCouponGrid").trigger('reloadGrid');
+                    }
+                });
+            }
+        }
+    }
+</script>
+<div>
+    @Html.Grid(
+            new GridControl()
+            .SetName("PromotionCouponGrid")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Promotion/ListPromotionCouponInfomation")
+            .SetEditUrl("")
+            .SetHeight("'100%'")
+            .SetWidth("300")
+            .SetMultiSelect(true)
+            .SetColumns<LiveAzure.Models.Order.PromotionCoupon>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Promotion.Name.Matter).SetName("PromotionName").SetCaption(LiveAzure.Resource.Model.Order.PromotionMutex.Promotion);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.Code);
+                cs.Add(x => x.Passcode).SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.Passcode);
+                cs.Add(x => x.CouponStatusName).SetName("Cstatus").SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.Cstatus);
+                cs.Add(x => x.Currency.Code).SetName("Currency").SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.Currency);
+                cs.Add(x => x.Amount).SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.Amount);
+                cs.Add(x => x.MinCharge).SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.MinCharge);
+                cs.Add(x => x.Cashier).SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.Cashier);
+                cs.Add(x => x.OnceUse).SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.OnceUse);
+                cs.Add(x => x.StartTime).SetName("StartTime").SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.StartTime);
+                cs.Add(x => x.EndTime).SetName("EndTime").SetCaption(LiveAzure.Resource.Model.Order.PromotionCoupon.EndTime);
+                cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+            })
+    )
+    <div>
+        <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="addPromotionCoupon();" />
+        <input type="button" value="@LiveAzure.Resource.Stage.PromotionController.CouponInvalid" onclick="invalidCoupons();" />
+    </div>
+</div>

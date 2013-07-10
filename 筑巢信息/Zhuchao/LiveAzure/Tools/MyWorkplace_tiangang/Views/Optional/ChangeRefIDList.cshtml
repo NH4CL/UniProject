@@ -1,0 +1,4 @@
+﻿@model LiveAzure.Models.General.GeneralOptional
+@LiveAzure.Resource.Model.General.GeneralOptional.RefID
+@Html.DropDownListFor(model => model.RefID, (List<SelectListItem>)ViewBag.refIDList)
+@Html.ValidationMessageFor(model => model.RefID)

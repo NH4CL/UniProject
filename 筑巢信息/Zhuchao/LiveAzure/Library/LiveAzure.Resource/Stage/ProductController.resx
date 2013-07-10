@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddBaseInfo" xml:space="preserve">
+    <value>Add Product Unit(PU)</value>
+  </data>
+  <data name="alertMessage" xml:space="preserve">
+    <value>no foucs</value>
+  </data>
+  <data name="ButtonOK" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="ButtonReset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>Day(s)</value>
+  </data>
+  <data name="EditBaseInfo" xml:space="preserve">
+    <value>Edit Product Unit(PU)</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Select Organization</value>
+  </data>
+  <data name="ProductBaseInfo" xml:space="preserve">
+    <value>Product Information</value>
+  </data>
+  <data name="ProductExtendCategory" xml:space="preserve">
+    <value>Extend Categories</value>
+  </data>
+  <data name="ResouceWindowTitle" xml:space="preserve">
+    <value>Product Name Edit</value>
+  </data>
+  <data name="ResourceButtonName" xml:space="preserve">
+    <value>Other Languages</value>
+  </data>
+  <data name="SaveExtend" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="SaveOK" xml:space="preserve">
+    <value>Save successfully!</value>
+  </data>
+  <data name="listHidden" xml:space="preserve">
+    <value>hidden</value>
+  </data>
+  <data name="listShow" xml:space="preserve">
+    <value>show</value>
+  </data>
+  <data name="SetDefult" xml:space="preserve">
+    <value>Set/Cancel Defult Category</value>
+  </data>
+  <data name="DeleteCategory" xml:space="preserve">
+    <value>Delete Category</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>Are you sure to delete</value>
+  </data>
+  <data name="ProductExtendAttribute" xml:space="preserve">
+    <value>Extend Attributes</value>
+  </data>
+  <data name="DeleteAttribute" xml:space="preserve">
+    <value>Delete Attribute</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name(PU)</value>
+  </data>
+  <data name="IfSplitReturnGoods" xml:space="preserve">
+    <value>IfSplitReturnGoods</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="OnSaleCode" xml:space="preserve">
+    <value>OnSaleCode(PU)</value>
+  </data>
+  <data name="SalePrice" xml:space="preserve">
+    <value>SalePrice(PU)</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="DeleteSuccess" xml:space="preserve">
+    <value>Delete successfully!</value>
+  </data>
+  <data name="ProductCategoryAndAtrribute" xml:space="preserve">
+    <value>Extend Categories and Attributes</value>
+  </data>
+  <data name="DeleteTips" xml:space="preserve">
+    <value>Please choose an item to delete!</value>
+  </data>
+  <data name="OnSaleBaseInfo" xml:space="preserve">
+    <value>The Base Infomation of the Product on Sale</value>
+  </data>
+  <data name="PUCode" xml:space="preserve">
+    <value>Product's Code(PU)</value>
+  </data>
+  <data name="ChoosePU" xml:space="preserve">
+    <value>ChoosePU</value>
+  </data>
+  <data name="AddSuccess" xml:space="preserve">
+    <value>Add Success</value>
+  </data>
+  <data name="EditSuccess" xml:space="preserve">
+    <value>Edit Success</value>
+  </data>
+  <data name="EditTips" xml:space="preserve">
+    <value>Please choose an item to edit!</value>
+  </data>
+  <data name="NameOnSale" xml:space="preserve">
+    <value>NameOnSale</value>
+  </data>
+  <data name="selectPU" xml:space="preserve">
+    <value>Select PU</value>
+  </data>
+  <data name="ProductOnsaleShipping" xml:space="preserve">
+    <value>Shipping Infomation</value>
+  </data>
+  <data name="SetShipArea" xml:space="preserve">
+    <value>Ship Area</value>
+  </data>
+  <data name="SetShipAreaTips" xml:space="preserve">
+    <value>Please choose one shipper to set area!</value>
+  </data>
+  <data name="AddOrEditShipping" xml:space="preserve">
+    <value>Product Shipping Edit</value>
+  </data>
+  <data name="ShippingPayment" xml:space="preserve">
+    <value>Payment</value>
+  </data>
+  <data name="ProductOnsaleBaseInfo" xml:space="preserve">
+    <value>BaseInformation</value>
+  </data>
+  <data name="SKUOnsale" xml:space="preserve">
+    <value>SKU Onsale</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>UnitPrice</value>
+  </data>
+  <data name="PUOnsale" xml:space="preserve">
+    <value>PU Onsale</value>
+  </data>
+  <data name="SaveShipAreaInShipping" xml:space="preserve">
+    <value>Set Ship Area Not In Supporting Area</value>
+  </data>
+  <data name="SaveShipAreaNotInShipping" xml:space="preserve">
+    <value>Set Ship Area In Supporting Area</value>
+  </data>
+  <data name="RelationPU" xml:space="preserve">
+    <value>Relation Product</value>
+  </data>
+  <data name="PuCodeExist" xml:space="preserve">
+    <value>PU Code already exist in this organization!</value>
+  </data>
+  <data name="ValidateBarcode" xml:space="preserve">
+    <value>Input 10 figuer</value>
+  </data>
+  <data name="ValidateSkuCode" xml:space="preserve">
+    <value>Input 10 figuer</value>
+  </data>
+  <data name="ProductOnLevelDiscount" xml:space="preserve">
+    <value>ProductOnLevelDiscount</value>
+  </data>
+  <data name="AlertStdUnit" xml:space="preserve">
+    <value>Please select SKU unit</value>
+  </data>
+  <data name="LowerThanLowest" xml:space="preserve">
+    <value>Sale price is lower than Lowest price, Continue to Save?</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchKey" xml:space="preserve">
+    <value>Search Key</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="PriceUnit" xml:space="preserve">
+    <value>PriceUnit</value>
+  </data>
+  <data name="description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="productAlreadyOnsale" xml:space="preserve">
+    <value>Product already onsale!</value>
+  </data>
+  <data name="SKU" xml:space="preserve">
+    <value>SKU</value>
+  </data>
+  <data name="NotUseTemplate" xml:space="preserve">
+    <value>Not use template</value>
+  </data>
+  <data name="UseTemplate" xml:space="preserve">
+    <value>Use template onsale</value>
+  </data>
+  <data name="SaveTemplate" xml:space="preserve">
+    <value>Save Template</value>
+  </data>
+  <data name="CloseGrid" xml:space="preserve">
+    <value>Hide Onsale Grid</value>
+  </data>
+  <data name="ShowGrid" xml:space="preserve">
+    <value>Show Onsale Grid</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="TemplateConfirm" xml:space="preserve">
+    <value>Template already exist, do you want to cover it?</value>
+  </data>
+  <data name="ChooseTemplate" xml:space="preserve">
+    <value>Choose Template</value>
+  </data>
+  <data name="ConfirmCover" xml:space="preserve">
+    <value>Sure to Cover the old Thumbnail</value>
+  </data>
+  <data name="CreatePicture" xml:space="preserve">
+    <value>Create Thumbnail</value>
+  </data>
+  <data name="Synchro" xml:space="preserve">
+    <value>synchro</value>
+  </data>
+  <data name="SynchroFailed" xml:space="preserve">
+    <value>Synchro Failed</value>
+  </data>
+  <data name="SynchroSuccess" xml:space="preserve">
+    <value>Synchro Success</value>
+  </data>
+</root>

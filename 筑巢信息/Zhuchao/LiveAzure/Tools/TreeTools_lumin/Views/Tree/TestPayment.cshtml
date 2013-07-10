@@ -1,0 +1,73 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Product
+
+<script type="text/javascript">
+    function ProductOnsalePaymentAdd() {
+        $.ajax({
+            type: "POST",
+            url: "/Tree/TestPaymentAddOrEdit",
+            data: { bAddOrEdit: "true" },
+            success: function (html) {
+                $("#onsalePaymentEdit").html("");
+                $("#onsalePaymentAdd").html(html);
+            }
+        });
+    }
+
+    function ProductOnsalePaymentEdit() {
+        $.ajax({
+            type: "POST",
+            url: "/Tree/TestPaymentAddOrEdit",
+            data: { bAddOrEdit: "false" },
+            success: function (html) {
+                $("#onsalePaymentAdd").html("");
+                $("#onsalePaymentEdit").html(html);
+            }
+        });
+    }
+
+    function setGridPageSize() {
+        var selectGid = $("#ProductPaymentGrid").jqGrid("getGridParam", "page");
+        alert(selectGid);
+        $("#ProductPaymentGrid").jqGrid("setGridParam", { rowNum: 1 }).trigger("reloadGrid");
+    }
+
+
+</script>
+
+<div>
+    <div>
+        Payment
+    </div>
+    <div>
+        @Html.Grid(
+                new GridControl()
+                .SetName("ProductPaymentGrid")
+                .SetPageSize(10)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Tree/ListOnsalePayment")
+                .SetEditUrl("")
+                .SetHeight("200")
+                .SetWidth("300")
+                .SetColumns<LiveAzure.Models.Product.ProductOnPayment>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.PayType.Name.Matter).SetCaption("支付方式");
+                    cs.Add(x => x.Remark).SetCaption("备注");
+                })
+        )
+    </div>
+    <div>
+        <input type="button" value="ADD" name="productPaymentAdd" onclick="ProductOnsalePaymentAdd();" />
+        <input type="button" value="EDIT" name="productPaymentEdit" onclick="ProductOnsalePaymentEdit();" />
+        <input type="button" value="DELETE" name="productPaymentDelete" onclick="" />
+    </div>
+    <div>
+        <input type="button" value="testRowNum" onclick="setGridPageSize();" />
+    </div>
+</div>
+<div id="onsalePaymentAdd">
+</div>
+<div id="onsalePaymentEdit">
+</div>

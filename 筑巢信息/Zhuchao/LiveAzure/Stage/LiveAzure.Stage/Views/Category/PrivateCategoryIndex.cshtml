@@ -1,0 +1,74 @@
+﻿@using LiveAzure.Resource.Model
+@model LiveAzure.Models.General.GeneralPrivateCategory
+@{
+    Layout = null;
+}
+      
+<div class="display-field" id="privateCategoryType">
+    @LiveAzure.Resource.Model.General.GeneralPrivateCategory.Ctype
+    @Html.DropDownListFor(model => model.Ctype, (List<SelectListItem>)ViewBag.privateCategoryList, new { Id = "privateCategoryTypeSelect", Name = "privateCategoryTypeSelect", OnChange = "ShowPrivateCategoryTreeByType(this)" })
+    @Html.ValidationMessageFor(model => model.Ctype)
+    @LiveAzure.Resource.Model.General.GeneralPrivateCategory.Organization
+    @Html.DropDownListFor(model => model.OrgID, (List<SelectListItem>)ViewBag.orgnizations, new { Id = "privateCategoryOrgnization", Name = "privateCategoryOrgnization", OnChange = "ShowPrivateCategoryTreeByOrg(this)" })
+    @Html.ValidationMessageFor(model => model.Ctype)
+</div>
+<div id="privateCategoryTree" class="tree">
+        
+</div>
+<div id="privateCategoryTable">
+</div>
+
+<script type="text/javascript">
+  <!--
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Category/PrivateCategoryTree",
+            data: { privateCategoryType: 0 },
+            success: function (data) {
+                $("#privateCategoryTree").html(data);
+            }
+        });
+    });
+
+    function ShowPrivateCategoryTreeByType(cType) {
+        $("#privateCategoryTable").hide();
+        $("#addPrivateCategory").hide();
+        $("#editPrivateCategory").hide();
+        $.ajax({
+            type: "POST",
+            url: "/Category/PrivateCategoryTree",
+            data: { privateCategoryType: cType.value },
+            success: function (data) {
+                $("#privateCategoryTree").html(data);
+            }
+        });
+    }
+
+    function ShowPrivateCategoryTreeByOrg(oOrg) {
+        $("#privateCategoryTable").hide();
+        $("#addPrivateCategory").hide();
+        $("#editPrivateCategory").hide();
+        $.ajax({
+            type: "POST",
+            url: "/Category/PrivateCategoryTree",
+            data: { privateCategoryOrg: oOrg.value },
+            success: function (data) {
+                $("#privateCategoryTree").html(data);
+            }
+        });
+    }
+
+    function RefreshPrivateTree() {
+        $.ajax({
+            type: "POST",
+            url: "/Category/PrivateCategoryTree",
+            success: function (data) {
+                $("#privateCategoryTree").html(data);
+                ClosePanel();
+            }
+        })
+    }
+
+</script>

@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "商品列表";
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml";  
+}
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Product/Left",
+            success: function (html) {
+                $("#Listleft").html(html);
+            }
+        });
+
+    });
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Product/ListShowStyle0",
+            success: function (html) {
+                $("#show_product").html(html);
+            }
+        });
+
+    });
+    function ListShowStyle0() {
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Product/ListShowStyle0",
+                success: function (html) {
+                    $("#show_product").html(html);
+                }
+            });
+
+        });
+    } function ListShowStyle1() {
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Product/ListShowStyle1",
+                success: function (html) {
+                    $("#show_product").html(html);
+                }
+            });
+
+        });
+    } function ListShowStyle2() {
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Product/ListShowStyle2",
+                success: function (html) {
+                    $("#show_product").html(html);
+                }
+            });
+
+        });
+    }
+</script>
+<div class="my_middle_category">
+    <div id="Listleft">
+    
+    </div>
+    <div class="List_right">
+        <div class="page_root">
+            <div class="page_root_pic">
+                <img alt="" src="@Url.Content("/Content/img/root.png")" />
+            </div>
+            <div class="page_root_content">
+                当前位置：
+            </div>
+         </div>
+         <div class="Class">
+            <span>分类名称 </span>	
+         </div>
+         <div class="Showway">
+             <span>显示方法 <img src="@Url.Content("~/Content/img/showway1.jpg")" alt="" onclick="ListShowStyle0()" /><img src="@Url.Content("~/Content/img/showway2.jpg")" alt="" onclick="ListShowStyle1()" /><img src="@Url.Content("~/Content/img/showway3.jpg")" alt="" onclick="ListShowStyle2()" /></span>	
+             <span style="margin-left:100px;">排序方式
+             <img src="@Url.Content("~/Content/img/range1.jpg")" alt="" /><img src="@Url.Content("~/Content/img/range2.jpg")" alt="" /><img src="@Url.Content("~/Content/img/range3.jpg")" alt="" />
+                 <select id="selectAge" style="width:100px;">
+                 <option value="1">默认</option> 
+                 </select> 
+             </span>	
+             <span class="content">1</span>/4<img src="@Url.Content("~/Content/img/up.jpg")" alt="" /><img src="@Url.Content("~/Content/img/down.jpg")" alt="" />
+         
+         </div>
+         <div id="show_product">
+         </div>
+         <div class="Page">
+             <span><img src="@Url.Content("~/Content/img/up.jpg")" alt="" /></span><span class="current">1</span>
+             <a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a>
+             <span><img src="@Url.Content("~/Content/img/down.jpg")" alt="" /></span>	
+         </div>
+    </div>
+
+</div>
+

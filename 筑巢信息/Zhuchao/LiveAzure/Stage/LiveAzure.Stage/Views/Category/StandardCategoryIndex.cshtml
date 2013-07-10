@@ -1,0 +1,58 @@
+﻿@using LiveAzure.Resource.Model
+@model LiveAzure.Models.General.GeneralStandardCategory
+@{
+    Layout = null;
+}
+      
+<div class="display-field" id="standardCategoryType">
+    @LiveAzure.Resource.Model.General.GeneralStandardCategory.Ctype
+    @Html.DropDownListFor(model => model.Ctype, (List<SelectListItem>)ViewBag.standardCategoryList, new { Id = "standardCategoryTypeSelect", Name = "standardCategoryTypeSelect", OnChange = "ShowStandardCategoryTree(this)" })
+    @Html.ValidationMessageFor(model => model.Ctype)
+</div>
+<div id="standardCategoryTree" class="tree">
+        
+</div>
+<div id="standardCategoryTable">
+</div>
+
+
+<script type="text/javascript">
+  <!--
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Category/StandardCategoryTree",
+            data: { standardCategoryType: 0 },
+            success: function (data) {
+                $("#standardCategoryTree").html(data);
+            }
+        });
+    });
+
+    function ShowStandardCategoryTree(cType) {
+        $("#standardCategoryTable").hide();
+        $("#addStandardCategory").hide();
+        $("#editStandardCategory").hide();
+        $.ajax({
+            type: "POST",
+            url: "/Category/StandardCategoryTree",
+            data: { standardCategoryType: cType.value },
+            success: function (data) {
+                $("#standardCategoryTree").html(data);
+            }
+        });
+    }
+
+    function RefreshTree() {
+        $.ajax({
+            type: "POST",
+            url: "/Category/StandardCategoryTree",
+            success: function (data) {
+                $("#standardCategoryTree").html(data);
+                ClosePanel();
+            }
+        })
+    }
+
+</script>

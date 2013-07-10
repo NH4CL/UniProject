@@ -1,0 +1,24 @@
+﻿@using LiveAzure.Controls.LiveEditor
+@using LiveAzure.Models.General
+@ControlManager.LiveEditor()
+@model LiveAzure.Models.General.GeneralMessageTemplate
+@{
+    ViewBag.Title = "MessageTemplateEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>MessageTemplateEdit</h2>
+      @using (Html.BeginForm("MessageTemplateEditPost", "Config", new { gid = Model.Gid }))
+      {
+          @Html.HiddenFor(model => model.Gid);
+          @Html.HiddenFor(model => model.OrgID);                                   
+          @Html.TextAreaFor(model => model.Matter.CLOB, new { id = "TemplateEditor1", name = "TemplateEditor1" })
+          @Html.LiveEditor(new LiveEditor()
+                .SetName("TemplateEditor1")
+            )
+          
+          if (ViewBag.view == null)
+          {
+            <input type="submit" value="@LiveAzure.Resource.Stage.ConfigController.Save" />
+          }
+          <a href="Message">@LiveAzure.Resource.Stage.ConfigController.Back</a>
+      }         

@@ -1,0 +1,73 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.General.GeneralCultureUnit
+@{
+    ViewBag.Title = "CultureUnit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="cultureUnitListTable">
+    @{ Html.RenderPartial("CultureListTable"); }
+</div>
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddPage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="ShowEditPage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemovePage()" />
+</div>
+
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.ConfigController.EditCulture";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    
+    function ShowAddPage() {
+        UnitPricePanel.OpenPanel();
+        $.post("/Config/CultureAdd", {}, back);
+        function back(html) {
+            UnitPricePanel.EditPageHtml(html);
+        };
+    }
+
+    function ShowEditPage() {
+        var unitRowId = $("#CultureUnits").jqGrid("getGridParam", "selrow");
+        if (unitRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+        UnitPricePanel.OpenPanel(); 
+            $.ajax({
+                type: "POST",
+                url: "/Config/CultureEdit",
+                data: { unitGid: unitRowId },
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);
+                }
+            });
+        }
+    }
+
+    function RemovePage() {
+        var uRowId = $("#CultureUnits").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Config/CultureRemove",
+                    data: { uGid: uRowId },
+                    success: function (data) {
+                        $("#cultureUnitListTable").html(data);
+                    }
+                });
+            }
+        }
+    }
+</script>
+

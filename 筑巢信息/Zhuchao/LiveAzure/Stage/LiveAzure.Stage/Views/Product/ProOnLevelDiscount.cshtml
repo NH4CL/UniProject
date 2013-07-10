@@ -1,0 +1,53 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@{
+    Layout = null;
+}
+<div id="ProductDiscount">
+    <div>
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Code :</span> <span style="font-weight: bold">@ViewBag.DiscountPUCode</span>
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Name :</span> <span style="font-weight: bold">@ViewBag.DiscountPUName</span>
+    </div>
+    @Html.Grid(new GridControl()
+                    .SetName("ProductDiscountGrid")
+                    .SetPageSize(8)
+                    .SetIsAutoSize(true)
+                    .SetHttpVerb(HttpVerbs.Get)
+                    .SetListUrl("/Product/ProductOnLevelDiscountList")
+                    .SetHeight("'100%'")
+                    .SetWidth("200")
+                    .SetColumns<LiveAzure.Models.Product.ProductOnLevelDiscount>(ps =>
+                        {
+                            ps.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                            ps.Add(p => p.UserLevel.Mlevel).SetCaption(LiveAzure.Resource.Model.Member.MemberLevel.Mlevel);
+                            ps.Add(p => p.UserLevel.Name.Matter).SetCaption(LiveAzure.Resource.Model.Member.MemberLevel.Name);
+                            ps.Add(p => p.Discount).SetCaption(LiveAzure.Resource.Model.Product.ProductOnLevelDiscount.Discount);
+                        })
+                    )
+    <input type="button" id="" value="@LiveAzure.Resource.Common.Add" onclick="addProductDiscount();"/>
+    <input type="button" id="" value="@LiveAzure.Resource.Common.Edit" onclick="editProductDiscount();"/>
+</div>
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.ProductController.ProductOnLevelDiscount ";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function addProductDiscount() {
+        UnitPricePanel.OpenPanel();
+        $.post("/Product/ProductOnLevelDiscountEdit", {}, function (html) {
+            UnitPricePanel.EditPageHtml(html);
+        })
+    }
+    function editProductDiscount() {
+        var selectId = $("#ProductDiscountGrid").jqGrid("getGridParam", "selrow");
+        if (selectId != null) {
+            UnitPricePanel.OpenPanel();
+            $.post("/Product/ProductOnLevelDiscountEdit", { ProductOnLevelDiscountGid: selectId }, function (html) {
+            UnitPricePanel.EditPageHtml(html);
+            });
+        }
+        else alert("Please select a row!");
+    }
+</script>

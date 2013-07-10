@@ -1,0 +1,107 @@
+﻿@*@using MVC.Controls;*@
+@model LiveAzure.Models.Member.MemberUser
+@{
+    ViewBag.Title = "UserInfomation";
+    Layout = null;
+}
+<div class="down_AddorEdit">
+    <table>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.LoginName:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.LoginName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.DisplayName:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.DisplayName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.NickName:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.NickName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.LastName:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.LastName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.FirstName:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.FirstName)
+            </td>
+        </tr>
+        @*        <div>
+            @LiveAzure.Resource.Model.Member.MemberUser.Passcode
+            @Html.EditorFor(model => model.Passcode)
+            @Html.ValidationMessageFor(model => model.Passcode)
+        </div>*@ @*        <div>
+            @LiveAzure.Resource.Model.Member.MemberUser.Title
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>*@
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.Email:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.Email)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.Ustatus:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.UserStatusName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.Gender:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.GenderName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.Birthday:
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.Birthday)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.Channel:
+            </th>
+            <td>
+                @ViewBag.channelName
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.MemberUser.Role:
+            </th>
+            <td>
+                @ViewBag.RoleName
+            </td>
+        </tr>
+    </table>
+</div>

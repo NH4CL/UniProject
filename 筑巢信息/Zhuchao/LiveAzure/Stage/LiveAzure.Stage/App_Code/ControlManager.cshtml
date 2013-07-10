@@ -1,0 +1,66 @@
+﻿@helper SKUSelect()
+{
+    <link rel="Stylesheet" href="/Content/LiveSelector/SkuSelector.css" />
+    <ul id="SKUSelectTemplates" class="SKUSelect" style="display:none">
+        <li id="SkuSelectTemplate" style="display:none">
+            <input type="hidden" id="hidSkuID" />
+            <span id="txtSkuCode"></span>(<span id="txtSkuName"></span>)
+        </li>
+        <li id="SkuSearching" style="display:none">
+            Searching...
+        </li>
+        <li id="SkuNoResult" style="display:none">
+            No Results.
+        </li>
+    </ul>
+    <script type="text/javascript" src="/Scripts/LiveSelector/SKUSelector.js">
+    </script>
+}
+
+@helper RefIDSelect()
+{
+    <script src="/Scripts/LiveSelector/RefIDSelector.js" type="text/javascript"></script>
+}
+
+@helper LiveEditor()
+{
+    <script src="/Scripts/CKEditor/ckeditor.js" type="text/javascript"></script>
+}
+
+@helper ImageSelect()
+{
+    <script src="/Scripts/LiveSelector/ImageSelector.js" type="text/javascript"></script>
+    <link rel="Stylesheet" href="/Content/LiveSelector/ImageSelector.css" />
+}
+
+@helper RegionSelect()
+{
+    <script src="/Scripts/LiveSelector/RegionSelector.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var oRegionTree = new regionSelectTreeObject();
+    </script>
+}
+
+@helper PrivateCategorySelect()
+{
+    <script src="/Scripts/LiveSelector/PrivateCategorySelector.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var privateCategorySelector = new privateCategorySelectTreeObject();
+    </script>
+}
+
+@helper StandardCategorySelect()
+{
+    <script src="/Scripts/LiveSelector/StandardCategorySelector.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var standardCategorySelector = new standardCategorySelectTreeObject();
+    </script>
+}
+
+@helper ProgramSelect()
+{
+    <script src="/Scripts/LiveSelector/ProgramSelector.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var programSelector = new programSelectTreeObject();
+    </script>
+}

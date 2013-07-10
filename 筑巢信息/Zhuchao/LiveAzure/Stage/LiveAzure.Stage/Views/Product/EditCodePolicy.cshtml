@@ -1,0 +1,49 @@
+﻿@model LiveAzure.Models.Member.MemberOrganization
+           
+           @Html.HiddenFor(model => model.Gid)
+<div class="down_AddorEdit">
+<table>
+    <tr>
+        <td>
+            @Html.Label(@LiveAzure.Resource.Model.Member.OrganizationBase.ProdCodePolicy)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.ProdCodePolicy)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label(@LiveAzure.Resource.Model.Member.OrganizationBase.SkuCodePolicy)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.SkuCodePolicy)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label(@LiveAzure.Resource.Model.Member.OrganizationBase.BarcodePolicy)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.BarcodePolicy)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="button" value="@LiveAzure.Resource.Common.Save" onclick="SubmitForm()" />
+        </td>
+        @*<td>
+            <input type="button" value="@LiveAzure.Resource.Common.Close" onclick="CloseEditPage()" />
+        </td>*@
+    </tr>
+</table>
+</div>
+<script type="text/javascript">
+        function SubmitForm() {
+            $("#editCodePolicyForm").submit();
+            alert("@LiveAzure.Resource.Common.SaveSuccess");
+//            CloseEditPage();
+        }
+//        function CloseEditPage() {
+//            $("#editCodePolicy").hide();
+//        }
+</script>

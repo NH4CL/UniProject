@@ -1,0 +1,11 @@
+﻿@model byte?
+@{
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    IEnumerable<SelectListItem> options = ViewBag.Options as IEnumerable<SelectListItem>;
+    byte value = (byte)ViewBag.Value;
+}
+@Html.DropDownList(id, options, new { value = value, disabled = "disabled" })

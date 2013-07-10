@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Product
+@model ProductOnTemplate
+           
+<script type="text/javascript">
+    function productTemplateSave(data) {
+        if (data == "fail") {
+            var confirmTips = "@LiveAzure.Resource.Stage.ProductController.TemplateConfirm";
+            var templateConfirm = window.confirm(confirmTips);
+            if (templateConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/SetOnTemplateSave",
+                    success: function () {
+                        $("#saveOnsaleTemplateform").submit();
+                        OnTemplatePanel.CloseEditPanel();
+                    }
+                });
+            }
+        }
+        else {
+            OnTemplatePanel.CloseEditPanel();
+        }        
+    }
+</script>
+<div>
+    @using (Ajax.BeginForm("SaveProductOnsaleTemplate", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "productTemplateSave" }, new { id = "saveOnsaleTemplateform" }))
+    {
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Product.ProductInformation.Code) :
+            @ViewBag.ProductCode
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Product.ProductOnSale.Code) :
+            @ViewBag.ProductOnsaleCode
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Product.ProductOnTemplate.Code) :
+            @Html.EditorFor(model => model.Code)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Product.ProductOnTemplate.Name) :
+            @Html.EditorFor(model => model.Name, "Matter")
+        </div>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    }
+</div>

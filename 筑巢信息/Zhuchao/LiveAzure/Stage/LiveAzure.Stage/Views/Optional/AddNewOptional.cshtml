@@ -1,0 +1,111 @@
+﻿@model LiveAzure.Models.General.GeneralOptional
+@using LiveAzure.Resource.Stage;
+@ControlManager.StandardCategorySelect()
+@{
+    Layout = null;
+    }
+@using (@Ajax.BeginForm("SaveNewOptional", "Optional", new AjaxOptions { OnSuccess = "RefreshOptionalGrid(); ClosePanel();" }, new { id = "opionalAddForm" }))
+{
+    <p>@LiveAzure.Resource.Stage.OptionalController.AddOptional</p>
+        <div>
+            @Html.HiddenFor(model => model.Gid)
+        </div>
+    
+        <script type="text/javascript">
+            //向控制器传回用户选中的属性类型
+            function ShowRefID(str) {
+                if (str == 3) {
+                    $("#RefIDDiv").show();
+                }
+                else {
+                    $("#RefIDDiv").hide();
+                }
+            }
+        </script>
+    
+        <div class="down_AddorEdit">    
+            <table>
+                <tr>
+                    <td>
+                        @LiveAzure.Resource.Model.General.GeneralOptional.Organization        
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.OrgID, (List<SelectListItem>)ViewBag.OrgSelectList)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralOptional.Otype
+                    </th>
+                    <td>    
+                        @Html.DropDownListFor(model => model.Otype, (List<SelectListItem>)ViewBag.optionalTypeList, new { OnChange = "ShowRefID(this.value)", OnSuccess = "ClosePanel();" })
+                        @Html.ValidationMessageFor(model => model.Otype)
+                    </td>
+                </tr>
+
+                <tr id="RefIDDiv" style="display:none">
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralOptional.RefID
+                    </th>
+                    <td>
+                        @Html.EditorFor(model => model.RefID, "StandardCategorySelect")
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralOptional.Code
+                    </th>
+                    <td>
+                        @Html.EditorFor(model => model.Code)
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralOptional.Sorting
+                    </th>
+                    <td>
+                        @Html.EditorFor(model => model.Sorting)
+                        @Html.ValidationMessageFor(model => model.Sorting)
+                    </td>
+                </tr>
+                <tr>
+                    <th>    
+                        <div class="AddorEditNameTitle">
+                            @LiveAzure.Resource.Model.General.GeneralOptional.Name
+                        </div>
+                    </th>
+                    <td>
+                        <div class="AddorEditNameMain">
+                            @Html.EditorFor(model => model.Name, "Matter")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralOptional.InputMode
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.InputMode, (List<SelectListItem>)ViewBag.optionalInputMode)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.ModelBase.Remark
+                    </th>
+                    <td>
+                        @Html.EditorFor(model => model.Remark)
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SubitAddOptional()" />
+            </div>
+        </div>
+    <script type="text/javascript">
+        function SubitAddOptional() {
+            $("#opionalAddForm").submit();
+        }
+    </script>
+}

@@ -1,0 +1,12 @@
+示例：
+
+MemberOrganization oOrgan = dbEntity.MemberOrganizations.Where(o => o.Code == "Zhuchao").FirstOrDefault();
+
+传到View的列表值，已经设置了选中状态
+List<SelectListItem> oTypeList = GetSelectList(oOrgan.OrganTypeList);
+
+页面使用示例
+@Html.DropDownListFor(model => model.Otype, (List<SelectListItem>)ViewBag.oTypeList)
+
+显示当前的数值
+string strTypeName = oOrgan.OrganTypeName;

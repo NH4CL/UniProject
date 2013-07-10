@@ -1,0 +1,16 @@
+﻿<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "/Order/OrderList",
+        success: function (html) {
+            $("#OrderListPartialPage").html(html);
+        }
+    });
+
+</script>
+<div>
+    <div id="OrderListPartialPage">
+    </div>
+@*    <div id="OrderAddMainPage">
+    </div>*@
+</div>

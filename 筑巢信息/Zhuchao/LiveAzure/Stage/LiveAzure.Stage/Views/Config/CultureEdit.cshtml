@@ -1,0 +1,130 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.General.GeneralCultureUnit
+
+    @using (@Ajax.BeginForm("CultureSave", "Config", new AjaxOptions { UpdateTargetId = "cultureUnitListTable", OnComplete = "ClosePanel" }, new { Id = "EditCultureForm" }))
+    {
+        <div class="down_AddorEdit">
+            <table>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralCultureUnit.CultureName
+                    </th>
+                    <td>
+                        @Html.TextBoxFor(model => model.Culture, new { onblur = "ShowCultureName(this)" })
+                        @Html.ValidationMessageFor(model => model.Culture)
+                        <span id="showCultureName"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralCultureUnit.Piece
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.aPiece, (List<SelectListItem>)ViewBag.PieceList, String.Empty)
+                        @Html.ValidationMessageFor(model => model.Piece)
+                    </td>
+                </tr>
+                <tr>
+                    <th>        
+                        @LiveAzure.Resource.Model.General.GeneralCultureUnit.Weight
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.aWeight, (List<SelectListItem>)ViewBag.WeightList, String.Empty)
+                        @Html.ValidationMessageFor(model => model.Weight)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralCultureUnit.Volume
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.aVolume, (List<SelectListItem>)ViewBag.VolumeList, String.Empty)
+                        @Html.ValidationMessageFor(model => model.Volume)
+                    </td>
+                </tr>
+                <tr>
+                    <th>     
+                        @LiveAzure.Resource.Model.General.GeneralCultureUnit.Fluid
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.aFluid, (List<SelectListItem>)ViewBag.FluidList, String.Empty)
+                        @Html.ValidationMessageFor(model => model.Fluid)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralCultureUnit.Area
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.aArea, (List<SelectListItem>)ViewBag.AreaList, String.Empty)
+                        @Html.ValidationMessageFor(model => model.Area)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralCultureUnit.Linear
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.aLinear, (List<SelectListItem>)ViewBag.LinearList, String.Empty)
+                        @Html.ValidationMessageFor(model => model.Linear)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.General.GeneralCultureUnit.Currency
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.aCurrency, (List<SelectListItem>)ViewBag.CurrencyList, String.Empty)
+                        @Html.ValidationMessageFor(model => model.Currency)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @LiveAzure.Resource.Model.ModelBase.Remark
+                    </th>
+                    <td>   
+                        @Html.EditorFor(model => model.Remark)
+                        @Html.ValidationMessageFor(model => model.Remark)
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SubmitEditCultureForm()" />
+            </div>
+        </div>
+        <script type="text/javascript">
+            function ShowCultureName(str) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Config/ShowCultureName",
+                    data: { cultureId: str.value },
+                    success: function (data) {
+                        $("#showCultureName").html(data);
+                    }
+                });
+            }
+
+            function SubmitEditCultureForm() {
+                var s = document.getElementById("CheckedResult");
+                var c = document.getElementById("Culture");
+                if (c == null || c.value == 0) {
+                    alert("Culture cann't be null");
+                }
+                else {
+                    if (s == null) {
+                        $("#EditCultureForm").submit();
+                    }
+                    else {
+                        if (s.value == 0) {
+                            $("#EditCultureForm").submit();
+                        }
+                        else {
+                            ShowCultureName(c);
+                        }
+                    }
+                }
+            }
+        </script>
+    }

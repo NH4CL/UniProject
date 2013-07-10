@@ -1,0 +1,365 @@
+﻿@{
+    ViewBag.Title = "订单提交";
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml"; 
+}
+@using LiveAzure.Models.Member;
+@using LiveAzure.Models.Finance;
+@using LiveAzure.Models.Product;
+@using LiveAzure.Portal.Models;
+<div class="order_page">
+    @{
+        int currentCulture = (int)ViewBag.nCulture;
+    }
+    <div class="page_root">
+        <div class="page_root_pic">
+            <img alt="" src="@Url.Content("/Content/img/root.png")" />
+        </div>
+        <div class="page_root_content">
+            当前位置：
+        </div>
+    </div>
+    @using (Ajax.BeginForm("SaveNewOrder", "Order", new AjaxOptions { HttpMethod = "POST", OnSuccess = "saveOrderSuccess" }, new { id = "OrderGenerateForm" }))
+    {
+        <div class="order_info">
+            <div class="order_info_title">
+                收货人信息&nbsp <a href="@Url.Content("/Order/AddNewAddress")">[使用新地址]</a>
+            </div>
+            <div class="order_user_address">
+                <table>
+                    @{                                
+                        List<MemberAddress> addressList = (List<MemberAddress>)ViewBag.oAddressList;
+                        foreach (var address in addressList)
+                        {
+                            <tr>
+                                <td style="width: 20px;">
+                                    @{
+                                        if (address.IsDefault == true)
+                                        {
+                                            <input type="radio" name="radio_address" id="@address.Gid" onclick="setMemberAddress(this);" checked="checked" />
+                                        }
+                                        else
+                                        { 
+                                            <input type="radio" name="radio_address" id="@address.Gid" onclick="setMemberAddress(this);" />
+                                        }
+                                    }                                    
+                                </td>
+                                <th style="width: 60px;">
+                                    收货人：
+                                </th>
+                                <td style="width: 100px;">@address.DisplayName
+                                </td>
+                                <th style="width: 80px;">
+                                    收货地址：
+                                </th>
+                                <td style="width: 300px;">@address.FullAddress
+                                </td>
+                                <th style="width: 80px;">
+                                    邮政编码：
+                                </th>
+                                <td style="width: 100px;">@address.PostCode
+                                </td>
+                                <th style="width: 80px;">
+                                    联系方式：
+                                </th>
+                                @if (address.CellPhone == "" || address.CellPhone.Equals(null))
+                                {
+                                    <td style="width: 100px;">@address.HomePhone
+                                    </td>             
+                                }
+                                else
+                                {
+                                    <td style="width: 100px;">@address.CellPhone
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="order_info">
+            <div class="order_info_title">
+                支付信息</div>
+            <div class="order_payinfo">
+                <div>
+                    积分：
+                    @{
+                        List<MemberPoint> listMemberPoint = (List<MemberPoint>)ViewBag.pointList;
+                        foreach (var memberpointItem in listMemberPoint)
+                        {                            
+                            <input type="text" value="@memberpointItem.Remain" disabled="disabled" />
+                        }
+                    }
+                </div>
+                <div>
+                    券信息：
+                    @{
+                        List<MemberPoint> listMemberArriveCoupon = (List<MemberPoint>)ViewBag.arriveCouponList;
+                        foreach (var memberArriveCouponItem in listMemberArriveCoupon)
+                        {
+                            string strCouponInfo = "券号：" + memberArriveCouponItem.Coupon.Code + "；余额：" + memberArriveCouponItem.Balance + "；有效期：" + memberArriveCouponItem.StartTime.Value.Date.ToString() + "——" + memberArriveCouponItem.EndTime.Value.Date.ToString();
+                            <input type="radio" name="arriveCoupon" value="@memberArriveCouponItem.Coupon.Code" id="@memberArriveCouponItem.Gid" onclick="setCouponInfo(this);" />@strCouponInfo
+                        }
+                    }
+                </div>
+                <div>
+                    交易类型：
+                    @Html.DropDownList("TransType", (List<SelectListItem>)ViewBag.oTransList, new { onchange = "changeTransType(this);" })                    
+                </div>
+                <div id="payTypePage" class="radio_div">
+                    支付方式：
+                    @{
+                        List<FinancePayType> listPayment = (List<FinancePayType>)ViewBag.oPaymentList;
+                        foreach (var payment in listPayment)
+                        {
+                            <input type="radio" id="@payment.Gid" name="radio_pay" onclick="setPayType(this);" />@payment.Name.GetResource(currentCulture)
+                        }
+                    }
+                </div>
+            </div>
+        </div>     
+        <div class="order_info">
+            <div class="order_info_title">
+                物流信息</div>            
+            <input type="radio" name="shipperInfo" id="notUseShipping" checked="checked" onclick="setUseShipping(false);" />自提点
+            <input type="radio" name="shipperInfo" id="useShipping" onclick="setUseShipping(true);" />快递/物流
+            <div class="order_info" id="cartShippingInfo">                
+            </div>
+        </div>
+        <div class="order_info">
+            <div class="order_info_title">
+                发票信息</div>
+            <div class="invoice">
+                <div class="radio_div">
+                    <input type="radio" id="radio_invoice_yes" name="radio_invoice" onclick="showOrHideInvoiceInfo(this);" />是
+                    <input type="radio" id="radio_invoice_no" name="radio_invoice" checked="checked" onclick="showOrHideInvoiceInfo(this);" />否
+                </div>
+                <div id="invoiceShow" class="invoice_show">
+                    <table>
+                        <tr>
+                            <th>
+                                发票抬头
+                            </th>
+                            <td>
+                                <input type="text" name="orderInvoice" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                发票内容
+                            </th>
+                            <td>
+                                @Html.DropDownList("InvoiceItem", (List<SelectListItem>)ViewBag.invoiceList)
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="order_info">
+            <div class="order_info_title">
+                订单备注</div>
+            <textarea name="OrderPosComment" class="order_remark" rows="" cols=""></textarea>
+            <div class="order_info_title">
+                最佳送货时间</div>
+            <textarea name="OrderBestDelivery" class="order_remark" rows="" cols=""></textarea>
+        </div>
+        <div class="order_info">
+            <div class="order_info_title">
+                商品清单</div>
+            <div class="cart_org_proinfo_title">
+                <span class="cart_propic">商品图片</span> <span class="cart_proname">商品名称</span> <span
+                    class="cart_proprice">单价</span> <span class="cart_pronumber">数量</span> <span class="cart_prodiscount">
+                        折扣</span> <span class="cart_proamount">小计</span>
+            </div>
+            @{
+                List<MallCartProduct> listSKUItem = (List<MallCartProduct>)ViewBag.oProductItemList;
+                foreach (var skuItem in listSKUItem)
+                {
+                    string productCount = skuItem.productCount.ToString().Remove(skuItem.productCount.ToString().Length - 2, 2);
+                    string salePrice = skuItem.productSalePrice.ToString().Remove(skuItem.productSalePrice.ToString().Length - 2, 2);
+                    string sumPrice = skuItem.productPriceSum.ToString().Remove(skuItem.productPriceSum.ToString().Length - 6, 6);
+                <div class="cart_org_proinfo_content">
+                    <span class="cart_propic_content">
+                        <img src="@skuItem.productPicture" alt="@skuItem.productName" /></span> <span class="cart_proname_content">@skuItem.productName</span>
+                    <span class="cart_proprice_content">@skuItem.productSalePrice.ToString("#0.00")</span>
+                    <span class="cart_proprice_content">@skuItem.productCount.ToString("#0.00")</span>
+                    <span class="cart_prodiscount_content">@skuItem.productDiscount</span> <span class="cart_proamount_content">@skuItem.productPriceSum.ToString("#0.00")</span>
+                </div>            
+                }
+            }
+        </div>
+        <div class="order_info">
+            <div class="order_info_title">
+                结算信息</div>
+            <div id="cartFeeInfo">
+            </div>
+        </div>
+        <div class="order_info">
+            <div class="comfirm">
+                <p>
+                    确认订单信息无误，请点击</p>
+                <input type="button" value="提交订单" onclick="submitForm();" />
+            </div>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Order/CartFeeInfo",
+            success: function (data) {
+                $("#cartFeeInfo").html(data);
+                var radioAddress = document.getElementsByName("radio_address");
+                for (var i = 0; i < radioAddress.length; i++) {
+                    if (radioAddress[i].checked == true) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Order/CartShippingInfo",
+                            data: { memberAddressGid: radioAddress[i].id },
+                            success: function (html) {
+//                                if (document.getElementById("useShipping").checked == true) {
+//                                    $("#cartShippingInfo").html(html);
+//                                }
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Order/CartFeeInfo",
+                                    success: function (data) {
+                                        $("#cartFeeInfo").html(data);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        if (document.getElementById("radio_invoice_no").checked == true) {
+            $("#invoiceShow").hide();
+        }
+    });
+    //是否显示发票信息
+    function showOrHideInvoiceInfo(obj) {
+        if (obj.id == "radio_invoice_yes") {
+            $.ajax({
+                type: "POST",
+                url: "/Order/SetInvoice",
+                data: { bInvoice: true },
+                success: function () {
+                    $("#invoiceShow").show();
+                }
+            });
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Order/SetInvoice",
+                data: { bInvoice: false },
+                success: function () {
+                    $("#invoiceShow").hide();
+                }
+            });
+        }
+    }
+    //设置收货人地址
+    function setMemberAddress(obj) {
+        $.ajax({
+            type: "POST",
+            url: "/Order/CartShippingInfo",
+            data: { memberAddressGid: obj.id },
+            success: function (html) {
+//                if (document.getElementById("useShipping").checked == true) {
+//                    $("#cartShippingInfo").html(html);
+//                }
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/CartFeeInfo",
+                    success: function (data) {
+                        $("#cartFeeInfo").html(data);
+                    }
+                });
+            }
+        });
+    }
+    //设置使用券的信息
+    function setCouponInfo(obj) {
+        var checkedOrNot = obj.checked;
+        var memberPointGid = obj.id;
+        $.ajax({
+            type: "POST",
+            url: "/Order/CartFeeInfo",
+            data: { pointGid: memberPointGid },
+            success: function (html) {
+                $("#cartFeeInfo").html(html);
+            }
+        });
+    }
+    //提交订单
+    function submitForm() {
+        var submitConfirm = window.confirm("确认提交订单吗？");
+        if (submitConfirm) {
+            $("#OrderGenerateForm").submit();
+        }
+    }
+    //换交易方式
+    function changeTransType(obj) {
+        if (obj.value == 1) {
+            $("#payTypePage").hide();
+        }
+        else {
+            $("#payTypePage").show();
+        }
+    }
+    //设置支付方式
+    function setPayType(obj) {
+        $.ajax({
+            type: "POST",
+            url: "/Order/SetPayType",
+            data: { payGid: obj.id },
+            success: function () { 
+            }
+        });
+    }
+    //保存订单
+    function saveOrderSuccess(data) {
+        alert(data);
+        if (data == "success") {
+            window.location.href = "/Account/Index";
+        }
+    }
+    //设置是否使用承运商
+    function setUseShipping(data) {
+        $.ajax({
+            type: "POST",
+            url: "/Order/SetUseShipping",
+            data: { bShipping: data },
+            success: function () {
+                if (data == true) {
+                    var radioAddress = document.getElementsByName("radio_address");
+                    for (var i = 0; i < radioAddress.length; i++) {
+                        if (radioAddress[i].checked == true) {
+                            $.ajax({
+                                type: "POST",
+                                url: "/Order/CartShippingInfo",
+                                data: { memberAddressGid: radioAddress[i].id },
+                                success: function (html) {
+//                                    if (document.getElementById("useShipping").checked == true) {
+//                                        $("#cartShippingInfo").html(html);
+//                                    }
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Order/CartFeeInfo",
+                                        success: function (data) {
+                                            $("#cartFeeInfo").html(data);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+@*<script type="text/javascript">
+
+    $("#PUGrid").fadeIn("fast");
+    $.ajax({
+        type: "POST",
+        url: "/Product/ShowPUList",
+        success: function (html) {
+            $("#PUGrid").html(html);
+        }
+    });
+
+</script>
+<div id="content">    
+    <div id="PUGrid">
+    </div>
+    <div id="SKUShow">
+    </div>
+</div>*@
+@model List<Guid>
+@ControlManager.SKUSelect()
+@Html.EditorFor(model => model[0], "SKUSelect", new { ID = "Editor1", OrgID = ViewBag.org })
+<button name="submit" id="submit" onclick="submit()">@LiveAzure.Resource.Common.Submit</button>
+<script type="text/javascript">
+    function submit() {
+        var value = document.getElementById("Editor1_val").value;
+        $.ajax({
+            type: "post",
+            url: "/Product/SKUOnsaleSave",
+            data: { gid: value },
+            success: function (data) {
+                addSKUOnsalePanel.CloseEditPanel();
+                $("#SKUOnsaleGrid").fadeIn("fast");                
+                $("#grid3").trigger('reloadGrid');                
+            }
+        })
+    }
+</script>

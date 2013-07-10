@@ -1,0 +1,113 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@{
+    ViewBag.Title = "Level";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+   @LiveAzure.Resource.Stage.UserController.organization:
+   @Html.DropDownList("orgCode", ViewData["orgCode"] as SelectList, new { id = "orgCode", name = "orgCode", style = "width:270px;", onchange = "changeOrg()" })
+</div>
+
+<div id="MemberLevelTable">
+@Html.Grid(new GridControl()
+        .SetName("gridLevel")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/User/listLevel")
+        .SetHeight("'100%'")
+        .SetWidth("600")
+        .SetColumns<LiveAzure.Models.Member.MemberLevel>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Member.MemberLevel.Code);
+                cs.Add(x => x.Name.Matter).SetCaption(LiveAzure.Resource.Model.Member.MemberLevel.Name);
+                cs.Add(x => x.Mlevel).SetCaption(LiveAzure.Resource.Model.Member.MemberLevel.Mlevel);
+                cs.Add(x => x.Discount).SetCaption(LiveAzure.Resource.Model.Member.MemberLevel.Discount);
+            })
+       )
+<br />
+    <input type="button" value="@LiveAzure.Resource.Common.Add" id="Add" onclick="add()"/>
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" id="Edit" onclick="edit()"/>
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" id="Delete" onclick="del()"/>
+</div>
+
+<script type="text/javascript">
+    function changeOrg() {
+
+        var id = $("#orgCode option:selected").val();
+        $.ajax({
+
+            type: "POST",
+
+            url: "/User/IndexTest1",
+
+            data: { currentid: id },
+
+            datatype: "html",
+
+            success: function (data) {
+
+                $("#gridLevel").trigger('reloadGrid');
+
+            },
+
+            error: function () {
+
+                alert("处理失败!");
+
+            }
+
+        });
+    }
+
+    function add() {
+        OpenEditPanel("CoverPage_UseLevel", "EditPage_UseLevel", "PartialPage_UseLevel", null, null);
+        $.post("/User/LevelAdd", {}, back);
+        function back(html) {
+            $("#PartialPage_UseLevel").html(html);
+        };
+    }
+
+    function edit() {
+        var uRowId = $("#gridLevel").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("No focus");
+            return false;
+        }
+        else {
+            OpenEditPanel("CoverPage_UseLevel", "EditPage_UseLevel", "PartialPage_UseLevel", null, null);
+            $.ajax({
+                type: "POST",
+                url: "/User/LevelEdit",
+                data: { uGid: uRowId },
+                success: function (data) {
+                    $("#PartialPage_UseLevel").html(data);
+                }
+            });
+        }
+    }
+
+    function del() {
+        var id = $("#gridLevel").jqGrid("getGridParam", "selrow");
+        if (confirm('@LiveAzure.Resource.Stage.UserController.delConfirm')) {
+            $.post("/User/DeleteLevel", { Gid: id }, function (data) {
+                $("#gridLevel").trigger('reloadGrid');
+            });
+        }
+    }
+</script>
+
+<div id="EditPage_UseLevel" class="EditPage">
+    <p id="Draggable_UseLevel" style="background-color: Orange; width: 100%; height: 30px; margin-top: 0;" class="Draggalbe">
+        <span id="PageTitle_UseLevel" class="Title">@LiveAzure.Resource.Stage.UserController.editLevel</span>
+        <span id="Close_UseLevel" class="Close" onclick="CloseEditPanel('CoverPage_UseLevel','EditPage_UseLevel');" style="float:right;"><img alt="close" src="@Url.Content("~/Content/themes/base/images/close.gif")" /></span>
+    </p>
+    <div id="PartialPage_UseLevel" class="PartialPage">
+    </div>
+</div>
+<div id="CoverPage_UseLevel" class="CoverPage">
+</div>

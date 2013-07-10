@@ -1,0 +1,93 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.General.GeneralMeasureUnit
+@{
+    ViewBag.Title = "MeasureUnit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    @LiveAzure.Resource.Model.General.GeneralMeasureUnit.Utype
+    @Html.DropDownListFor(model => model.Utype, (List<SelectListItem>)ViewBag.unitSelectList, new { onchange = "ChangeUnitType(this.value)" })
+</div>
+
+<div id="measureUnitTable">
+    @{ Html.RenderPartial("MeasureUnitListTable"); }
+</div>
+@{
+    if(ViewBag.EnableEdit)
+    {
+        <div>
+            <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddPage()" />
+            <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="ShowEditPage()" />
+            <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemovePage()" />
+        </div>
+    }
+}
+
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.ConfigController.EditUnit";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+    function ChangeUnitType(str) {
+        $.ajax({
+                type: "POST",
+                url: "/Config/ChangeUnitType",
+                data: { uType: str },
+                success: function () {
+                    $('#MeasureUnits').trigger('reloadGrid');
+                }
+            });
+    }
+
+    function ShowAddPage() {
+        UnitPricePanel.OpenPanel();
+        $.post("/Config/MeasureUnitAdd", {}, back);
+        function back(html) {
+            UnitPricePanel.EditPageHtml(html);
+        };
+    }
+
+    function ShowEditPage() {
+        var uRowId = $("#MeasureUnits").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+        UnitPricePanel.OpenPanel();
+            $.ajax({
+                type: "POST",
+                url: "/Config/MeasureUnitEdit",
+                data: { uGid: uRowId },
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);
+                }
+            });
+        }
+    }
+
+    function RemovePage() {
+        var unitRowId = $("#MeasureUnits").jqGrid("getGridParam", "selrow");
+        if (unitRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Config/MeasureUnitRemove",
+                    data: { unitGid: unitRowId },
+                    success: function (data) {
+                        $("#measureUnitTable").html(data);
+                    }
+                });
+            }
+        }
+    }
+</script>
+

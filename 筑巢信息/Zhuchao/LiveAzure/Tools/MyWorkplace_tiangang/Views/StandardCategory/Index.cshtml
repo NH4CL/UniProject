@@ -1,0 +1,16 @@
+﻿@model IEnumerable<LiveAzure.Models.General.GeneralStandardCategory>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@{
+    foreach(var item in Model)
+    {
+        <div>
+            @item.Name.Matter
+        </div>   
+    }    
+    }
+

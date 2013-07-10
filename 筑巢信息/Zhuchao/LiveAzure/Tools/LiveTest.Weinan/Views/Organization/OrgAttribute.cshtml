@@ -1,0 +1,128 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Member.MemberOrganization 
+
+@{
+    ViewBag.Title = "AddOrgAttribute";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AddOrgAttribute</h2>
+
+@*<script src="../../Scripts/jquery-1.6.2.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.validate-vsdoc.js" type="text/javascript"></script>*@
+<script type="text/javascript">
+    function onshow() {
+        var id = document.getElementById("OptID").value;
+        $.ajax({
+            type: "GET",
+            //contentType: "json",
+            url: "/Organization/getInputMode",
+            //dataType: 'json',
+            data: { id: id },
+            success: function (data) {
+                if (data == 1) {
+                    $("#Matter").attr("disabled", true);
+//                    document.getElementById("Matter").setAttribute("disabled");
+                }
+                else {
+                    $("#OptResult").attr("disabled", true);
+//                    document.getElementById("OptResult").setAttribute("disabled");
+                }
+            }
+        });
+    }
+
+    function showtable() {
+        var objs1 = document.getElementById("OptID");
+        var OptID = objs1.options[objs1.selectedIndex].text;
+        var OptIDValue = document.getElementById("OptID").value;
+        
+        var objs2 = document.getElementById("OptResult");
+        var OptResult = objs2.options[objs2.selectedIndex].text;
+        var OptResultValue = document.getElementById("OptResult").value;
+
+        var Matter = document.getElementById("Matter").value;
+        var tb = document.getElementById("attGrid");
+        
+        var optionItemCount = document.getElementById("optitemCount").value;
+        if (OptID) {
+            var row = tb.insertRow(1);
+            var cell1 = row.insertCell();
+            var cell2 = row.insertCell();
+            var cell3 = row.insertCell();
+
+            cell3.innerHTML = OptID + '<input type="hidden" name="OptID' + optionItemCount + '" value="' + OptIDValue + '" />';
+            cell2.innerHTML = OptResult + '<input type="hidden" name="OptResult' + optionItemCount + '" value="' + OptResultValue + '" />';
+            cell1.innerHTML = Matter + '<input type="hidden" name="Matter' + optionItemCount + '" value="' + Matter + '" />';
+            optionItemCount++;
+            $("#list").fadeIn("slow");
+        }
+        document.getElementById("optitemCount").value = optionItemCount;
+        alert("验证信息：  " + cell1.innerHTML);
+    }
+</script>
+
+
+ @using (Html.BeginForm("OrgAttribute", "Organization", FormMethod.Post))
+ {
+     @Html.ValidationSummary(true)
+
+<div id="list">
+<input type="hidden" id="optitemCount" name="optitemCount" value="0" />
+@Html.Grid(new GridControl()
+        .SetName("attGrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Organization/ListAttribute")
+        .SetHeight("200")
+        .SetColumns<LiveAzure.Models.Member.MemberOrgAttribute>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Optional.Name.Matter).SetCaption(@LiveAzure.Resource.Model.Member.MemberOrgAttribute.OptID);
+            cs.Add(x => x.OptionalResult.Name.Matter).SetCaption(@LiveAzure.Resource.Model.Member.MemberOrgAttribute.OptResult);
+            cs.Add(x => x.Matter).SetCaption(@LiveAzure.Resource.Model.Member.MemberOrgAttribute.Matter);
+        })
+            )
+ @{string s = @Html.GridDeleteButton(buttonText: "Delete", gridName: "attGrid", actionUrl: "/Organization/DeleteAttGrid");          
+              var aaa =new HtmlString(s);@aaa}
+@*<table id ="itemtable">
+  <tr>
+    <td>
+      @LiveAzure.Resource.Model.Member.MemberOrgAttribute.OptID
+    </td>
+    <td>
+      @LiveAzure.Resource.Model.Member.MemberOrgAttribute.OptResult
+    </td>
+    <td>
+      @LiveAzure.Resource.Model.Member.MemberOrgAttribute.Matter
+    </td>
+  </tr>
+</table>*@
+</div>
+
+ <div>
+  <div>
+  @LiveAzure.Resource.Model.Member.MemberOrgAttribute.OptID：
+  @Html.DropDownList("OptID", ViewData["OptID"] as IEnumerable<SelectListItem>, "--请选择属性--",new { id = "OptID", style = "width:270px;", onchange = "onshow()" })
+  </div>
+  <div>
+  @LiveAzure.Resource.Model.Member.MemberOrgAttribute.OptResult：
+  @Html.DropDownList("OptResult", ViewData["OptResult"] as IEnumerable<SelectListItem>, "--请选择内容--", new { id = "OptResult", style = "width:270px;" })
+    </div>
+    <div>
+  @LiveAzure.Resource.Model.Member.MemberOrgAttribute.Matter：
+  @Html.TextBox("Matter", "输入文本", new { id = "Matter", style = "width:270px;" })
+    </div>
+</div>
+
+<div>
+  <input type="button" onclick ="showtable()" value="添加"/>
+  <input type ="reset" value = "@LiveAzure.Resource.Stage.HomeController.Reset" />
+</div>
+
+<div>
+   <input type="submit" value="列表保存"/>
+</div>
+ }

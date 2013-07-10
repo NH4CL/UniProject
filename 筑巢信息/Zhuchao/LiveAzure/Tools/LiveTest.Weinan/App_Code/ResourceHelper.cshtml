@@ -1,0 +1,53 @@
+﻿@using LiveTest.Weinan.Controllers
+@using LiveAzure.Utility
+
+@helper MatterEditor(string resId, string name = "MatterEditor", string buttonText = "其他语言",
+        bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+{
+    string encryptedParam = ResourceController.EncryptResourceEditorParam(resId, ResourceController.strSaltKey, enableAdd, enableEdit, enableDelete);
+    <input id="btnEditMatter_@(name)" type="button" value="@(buttonText)" />
+    <script type="text/javascript">
+        $("#btnEditMatter_@(name)").click(
+            function () {
+                window.open("/Resource/EditMatter?param=@(encryptedParam)", "MatterEditor",
+                    "height=400, width=610, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+            });
+    </script>
+}
+@helper MatterEditor(Guid? resId, string name = "MatterEditor", string buttonText = "其他语言",
+        bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+{
+    @MatterEditor(resId.ToString(), name, buttonText, enableAdd, enableEdit, enableDelete)
+}
+
+@helper MatterEditor(LiveAzure.Models.General.GeneralResource res, string name = "MatterEditor", string buttonText = "其他语言",
+        bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+{
+    @MatterEditor(res.Gid, name, buttonText, enableAdd, enableEdit, enableDelete)
+}
+
+@helper CashEditor(string resId, string name = "CashEditor", string buttonText = "其他货币",
+        bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+{
+    string encryptedParam = ResourceController.EncryptResourceEditorParam(resId, ResourceController.strSaltKey, enableAdd, enableEdit, enableDelete);
+    <input id="btnEditCash_@(name)" type="button" value="@(buttonText)" />
+    <script type="text/javascript">
+        $("#btnEditCash_@(name)").click(
+            function () {
+                window.open("/Resource/EditCash?param=@(encryptedParam)", "CashEditor",
+                    "height=400, width=610, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+            });
+    </script>
+}
+
+@helper CashEditor(Guid? resId, string name = "CashEditor", string buttonText = "其他货币",
+        bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+{
+    @CashEditor(resId.ToString(), name, buttonText, enableAdd, enableEdit, enableDelete)
+}
+
+@helper CashEditor(LiveAzure.Models.General.GeneralResource res, string name = "CashEditor", string buttonText = "其他货币",
+        bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+{
+    @CashEditor(res.Gid, name, buttonText, enableAdd, enableEdit, enableDelete)
+}

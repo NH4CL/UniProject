@@ -1,0 +1,21 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@Html.Grid(new GridControl()        
+    .SetName("MeasureUnits")
+    .SetPageSize(20)
+    .SetIsAutoSize(true)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Config/MeasureUnitList")
+    .SetEditUrl("/Config/MeasureUnitEdit")
+    .SetWidth("600")
+    .SetHeight("'100%'")
+    .SetColumns<LiveAzure.Models.General.GeneralMeasureUnit>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.TypeName).SetCaption(LiveAzure.Resource.Model.General.GeneralMeasureUnit.Utype);
+        cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.General.GeneralMeasureUnit.Code);
+        cs.Add(x => x.Name).SetCaption(LiveAzure.Resource.Model.General.GeneralMeasureUnit.Name);
+        cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+    })
+        .UpdateDefaultPager(pager=>pager.ShowSearch(false,false))
+    )

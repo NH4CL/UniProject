@@ -1,0 +1,101 @@
+﻿@model LiveAzure.Models.General.GeneralOptional
+@{
+    Layout = null;
+} 
+
+@ControlManager.StandardCategorySelect()
+@using (@Ajax.BeginForm("SaveOptional", "Optional", new AjaxOptions { OnSuccess = "RefreshOptionalGrid();ClosePanel();" }, new { id = "opionalEditForm" }))
+{
+
+<div id="editOptional" >
+    <p>@LiveAzure.Resource.Stage.OptionalController.EditOptional</p>
+    @Html.HiddenFor(model => model.Gid)
+    
+    <div class="down_AddorEdit">
+                                                                                                                                                                                                                                            <table>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.Otype)
+            </th>
+            <td>
+                @Html.DropDownListFor(model => model.Otype, (List<SelectListItem>)ViewBag.editOptionalTypeList, new { OnChange = "editShowRefID(this.value)" })
+                @Html.ValidationMessageFor(model => model.Otype)
+            </td>
+        </tr>
+        @{
+            if (ViewBag.oType == 3)
+            {
+                <tr id="editRefIDDiv">
+                        <th>
+                            @LiveAzure.Resource.Model.General.GeneralOptional.RefID
+                        </th>
+                        <td>
+                            @Html.EditorFor(model => model.RefID, "StandardCategorySelect")
+                        </td>
+                </tr>
+            }
+        }
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.Code)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Code)
+                @Html.ValidationMessageFor(model => model.Code)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.Sorting)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Sorting)
+                @Html.ValidationMessageFor(model => model.Sorting)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <div class="AddorEditNameTitle">
+                    @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.Name)
+                </div>
+            </th>
+            <td>
+                <div class="AddorEditNameMain">
+                    @Html.EditorFor(model => model.Name, "Matter")
+                </div>
+            </td>
+        </tr> 
+        <tr>
+            <th>   
+                @Html.Label(@LiveAzure.Resource.Model.General.GeneralOptional.InputMode)
+            </th>
+            <td>
+                @Html.DropDownListFor(model => model.InputMode, (List<SelectListItem>)ViewBag.editOptionalInputMode)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.ModelBase.Remark)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Remark)
+            </td>
+        </tr>
+    </table>
+        <input type="submit" value="@LiveAzure.Resource.Common.Submit" onclick="ClosePanel()" />
+    </div>
+</div>
+}
+ <script type="text/javascript" >
+     
+     function editShowRefID(str) {
+         if (str == 3) {
+             $("#editRefIDDiv").show();
+
+         }
+         else {
+             $("#editRefIDDiv").hide();
+         }
+     }
+ </script>   
+

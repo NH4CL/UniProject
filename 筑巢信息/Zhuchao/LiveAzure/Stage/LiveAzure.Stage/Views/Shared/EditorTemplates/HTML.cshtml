@@ -1,0 +1,13 @@
+﻿@using LiveAzure.Controls.LiveEditor
+@model string
+@{
+    string id = ViewBag.ID == null ? Guid.NewGuid().ToString() : (string)ViewBag.ID;
+    LiveEditor editor = ViewBag.Editor as LiveEditor;
+    if (editor == null)
+    {
+        editor = new LiveEditor();
+    }
+    editor.SetName(id.ToString());
+}
+@Html.TextAreaFor(model => model, new { id = id })
+@Html.LiveEditor(editor)

@@ -1,0 +1,229 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Portal.Models
+@model List<MyCoupons>
+
+
+           <div class="acc_right">
+                <div class="page_root">
+                    <div class="page_root_pic">
+                         <img alt="" src="@Url.Content("/Content/img/root.png")" />
+                     </div>
+                    <div class="page_root_content">
+                     当前位置：
+                     </div>
+                </div>
+                <div class="Cash">
+                <div class="Order_title"><b>资金管理</b></div>
+                <ul style="list-style:none">
+                    <li class="user_tab_02" id="d1" onmousedown="funds(1)">我的抵用券</li>
+                    <li class="user_tab_02" id="d2" onmousedown="funds(2)">绑定</li>
+                </ul>
+                <div class="tab_container">
+                    <div id="Cash_1" class="tab_content">
+                    <div class="Title_list">
+                        <table cellpadding="0" cellspacing="0" border="0">
+			                <tr>
+				                <th width="100">卡号<br />类型</th>
+                                <th width="100">是否有效</th>
+				                <th width="100">积分<br />金额</th>
+				                <th width="100">余额</th>
+				                <th width="100">时间</th>
+				                <th width="100">原因<br />单据</th>
+                                <th width="100">限定</th>                                
+			                </tr>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@if (null == item.cCode)
+                                        {
+                                            <span>----</span><br />
+                                        }
+                                        else
+                                        {
+                                            <span>@item.cCode</span><br />
+                                        }
+                                        @switch (item.Ptype)
+                                        {
+                                            case 0:
+                                                {
+                                                    <span>积分</span>
+                                                    break;
+                                                }
+                                            case 1:
+                                                {
+                                                    <span>现金余额</span>
+                                                    break;
+                                                }
+                                            case 2:
+                                                {
+                                                    <span>券</span>
+                                                    break;
+                                                }
+                                            case 3:
+                                                {
+                                                    <span>联盟返点</span>
+                                                    break;
+                                                }
+                                            case 4:
+                                                {
+                                                    <span>CPS返点</span>
+                                                    break;
+                                                }
+                                            case 5:
+                                                {
+                                                    <span>代销返点</span>
+                                                    break;
+                                                }
+                                        }
+                                    </td>
+                                    <td>
+                                    @if (0 == item.Pstatus)
+                                    {
+                                        <span>无效</span>
+                                    }
+                                    else if (1 == item.Pstatus)
+                                    {
+                                        <span>有效</span>
+                                    }
+                                    else
+                                    {
+                                        <span>已使用</span>
+                                    }
+                                    </td>
+                                    <td>
+                                    @if (0 == item.Score)
+                                    {
+                                        <span>----</span><br />
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Score</span><br />
+                                    }
+                                    @if (0m == item.Amount)
+                                    {
+                                        <span>----</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Amount</span>
+                                    }
+                                    </td>
+                                    <td>
+                                    @if (0 == item.Remain)
+                                    {
+                                        <span>----</span><br />
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Remain</span><br />
+                                    }
+                                    @if (item.Balance == 0m)
+                                    {
+                                        <span>----</span>                                    
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Balance</span>
+                                    }
+                                    </td>                                    
+                                    <td>
+                                    <span>@item.StartTime</span><br />
+                                    <span>@item.EndTime</span>                                    
+                                    </td>
+                                    <td>
+                                    <span>@item.Reason</span><br />
+                                    <span>@item.oCode</span>
+                                    </td>
+                                    <td>
+                                    <span>最小使用额度 @item.MinCharge</span><br />
+                                    <span>能否提现 @item.Cashier</span><br />
+                                    <span>是否一次使用 @item.OnceUse</span>
+                                    </td>
+                                    
+                                </tr>
+                            }
+                            <tr align="center">
+                                <td colspan="7">@Html.Raw(ViewBag.pageDown)</td>
+                            </tr>
+				        </table>
+                        <div class="Order_bottom"></div>
+                    </div>
+                    </div>
+
+                    <div id="Cash_2" class="tab_content">
+                     <div class="Title_list">
+                    <form name="coupon" id="coupon" method="post" action="">
+												
+					    <table cellpadding="0" cellspacing="0" border="0" width="803" align="right">
+						    <tr>
+							    <th width="30%">卡号：<input type="text" class="user_t_box" name="card_sn" id="card_sn" /></th>
+							    <th width="30%">密码：<input type="password" class="user_t_box" name="pwd" id="pwd" /></th>
+							    <th><img src="@Url.Content("~/Content/img/submit.jpg")" title="提交" width="72" height="26"  alt="submit" style="border:2px; border-color:Black;" onclick="CouponBind()" /></th>
+						    </tr>
+					    </table>
+
+                    </form>
+                    </div>
+                    <div class="Order_bottom"></div>
+                   </div>
+
+                </div>
+
+                </div>
+
+          </div>
+
+
+<script language="javascript" type="text/javascript">
+
+    document.getElementById('d1').className = 'user_tab_01';
+    document.getElementById('Cash_1').style.display = '';
+    document.getElementById('Cash_2').style.display = 'none';
+    var fundsID = '1';
+    function funds(id) {
+        var fundsObj = document.getElementById('Cash_' + fundsID);
+        if (fundsObj) {
+            fundsObj.style.display = 'none';
+            document.getElementById('d' + fundsID).className = 'user_tab_02';
+        }
+        var obj1 = document.getElementById('Cash_' + id);
+        document.getElementById('d' + id).className = 'user_tab_01';
+        obj1.style.display = '';
+        fundsID = id;
+    }
+
+    /*----------------
+    券绑定
+    ----------------*/
+    function CouponBind() {
+        var cardCode = document.getElementById("card_sn").value;
+        var password = document.getElementById("pwd").value;
+        if ("" == cardCode) {
+            alert("请输入卡号");
+            $("#card_sn").focus();
+            return false;
+        }
+        if ("" == password) {
+            alert("请输入密码");
+            $("#pwd").focus();
+            return false;
+        }
+
+        $.ajax({
+            type: "post",
+            url: "/Account/CouponBind",
+            data: {code:cardCode,pwd:password},
+            success: function (data) {
+                if (data == "True") {
+                    alert("绑定成功");
+                } else {
+                    alert("绑定失败，请重新核对信息");
+                }
+            }
+        })
+    }
+</script>
+
+

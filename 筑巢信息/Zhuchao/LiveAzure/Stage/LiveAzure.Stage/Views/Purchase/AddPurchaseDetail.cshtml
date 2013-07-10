@@ -1,0 +1,202 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Purchase.PurchaseInformation
+@ViewBag.datePattern
+<div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" value="打印订单" onclick="" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.PurchaseList" onclick="backIndex()" />
+            </td>
+        </tr>
+    </table>
+</div>
+@{
+    string nowformat = ViewBag.datePattern;
+}
+@using (Html.BeginForm("PurchaseDetail", "Purchase", FormMethod.Post, new { name = "FormName", id = "FormID" }))
+{ 
+    <div>
+        <table class="DIY_table" border="1">
+            @Html.HiddenFor(model => model.Gid)
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.DocVersion
+                </th>
+                <td>
+                    @*@Html.EditorFor(model => model.DocVersion)*@                    
+                    <input type="text" id="DocVersion" value="@LiveAzure.Resource.Stage.PurchaseController.AutoGeneration" />
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Code
+                </th>
+                <td>
+                    @*@Html.EditorFor(model => model.Code)*@
+                    <input type="text" id="Code" value="@LiveAzure.Resource.Stage.PurchaseController.AutoGeneration" />
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Pstatus
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Pstatus, (List<SelectListItem>)ViewBag.ostatuslist, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.etd
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.etd).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.TrackLot
+                </th>
+                <td>
+                    @* @Html.EditorFor(model => model.TrackLot)*@
+                    <input type="text" id="TrackLot" value="@LiveAzure.Resource.Stage.PurchaseController.AutoGeneration" />
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Supplier
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.aSupplier, (List<SelectListItem>)ViewBag.osupplierlist, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.atd
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.atd).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Stage.PurchaseController.PurchaseTime
+                </th>
+                <td>
+                    <input type="text" value="@LiveAzure.Resource.Stage.PurchaseController.AutoGeneration" disabled="disabled" />
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Warehouse
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.WhID, (List<SelectListItem>)ViewBag.owarehouselist, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.eta
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.eta).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Amount
+                </th>
+                <td>
+                    @*@Html.EditorFor(model => model.Amount)*@
+                    <input type="text" id="Amount" value="@LiveAzure.Resource.Stage.PurchaseController.AutoGeneration" />
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Ptype
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Ptype, ViewBag.purchaseTypeList as IEnumerable<SelectListItem>, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.ata
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.ata).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Quantity
+                </th>
+                <td>
+                    @*@Html.EditorFor(model => model.Quantity)*@
+                    <input type="text" id="Quantity" value="自动生成" />
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Currency
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.aCurrency, (List<SelectListItem>)ViewBag.listorgunit, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.PortDate
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.PortDate).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Brief
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Brief)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Hanged
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Hanged, (List<SelectListItem>)ViewBag.ohangstatuslist, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.CalcMode
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.CalcMode, (List<SelectListItem>)ViewBag.ocalmodelist, new { type = "width:150px" })
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+
+    <div>
+        @*<input type="submit" value="@LiveAzure.Resource.Stage.OrganizationController.submit" />*@
+        <input type="button" value="@LiveAzure.Resource.Common.Next" onclick="subForm()" />
+    </div>
+}
+<script type="text/javascript">
+    function backIndex() {
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setZero",
+            success: function (data) {
+                window.location.href = "/Purchase/Index";
+            },
+            error: function () {
+                alert('@LiveAzure.Resource.Stage.OrganizationController.errorAlert');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#DocVersion").attr("disabled", "true");
+        $("#Code").attr("disabled", "true");
+        $("#TrackLot").attr("disabled", "true");
+        $("#Pstatus").attr("disabled", "true");
+        $("#Hanged").attr("disabled", "true");
+        $("#Amount").attr("disabled", "true");
+        $("#Quantity").attr("disabled", "true");
+    })
+
+    function subForm() {
+        if ($("#aSupplier").val() == null) {
+            alert("@LiveAzure.Resource.Stage.PurchaseController.SuppierNotnull");
+        }
+        else if ($("#WhID").val() == null) {
+            alert("@LiveAzure.Resource.Stage.PurchaseController.WarehouseNotnull");
+        }
+        else {
+            $("#FormID").submit();
+        }
+    }
+</script>

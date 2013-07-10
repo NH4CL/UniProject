@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdvID" xml:space="preserve">
+    <value>Advertise ID</value>
+  </data>
+  <data name="ArrangeTime" xml:space="preserve">
+    <value>Arranged Time</value>
+  </data>
+  <data name="BestDelivery" xml:space="preserve">
+    <value>Best Delivery Time</value>
+  </data>
+  <data name="BestDeliveryLong" xml:space="preserve">
+    <value>Must be in 128 letters</value>
+  </data>
+  <data name="BounsPay" xml:space="preserve">
+    <value>Bouns Pay</value>
+  </data>
+  <data name="BuildingSign" xml:space="preserve">
+    <value>Building Sign</value>
+  </data>
+  <data name="BuildingSignLong" xml:space="preserve">
+    <value>Must be in 128 letters</value>
+  </data>
+  <data name="ChlID" xml:space="preserve">
+    <value>Channel ID </value>
+  </data>
+  <data name="ChlIDRequired" xml:space="preserve">
+    <value>Channel is required</value>
+  </data>
+  <data name="ClosedTime" xml:space="preserve">
+    <value>Closed Time</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="CodeLong" xml:space="preserve">
+    <value>Must be in 50 letters</value>
+  </data>
+  <data name="CodeRequired" xml:space="preserve">
+    <value>Code is required</value>
+  </data>
+  <data name="ConfirmTime" xml:space="preserve">
+    <value>Confirmed Time</value>
+  </data>
+  <data name="Consignee" xml:space="preserve">
+    <value>Consignee</value>
+  </data>
+  <data name="ConsigneeLong" xml:space="preserve">
+    <value>Must be in 256 letters</value>
+  </data>
+  <data name="CouponPay" xml:space="preserve">
+    <value>Coupon Pay</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Currency </value>
+  </data>
+  <data name="Differ" xml:space="preserve">
+    <value>Difference</value>
+  </data>
+  <data name="DocVersion" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailLong" xml:space="preserve">
+    <value>Must be in 128 letters</value>
+  </data>
+  <data name="ErrorAddress" xml:space="preserve">
+    <value>Error Address</value>
+  </data>
+  <data name="ExecuteAmount" xml:space="preserve">
+    <value>Execute Amount</value>
+  </data>
+  <data name="FullAddress" xml:space="preserve">
+    <value>Full Address</value>
+  </data>
+  <data name="FullAddressLong" xml:space="preserve">
+    <value>Must be in 256 letters</value>
+  </data>
+  <data name="GetPoint" xml:space="preserve">
+    <value>Get Point</value>
+  </data>
+  <data name="Hanged" xml:space="preserve">
+    <value>Hang Status</value>
+  </data>
+  <data name="HangReason" xml:space="preserve">
+    <value>Hang Reason</value>
+  </data>
+  <data name="HangReasonLong" xml:space="preserve">
+    <value>Must be in 128 letters</value>
+  </data>
+  <data name="InstallFee" xml:space="preserve">
+    <value>Install Fee</value>
+  </data>
+  <data name="Insurance" xml:space="preserve">
+    <value>Insurance Fee</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="IpAddressLong" xml:space="preserve">
+    <value>Must be in 20 letters</value>
+  </data>
+  <data name="LeaveWord" xml:space="preserve">
+    <value>To Customer</value>
+  </data>
+  <data name="LeaveWordLong" xml:space="preserve">
+    <value>Must be in 256 letters</value>
+  </data>
+  <data name="LiftGateFee" xml:space="preserve">
+    <value>Liftgate Fee</value>
+  </data>
+  <data name="LinkCode" xml:space="preserve">
+    <value>Link Code</value>
+  </data>
+  <data name="LinkCodeLong" xml:space="preserve">
+    <value>Must be in 50 letters</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Locking" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="MergeFormLong" xml:space="preserve">
+    <value>Must be in 256 letters</value>
+  </data>
+  <data name="MergeFrom" xml:space="preserve">
+    <value>Merge Form</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Mobile</value>
+  </data>
+  <data name="MobileLong" xml:space="preserve">
+    <value>Must be in 50 letters</value>
+  </data>
+  <data name="MoneyPaid" xml:space="preserve">
+    <value>Cash Paid</value>
+  </data>
+  <data name="NoticeTime" xml:space="preserve">
+    <value>Notice Receivables</value>
+  </data>
+  <data name="OrderAmount" xml:space="preserve">
+    <value>Order Amount</value>
+  </data>
+  <data name="OrgID" xml:space="preserve">
+    <value>Organization ID</value>
+  </data>
+  <data name="OrgIDRequired" xml:space="preserve">
+    <value>Organization is required</value>
+  </data>
+  <data name="Ostatus" xml:space="preserve">
+    <value>Order Status</value>
+  </data>
+  <data name="OtherFee" xml:space="preserve">
+    <value>Other Fee</value>
+  </data>
+  <data name="PackingFee" xml:space="preserve">
+    <value>Packing Fee</value>
+  </data>
+  <data name="PaidTime" xml:space="preserve">
+    <value>Paid Time</value>
+  </data>
+  <data name="PayID" xml:space="preserve">
+    <value>Pay Type</value>
+  </data>
+  <data name="PaymentFee" xml:space="preserve">
+    <value>Payment Fee</value>
+  </data>
+  <data name="PayNote" xml:space="preserve">
+    <value>Pay Notes</value>
+  </data>
+  <data name="PayNoteLong" xml:space="preserve">
+    <value>Must be in 256 letters</value>
+  </data>
+  <data name="PayStatus" xml:space="preserve">
+    <value>Pay Status</value>
+  </data>
+  <data name="Pieces" xml:space="preserve">
+    <value>Pieces</value>
+  </data>
+  <data name="PointPay" xml:space="preserve">
+    <value>Point Pay</value>
+  </data>
+  <data name="PostCode" xml:space="preserve">
+    <value>Post Code</value>
+  </data>
+  <data name="PostCodeLong" xml:space="preserve">
+    <value>Must be in 50 letters</value>
+  </data>
+  <data name="PostComment" xml:space="preserve">
+    <value>To Seller</value>
+  </data>
+  <data name="PostCommentLong" xml:space="preserve">
+    <value>Must be in 256 letters</value>
+  </data>
+  <data name="ReleaseTime" xml:space="preserve">
+    <value>Release Time</value>
+  </data>
+  <data name="ResidenceFee" xml:space="preserve">
+    <value>Residence Fee</value>
+  </data>
+  <data name="SaleAmount" xml:space="preserve">
+    <value>Product Amount</value>
+  </data>
+  <data name="ShippingFee" xml:space="preserve">
+    <value>Shipping fee</value>
+  </data>
+  <data name="SplitFrom" xml:space="preserve">
+    <value>Split From</value>
+  </data>
+  <data name="TaxFee" xml:space="preserve">
+    <value>Tax Fee</value>
+  </data>
+  <data name="Telephone" xml:space="preserve">
+    <value>Telephone</value>
+  </data>
+  <data name="TelephoneLong" xml:space="preserve">
+    <value>Must be in 50 letters</value>
+  </data>
+  <data name="TotalFee" xml:space="preserve">
+    <value>Total Fee</value>
+  </data>
+  <data name="TotalPaid" xml:space="preserve">
+    <value>Total Paid</value>
+  </data>
+  <data name="TransType" xml:space="preserve">
+    <value>Transaction Type</value>
+  </data>
+  <data name="UsePoint" xml:space="preserve">
+    <value>Use Point</value>
+  </data>
+  <data name="UserID" xml:space="preserve">
+    <value>User ID</value>
+  </data>
+  <data name="UserIDRequired" xml:space="preserve">
+    <value>User is required</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="OrderAttributes" xml:space="preserve">
+    <value>Order Attributes</value>
+  </data>
+  <data name="OrderHistories" xml:space="preserve">
+    <value>Histories</value>
+  </data>
+  <data name="OrderItems" xml:space="preserve">
+    <value>SKUs</value>
+  </data>
+  <data name="OrderProcesses" xml:space="preserve">
+    <value>Process Logs</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="PayType" xml:space="preserve">
+    <value>Pay Type</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+</root>

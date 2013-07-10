@@ -1,0 +1,90 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+<div id = "ListBlock">
+@Html.Grid(new GridControl()
+        .SetName("gridChannel")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Organization/ListChannel")
+        .SetHeight("'100%'")
+        .SetWidth("600")
+        .SetColumns<LiveAzure.Models.Member.MemberOrganization>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+                cs.Add(x => x.FullName.Matter).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.FullName);
+                cs.Add(x => x.Ostatus).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Ostatus);
+                cs.Add(x => x.Sorting).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Sorting);
+            })
+       )
+<br />
+    @if (ViewBag.privEnableEdit == "1"){
+        <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="addChannel()"/>
+        <input type="button" value="@LiveAzure.Resource.Common.Edit" id="edit" onclick="editChannel()"/>
+    }
+    else
+    {
+        <input type="button" value="@LiveAzure.Resource.Common.Add" disabled="disabled"/>
+        <input type="button" value="@LiveAzure.Resource.Common.Edit" disabled="disabled"/>
+    }
+    <input type="button" value="@LiveAzure.Resource.Model.Member.OrganizationBase.Introduction" onclick="OrganizationIntroduction();" />
+    @if (ViewBag.privEnableDelete == "1")
+    {
+        <input type="button" value="@LiveAzure.Resource.Common.Delete" id="del" onclick="deleteChannel()"/> 
+    }
+    else
+    { 
+        <input type="button" value="@LiveAzure.Resource.Common.Delete" disabled="disabled"/>
+    } 
+    
+</div>  
+<div id="ChannelBlock">
+</div>
+<script type="text/javascript">
+    function addChannel() {
+        $("#ListBlock").fadeOut("fast");
+        $.post("/Organization/OrgDetail", { OrgType: "channel" }, function (backdata) {
+            $("#ChannelBlock").html(backdata);
+        });
+    }
+
+    function editChannel() {
+        $("#ListBlock").fadeOut("fast");
+        var id = $("#gridChannel").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        }
+        else {
+            $.post("/Organization/OrgDetail", { OrgType:"channel",Gid: id }, function (backdata) {
+                $("#ChannelBlock").html(backdata);    
+            });
+        }
+    }
+    function deleteChannel() {
+        var deleid = $("#gridChannel").jqGrid("getGridParam", "selrow");
+        if (deleid == null)
+        { alert("@LiveAzure.Resource.Common.PleaseSelectRow"); }
+        else {
+            if (confirm("@LiveAzure.Resource.Common.DeleteConfirm")) {
+                $.post("/Organization/deleteChannel", { strdeleid: deleid }, function (data) {
+                    if (back == "NoPrivilege") {
+                        alert("@LiveAzure.Resource.Common.NoPermission");
+                    }
+                    else if (back == "Success") {
+                        $("#gridChannel").trigger('reloadGrid');
+                    }
+                    
+                });
+            }
+        }
+    }
+    function OrganizationIntroduction() {
+        var id = $("#gridChannel").jqGrid("getGridParam", "selrow");
+        if (id == null)
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Organization/OrgIntroduction?OrgType=channel&Gid=" + id;
+        }
+    }
+</script>

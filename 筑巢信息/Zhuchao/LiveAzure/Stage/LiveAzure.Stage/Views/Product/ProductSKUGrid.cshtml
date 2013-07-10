@@ -1,0 +1,107 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models
+@model LiveAzure.Models.Product.ProductInformation
+<script type="text/javascript">
+    function addProductSKU() {        
+        $("#tabGrid").html("");
+        $.ajax({
+            type: "POST",
+            url: "/Product/AddProductSKU",
+            success: function (html) {
+                $("#productSKUAdd").html(html);
+            }
+        });
+    }
+    function editProductSKU() {
+
+        var id = $("#grid2").jqGrid("getGridParam", "selrow");
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProgramController.alertDelete)";
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        }
+        else {            
+            $("#tabGrid").html("");
+            $.ajax({
+                type: "POST",
+                url: "/Product/EditProductSKU",
+                data: { ProductSKUGid: id },
+                success: function (html) {
+                    $("#productSKUEdit").html(html);
+                }
+            });
+        }        
+    }
+
+    function deleteProductSKU() {
+        var id = $("#grid2").jqGrid("getGridParam", "selrow");
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProgramController.alertDelete)";
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        }
+        else {
+            $("#deleteItemId").val(id);
+        }
+        var deleteInfo = $("#grid2").jqGrid("getRowData", id);
+        var isDelete = confirm("@Html.Raw(LiveAzure.Resource.Stage.ProgramController.isDelete) " + deleteInfo["ShortName.Matter"] + "?");
+        if (isDelete == false) {
+            return false;
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/Product/deleteProductSKU",
+                data: { ProductSKUGuid: id },
+                success: function () {
+                    $("#grid2").trigger('reloadGrid');
+                }
+            });
+        }
+    }
+
+</script>
+<div id="gridpanelSKU">
+    <div>
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Code :</span> <span style="font-weight: bold">@Html.DisplayFor(model => model.Code)</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Name :</span> <span style="font-weight: bold">@ViewBag.SKUName</span>
+    </div>
+    @Html.Grid(new GridControl()
+            .SetName("grid2")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Product/ListProductSKU")
+            .SetHeight("'100%'")
+            .SetWidth("600")
+            .SetColumns<LiveAzure.Models.Product.ProductInfoItem>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Code);
+                cs.Add(x => x.Barcode).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode);
+                cs.Add(x => x.CodeEx1).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.CodeEx1);
+                cs.Add(x => x.FullName.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.FullName);
+                cs.Add(x => x.ShortName.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.ShortName);
+                cs.Add(x => x.Percision).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Percision);
+                //cs.Add(x => x.Specification).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Specification);
+                cs.Add(x => x.MarketPrice.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.MarketPrice);
+                cs.Add(x => x.SuggestPrice.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.SuggestPrice);
+                cs.Add(x => x.LowestPrice.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.LowestPrice);
+                cs.Add(x => x.GrossWeight).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.GrossWeight);
+                cs.Add(x => x.NetWeight).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.NetWeight);
+                cs.Add(x => x.GrossVolume).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.GrossVolume);
+                cs.Add(x => x.NetVolume).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.NetVolume);
+                cs.Add(x => x.NetPiece).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.NetPiece);
+                cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+
+            })
+
+            )
+    <div>
+        <input type="button" name="add" value="@LiveAzure.Resource.Common.Add" onclick="addProductSKU()" />
+        <input type="button" name="edit" value="@LiveAzure.Resource.Common.Edit" onclick="editProductSKU()" />
+        <input type="button" name="delete" value="@LiveAzure.Resource.Common.Delete" onclick="deleteProductSKU()" />
+    </div>
+</div>

@@ -1,0 +1,104 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using CommonResource = LiveAzure.Resource.Common
+@using ShipResource = LiveAzure.Resource.Model.Warehouse.WarehouseShipping
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+<table>
+    <tr>
+        <th>@WCResource.Organization</th>
+        <td>
+            <span id="spanOrgSelect">
+                <select id="WarehouseOrgSelect" disabled="disabled"></select>
+            </span>
+        </td>
+        <th>@WCResource.Warehouse</th>
+        <td>
+            <span id="spanWarehouseSelect">
+                <select id="WarehouseSelect" disabled="disabled"></select>
+            </span>
+        </td>
+    </tr>
+</table>
+@Html.Grid(
+    new GridControl()
+        .SetName("ShipGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("ShippingList"))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseShipping>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Warehouse).SetCaption(ShipResource.Warehouse);
+            cs.Add(x => x.Shipper).SetCaption(ShipResource.Shipping);
+            cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+        })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )
+@if (ViewBag.privEnableEdit == "1")
+{
+<input type="button" id="btnEdit" value="@CommonResource.Edit" />
+}
+else
+{ 
+<input type="button" value="@CommonResource.Edit" disabled="disabled" />
+}
+<script type="text/javascript">
+    $("#btnEdit").click(function () {
+        var whID = $("#WarehouseSelect").val();
+        document.location.replace("/Warehouse/ShippingEdit?whID=" + whID);
+    });
+</script>
+<script type="text/javascript">
+    function onChangeWarehouse() {
+        var whID = $("#WarehouseSelect").val();
+        var grid = $("#ShipGrid");
+        grid.jqGrid("setGridParam", { url: "/Warehouse/ShippingList?whID=" + whID });
+        grid.trigger("reloadGrid");
+    }
+    function updateWarehouseList() {
+        var warehouseSelect = $("#WarehouseSelect");
+        var spanWarehouseSelect = $("#spanWarehouseSelect");
+        var orgSelect = $("#OrgSelect");
+        var orgID = orgSelect.val();
+        warehouseSelect.unbind("change");
+        warehouseSelect.attr("disabled", "disabled");
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseSelect",
+            data: { id: 'WarehouseSelect', orgID: orgID },
+            async: false,
+            success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+        });
+        warehouseSelect = $("#WarehouseSelect");
+        warehouseSelect.change(function () {
+            onChangeWarehouse();
+        });
+        onChangeWarehouse();
+    }
+    $(function () {
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseOrgSelect",
+            data: { id: "OrgSelect" },
+            async: false,
+            success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+        });
+        var orgSelect = $("#OrgSelect");
+        orgSelect.change(function () {
+            updateWarehouseList();
+        });
+        updateWarehouseList();
+    });
+</script>

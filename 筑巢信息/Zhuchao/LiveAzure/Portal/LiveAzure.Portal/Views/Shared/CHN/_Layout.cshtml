@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Scripts/jquery-ui-1.8.16.custom/development-bundle/themes/base/jquery.ui.all.css"/>
+    <link rel="stylesheet" href="~/Scripts/jquery-ui-1.8.16.custom/development-bundle/demos/demos.css" />
+    <link href="@Url.Content("~/Content/themes/base/css/main_css.css")" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="@Url.Content("~/Content/img/logo_title.png")" />
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.8.16.custom/development-bundle/jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.8.16.custom/development-bundle/ui/jquery.ui.core.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.8.16.custom/development-bundle/ui/jquery-ui-1.8.16.custom.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.8.16.custom/development-bundle/ui/jquery.ui.datepicker.js"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.6.2.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        function AddFavorite(sURL, sTitle)
+        {
+            try
+            {
+                window.external.addFavorite(sURL, sTitle);
+            }
+            catch (e)
+            {
+                try
+                {
+                    window.sidebar.addPanel(sTitle, sURL, "");
+                }
+                catch (e)
+                {
+                    alert("加入收藏失败，请使用Ctrl+D进行添加");
+                }
+            }
+        }
+    </script>
+    <div id="main_page">
+        <div id="index_header">
+            <div id="index_header_content">
+                <div id="login">
+                    <div id="login_part_01">
+                        您好！欢迎光临四合地板商城
+                        <a class="login_and_register" href="@Url.Content("/Account/LoginOrRegister")">【登陆】</a>
+                        <a class="login_and_register" href="@Url.Content("/Account/LoginOrRegister")">【免费注册】</a>
+                    </div>
+                    <div id="login_part_02">
+                        <a href="@Url.Content("/Account/Index")">我的账户</a>|    @*登陆之前不显示，登陆后显示*@
+                        <a class="sihe" href="#">四合论坛</a>|
+                        <a href="@Url.Content("/Home/Help")">帮助中心</a>|
+                        <a href="javascript:AddFavorite('http://localhost:3805','四合首页')">加入收藏</a>
+                        <input type="button" value="在线客服" />
+                    </div>
+                </div>
+                <div id="index_header_index">
+                    <div id="logo">
+                        <a href="@Url.Content("/Home/Index")"><img alt="" src="@Url.Content("~/Content/img/logo.gif")" /></a>
+                    </div>
+                    <div id="telephone">
+                         <img alt="" src="@Url.Content("/Content/img/tep.gif")" />
+                    </div>
+                </div>
+                <div id="index_header_search">
+                    <div class="Navigation">
+                        <ul style="list-style:none">
+                            <li class="nav_index">@Html.ActionLink("首页","Index","Home")</li>
+                            <li class="nav_common">@Html.ActionLink("列表页","List","Product")</li>
+                            <li class="nav_common"><a href="#">活动专区</a></li>
+                            <li class="nav_common"><a href="#">关于我们</a></li>
+                        </ul>
+                    </div>
+                    <div class="search_box">
+                        <input type="text" id="search_input" />
+                        <input type="button" id="search_button"  onclick="searchProduct()" />
+                    </div>
+                </div>
+                <div id="index_header_cart">
+                    <div class="news">
+                        <p>筑巢家居商城精彩上线筑巢家居商城精彩上线筑巢家居商城精彩上线筑巢家居商城精彩上线筑巢家居商城精彩上线筑巢家居商城精彩上线筑巢家居商城精彩上线</p>
+                    </div>
+                    <div class="cart">
+                        <span>您的购物车中有@*此处添加购物车内商品数量（sku）*@<b>12</b>件商品</span>
+                        <a href="@Url.Content("/Order/Index")"><div class="cart_button">进入结账</div></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="main">
+            @RenderBody()
+        </div>
+        <div id="index_bottom">
+            <div class="bottom_help_active">
+                <div class="bottom_help_active_part">
+                    <h4>
+                        <img alt="" src="" />
+                        地板课堂
+                    </h4>
+                    <ul>
+                        <li>
+                            <a>地板安装与保养</a>
+                        </li>
+                        <li>
+                            <a>时尚搭配</a>
+                        </li>
+                        <li>
+                            <a>四合博士</a>
+                        </li>
+                        <li>
+                            <a>四合说地板</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom_help_active_part">
+                    <h4>
+                        <img alt="" src="" />
+                        地板课堂
+                    </h4>
+                    <ul>
+                        <li>
+                            <a>地板安装与保养</a>
+                        </li>
+                        <li>
+                            <a>时尚搭配</a>
+                        </li>
+                        <li>
+                            <a>四合博士</a>
+                        </li>
+                        <li>
+                            <a>四合说地板</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom_help_active_part">
+                    <h4>
+                        <img alt="" src="" />
+                        地板课堂
+                    </h4>
+                    <ul>
+                        <li>
+                            <a>地板安装与保养</a>
+                        </li>
+                        <li>
+                            <a>时尚搭配</a>
+                        </li>
+                        <li>
+                            <a>四合博士</a>
+                        </li>
+                        <li>
+                            <a>四合说地板</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom_help_active_part">
+                    <h4>
+                        <img alt="" src="" />
+                        地板课堂
+                    </h4>
+                    <ul>
+                        <li>
+                            <a>地板安装与保养</a>
+                        </li>
+                        <li>
+                            <a>时尚搭配</a>
+                        </li>
+                        <li>
+                            <a>四合博士</a>
+                        </li>
+                        <li>
+                            <a>四合说地板</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom_help_active_part">
+                    <h4>
+                        <img alt="" src="" />
+                        地板课堂
+                    </h4>
+                    <ul>
+                        <li>
+                            <a>地板安装与保养</a>
+                        </li>
+                        <li>
+                            <a>时尚搭配</a>
+                        </li>
+                        <li>
+                            <a>四合博士</a>
+                        </li>
+                        <li>
+                            <a>四合说地板</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="bottom_help_pic">
+                <img src="@Url.Content("~/content/img/bottom_help.png")" alt="" />
+            </div>
+            <div id="bottom_navigation">
+                <a href="">首页</a>&nbsp|&nbsp
+                <a href="">企业概述</a>&nbsp|&nbsp
+                <a href="">物流支持</a>&nbsp|&nbsp
+                <a href="">人才招聘</a>&nbsp|&nbsp
+                <a href="">联系方式</a>&nbsp|&nbsp
+                <a href="">支付方式</a>&nbsp|&nbsp
+                <a href="">网站地图</a>&nbsp|&nbsp
+                <a href="">友情链接</a>
+            </div>
+            <div id="bottom_org_info">
+                <p>Copyright &copy; zhuchao.com, All Rights Reserved. <a target="_blank" href="http://www.miibeian.gov.cn">沪ICP备10214247号</a></p>
+                <a href="http://www.sgs.gov.cn/lz/licenseLink.do?method=licenceView&entyId=20110520114405433"><img alt="" src="@Url.Content("~/content/img/icon.gif")" /></a>
+                <a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202007080200026"><img alt="" src="@Url.Content("~/content/img/123.gif")" /></a>
+                <a href="https://ss.cnnic.cn/verifyseal.dll?sn=2008070300100000031&pa=294005"><img alt="" src="@Url.Content("~/content/img/124.jpg")" /></a>
+            </div>
+        </div>
+   </div>
+   <script type="text/javascript">
+       function searchProduct() {
+           var keyword = $("#search_input").val();
+           $.ajax({
+               type: "POST",
+               url: "../Product/Search",
+               data: { keywords: keyword },
+               success: function () {
+                   window.location.href = "/Product/List";
+               }
+           });
+       }
+   </script>
+</body>
+</html>

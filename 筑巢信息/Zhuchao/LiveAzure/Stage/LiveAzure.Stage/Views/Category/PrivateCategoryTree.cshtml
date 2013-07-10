@@ -1,0 +1,102 @@
+﻿@{
+    Layout = null;
+    }
+<script type="text/javascript">
+    var pTreeObject = new PrivateCategoryObject();
+    pTreeObject.createTree("privateCategoryTree", "/Category/PrivateCategoryTreeLoad", "/Category/PrivateCategoryTreeExpand", "", false, "");
+
+    function PrivateCategoryObject() {
+
+        var tree;
+        var treesetting;
+        var currentProgUrl;
+        this.selectNode;                                                                    //删除确认字符串
+
+        this.createTree = function (treeId, loadUrl, asyncUrl, changeUrl, checkable, rmenuId) {
+            //树状结构的对象
+            var zTree1;
+
+            //树属性的设定
+            var setting;
+
+            var bCheckable = checkable;
+            var strAsyncUrl = asyncUrl;												//异步参数不需要，直接指定为对象的Guid        
+            var strRmenuId = rmenuId;
+            var strChangeUrl = changeUrl;
+            var strLoadUrl = loadUrl;
+            var strTreeId = treeId
+
+            //设定数结构的参数
+            setting = {
+                editable: false, 															    //树不可删除
+                edit_renameBtn: false, 															//编辑按钮不可用，不需要用户指定
+                edit_removeBtn: false,
+                showIcon: false, 															//删除按钮不可用，不需要用户指定
+                checkable: bCheckable, 															//用户指定是否需要checkbox，需要用户指定
+                checkType: { "Y": "", "N": "" },                                                //树结构的勾选框不影响父，不影响子
+                checkedCol: "nodeChecked",                                                      //自定义勾选框状态的字段名
+                async: true, 																	//默认值，不需要用户指定
+                asyncUrl: strAsyncUrl, 															//用户指定url
+                asyncParam: ["id"], 															//用户指定参数
+                callback: {										                            //右键事件是否可用，根据editable设定，需要用户指定页面右键菜单id
+                    change: zTreeOnChange, 													    //如果checkable为true，则需要指定url。
+                    click: zTreeOnClick
+                }
+            };
+
+            //获取树节点信息
+            $.ajax({
+                type: "POST",
+                url: strLoadUrl,
+                success:
+				function (data) {
+				    //将获取的json字符串转换为json对象
+				    var testdata = jQuery.parseJSON(data);
+				    //生成树状结构
+				    zTree1 = $("#" + strTreeId).zTree(setting, testdata);
+				    //设定全局变量，给对象内部其它函数调用
+				    tree = zTree1;
+				    treesetting = setting;
+				}
+            });
+
+            //用户将checkbox的状态改变后调用
+            function zTreeOnChange(event, treeId, treeNode) {
+                $.ajax({
+                    type: "POST",
+                    url: strChangeUrl,
+                    data: { id: treeNode.id }
+                });
+            }
+
+            //指定多少层的树节点不能再展开，参数为10
+            function beforeAsync(treeId, treeNode) {
+                if (treeNode.level > 10) {
+                    return false;
+                }
+                return true;
+            }
+
+            //点击树节点事件
+            function zTreeOnClick(event, treeId, treeNode) {
+                this.selectNode = treeNode;
+                var state = treeNode.open;
+                if (state) {
+                    zTree1.expandNode(treeNode, false, false);
+                }
+                else {
+                    zTree1.expandNode(treeNode, true, false);
+                }
+                $("#privateCategoryTable").show();
+                $.ajax({
+                    type: "POST",
+                    url: "/Category/PrivateCategoryListTable",
+                    data: { categoryId: treeNode.id },
+                    success: function (data) {
+                        $("#privateCategoryTable").html(data);
+                    }
+                });
+            }
+        } 
+    }
+</script>

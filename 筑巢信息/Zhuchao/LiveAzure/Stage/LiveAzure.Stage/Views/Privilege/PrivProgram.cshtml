@@ -1,0 +1,137 @@
+﻿@model LiveAzure.Models.Member.MemberPrivilege
+@{
+    ViewBag.Title = "PrivProgram";
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+<div class="down_AddorEdit">
+    <input type="checkbox"  onclick="ablebutton()" id="StatusProg"/>
+    @Html.Label(@LiveAzure.Resource.Stage.PrivilegeController.on)
+</div>
+<div id="NodeGrid" class="content_main_right" ></div>
+<div id="NodeList" class="content_main_right"></div>
+<div id="PrivProgram" class="down_AddorEdit" >
+    <ul id ="Programtree" class="tree" style="width:230px; overflow:auto;" >
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        reloadTree();
+    });
+    var zTree1, zTree2;
+    var setting;
+    var preSelectedNode1;
+    setting = {
+        checkable: true,
+        
+        checkType: { "Y": "", "N": "" },                                                //树结构的勾选框不影响父，不影响子
+        checkedCol: "nodeChecked",                                                      //自定义勾选框状态的字段名
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "/Privilege/PrivProgramExpand", 												//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        callback: {
+            click: zTreeOnClick,
+            change:zTreeOnChange
+        }
+    };
+    function zTreeOnClick(event, treeId, treeNode) {
+        if (treeNode.nodeChecked == true && treeNode.isParent==false) {
+            var id = treeNode.id;
+            $.ajax({
+                type: "POST",
+                url: "/Privilege/GetProgID",
+                data: { id: id },
+                success: function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Privilege/PrivProgramNode",
+                        data: {},
+                        success: function (Attributehtml) {
+                            $("#NodeList").html(Attributehtml);
+                            var nodeList = document.getElementById("NodeList");
+                            $.ajax({
+                                type: "POST",
+                                url: "/Privilege/PrivProgramNodeList",
+                                data: {},
+                                success: function (Gridhtml) {
+                                    $("#NodeGrid").html(Gridhtml);
+                                    nodeList.style.display = "block";
+                                }
+                            });
+                        }
+                    });
+                }
+            }); 
+        }
+    }
+    function zTreeOnChange(event, treeId, treeNode) {
+        if (treeNode.nodeChecked == true) {
+            $.ajax({
+                type: "POST",
+                url: "/Privilege/PrivProgram",
+                data: { id: treeNode.id }
+            });
+            }
+            else{
+            $.ajax({
+            type:"POST",
+            url: "/Privilege/DeleteProgram",
+            data:{id: treeNode.id}
+        });
+            }
+        }
+    
+
+    function reloadTree() {
+        $.ajax({
+            type: "POST",
+            url: "/Privilege/PrivProgramLoad",
+            success: function (data) {
+                var testdata = jQuery.parseJSON(data);
+                zTree1 = $("#Programtree").zTree(setting, testdata);
+            }
+        });
+    }
+
+    function ablebutton() {
+        var IsCheck;
+        if ($("#StatusProg").attr('checked')) {
+            $("#PrivProgram").css("display", "block");
+            IsCheck = true;
+        }
+        else {
+            $("#PrivProgram").css("display", "none");
+            IsCheck = false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Privilege/DelAll",
+            data: { IsCheck: IsCheck, ptype: 0 },
+            datatype: "html",
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        if ('@(ViewBag.status)' == 1) {
+            $("#StatusProg").attr('checked', true);
+            $("#PrivProgram").css("display", "block");
+        }
+        else {
+            $("#StatusProg").attr('checked', false);
+            $("#PrivProgram").css("display", "none");
+        }
+        $("#Close").css("display", "none");
+    });
+    function Close() {
+        $("#NodeGrid").css("display","none");
+        $("#NodeList").css("display", "none");
+    };
+</script>

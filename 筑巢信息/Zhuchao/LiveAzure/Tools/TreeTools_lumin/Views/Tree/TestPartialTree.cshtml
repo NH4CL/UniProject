@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+  <!--
+    var nTreeObject = new treeObject();
+    var strConfirm = "@Html.Raw(LiveAzure.Resource.Stage.RegionController.Confirm)";
+    nTreeObject.createTree("tree", "../Tree/TreeGeneration", "../Tree/TreeExpand", "", "rMenu", true, strConfirm);
+
+    function editRegion() {
+        nTreeObject.edit_TreeNode("rMenu");
+        document.getElementById("showResult").style.display = "block";
+        $.ajax({
+            type: "POST",
+            url: "/Tree/RegionEdit",
+            data: { id: nTreeObject.selectNode.id },
+            success: function (html) {
+                $("#showResult").html(html);
+            }
+        });
+    }
+    //-->
+</script>
+<div>
+    <ul id="tree" class="tree" style="width: 230px; overflow: auto;">
+    </ul>
+    <div id="rMenu" style="position: absolute; visibility: hidden;">
+        <ul>
+        <li>
+            <ul id="m_add" onclick="add_Node();">
+                <li>增加节点</li></ul>
+            <ul id="m_edit" onclick="editRegion();">
+                <li>编辑节点</li></ul>
+            <ul id="m_delete" onclick="del_Node();">
+                <li>删除节点</li></ul>
+        </li>
+        </ul>
+    </div>
+</div>

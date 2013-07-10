@@ -1,0 +1,22 @@
+﻿@model byte?
+@{
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    string enumName = ViewBag.EnumName as string;
+}
+<span id="span@(id)"></span>
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Resource/EnumName",
+        data: { enumName : "@enumName", id : "@id", value : @Model.Value },
+        async: false,
+        success: function (data) {
+            html = data.toString();
+            $("#span@(id)").replaceWith(html);
+        }
+    });
+</script>

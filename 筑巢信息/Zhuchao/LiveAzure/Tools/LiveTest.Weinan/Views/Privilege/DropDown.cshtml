@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "DropDown";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>DropDown</h2>
+@Html.DropDownList("dropdown", (List<SelectListItem>)ViewBag.matterlist , new { type = "width:150px" })
+<input type="button" value="添加" id="add" onclick="getMatter()" />
+<script type="text/javascript">
+    function getMatter() {
+        Dropresult = $("#dropdown").val();
+        alert(Dropresult);
+        $.post("/Privilege/PrivProgram", { Dropresult: Dropresult }, function (data) {
+        });
+    }
+</script>

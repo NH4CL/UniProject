@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+    }
+<script type="text/javascript">
+
+    $(function () {
+        document.getElementById("tabs-2").innerHTML = "";
+        document.getElementById("ProductCategoryAndAttribute").innerHTML = "";
+        document.getElementById("productSku").innerHTML = "";
+        $("#tabs").tabs();
+        $.ajax({
+            type: "POST",
+            url: "/Product/ProductBaseInfo",
+            success: function (html) {
+                $("#productBaseInfoPage").html(html);
+            }
+        });
+
+    });
+    function tab1() {
+        document.getElementById("tabs-2").innerHTML = "";
+        document.getElementById("ProductCategoryAndAttribute").innerHTML = "";
+        document.getElementById("productSku").innerHTML = "";
+        $.ajax({
+            type: "POST",
+            url: "/Product/ProductBaseInfo",
+            success: function (html) {
+                $("#productBaseInfoPage").html(html);
+            }
+        });
+    }
+    function tab2() {
+        var bAddOrEditPu = false;
+        $.post("/Product/isKeyNull", { key: "selectedProductGuid" }, function (data) {
+            if (data == "True") {
+                bAddOrEditPu = true;
+            }
+            else {
+                bAddOrEditPu = false;
+            }
+            document.getElementById("productBaseInfoPage").innerHTML = "";
+            document.getElementById("ProductCategoryAndAttribute").innerHTML = "";
+            document.getElementById("productSku").innerHTML = "";
+            if (bAddOrEditPu == false) {
+                $.post("/Product/ProductDetailInfo", {}, function (html) {
+                    $("#tabs-2").html(html);
+                });
+            }
+        });
+    };
+
+    function productCategoryAndAtrribute() {
+        var bAddOrEditPu = false;   
+        $.post("/Product/isKeyNull", { key: "selectedProductGuid" }, function (data) {            
+            if (data == "True") {
+                bAddOrEditPu = true;
+            }
+            else {
+                bAddOrEditPu = false;
+            }
+            document.getElementById("productBaseInfoPage").innerHTML = "";
+            document.getElementById("tabs-2").innerHTML = "";
+            document.getElementById("productSku").innerHTML = "";
+            if (bAddOrEditPu == false) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/ProductCategoryAttribute",
+                    success: function (html) {
+                        $("#ProductCategoryAndAttribute").html(html);
+                    }
+                });
+            }
+        });
+        
+    }
+
+    function productSku() {
+        var bAddOrEditPu = false;
+        $.post("/Product/isKeyNull", { key: "selectedProductGuid" }, function (data) {
+            if (data == "True") {
+                bAddOrEditPu = true;
+            }
+            else {
+                bAddOrEditPu = false;
+            }
+            document.getElementById("productBaseInfoPage").innerHTML = "";
+            document.getElementById("tabs-2").innerHTML = "";
+            document.getElementById("ProductCategoryAndAttribute").innerHTML = "";
+            if (bAddOrEditPu == false) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Product/ProductSKU",
+                    success: function (html) {
+                        $("#productSku").html(html);
+                    }
+                });
+            }
+        });
+
+    }
+
+    function closeProductTab() {
+        $("#tabShow").fadeOut("fast");
+        $("#listShow").fadeIn("fast");
+        $("#grid").trigger("reloadGrid");
+    }
+</script>
+<div class="redmond">
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1" onclick="tab1()">@LiveAzure.Resource.Stage.ProductController.ProductBaseInfo</a></li>
+            <li><a href="#tabs-2" onclick="tab2();">@LiveAzure.Resource.Stage.ProductController.description</a></li>
+            <li><a href="#tabs-3" onclick="productCategoryAndAtrribute();">@LiveAzure.Resource.Stage.ProductController.ProductCategoryAndAtrribute</a></li>
+            <li><a href="#tabs-4" onclick="productSku()">SKU@*@LiveAzure.Resource.Stage.ProductController*@ </a></li>
+        </ul>
+        <div id="tabs-1">
+            <div id="productBaseInfoPage">
+            </div>
+        </div>
+        <div id="tabs-2">
+            
+        </div>
+        <div id="tabs-3">
+           <div id="ProductCategoryAndAttribute">           
+           </div>
+        </div>
+        <div id="tabs-4">
+        <div id="productSku">
+        </div>
+        </div>
+    </div>
+</div>
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Close" onclick="closeProductTab();" />
+</div>

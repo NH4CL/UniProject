@@ -1,0 +1,176 @@
+﻿@{
+    Layout = null;
+}
+@using System.Globalization
+@model LiveAzure.Models.Product.ProductInfoItem
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    function saveEditSuccess() {
+//        $("#productSKUEdit").fadeOut("fast");
+//        $("#productSKUAdd").fadeOut("fast");        
+        $("#productSKUAdd").html("");
+        $("#productSKUEdit").html("");
+        $.ajax({
+            type: "POST",
+            url: "/Product/ProductSKUGrid",
+            success: function (html) {
+                $("#tabGrid").html(html);
+            }
+        });
+    }
+    /*-----------------------------------
+    验证Barcode
+    -----------------------------------*/
+    function validateBarcode() {
+        var Barcode = document.getElementById("Barcode").value;
+        var reg = eval("/" + "@ViewBag.regexBarcode" + "/");
+        var validate = Barcode.search(reg);
+        if (validate == -1) {
+            $("#validateBarcode").html("@Html.Raw(LiveAzure.Resource.Stage.ProductController.ValidateBarcode)");
+            return false;
+        } else {
+            $("#validateBarcode").html("");
+        }
+    }
+</script>
+@using (@Ajax.BeginForm("SaveEditProductSKU", "Product", new AjaxOptions { UpdateTargetId = "tabGrid", OnSuccess = "saveEditSuccess" }, new { id = "productSKUEditForm" }))
+{
+<div class="down_AddorEdit">
+    <table class="DIY_table">
+        @Html.HiddenFor(model => model.Gid)
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.Code)
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.Code)
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode)
+            </th>
+            <td>
+                <input id="Barcode" name="Barcode" type="text" onblur="validateBarcode()" value="@Model.Barcode" /><span id="validateBarcode"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.CodeEx1)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.CodeEx1)
+                @Html.ValidationMessageFor(model => model.CodeEx1)
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.FullName)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.FullName, "Matter")
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.ShortName)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.ShortName, "Matter")
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.StdUnit)
+            </th>
+            <td>
+                @Html.DropDownListFor(model => model.StdUnit, ViewBag.modelList as List<SelectListItem>)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.Specification)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Specification, "Matter")
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.Percision)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Percision)
+                @Html.ValidationMessageFor(model => model.Percision)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.MarketPrice)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.MarketPrice, "Cash")
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.SuggestPrice)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.SuggestPrice, "Cash")
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.LowestPrice)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.LowestPrice, "Cash")
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.GrossWeight)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.GrossWeight)
+                @Html.ValidationMessageFor(model => model.GrossWeight)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.NetWeight)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.NetWeight)
+                @Html.ValidationMessageFor(model => model.NetWeight)
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.GrossVolume)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.GrossVolume)
+                @Html.ValidationMessageFor(model => model.GrossVolume)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.NetVolume)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.NetVolume)
+                @Html.ValidationMessageFor(model => model.NetVolume)
+            </td>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductInfoItem.NetPiece)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.NetPiece)
+                @Html.ValidationMessageFor(model => model.NetPiece)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(LiveAzure.Resource.Model.ModelBase.Remark)
+            </th>
+            <td>
+                @Html.TextAreaFor(model => model.Remark)
+                @Html.ValidationMessageFor(model => model.Remark)
+            </td>
+        </tr>
+    </table>
+    <div>
+        <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+        <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+    </div>
+</div>
+}

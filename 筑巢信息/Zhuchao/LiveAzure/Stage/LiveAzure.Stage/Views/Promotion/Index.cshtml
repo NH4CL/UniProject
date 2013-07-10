@@ -1,0 +1,79 @@
+﻿<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "/Promotion/PromotionList",
+        success: function (html) {
+            $("#PromotionListView").html(html);
+        }
+    });
+    function OrgListChange() {
+        var orgGid = $("#orgList").val();
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/ChangeOrgGid",
+            data: { orgGid: orgGid },
+            success: function () {
+                window.location.href = "/Promotion/Index";
+            }
+        });
+    }
+    function ChlListChange() {
+        var chlGid = $("#chlList").val();
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/ChangeChlGid",
+            data: { chlGid: chlGid },
+            success: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Promotion/PromotionList",
+                    success: function (html) {
+                        $("#PromotionListView").html(html);
+                    }
+                });
+            }
+        });
+    }
+
+    function addNewPromotion() {
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/SetbEdit",
+            data: { bAddOrEdit: false },
+            success: function () {
+                window.location.href = "/Promotion/PromotionTab";
+            }
+        });
+    }
+
+    function editPromotion() {
+        var id = $("#PromotionInfoGrid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/Promotion/SetbEdit",
+                data: { bAddOrEdit: true, promotionGid: id },
+                success: function () {
+                    window.location.href = "/Promotion/PromotionTab";
+                }
+            });
+        }
+    }
+</script>
+<div>
+    @LiveAzure.Resource.Model.Order.PromotionInformation.Organization
+    @Html.DropDownList("orgList", (List<SelectListItem>)ViewBag.oOrgList, new { onchange= "OrgListChange();" })
+</div>
+<div>
+    @LiveAzure.Resource.Model.Order.PromotionInformation.Channel
+    @Html.DropDownList("chlList", (List<SelectListItem>)ViewBag.oChlList, new { onchange = "ChlListChange();" })    
+</div>
+<div id="PromotionListView">
+</div>
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="addNewPromotion();" />
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="editPromotion();" />
+</div>

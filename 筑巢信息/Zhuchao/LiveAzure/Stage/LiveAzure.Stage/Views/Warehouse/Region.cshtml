@@ -1,0 +1,103 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using RegionResource = LiveAzure.Resource.Model.General.GeneralRegion
+@using CommonResource = LiveAzure.Resource.Common
+@using WCResourece = LiveAzure.Resource.Stage.WarehouseController
+<table>
+    <tr>
+        <th>@WCResourece.Organization</th>
+        <td>
+            <span id="spanOrgSelect">
+                <select id="WarehouseOrgSelect" disabled="disabled"></select>
+            </span>
+        </td>
+        <th>@WCResourece.Warehouse</th>
+        <td>
+            <span id="spanWarehouseSelect">
+                <select id="WarehouseSelect" disabled="disabled"></select>
+            </span>
+        </td>
+    </tr>
+</table>
+@Html.Grid(
+    new GridControl()
+        .SetName("whRegionGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("RegionList"))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseRegion>(cs=>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Region.Code).SetCaption(RegionResource.Code);
+            cs.Add(x => x.Region.ShortName).SetCaption(RegionResource.ShortName);
+            cs.Add(x => x.Region).SetCaption(RegionResource.FullName);
+        })
+        .UpdateDefaultPager(pager=>
+            pager
+                .ShowSearch(false,false)
+        )
+    )
+@if (ViewBag.privEnableEdit == "1")
+{
+<input type="button" id="btnEdit" value="@CommonResource.Edit" />
+}
+else
+{ 
+<input type="button" value="@CommonResource.Edit" disabled="disabled" />
+}
+
+<script type="text/javascript">
+    $("#btnEdit").click(function () {
+        var whID = $("#WarehouseSelect").val();
+        document.location.replace("/Warehouse/RegionEdit?whID=" + whID);
+    });
+    function onChangeWarehouse() {
+        var whID = $("#WarehouseSelect").val();
+        var grid = $("#whRegionGrid");
+        grid.jqGrid("setGridParam", { url: "/Warehouse/RegionList?whID=" + whID });
+        grid.trigger("reloadGrid");
+    }
+    function updateWarehouseList() {
+        var warehouseSelect = $("#WarehouseSelect");
+        var spanWarehouseSelect = $("#spanWarehouseSelect");
+        var orgSelect = $("#OrgSelect");
+        var orgID = orgSelect.val();
+        warehouseSelect.unbind("change");
+        warehouseSelect.attr("disabled", "disabled");
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseSelect",
+            data: { id: 'WarehouseSelect', orgID: orgID },
+            async: false,
+            success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+        });
+        warehouseSelect = $("#WarehouseSelect");
+        warehouseSelect.change(function () {
+            onChangeWarehouse();
+        });
+        onChangeWarehouse();
+    }
+    $(function () {
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseOrgSelect",
+            data: { id: "OrgSelect" },
+            async: false,
+            success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+        });
+        var orgSelect = $("#OrgSelect");
+        orgSelect.change(function () {
+            updateWarehouseList();
+        });
+        updateWarehouseList();
+    });
+</script>

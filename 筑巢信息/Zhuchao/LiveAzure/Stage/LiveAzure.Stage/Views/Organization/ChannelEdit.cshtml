@@ -1,0 +1,183 @@
+﻿@{
+    Layout = null;
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+@using LiveAzure.Controls.LiveEditor
+@ControlManager.LiveEditor()
+@using LiveAzure.Controls.LiveRegionSelector
+@ControlManager.RegionSelect()
+@model LiveAzure.Models.Member.MemberChannel
+@using (Ajax.BeginForm("ChannelEditSave", "Organization", new AjaxOptions { HttpMethod = "POST", OnSuccess = "ChannelEditSuccess" }))
+{
+    <table class="DIY_table">
+        @*@Html.ValidationSummary(true)*@
+        @Html.HiddenFor(model => model.Gid)
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Code
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Code)
+                @Html.ValidationMessageFor(model => model.Code)
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.ExCode
+            </th>
+            <td>
+                @Html.EditorFor(model => model.ExCode)
+                @Html.ValidationMessageFor(model => model.ExCode)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Ostatus
+            </th>
+            <td>
+                @Html.DropDownListFor(model => model.Ostatus, (List<SelectListItem>)ViewBag.ChannelStatus)
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Otype
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.Otype)
+                @Html.HiddenFor(model => model.Otype)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.ExType
+            </th>
+            <td>
+                @Html.DropDownListFor(model => model.ExType, (List<SelectListItem>)ViewBag.lExType)
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Terminal
+            </th>
+            <td>
+                @Html.DropDownListFor(model => model.Terminal, (List<SelectListItem>)ViewBag.oIsTerminal)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.FullName
+            </th>
+            <td>
+                @Html.EditorFor(model => model.FullName, "Matter")
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName
+            </th>
+            <td>
+                @Html.EditorFor(model => model.ShortName, "Matter")
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Location
+            </th>
+            <td>
+                @Html.EditorFor(model => model.aLocation, "RegionSelect", new { ID = "orderRegion" })
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.FullAddress
+            </th>
+            <td>
+                @Html.EditorFor(model => model.FullAddress)
+                @Html.ValidationMessageFor(model => model.FullAddress)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.PostCode
+            </th>
+            <td>
+                @Html.EditorFor(model => model.PostCode)
+                @Html.ValidationMessageFor(model => model.PostCode)
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Contact
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Contact)
+                @Html.ValidationMessageFor(model => model.Contact)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.WorkPhone
+            </th>
+            <td>
+                @Html.EditorFor(model => model.WorkPhone)
+                @Html.ValidationMessageFor(model => model.WorkPhone)
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.CellPhone
+            </th>
+            <td>
+                @Html.EditorFor(model => model.CellPhone)
+                @Html.ValidationMessageFor(model => model.CellPhone)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.WorkFax
+            </th>
+            <td>
+                @Html.EditorFor(model => model.WorkFax)
+                @Html.ValidationMessageFor(model => model.WorkFax)
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Email
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.HomeUrl
+            </th>
+            <td>
+                @Html.EditorFor(model => model.HomeUrl)
+                @Html.ValidationMessageFor(model => model.HomeUrl)
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Sorting
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Sorting)
+                @Html.ValidationMessageFor(model => model.Sorting)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Model.Member.OrganizationBase.Brief
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Brief)
+                @Html.ValidationMessageFor(model => model.Brief)
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.ModelBase.Remark
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Remark)
+                @Html.ValidationMessageFor(model => model.Remark)
+            </td>
+        </tr>
+    </table>
+    <div>
+        <input type="submit" value="@LiveAzure.Resource.Stage.OrganizationController.submit" />
+        <input type="reset" value="@LiveAzure.Resource.Stage.OrganizationController.reset"  />
+    </div>   
+}
+<script type="text/javascript">
+    function ChannelEditSuccess() {
+        alert("@LiveAzure.Resource.Common.SaveSuccess");
+        $("#gridChannel").trigger('reloadGrid');
+        $("#ChannelBlock").html("");
+    }
+</script>
+

@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null; 
+}
+@model IEnumerable<LiveAzure.Models.Order.OrderInformation>
+<script type="text/javascript">
+    $.ajax({
+                type: "post",
+                url: "/Account/orderTable",
+                data: { pNow: 1,type:"f" },
+                success: function (html) {
+                    $("#Title_list").html(html);
+                    $.ajax({
+                        type: "post",
+                        url: "/Account/Pages",
+                        success: function (html) {
+                            $("#foot").html(html);
+                        }
+                    })
+                }
+            })
+    
+</script>
+<div class="acc_right">
+    <div class="page_root">
+        <div class="page_root_pic">
+            <img alt="" src="@Url.Content("/Content/img/root.png")" />
+        </div>
+        <div class="page_root_content">
+            当前位置：
+        </div>
+    </div>
+    <div class="My_Order">
+        <div class="Order_title">
+            <b>订单列表</b></div>
+        <div class="Title_list" id="Title_list">
+            
+        </div>
+        <div class="foot">
+        <table>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td id="foot" colspan="6" align="center"></td></tr>
+        </table>
+        </div>
+    </div>
+    <div class="Order_Page">
+        <span>
+            <img src="@Url.Content("~/Content/img/up.jpg")" alt="" /></span><span class="current">1</span>
+        <a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a> <span>
+            <img src="@Url.Content("~/Content/img/down.jpg")" alt="" /></span>
+    </div>
+</div>

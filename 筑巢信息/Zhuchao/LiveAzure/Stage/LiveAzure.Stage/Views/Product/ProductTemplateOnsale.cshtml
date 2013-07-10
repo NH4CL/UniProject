@@ -1,0 +1,62 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Product
+@model ProductOnSale
+<script type="text/javascript">
+    function useTemplate() {
+        $("#saveProductOnsaleTemplateForm").submit();
+    }
+
+    function notUseTemplate() {
+        var id = $("#ProdID").val();
+        ProductTemplatePanel.CloseEditPanel();
+        $.post("/Product/ProductPUOnSale", { GID: id }, function () {
+            window.location = "/Product/OnSaleIndex";
+        });
+    }
+
+    function productOnsaleTemplateSave(data) {
+        if (data == "success") {
+            var saveSuccessTips = "@Html.Raw(LiveAzure.Resource.Common.SaveSuccess)";
+            alert(saveSuccessTips);
+            var id = $("#ProdID").val();
+            ProductTemplatePanel.CloseEditPanel();
+            $.post("/Product/ProductPUOnSale", { GID: id }, function () {
+                window.location = "/Product/OnSaleIndex";
+            });
+        }
+        else {
+            var alreadySaleTips = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.productAlreadyOnsale)";
+            alert(alreadySaleTips);
+        }
+    }
+
+</script>
+<div>
+    @using (Ajax.BeginForm("SaveProductOnsaleUseTemplate", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "productOnsaleTemplateSave" }, new { id = "saveProductOnsaleTemplateForm" }))
+    {
+        @Html.HiddenFor(model => model.ProdID)
+        @Html.HiddenFor(model => model.OrgID)
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Product.ProductOnSale.Organization)
+            @ViewBag.orgName
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Product.ProductInformation.Code)
+            @ViewBag.productCode
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Product.ProductOnSale.Channel)
+            @Html.DropDownListFor(model => model.ChlID, (List<SelectListItem>)ViewBag.productChList)
+        </div>
+        <div>
+            @Html.Label(LiveAzure.Resource.Model.Product.ProductOnTemplate.Code)
+            @Html.DropDownList("ProductTemplateCode", (List<SelectListItem>)ViewBag.TemplateCodeList)
+        </div>
+        <div>
+            <input type="button" value="@LiveAzure.Resource.Stage.ProductController.UseTemplate" onclick="useTemplate();" />
+            <input type="button" value="@LiveAzure.Resource.Stage.ProductController.NotUseTemplate" onclick="notUseTemplate();" />
+        </div>
+    }
+</div>

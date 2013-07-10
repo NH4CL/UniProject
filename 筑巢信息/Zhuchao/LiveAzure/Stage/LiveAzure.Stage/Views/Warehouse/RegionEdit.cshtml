@@ -1,0 +1,78 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseInformation
+@using CommonResource = LiveAzure.Resource.Common
+<h2>WarehouseRegion</h2>
+<div id="RegionTree" class="tree"></div>
+<input type="button" id="btnConfirm" value="@CommonResource.Confirm" />
+<script type="text/javascript">
+    function WarehouseRegionTree() {
+        this.createTree = function (treeId, whID) {
+            //树状结构的对象
+            var zTree1;
+            var strTreeId = treeId;
+            var loadUrl = "/Warehouse/RegionTreeLoad";
+            var addUrl = "/Warehouse/RegionAdd";
+            var deleteUrl = "/Warehouse/RegionDelete";
+
+            //设定数结构的参数
+            var setting = {
+                checkable: true,
+                checkType: { "Y": "s", "N": "ps" },
+                checkStyle: "checkbox",
+                checkedCol: "nodeChecked",
+                async: true,
+                asyncUrl: loadUrl,
+                asyncParam: ["id"],
+                asyncParamOther: { whID: whID },
+                callback: {
+                    beforeChange: zTreeBeforeChange,
+                    change: zTreeOnChange
+                }
+            };
+
+            //获取树节点信息
+            $.post(loadUrl, { whID: whID },
+                    function (data) {
+                        //将获取的json字符串转换为json对象
+                        var testdata = $.parseJSON(data);
+                        //生成树状结构
+                        zTree1 = $("#" + strTreeId).zTree(setting, testdata);
+                    });
+            function zTreeBeforeChange(treeId, treeNode) {
+                var state;
+                if(treeNode.nodeChecked) {
+                    //删除
+                    $.post(deleteUrl, { whID: whID, regionID: treeNode.id },
+                    function(result){
+                        state = result;
+                        if(!result) {
+                            alert("Error!");
+                        }
+                    });
+                }
+                else {
+                    //添加
+                     $.post(addUrl, { whID: whID, regionID: treeNode.id },
+                    function(result){
+                        if(result){
+                            state = result;
+                            if(!result) {
+                                alert("Error!");
+                            }
+                        }
+                    });
+                }
+                return state;
+            }
+
+            function zTreeOnChange(event, treeId, treeNode) {
+                //刷新子节点
+                zTree1.reAsyncChildNodes(treeNode, "refresh");
+            }
+        }
+    }
+    var regionTree = new WarehouseRegionTree();
+    regionTree.createTree("RegionTree", "@Model.Gid");
+    $("#btnConfirm").click(function(){
+        document.location.replace("/Warehouse/Region");
+    });
+</script>

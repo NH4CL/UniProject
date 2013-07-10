@@ -1,0 +1,131 @@
+﻿@{
+    Layout = null; 
+}
+@model List<LiveAzure.Models.Member.MemberAddress>
+<script type="text/javascript">
+    var oldRow;
+    var currentActiveRow;
+    /*---------------
+    新建配送地址
+    ---------------*/
+    function addAddress() {
+        $.ajax({
+            type: "post",
+            url: "/Account/AddressAdd",
+            success: function (html) {
+                $("#addConten").html(html);
+            }
+        })
+    }
+    function addressEdit() {
+        if (currentActiveRow == "") {
+            alert("请选中数据");
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            url: "/Account/AddressEdit",
+            data: { gid: oldRow.id },
+            success: function (html) {
+                $("#addConten").html(html);
+            }
+        })   
+    }
+    function addressDelet() {
+        if (currentActiveRow == "") {
+            alert("请选中数据");
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            url: "/Account/AddressDelete",
+            data:{gid:oldRow.id},
+            success: function (html) {
+                $("#Account_right").html(html);
+            }
+        })        
+    }
+    function rowSelect(obj) {
+        if (currentActiveRow) {
+            currentActiveRow.style.backgroundColor = "";
+            currentActiveRow = "";
+        } else {
+            oldRow = obj;
+            currentActiveRow = obj;
+            currentActiveRow.style.backgroundColor = "Red";
+        }
+
+    }
+</script>
+<div class="acc_right">
+    <div class="page_root">
+        <div class="page_root_pic">
+            <img alt="" src="@Url.Content("/Content/img/root.png")" />
+        </div>
+        <div class="page_root_content">
+            当前位置：
+        </div>
+    </div>
+    <div class="Cash" id="addConten">
+        <div class="Order_title">
+            <b>收货地址</b><span>最多5个地址</span></div>
+        <table border="1px">
+            <tr>
+                <th>
+                    收货人
+                </th>
+                <th>
+                    配送区域
+                </th>
+                <th>
+                    详细地址
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    邮编
+                </th>
+                <th>
+                    电话
+                </th>
+                <th>
+                    手机
+                </th>
+                <th>
+                    默认
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr onclick="rowSelect(this)" id="@item.Gid.ToString()">
+                    <td>@item.DisplayName
+                    </td>
+                    <td>@item.Location.ShortName
+                    </td>
+                    <td>@item.FullAddress
+                    </td>
+                    <td>@item.Email
+                    </td>
+                    <td>@item.PostCode
+                    </td>
+                    <td>@item.HomePhone
+                    </td>
+                    <td>@item.CellPhone
+                    </td>
+                    <td>@item.IsDefault
+                    </td>
+                </tr>
+            }
+        </table>
+        @if (ViewBag.addNum <= 5)
+        {
+            <input type="button" value="新建" onclick="addAddress()" />
+        }
+        <input type="button" value="编辑" onclick="addressEdit()" />
+        @if (ViewBag.addNum > 0)
+        {
+            <input type="button" value="删除" onclick="addressDelet()" />
+        }
+    </div>
+</div>

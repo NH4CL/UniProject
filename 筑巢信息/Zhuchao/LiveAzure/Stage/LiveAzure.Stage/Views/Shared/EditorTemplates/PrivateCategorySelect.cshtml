@@ -1,0 +1,20 @@
+﻿@using LiveAzure.Models
+@model Guid?
+@{
+    string id = ViewBag.ID == null ? Guid.NewGuid().ToString() : (string)ViewBag.ID;
+    string valueID = id + "_val";
+    string txtID = id + "_txt";
+    string menuID = id + "_menu";
+    ModelEnum.PrivateCategoryType categoryType = (ModelEnum.PrivateCategoryType)ViewBag.Type;
+    Guid orgID = ViewBag.OrgID == null ? Guid.Empty : (Guid)ViewBag.OrgID;
+}
+@Html.HiddenFor(model => model, new { id = valueID })
+<input type="text" id="@(txtID)" readonly="readonly"/>
+<div id="@menuID" class="tree" style="display:none; position:fixed; height:200px; min-width:150px; background-color:white;border:1px solid;overflow-y:auto;overflow-x:auto;z-index:10">
+</div>
+<script type="text/javascript">
+    privateCategorySelector.createTree("@(menuID)",
+        "@Url.Action("PrivateCategorySelectLoad","Resource")",
+        "@Url.Action("PrivateCategorySelectLoad","Resource")",
+        "@((byte)categoryType)", "@(orgID)", "@(txtID)", "@(valueID)");
+</script>

@@ -1,0 +1,27 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Order
+<script type="text/javascript">
+
+</script>
+<div>
+    @Html.Grid(
+        new GridControl()
+        .SetName("OrderShippingListGrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetListUrl("/Order/ListOrderSupportShipping")
+        .SetEditUrl("")
+        .SetHeight("'100%'")
+        .SetWidth("300")
+        .SetColumns<LiveAzure.Models.Order.OrderShipping>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Shipper.FullName.Matter).SetName("ShipperName").SetCaption(@LiveAzure.Resource.Model.Order.OrderShipping.Shipper);
+                cs.Add(x => x.ShipWeight).SetCaption(@LiveAzure.Resource.Model.Order.OrderShipping.ShipWeight);
+                cs.Add(x => x.ShippingCheckName).SetName("ShipStatus").SetCaption(@LiveAzure.Resource.Model.Order.OrderShipping.Ostatus);
+                cs.Add(x => x.Candidate).SetCaption(@LiveAzure.Resource.Model.Order.OrderShipping.Candidate);
+                cs.Add(x => x.Remark).SetCaption(@LiveAzure.Resource.Model.ModelBase.Remark);
+            })
+    )
+</div>

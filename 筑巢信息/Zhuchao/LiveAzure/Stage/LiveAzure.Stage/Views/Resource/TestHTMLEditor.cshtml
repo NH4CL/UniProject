@@ -1,0 +1,46 @@
+﻿@using LiveAzure.Controls.LiveEditor
+@{
+    ViewBag.Title = "TestHTMLEditor";
+ }
+<h2>测试LiveEditor HTML编辑器</h2>
+
+
+<!--注册脚本文件-->
+@ControlManager.LiveEditor()
+
+
+
+<!--演示文本-->
+在网页头部，引入命名空间LiveAzure.Controls.LiveEditor
+<p style="color:Purple">@@using LiveAzure.Controls.LiveEditor</p>
+首先需要引入脚本文件，需调用<br />
+<p style="color:Purple">@@Html.LiveEditorScriptManager()</p>
+接下来首先定义一个TextArea<br />
+可以是@("<textarea></textarea>")标签，<br />
+也可以是@@Html.TextArea()、@@Html.TextAreaFor()或可以最终生成textarea的@@Html.Editor()/@@Html.EditorFor()标签<br />
+接下来调用@@Html.LiveEditor(...)来实现扩展TextArea。<br />
+<p style="color:Red">
+    注意：LiveEditor的Name必须与需要扩展的TextArea的id完全一致。否则不会进行扩展并出现错误<br />
+    对于@@Html.TextArea()、@@Html.TextAreaFor()或可以最终生成textarea的@@Html.Editor()/@@Html.EditorFor()标签
+    需要强制设定元素的id以保证成功扩展。
+</p>
+详细参数可参见函数调用说明。<br />
+
+最终提交或传递数据时，可视为直接对TextArea内容进行相关操作。因此不会影响数据绑定等功能。<br />
+<br />
+<br />
+
+<p style="color:Blue">下面是两个调用示例</p>
+
+<!--调用示例-->
+@Html.TextArea("Editor1", new { id = "edit1" })
+@Html.LiveEditor(
+    new LiveEditor()
+        .SetName("edit1")
+        .SetSkin(LiveEditorSkin.Office2003)
+    )
+@Html.TextArea("Editor2")
+@Html.LiveEditor(
+    new LiveEditor()
+        .SetName("Editor2")
+    )

@@ -1,0 +1,43 @@
+﻿@{
+    string id = ViewBag.ID == null ? Guid.NewGuid().ToString() : (string)ViewBag.ID;
+}
+@model LiveAzure.Models.General.GeneralResource
+
+<span id="@(id)">
+    <span>
+        @Html.HiddenFor(model => model.Gid)
+        @Html.HiddenFor(model => model.Currency)
+        @Html.TextBoxFor(model => model.Cash)
+        @Html.LabelFor(model => model.Cash, Model.Code)
+    </span>
+    @{
+        int i = -1;
+        foreach (LiveAzure.Models.General.GeneralResItem item in Model.ResourceItems)
+        {
+            i++;
+            string strItem = string.Format("ResourceItems[{0}]", i);
+    <span>
+        @Html.Hidden(strItem + ".Gid", item.Gid)
+        @Html.Hidden(strItem + ".Currency", item.Currency)
+        @Html.TextBox(strItem + ".Cash", item.Cash)
+        @Html.Label(strItem + ".Cash", item.Code)
+    </span>
+        }
+    }
+</span>
+<script type="text/javascript">
+    $(function () {
+        var editor = $("#@(id)");
+        var spans = editor.find("span");
+        $.each(spans, function (index, obj) {
+            var span = $(obj);
+            span.css("position", "relative");
+            var txtbox = span.find("input[type=text]");
+            var label = span.find("label");
+            txtbox.css("padding-left", "15px");
+            label.css("position", "absolute");
+            label.css("left", "5px");
+            label.css("top", "2px");
+        });
+    });
+</script>

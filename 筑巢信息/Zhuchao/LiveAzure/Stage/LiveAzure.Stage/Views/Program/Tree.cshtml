@@ -1,0 +1,68 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+  <!--
+    var nProgramTreeObject = new treeObject();      //生成一个新的树对象
+    nProgramTreeObject.createTree("tree", "/Program/TreeLoad", "/Program/TreeExpand", "", "rMenu", true);   //生成树 programController 处理过程
+    /*-----------------
+    增加程序节点
+    ------------------*/
+    function add_Node() {
+        UnitPricePanel.OpenPanel();
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProgramController.alert)";
+        nProgramTreeObject.add_TreeNode("rMenu");
+        if (nProgramTreeObject.selectNode.isParent == false) {
+            alert(alertMessage);
+            document.body.removeChild(document.getElementById("newEditPageDiv"));
+            document.body.removeChild(document.getElementById("newCoverPageDiv"));
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Program/ProgramNew",
+            data: { id: nProgramTreeObject.selectNode.id },
+            success: function (data) {
+
+                UnitPricePanel.EditPageHtml(data);
+            }
+        });
+    }
+    /*-----------------
+    编辑程序节点
+    ------------------*/
+    function edit_Node() {
+        UnitPricePanel.OpenPanel();
+        nProgramTreeObject.edit_TreeNode("rMenu");
+        $.ajax({
+            type: "POST",
+            url: "/Program/ProgramEdit",
+            data: { id: nProgramTreeObject.selectNode.id },
+            success: function (data) {
+
+                UnitPricePanel.EditPageHtml(data);
+            }
+        });
+    }
+    /*-----------------
+    删除程序节点
+    ------------------*/
+    function del_Node() {
+        nProgramTreeObject.del_TreeNode("tree", "/Program/TreeRemove", "/Program/TreeLoad", "rMenu");
+    }
+      //-->
+</script>
+<ul id="tree" class="tree" style="overflow: auto;">
+</ul>
+<div id="rMenu" style="position: absolute; visibility: hidden;">
+    <ul>
+        <li>
+            <ul id="m_add" onclick="add_Node();">
+                <li>@LiveAzure.Resource.Stage.ProgramController.addNode</li></ul>
+            <ul id="m_edit" onclick="edit_Node();">
+                <li>@LiveAzure.Resource.Stage.ProgramController.editNode</li></ul>
+            <ul id="m_delete" onclick="del_Node();">
+                <li>@LiveAzure.Resource.Stage.ProgramController.deleteNode</li></ul>
+        </li>
+    </ul>
+</div>

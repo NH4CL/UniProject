@@ -1,0 +1,77 @@
+﻿@model LiveAzure.Models.Mall.MallSensitiveWord
+
+@{
+    ViewBag.Title = "SensitiveWordAddOrEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SensitiveWordAddOrEdit</h2>
+
+<script type="text/javascript">
+    function SaveWord(data) {
+        if (data == "ERROR") {
+            alert("@LiveAzure.Resource.Common.OperationFailed");
+        }
+        else {
+            window.location.href = "/Mall/SensitiveWord";
+        }
+    }
+</script>
+@using (Ajax.BeginForm("SensitiveWordSave", "Mall", new AjaxOptions { OnSuccess = "SaveWord()" }, new { }))
+{
+    @Html.HiddenFor(model => model.Gid)
+<table>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallSensitiveWord.Organization
+            </td>
+            <td>
+               @Html.HiddenFor(model => model.OrgID)
+               @Html.HiddenFor(model => model.Organization.aFullName)
+               @Html.DisplayFor(model => model.Organization.FullName.Matter)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallSensitiveWord.Channel
+            </td>
+            <td>
+               @Html.HiddenFor(model => model.ChlID)
+               @Html.HiddenFor(model => model.Channel.aFullName)
+               @Html.DisplayFor(model => model.Channel.FullName.Matter)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallSensitiveWord.Keyword
+            </td>
+            <td>
+               @Html.EditorFor(model => model.Keyword)
+            </td>
+         </tr>
+         @*<tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallSensitiveWord.Wstatus
+            </td>
+            <td>
+               @Html.DropDownListFor(model => model.Wstatus, (List<SelectListItem>)ViewBag.StatusList)
+            </td>
+         </tr>*@
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallSensitiveWord.Remark
+            </td>
+            <td>
+               @Html.TextAreaFor(model => model.Remark)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            </td>
+            <td>
+               <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+            </td>
+         </tr>
+    </table>
+}

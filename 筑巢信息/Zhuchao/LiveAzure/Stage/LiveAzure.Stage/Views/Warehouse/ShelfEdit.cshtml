@@ -1,0 +1,59 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseShelf
+@using WarehouseShelfResource = LiveAzure.Resource.Model.Warehouse.WarehouseShelf
+@using CommonResource = LiveAzure.Resource.Common
+@{
+    ViewBag.Title = "WarehouseShelfEdit";
+}
+<h2>WarehouseShelfEdit</h2>
+
+@using (Html.BeginForm("ShelfEditDB", "Warehouse", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>@Html.HiddenFor(model => model.Gid)@WarehouseShelfResource.Warehouse</td>
+            <td>
+                @Html.HiddenFor(model => model.WhID)
+                @Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "WarehouseName" })
+            </td>
+        </tr>
+        <tr>
+            <td>@WarehouseShelfResource.Code</td>
+            <td>@Html.TextBoxFor(model => model.Code, new { id = "txtCode" })</td>
+        </tr>
+        <tr>
+            <td>@WarehouseShelfResource.Barcode</td>
+            <td>@Html.TextBoxFor(model => model.Barcode, new { id = "txtBarcode" })</td>
+        </tr>
+        <tr>
+            <td>@WarehouseShelfResource.Name</td>
+            <td>@Html.TextBoxFor(model => model.Name, new { id = "txtName" })</td>
+        </tr>
+        <tr>
+            <td>@WarehouseShelfResource.Reserved</td>
+            <td>@Html.CheckBoxFor(model => model.Reserved)</td>
+        </tr>
+        <tr>
+            <td>@WarehouseShelfResource.Brief</td>
+            <td>@Html.TextAreaFor(model => model.Brief, new { id = "txtBrief" })</td>
+        </tr>
+        <tr>
+            <td>@LiveAzure.Resource.Model.ModelBase.Remark</td>
+            <td>@Html.TextAreaFor(model => model.Remark, new { id = "txtRemark" })</td>
+        </tr>
+    </table>
+    <input type="submit" value="@CommonResource.Edit" />
+    <input type="reset" id="btnReset" value="@CommonResource.Reset" />
+    <input type="button" id="btnCancel" value="@CommonResource.Cancel" />
+}
+<script type="text/javascript">
+    $("#btnReset").click(function () {
+        $("#txtCode").val("");
+        $("#txtBarcode").val("");
+        $("#txtName").val("");
+        $("#txtBrief").val("");
+        $("#txtRemark").val("");
+    });
+    $("btnCancel").click(function () {
+        document.location.replace("/Warehouse/WarehouseShelf");
+    });
+</script>

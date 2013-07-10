@@ -1,0 +1,55 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Member.MemberOrgCulture
+@using (@Ajax.BeginForm("SaveEditOrgCulture", "Organization", new AjaxOptions { OnSuccess = "CompleteSumbitOrgCulture()" }, new { Id = "EditOrgCultureForm" }))
+{
+    @Html.HiddenFor(model => model.Ctype)
+    @Html.HiddenFor(model => model.Gid)
+    @Html.HiddenFor(model => model.OrgID)
+    @Html.HiddenFor(model => model.aCulture)
+    @Html.HiddenFor(model => model.aCurrency)
+    <table>
+    @{
+    if (ViewBag.editCultureType == (byte)LiveAzure.Models.ModelEnum.CultureType.LANGUAGE)
+{
+        <tr>
+            <td>@LiveAzure.Resource.Model.Member.MemberOrgCulture.Cultures</td>
+            <td>
+                @ViewBag.editCultureName
+            </td>
+        </tr>
+}
+else
+{
+        <tr>
+            <td>@LiveAzure.Resource.Model.Member.MemberOrgCulture.Currency</td>
+            <td>
+                @ViewBag.editCultureName
+            </td>
+        </tr>
+}
+}
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.Member.MemberOrgCulture.Sorting)</td>
+            <td>
+                @Html.EditorFor(model => model.Sorting)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.ModelBase.Remark)</td>
+            <td>
+                @Html.EditorFor(model => model.Remark)
+            </td>
+        </tr>
+    </table>
+    <div>
+    <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SumbitEditOrgCultureForm()" />
+    </div>
+    <script type="text/javascript">
+
+        function SumbitEditOrgCultureForm() {
+            $("#EditOrgCultureForm").submit();
+        }
+    </script>
+}

@@ -1,0 +1,99 @@
+﻿@{
+    Layout = null; 
+ }
+ @model LiveAzure.Models.Warehouse.WarehouseInItem
+@using CommonResource = LiveAzure.Resource.Common
+@using WarehouseInItemResource =  LiveAzure.Resource.Model.Warehouse.WarehouseInItem
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@ControlManager.SKUSelect()
+
+<h2>WarehouseInItemEdit</h2>
+
+@using (Html.BeginForm("InItemEditDB", "Warehouse", FormMethod.Post, new { id = "InItemEditForm" }))
+{
+    <table>
+        <tr>
+            <td><b>@WarehouseInItemResource.StockIn</b></td>
+            <td>
+                @Html.HiddenFor(model => model.Gid, new { id = "hidGid" })    
+                @Html.HiddenFor(model => model.InID, new { id = "hidInID" })
+                @Html.TextBoxFor(model => model.StockIn.Code, new { disabled = "disabled" })
+            </td>
+        </tr>
+        <tr>
+            <td><b>@WarehouseInItemResource.SkuItem</b></td>
+            <td>@Html.EditorFor(model => model.SkuID, "SKUSelect", new { ID = "SKU", OrgID = Model.StockIn.Warehouse.aParent })</td>
+        </tr>
+        <tr>
+            <td><b>@WarehouseInItemResource.Shelf</b></td>
+            <td>@Html.DropDownListFor(model => model.ShelfID, ViewBag.Shelf as IEnumerable<SelectListItem>)</td>
+        </tr>
+       <tr>
+            <td><b>@WarehouseInItemResource.TrackLot</b></td>
+            <td>@Html.TextBoxFor(model => model.TrackLot, new { id = "txtTrackLot" })</td>
+        </tr>
+        <tr>
+            <td><b>@WarehouseInItemResource.Quantity</b></td>
+            <td>@Html.TextBoxFor(model => model.Quantity, new { id = "txtQuantity" })</td>
+        </tr>
+        <tr>
+            <td><b>@WarehouseInItemResource.Guarantee</b></td>
+            <td>@Html.TextBoxFor(model => model.Guarantee, new { id = "txtGuarantee" })</td>
+        </tr>
+        <tr>
+            <td><b>@WarehouseInItemResource.GenBarcode</b></td>
+            <td>@Html.TextBoxFor(model => model.GenBarcode, new { id = "txtGenBarcode" })</td>
+        </tr>
+    </table>
+    <input type="submit" id="btnEdit" value="@CommonResource.Edit" />
+    <input type="reset" id="btnResetInItem" value="@CommonResource.Reset" />
+}
+
+<script type="text/javascript">
+    $("#btnResetInItem").click(function () {
+        var itemID = $("#hidGid").val();
+        document.location.replace("/Warehouse/InItemEdit?itemID=" + itemID);
+    });
+</script>
+<script type="text/javascript">
+    var RegxNum = /^[0-9]+(\.[0-9]+)?$/;
+    $("#txtQuantity").blur(function () {
+        var input = $(this);
+        var value = input.val();
+        if (!RegxNum.test(value)) {
+            alert("@WCResource.WrongNum");
+            input.val("@Model.Quantity");
+        }
+        if (value == "0") {
+            alert("@WCResource.NumMustGreaterThanZero");
+        }
+    });
+    $("#txtTrackLot").blur(function () {
+        var input = $(this);
+        var value = input.val();
+        if (!RegxNum.test(value)) {
+            alert("@WCResource.WrongNum");
+            input.val("@Model.TrackLot");
+        }
+    });
+    $("#txtGenBarcode").blur(function () {
+        var input = $(this);
+        var value = input.val();
+        if (!RegxNum.test(value)) {
+            alert("@WCResource.WrongNum");
+            input.val("@Model.GenBarcode");
+        }
+    });
+    $("#InItemEditForm").submit(function (e) {
+        if ($("#SKU_val").val() == "") {
+            alert("@WCResource.SKURequired");
+            e.preventDefault(); 
+        }
+    });
+    $("#btnEdit").click(function () {
+        if ($("#txtQuantity").val() == 0) {
+            alert("数量不能为0");
+            return false;
+        }
+    });
+</script>

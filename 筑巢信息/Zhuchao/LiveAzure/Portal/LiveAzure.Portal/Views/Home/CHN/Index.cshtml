@@ -1,0 +1,463 @@
+﻿@using LiveAzure.Models.Product
+@{
+    ViewBag.Title = "四合首页";
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml";  
+}
+<script src="@Url.Content("~/Content/jquery-1.4.2.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    var _t1 = 1; //打开页面时等待图片载入的时间，单位为秒，可以设置为0
+    var _t2 = 5; //图片轮转的间隔时间
+    var _tnum = 4; //焦点图个数
+    var _tn = 1; //当前焦点
+    var _tl = null;
+
+    _tt1 = setTimeout('change_img()', _t1 * 1000);
+    function change_img() {
+        setFocus(_tn);
+        _tt1 = setTimeout('change_img()', _t2 * 1000);
+    }
+    function setFocus(i) {
+        var foc_tl = document.getElementById('focusPic' + _tl);
+        if (i > _tnum) { _tn = 1; i = 1; }
+        _tl ? foc_tl.style.display = 'none' : '';
+        var foc = document.getElementById('focusPic' + i);
+        foc.style.display = 'block';
+        _tl = i;
+        _tn++;
+    }
+
+
+
+    function limitAnchor(XelementName, Xlength) {
+        var anchors = document.getElementsByName(XelementName);
+        for (var i = 0; i < anchors.length; i++)
+            if (anchors[i].innerHTML.length > Xlength)
+                anchors[i].innerHTML = anchors[i].innerHTML.substring(0, Xlength)
+
++ "...";
+    }
+
+
+    $(function () {
+        var page = 1;
+        var i = 5; //每版放4个图片
+        //向后 按钮
+        $("#next").click(function () {    //绑定click事件
+            var $parent = $(this).parents("div.v_show"); //根据当前点击元素获取到父元素
+            var $v_show = $parent.find("div.v_content_list"); //寻找到“视频内容展示区域”
+            var $v_content = $parent.find("div.v_content"); //寻找到“视频内容展示区域”外围的DIV元素
+            var v_width = $v_content.width();
+            var len = $v_show.find("td").length;
+            var page_count = Math.ceil(len / i);   //只要不是整数，就往大的方向取最小的整数
+            if (!$v_show.is(":animated")) {    //判断“视频内容展示区域”是否正在处于动画
+                if (page == page_count) {  //已经到最后一个版面了,如果再向后，必须跳转到第一个版面。
+                    $v_show.animate({ left: '0px' }, "slow"); //通过改变left值，跳转到第一个版面
+                    page = 1;
+                } else {
+                    $v_show.animate({ left: '-=' + v_width }, "slow");  //通过改变left值，达到每次换一个版面
+                    page++;
+                }
+            }
+            $parent.find("span").eq((page - 1)).addClass("current").siblings().removeClass("current");
+        });
+        //往前 按钮
+        $("#pre").click(function () {
+            var $parent = $(this).parents("div.v_show"); //根据当前点击元素获取到父元素
+            var $v_show = $parent.find("div.v_content_list"); //寻找到“视频内容展示区域”
+            var $v_content = $parent.find("div.v_content"); //寻找到“视频内容展示区域”外围的DIV元素
+            var v_width = $v_content.width();
+            var len = $v_show.find("td").length;
+            var page_count = Math.ceil(len / i);   //只要不是整数，就往大的方向取最小的整数
+            if (!$v_show.is(":animated")) {    //判断“视频内容展示区域”是否正在处于动画
+                if (page == 1) {  //已经到第一个版面了,如果再向前，必须跳转到最后一个版面。
+                    $v_show.animate({ left: '-=' + v_width * (page_count - 1) }, "slow");
+                    page = page_count;
+                } else {
+                    $v_show.animate({ left: '+=' + v_width }, "slow");
+                    page--;
+                }
+            }
+            $parent.find("span").eq((page - 1)).addClass("current").siblings().removeClass("current");
+        });
+
+    });
+
+</script>
+<div class="my_middle_category">
+    <div class="ad1">
+        <table width="664" border="0" align="center" cellpadding="0" cellspacing="0" class="jdt">
+            <tr>
+                <td width="664" height="286">
+                    @Html.Raw(ViewBag.Article)
+                    @*<div id="focusPic1">
+                            
+                            <img src="@Url.Content("~/Content/img/01.jpg")" alt="这里是您的标题一文字内容" />
+                        <div class="index_page">
+                            <strong class="NumberSec">1</strong> <a href="javascript:setFocus(2);" class="Number">2</a> <a href="javascript:setFocus(3);" class="Number">
+                                3</a> <a href="javascript:setFocus(4);" class="Number">4</a>
+                        </div>
+                    </div>
+                    <!--焦点图1结束-->
+                    <!--焦点图2开始  标题13字 说明30个字-->
+                    <div id="focusPic2" style="display: none;">
+                            
+                            <img src="@Url.Content("~/Content/img/2.jpg")" alt="这里是您的标题二文字内容" />
+                        <div class="index_page">
+                            <a href="javascript:setFocus(1);" class="Number">1</a> <strong class="NumberSec">2</strong> <a href="javascript:setFocus(3);" class="Number">
+                                3</a> <a href="javascript:setFocus(4);" class="Number">4</a>
+                        </div>
+                    </div>
+                    <!--焦点图2结束-->
+                    <!--焦点图3开始  标题13字 说明30个字-->
+                    <div id="focusPic3" style="display: none;">
+                            
+                            <img src="@Url.Content("~/Content/img/3.jpg")" alt="这里是您的标题三文字内容" />
+                        <div class="index_page">
+                            <a href="javascript:setFocus(1);" class="Number">1</a> <a href="javascript:setFocus(2);" class="Number">2</a>
+                            <strong class="NumberSec">3</strong> <a href="javascript:setFocus(4);" class="Number">4</a>
+                        </div>
+                    </div>
+                    <!--焦点图3结束-->
+                    <!--焦点图4开始  标题13字 说明30个字-->
+                    <div id="focusPic4" style="display: none;">
+                           
+                            <img src="@Url.Content("~/Content/img/4.jpg")" alt="" />
+                        <div class="index_page">
+                            <a href="javascript:setFocus(1);" class="Number">1</a> <a href="javascript:setFocus(2);" class="Number">2</a>
+                            <a href="javascript:setFocus(3);" class="Number">3</a> <strong class="NumberSec">4</strong>
+                        </div>
+                    </div>
+                    <!--焦点图4结束-->*@
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="hot_category">
+        <div class="hot_category_title">
+            <img alt="" src="@Url.Content("~/content/img/hot_cat_title.png")" />
+        </div>
+        <div class="hot_category_content">
+            <div class="hot_cat_line">
+                <div class="hot_cat_name">
+                    强化复合地板
+                </div>
+                <a href="#">
+                    <div class="hot_cat_sun_name">
+            
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="hot_category_content">
+            <div class="hot_cat_line">
+                <div class="hot_cat_name">
+                    实木复合地板
+                </div>
+                <a href="#">
+                    <div class="hot_cat_sun_name">
+            
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="hot_category_content">
+            <div class="hot_cat_line">
+                <div class="hot_cat_name">
+                    辅材
+                </div>
+                <a href="#">
+                    <div class="hot_cat_sun_name">
+            
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="new">
+        <div class="v_show">
+            <div class="v_pre">
+                <img id="pre"; src="@Url.Content("~/Content/img/pre.jpg")" alt="" /></div>
+            <div class="v_next">
+                <img id="next"; src="@Url.Content("~/Content/img/next.jpg")" alt="" /></div>
+            <div class="v_content">
+                <div class="v_content_list">
+                    <table>
+                        <tr>
+                            @*@foreach (var item in (List<ProductOnSale>)ViewBag.NewProduct)
+                            {
+                                string IMGsource = "http://img.zhuchao.com" + item.Picture;
+                                <td style="width: 170px;">
+                                    <a href="/Product/Detail?id=@item.Gid">
+                                        <img src="@IMGsource" alt="" /></a>
+                                    <p>
+                                        <a name="anchor" href="/Product/Detail?id=@item.Gid">@item.Name.Matter</a></p>
+                                </td>
+                            }*@
+                            @*
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic01.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic03.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic04.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic05.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic06.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic07.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic08.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic09.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>
+                            <td style="width: 170px;">
+                                <a href="#">
+                                    <img src="@Url.Content("~/Content/img/pic10.jpg")" alt="" /></a>
+                                <p>
+                                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                            </td>*@
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ad">
+        <img src="@Url.Content("~/Content/img/ad1.jpg")" alt="" /></div>
+    <div class="show">
+        <div class="title">
+            <img src="@Url.Content("~/Content/img/tit01.jpg")" alt="" />
+        </div>
+        <table style="width: 980px; height: 200px">
+            <tr>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="ad">
+        <img src="@Url.Content("~/Content/img/ad1.jpg")" alt="" /></div>
+    <div class="show">
+        <div class="title">
+            <img src="@Url.Content("~/Content/img/tit01.jpg")" alt="" /></div>
+        <table style="width: 980px; height: 200px">
+            <tr>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+                <td class="td" align="center">
+                    <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                    <p>
+                        <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                    <p>
+                        <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="ad">
+    <img src="@Url.Content("~/Content/img/ad1.jpg")" alt="" /></div>
+<div class="show">
+    <div class="title">
+        <img src="@Url.Content("~/Content/img/tit01.jpg")" alt="" /></div>
+    <table style="width: 980px; height: 200px">
+        <tr>
+            <td class="td" align="center">
+                <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                <p>
+                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                <p>
+                    <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+            </td>
+            <td class="td" align="center">
+                <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                <p>
+                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                <p>
+                    <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+            </td>
+            <td class="td" align="center">
+                <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                <p>
+                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                <p>
+                    <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+            </td>
+            <td class="td" align="center">
+                <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                <p>
+                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                <p>
+                    <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="td" align="center">
+                <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                <p>
+                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                <p>
+                    <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+            </td>
+            <td class="td" align="center">
+                <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                <p>
+                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                <p>
+                    <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+            </td>
+            <td class="td" align="center">
+                <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                <p>
+                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                <p>
+                    <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+            </td>
+            <td class="td" align="center">
+                <img src="@Url.Content("~/Content/img/show01.jpg")" alt="" />
+                <p>
+                    <a name="anchor" href="#">[打包42平米]四合地板 三层实木复合地板 橡木本色</a></p>
+                <p>
+                    <span>销售价：</span><span class="price_now">49</span><span>市场价：</span><span class="price_del">119</span></p>
+            </td>
+        </tr>
+    </table>
+</div>
+@*<script>    limitAnchor("anchor", 20)</script>*@

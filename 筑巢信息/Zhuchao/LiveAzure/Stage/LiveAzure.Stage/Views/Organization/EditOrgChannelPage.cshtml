@@ -1,0 +1,61 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Member.MemberOrgChannel
+@using (@Ajax.BeginForm("SaveEditOrgChannel", "Organization", new AjaxOptions { OnSuccess = "CompleteSumbitOrgChannel()" }, new { Id = "EditOrgChannelForm" }))
+{
+    <table>
+        @Html.HiddenFor(model => model.Gid)
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.Member.MemberOrgChannel.Channel)</td>
+            <td>
+                @ViewBag.ChannelFullName
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.Member.MemberOrgChannel.Cstatus)</td>
+            <td>
+                @Html.DropDownListFor(model => model.Cstatus, (List<SelectListItem>)ViewBag.OrgChannelStatusSelectListForEdit)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.Member.MemberOrgChannel.RemoteUrl)</td>
+            <td>
+                @Html.EditorFor(model => model.RemoteUrl)
+            </td>
+        </tr>    
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.Member.MemberOrgChannel.ConfigKey)</td>
+            <td>
+                @Html.EditorFor(model => model.ConfigKey)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.Member.MemberOrgChannel.SecretKey)</td>
+            <td>
+                @Html.EditorFor(model => model.SecretKey)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.Member.MemberOrgChannel.SessionKey)</td>
+            <td>
+                @Html.EditorFor(model => model.SessionKey)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label(@LiveAzure.Resource.Model.ModelBase.Remark)</td>
+            <td>
+                @Html.EditorFor(model => model.Remark)
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SumbitEditOrgChannelForm()" />
+    
+    <script type="text/javascript">
+
+        function SumbitEditOrgChannelForm() {
+            $("#EditOrgChannelForm").submit();
+        }
+
+    </script>
+}

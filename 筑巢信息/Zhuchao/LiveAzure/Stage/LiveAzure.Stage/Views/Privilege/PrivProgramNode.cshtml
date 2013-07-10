@@ -1,0 +1,65 @@
+﻿@model LiveAzure.Models.General.GeneralProgNode
+@{
+    Layout = null;
+}
+<div id="node">
+@Html.DropDownList("Node", (List<SelectListItem>)ViewBag.NodeList, new { onchange = "EditNode();" })
+</div>
+<div id="DropList"></div>
+<div id ="EditBox"></div>
+<script type="text/javascript">
+    EditNode();
+    function EditNode() {
+        var id = $("#Node").val();
+        $.ajax({
+            type: "POST",
+            url: "/Privilege/GetInputMode",
+            data: { id: id },
+            success: function (data) {
+                if (data == "1") {
+                    $("#EditBox").css("display", "none");
+                    $("#DropList").css("display", "block");
+                    $.ajax({
+                        type: "POST",
+                        url: "/Privilege/PrivProgramDropList",
+                        data: { id: id },
+                        success: function (html) {
+                            $("#DropList").html(html);
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/Privilege/GetNodeID",
+                                data: { id: id },
+                                success: function (data) {
+                                }
+                            });
+                        }
+                    });
+                }
+                else {
+                    $("#EditBox").css("display", "block");
+                    $("#DropList").css("display", "none");
+                    $.ajax({
+                        type: "POST",
+                        url: "/Privilege/PrivProgramEditBox",
+                        data: {id:id},
+                        success: function (html) {
+                            $("#EditBox").html(html);
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/Privilege/GetNodeID",
+                                data: { id: id },
+                                success: function (data) {
+
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+ </script>
+  
+  

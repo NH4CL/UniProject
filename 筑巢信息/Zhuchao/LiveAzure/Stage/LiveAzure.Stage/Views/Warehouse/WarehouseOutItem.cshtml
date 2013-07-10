@@ -1,0 +1,49 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+
+@model LiveAzure.Models.Warehouse.WarehouseStockOut
+
+@{
+    ViewBag.Title = "WarehouseOutItem";
+}
+
+<h2>WarehouseOutItem</h2>
+@Html.Grid(
+    new GridControl()
+        .SetName("OutItemGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl("/Warehouse/WarehouseOutItemList?outID="+Model.Gid)
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseOutItem>(cs=>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x=>x.SkuItem.FullName.Matter);
+                cs.Add(x=>x.Shelf.Code);
+                cs.Add(x=>x.TrackLot);
+                cs.Add(x=>x.Quantity);                
+            })
+            .UpdateDefaultPager(pager=>
+                pager
+                    .ShowSearch(false,false)
+            )
+    )
+
+<input type="button" id="btnOutItemAdd" value="ADD" />
+<input type="button" id="btnOutItemEdit" value="Edit" />
+@Html.Raw(Html.GridDeleteButton(
+    buttonText:"Delete",
+    gridName: "InItemGrid",
+    actionUrl: "/Warehouse/WarehouseInItemDel"
+))
+<script type="text/javascript">
+    $("#btnOutItemAdd").click(function () {
+        document.location.replace("/Warehouse/WarehouseOutItemAdd?outID=@Model.Gid");
+    });
+    $("#btnOutItemEdit").click(function () {
+        var itemID = $("#OutItemGrid").jqGrid("getGridParam", "selrow");
+        document.location.replace("/Warehouse/WarehouseOutItemEdit?itemID=" + itemID);
+    });
+</script>

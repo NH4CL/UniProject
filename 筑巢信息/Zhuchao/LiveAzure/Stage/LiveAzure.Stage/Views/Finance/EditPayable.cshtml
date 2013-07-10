@@ -1,0 +1,104 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Finance.FinancePayment
+@using (@Ajax.BeginForm("SaveEditPayable", "Finance", new AjaxOptions { OnSuccess = "RefreshPayableGrid();ClosePanel();CloseEditPanel('CoverPage_Payable', 'EditPage_Payable')" }, new { id = "editPayableForm" }))
+{
+<div class="down_AddorEdit">
+    @Html.HiddenFor(model => model.Gid)
+    <table>
+            <tr>
+                <th>    
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.Organization)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.OrgID, (List<SelectListItem>)ViewBag.editOrganizationList)
+                </td>
+            </tr>
+            <tr>
+                <th>   
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.Ptype)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Ptype, (List<SelectListItem>)ViewBag.editPayTypeList)
+                </td>
+            </tr>
+            <tr>
+                <th>   
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.PayTo)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.PayTo, (List<SelectListItem>)ViewBag.editPayToList)
+                </td>
+            </tr>
+            <tr>
+                <th>   
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.Pstatus)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Pstatus, (List<SelectListItem>)ViewBag.editPayStatusList, new { disabled = true })
+                </td>
+            </tr>
+            <tr>
+                <th>   
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.RefType)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.RefType, (List<SelectListItem>)ViewBag.editRefTypeList, new { disabled = true })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                       
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.RefID)
+                </th>
+                <td>
+                    @*@Html.LabelFor(model => model.RefID, (string)ViewBag.defaultvalue)*@
+                    @Html.TextBox("RefID", (string)ViewBag.defaultvalue, new { disabled = true })
+                </td>
+            </tr>
+            <tr>
+                <th>    
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.PayDate)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.PayDate).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>    
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.Reason)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Reason)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.Currency)
+                </th>
+                <td>
+                    @ViewBag.currencyForEdit
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Finance.FinancePayment.Amount)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Amount)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.ModelBase.Remark)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Remark)
+                </td>
+            </tr>
+    </table>
+    <div>
+        <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+    </div>
+</div>
+}

@@ -1,0 +1,125 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using CommonResource = LiveAzure.Resource.Common
+@using OutResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockOut
+@{
+    ViewBag.Title = "WarehouseStockOut";
+}
+
+<span id="spanOrgSelect">
+    <select id="WarehouseOrgSelect" disabled="disabled"></select>
+</span>
+<span id="spanWarehouseSelect">
+    <select id="WarehouseSelect" disabled="disabled"></select>
+</span>
+<br />
+<br />
+@Html.Grid(
+    new GridControl()
+        .SetName("OutGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("WarehouseStockOutList"))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseStockOut>(cs=>
+            {
+                cs.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(p => p.Code).SetCaption(OutResource.Code);
+                cs.Add(p => p.Ostatus).SetCaption(OutResource.Ostatus);
+                cs.Add(p => p.OutType).SetCaption(OutResource.OutType);
+                cs.Add(p => p.RefType).SetCaption(OutResource.RefType);
+                cs.Add(p => p.RefID).SetCaption(OutResource.RefID);
+                cs.Add(p => p.TakeMan).SetCaption(OutResource.TakeMan);
+                cs.Add(p => p.SortMan).SetCaption(OutResource.SortMan);
+                cs.Add(p => p.SendMan).SetCaption(OutResource.SendMan);
+                cs.Add(p => p.PrintOutSheet).SetCaption(OutResource.PrintOutSheet);
+                cs.Add(p => p.PrintEnvelope).SetCaption(OutResource.PrintEnvelope);
+                cs.Add(p => p.Total).SetCaption(OutResource.Total);
+                cs.Add(p => p.Prepared).SetCaption(OutResource.Prepared);
+                cs.Add(p => p.Approved).SetCaption(OutResource.Approved);
+                cs.Add(p => p.ApproveTime).SetCaption(OutResource.ApproveTime);
+            })
+    )
+    <input type="button" id="btnAddStockOut" value="@CommonResource.Add" />
+    <input type="button" id="btnEditStockOut" value="@CommonResource.Edit" />
+    @Html.Raw(Html.GridDeleteButton(buttonText: CommonResource.Delete, gridName: "OutGrid",actionUrl:"/Warehouse/WarehouesStockOutDel"))
+    <input type="button" id="btnStockOutItem" value="查看明细" />
+    <input type="button" id="btnStockOutScan" value="出库扫描" />
+    <input type="button" value="打印" />
+    <script type="text/javascript">
+        $("#btnAddStockOut").click(function () {
+            var whID = $("#WarehouseSelect").val();
+            document.location.replace("/Warehouse/WarehouseStockOutAdd?whID=" + whID);
+        });
+        $("#btnEditStockOut").click(function () {
+            var outID = $("#OutGrid").jqGrid("getGridParam", "selrow");
+            if (outID == null) {
+                alert("请选择要编辑的出库单");
+            } else {
+                document.location.replace("/Warehouse/WarehouseStockOutEdit?outID=" + outID);
+            }
+        });
+        $("#btnStockOutItem").click(function () {
+            var outID = $("#OutGrid").jqGrid("getGridParam", "selrow");
+            if (outID == null) {
+                alert("请选择要查看的出库单");
+            } else {
+                document.location.replace("/Warehouse/WarehouseOutItem?outID=" + outID);
+            }
+        });
+        $("#btnStockOutScan").click(function () {
+            var outID = $("#OutGrid").jqGrid("getGridParam", "selrow");
+            if (outID == null) {
+                alert("请选择要扫描的出库单");
+            } else {
+                document.location.replace("/Warehouse/WarehouseOutScan?outID=" + outID);
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        function onChangeWarehouse() {
+            var whID = $("#WarehouseSelect").val();
+            var grid = $("#OutGrid");
+            grid.jqGrid("setGridParam", { url: "/Warehouse/WarehouseStockOutList?whID=" + whID });
+            grid.trigger("reloadGrid");
+        }
+        function updateWarehouseList() {
+            var warehouseSelect = $("#WarehouseSelect");
+            var spanWarehouseSelect = $("#spanWarehouseSelect");
+            var orgSelect = $("#OrgSelect");
+            var orgID = orgSelect.val();
+            warehouseSelect.unbind("change");
+            warehouseSelect.attr("disabled", "disabled");
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/WarehouseSelect",
+                data: { id: 'WarehouseSelect', orgID: orgID },
+                async: false,
+                success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+            });
+            warehouseSelect = $("#WarehouseSelect");
+            warehouseSelect.change(onChangeWarehouse());
+        }
+        $(function () {
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/WarehouseOrgSelect",
+                data: { id: "OrgSelect" },
+                async: false,
+                success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+            });
+            var orgSelect = $("#OrgSelect");
+            orgSelect.change(function () {
+                updateWarehouseList();
+            });
+            updateWarehouseList();
+        });
+</script>

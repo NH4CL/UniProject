@@ -1,0 +1,14 @@
+﻿@{
+    IEnumerable<SelectListItem> warehouseList = (IEnumerable<SelectListItem>)ViewBag.WarehouseList;
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    Guid selectedWarehouse = new Guid();
+    if (ViewBag.SelectedWarehouse != null)
+    {
+        selectedWarehouse = (Guid)ViewBag.SelectedWarehouse;
+    }
+}
+@Html.DropDownList(id, warehouseList, new { id = id, value = selectedWarehouse })

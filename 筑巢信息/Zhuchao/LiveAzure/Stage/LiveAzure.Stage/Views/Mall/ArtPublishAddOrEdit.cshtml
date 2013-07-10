@@ -1,0 +1,124 @@
+﻿@model LiveAzure.Models.Mall.MallArtPublish
+           
+@using MVC.Controls;
+@{
+    ViewBag.Title = "ArtPublishAddOrEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function saveArtPublish(data) {
+        if (data == "success") {
+            window.location.href = "/Mall/ArticlePublish";
+        }
+    }
+</script>
+@using (Ajax.BeginForm("ArtPublishSave", "Mall", new AjaxOptions { HttpMethod = "POST" ,OnSuccess="saveArtPublish"}, new { }))
+{
+    @Html.HiddenFor(model=>model.Gid)
+    <table>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.ArtID
+            </td>
+            <td>
+               @Html.DropDownListFor(model=>model.ArtID,(List<SelectListItem>)ViewBag.ArticleList)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.ChlID
+            </td>
+            <td>
+               @Html.DropDownListFor(model=>model.ChlID,(List<SelectListItem>)ViewBag.ChannelList)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.PosID
+            </td>
+            <td>
+               @Html.DropDownListFor(model=>model.PosID,(List<SelectListItem>)ViewBag.PositionList)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.Sorting
+            </td>
+            <td>
+               @Html.EditorFor(model=>model.Sorting)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.Show
+            </td>
+            <td>
+               @Html.EditorFor(model=>model.Show,(List<SelectListItem>)ViewBag.ShowList)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.TotalRank
+            </td>
+            <td>
+               @Html.EditorFor(model=>model.TotalRank)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.MatterRank
+
+            </td>
+            <td>
+               @Html.EditorFor(model=>model.MatterRank)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.LayoutRank
+            </td>
+            <td>
+               @Html.EditorFor(model=>model.LayoutRank)
+            </td>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.ComfortRank
+            </td>
+            <td>
+               @Html.EditorFor(model=>model.ComfortRank)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.StartTime
+            </td>
+            <td>
+               @Html.TextBox("startTime", ViewData["StartTime"]).AsDatePicker(new DatePicker())
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.EndTime
+            </td>
+            <td>
+               @Html.TextBox("endTime",ViewData["EndTime"]).AsDatePicker(new DatePicker())
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArtPublish.Remark
+            </td>
+            <td>
+               @Html.TextAreaFor(model=>model.Remark)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            </td>
+            <td>
+               <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+            </td>
+         </tr>
+    </table>
+}

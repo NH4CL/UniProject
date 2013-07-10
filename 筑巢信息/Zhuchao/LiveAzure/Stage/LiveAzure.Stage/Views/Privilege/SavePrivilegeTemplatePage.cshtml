@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.General.GeneralPrivTemplate
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+@using (@Ajax.BeginForm("SavePrivilegeTemplate", "Privilege", new AjaxOptions { OnSuccess = "SaveTempSuccess" }, new { id = "SavePrivilegeTemplateForm" }))
+{
+    <input type="hidden" value="@ViewBag.UserID" name="UserID" />
+    <p>
+        <span>@Html.Label(LiveAzure.Resource.Model.General.GeneralPrivTemplate.Code)</span>
+        <span>@Html.EditorFor(model => model.Code)</span>
+        <span>@Html.ValidationMessageFor(model => model.Code)</span>
+    </p>
+    <p>
+        <span>@Html.Label(LiveAzure.Resource.Model.ModelBase.Remark)</span>
+        <span>@Html.TextAreaFor(mode => mode.Remark)</span>
+        <span>@Html.ValidationMessageFor(model => model.Remark)</span>
+    </p>
+    <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="CheckTempHasBefore();"/>
+    <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+}
+<script type="text/javascript">
+    function CheckTempHasBefore() {
+        var code = $("#Code").val();
+        $.post("/Privilege/HasTemplateBefore", { Code: code }, function (hasbefore) {
+            if (hasbefore == "True") {
+                if (confirm("@LiveAzure.Resource.Stage.PrivilegeController.HasTemplateBefore"))
+                    $("#SavePrivilegeTemplateForm").submit();
+            }
+            else {
+                $("#SavePrivilegeTemplateForm").submit();
+            }
+        });
+    }
+    function SaveTempSuccess() {
+        alert("@LiveAzure.Resource.Common.SaveSuccess");
+        PrivilegeTemplatePannel.CloseEditPanel();
+    }
+</script>

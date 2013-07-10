@@ -1,0 +1,28 @@
+﻿@using LiveAzure.Models.General
+@model GeneralProgram
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.ProgramController.editProgramNode";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+   //页面加载生成树
+    $.ajax({
+        type: "POST",
+        url: "/Program/Tree",
+        success: function (html) {
+            $("#progMain").html(html);
+        }
+    });
+</script>
+<div id="program">
+    <div id="progDetail" style="display: block">
+    </div>
+    
+    <div class="content_main_left">
+        <div id="progMain">
+        </div>
+   </div>
+</div>

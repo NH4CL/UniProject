@@ -1,0 +1,137 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    ViewBag.Title = "PrivilegeIndex";
+    }
+@using (Html.BeginForm("", "Privilege", FormMethod.Post, new { id = "searchUserForm", name = "searchUserForm" }))
+{ 
+    <table>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Stage.UserController.organization:
+            </th>
+            <td>
+                @Html.DropDownList("organization", (List<SelectListItem>)ViewBag.organizationList, new { id = "orgSelect", style = "width:270px;", onchange = "" })
+            </td>
+            <th>
+                @LiveAzure.Resource.Stage.UserController.keyword:
+            </th>
+            <td>
+                @Html.TextBox("SearchString") &nbsp;  
+            </td>
+            <td> 
+                <input type="button" id="search" name="search" value="@LiveAzure.Resource.Stage.UserController.search" onclick="searchUser()" />
+            </td>
+        </tr>
+    </table>
+    <div> 
+            <input type="hidden" id="userId" name="userId" />
+    </div>
+}
+<div id="userList"></div>
+<div>
+@if (ViewBag.privEnableEdit == "1")
+{
+     <input type="button" id="showTab" value="@LiveAzure.Resource.Stage.PrivilegeController.showtab" onclick="displayTab();" />
+     <input type="button" value="@LiveAzure.Resource.Stage.ProductController.SaveTemplate"onclick="savePrivilegeTemplate();" />
+     <input type="button" value="@LiveAzure.Resource.Stage.ProductController.ChooseTemplate"onclick="choosePrivilegeTemplate();" />
+}
+else
+{ 
+     <input type="button" value="@LiveAzure.Resource.Stage.PrivilegeController.showtab" disabled="disabled" />
+     <input type="button" value="@LiveAzure.Resource.Stage.ProductController.SaveTemplate" disabled="disabled"/>
+     <input type="button" value="@LiveAzure.Resource.Stage.ProductController.ChooseTemplate" disabled="disabled"/>
+}
+    </div>
+<div id="PrivilegeTab"></div>
+
+<script type="text/javascript">
+    var PrivilegeTemplatePannel = new OpenPanel();
+        PrivilegeTemplatePannel.bLoading = true;
+        PrivilegeTemplatePannel.width = 500;
+        PrivilegeTemplatePannel.height = 600;
+        PrivilegeTemplatePannel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function searchUser() {
+        var orgId = $("#orgSelect").val();
+        var searchStr = $("#SearchString").val();
+        $.post("/Privilege/SearchUser",{ orgId: orgId, searchStr: searchStr },function(data){
+            $("#userList").html(data);
+        });
+    }
+    function displayTab() {
+        var userId = $("#searchUserList").jqGrid("getGridParam", "selrow");
+        if (userId) {
+            $("#userId").val(userId);//?
+            $.post("/Privilege/TabPage",{ EditUserID:userId},function(data){
+                $("#PrivilegeTab").html(data);
+                $.post("/Privilege/UserInfomation", {}, function (html) {
+                    $("#tabs-UserInfomation").html(html);
+                });
+            });
+        }
+        else {
+            alert("@LiveAzure.Resource.Stage.PrivilegeController.userinfoempty");
+        }
+    }
+
+    function savePrivilegeTemplate() {
+        var userId = $("#searchUserList").jqGrid("getGridParam", "selrow");
+        var ChooseUserID =null;
+        if(userId == null)
+        {
+            $.post("/Privilege/getUser",{},function(data){
+                ChooseUserID = data;
+                if(ChooseUserID == "00000000-0000-0000-0000-000000000000"){
+                    alert("@LiveAzure.Resource.Stage.PrivilegeController.userinfoempty");
+                }
+                else{
+                    PrivilegeTemplatePannel.title = "@LiveAzure.Resource.Stage.ProductController.SaveTemplate";
+                    PrivilegeTemplatePannel.OpenPanel();
+                    $.post("/Privilege/SavePrivilegeTemplatePage", { UserID: ChooseUserID }, function (backhtml) { 
+                        PrivilegeTemplatePannel.EditPageHtml(backhtml);
+                    });
+                }
+            })
+        }
+        else{
+            PrivilegeTemplatePannel.title = "@LiveAzure.Resource.Stage.ProductController.SaveTemplate";
+            PrivilegeTemplatePannel.OpenPanel();
+            $.post("/Privilege/SavePrivilegeTemplatePage", { UserID: userId }, function (backhtml) { 
+                PrivilegeTemplatePannel.EditPageHtml(backhtml);
+            });
+        }
+    }
+    function choosePrivilegeTemplate(){
+        var userId = $("#searchUserList").jqGrid("getGridParam", "selrow");
+        var ChooseUserID =null;
+        if(userId == null)
+        {
+            $.post("/Privilege/getUser",{},function(data){
+                ChooseUserID = data;
+                if(ChooseUserID == "00000000-0000-0000-0000-000000000000"){
+                    alert("@LiveAzure.Resource.Stage.PrivilegeController.userinfoempty");
+                }
+                else{
+                    PrivilegeTemplatePannel.title = "@LiveAzure.Resource.Stage.ProductController.ChooseTemplate";
+                    PrivilegeTemplatePannel.OpenPanel();
+                    $.post("/Privilege/ChoosePrivilegeTemplatePage", { UserID: ChooseUserID }, function (backhtml) { 
+                        PrivilegeTemplatePannel.EditPageHtml(backhtml);
+                    });
+                }
+            })
+        }
+        else{
+            PrivilegeTemplatePannel.title = "@LiveAzure.Resource.Stage.ProductController.ChooseTemplate";
+            PrivilegeTemplatePannel.OpenPanel();
+            $.post("/Privilege/ChoosePrivilegeTemplatePage", { UserID: userId }, function (backhtml) { 
+                PrivilegeTemplatePannel.EditPageHtml(backhtml);
+            });
+        }
+    }
+    
+    $(document).ready(function () {
+//        if ('@(ViewBag.UserName)') {
+//            $("#userList").css("display", "none");
+//        }
+    });
+</script>

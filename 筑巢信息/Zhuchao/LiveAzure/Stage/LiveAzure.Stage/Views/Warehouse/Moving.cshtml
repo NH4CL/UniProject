@@ -1,0 +1,190 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseInformation
+@using MVC.Controls
+@using MVC.Controls.Grid
+@using CommonResource = LiveAzure.Resource.Common
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@using MovingStatus = LiveAzure.Models.ModelEnum.MovingStatus
+
+@{
+    ViewBag.Title = "WarehouseMoving";
+}
+
+    <table>
+        <tr>
+            <th>@WCResource.Organization</th>
+            <td>
+                <span id="spanOrgSelect">
+                    <select id="WarehouseOrgSelect" disabled="disabled"></select>
+                </span>
+            </td>
+            <th>@WCResource.Warehouse</th>
+            <td>
+                <span id="spanWarehouseSelect">
+                    <select id="WarehouseSelect" disabled="disabled"></select>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>@WCResource.Status</th>
+            <td>@Html.DropDownList("SearchStatus", ViewBag.MStatus as IEnumerable<SelectListItem>)</td>
+            <th>@WCResource.Type</th>
+            <td>@Html.DropDownList("SearchType", ViewBag.MType as IEnumerable<SelectListItem>)</td>
+            <td>
+                <select id="SearchSelect">
+                    <option value="1">SKUName</option>
+                    <option value="2">SKUCode</option>
+                    <option value="3">SKUBarcode</option>
+                    <option value="4">Time</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" id="SearchItem" />
+            </td>
+            <td><input type="button" id="btnSearch" value="@CommonResource.Search" /></td>
+        </tr>
+    </table>
+    <div id="MovingList"></div>
+    @if (ViewBag.privEnablePrepare == "1")
+    {
+    <input type="button" id="btnAddMoving" value="@CommonResource.Add" />
+    <input type="button" id="btnEditMoving" value="@CommonResource.Edit" />
+    <input type="button" id="btnViewMoveItems" value="@WCResource.MoveItems" />
+    }
+    else
+    { 
+    <input type="button" value="@CommonResource.Add" disabled="disabled" />
+    <input type="button" value="@CommonResource.Edit" disabled="disabled" />
+    <input type="button" value="@WCResource.MoveItems" disabled="disabled" />
+    }
+    <script type="text/javascript">
+        $("#btnAddMoving").click(function () {
+            var whID = $("#WarehouseSelect").val();
+            document.location.replace("/Warehouse/MovingAdd");
+        });
+        $("#btnEditMoving").click(function () {
+            var moveID = $("#MovGrid").jqGrid("getGridParam", "selrow");
+            if(moveID == null){
+                alert("@WCResource.SelectOneRow");
+            }
+            document.location.replace("/Warehouse/MovingEdit?moveID=" + moveID);
+        });
+        $("#btnConfirmMoving").click(function () {
+            var grid = $("#MovGrid");
+            var moveID = grid.jqGrid("getGridParam", "selrow");
+            var row = grid.jqGrid("getRowData", moveID);
+            if (row.Mstatus == @((byte)MovingStatus.CONFIRMED)) {
+                alert("The record has already been confirmed.");
+            } else {
+                $.post("/Warehouse/MovingConfirmDB", { moveID : moveID },
+                    function (result) {
+                        if(result) {
+                            alert("OK");
+                            grid.trigger("reloadGrid");
+                        } else {
+                            alert("@WCResource.Error");
+                        }
+                    });
+            }
+        });
+        $("#btnCancelConfirmMoving").click(function () {
+            var grid = $("#MovGrid");
+            var moveID = grid.jqGrid("getGridParam", "selrow");
+            var row = grid.jqGrid("getRowData", moveID);
+            if (row.Mstatus == @((byte)MovingStatus.NONE)) {
+                alert("The record hasn't been confirmed.");
+            } else {
+                $.post("/Warehouse/MovingCancelConfirmDB", { moveID : moveID },
+                    function (result) {
+                        if(result) {
+                            alert("@WCResource.ConfirmSuccess");
+                            grid.trigger("reloadGrid");
+                        } else {
+                            alert("@WCResource.Error");
+                        }
+                    });
+            }
+        });
+        $("#btnViewMoveItems").click(function () {
+            var moveID = $("#MovGrid").jqGrid("getGridParam", "selrow");
+            if (moveID == null) {
+                alert("@WCResource.SelectOneRow");
+            }
+            else
+            {
+                document.location.replace("/Warehouse/MoveItem?moveID=" + moveID);
+            }
+        });
+        $("#btnSearch").click(function () {
+            var status = $("#SearchStatus").val();
+            var type = $("#SearchType").val();
+            var param = "";
+            param += ("&status=" + status);
+            param += ("&type=" + type);
+            var SSearch = $("#SearchSelect").val();  
+            var item = $("#SearchItem").val();
+            if(item != "") {
+                param += ("&n"+"="+SSearch);
+                param += ("&itemVal"+"="+item);
+            }
+            $("#StockInGrid").jqGrid('setGridParam', { url: "/Warehouse/MovingList?whID=" + $("#WarehouseSelect").val() + param });
+            $("#StockInGrid").trigger("reloadGrid");
+        });
+   </script>
+    <script type="text/javascript">
+       function onChangeWarehouse() {
+           var whID = $("#WarehouseSelect").val();
+           var grid = $("#MovGrid");
+           grid.jqGrid("setGridParam", { url: "/Warehouse/MovingList?whID=" + whID });
+           grid.trigger("reloadGrid");
+       }
+       function updateWarehouseList() {
+           var warehouseSelect = $("#WarehouseSelect");
+           var spanWarehouseSelect = $("#spanWarehouseSelect");
+           var orgSelect = $("#OrgSelect");
+           var orgID = orgSelect.val();
+           warehouseSelect.unbind("change");
+           warehouseSelect.attr("disabled", "disabled");
+           $.ajax({
+               type: "post",
+               url: "/Warehouse/WarehouseSelect",
+               data: { id: 'WarehouseSelect', orgID: orgID },
+               async: false,
+               success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+           });
+           warehouseSelect = $("#WarehouseSelect");
+           warehouseSelect.change(function () {
+               onChangeWarehouse();
+           });
+           onChangeWarehouse();
+       }
+       $(function () {
+           $.ajax({
+               type: "post",
+               url: "/Warehouse/WarehouseOrgSelect",
+               data: { id: "OrgSelect" },
+               async: false,
+               success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+            });
+            var orgSelect = $("#OrgSelect");
+            orgSelect.change(function () {
+                updateWarehouseList();
+            });
+            updateWarehouseList();
+            var whID = $("#WarehouseSelect").val();
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/MovingGrid",
+                data: { whID: whID },
+                async: false,
+                success: function (html) {
+                    $("#MovingList").html(html);
+                }
+            });
+       });
+</script>

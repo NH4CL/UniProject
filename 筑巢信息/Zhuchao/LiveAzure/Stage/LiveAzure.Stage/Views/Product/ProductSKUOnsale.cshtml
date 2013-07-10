@@ -1,0 +1,20 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "/Product/SKUOnsaleGrid",
+        success: function (html) {
+            $("#SKUOnsaleGrid").html(html);
+        }
+    });
+</script>
+<div id="SKUOnsale">
+    <div id="SKUOnsaleGrid">
+    </div>
+    <div id="SKUOnsaleAdd">
+    </div>
+    <div id="SKUOnsaleEdit">
+    </div>
+</div>

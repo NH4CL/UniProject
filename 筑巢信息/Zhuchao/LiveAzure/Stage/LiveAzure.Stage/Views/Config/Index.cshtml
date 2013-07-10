@@ -1,0 +1,64 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+        @LiveAzure.Resource.Stage.ConfigController.ConfigType
+        @Html.DropDownList("ConfigItem",Model as IEnumerable<SelectListItem>)
+        @Html.Grid(new GridControl()
+                .SetName("ConfigGrid")
+                .SetPageSize(20)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Config/ConfigList")
+                .SetEditUrl("/Config/ConfigEdit")
+                .SetIsRowNumber(true)
+                .SetHeight("'100%'")
+                .SetColumns<LiveAzure.Models.General.GeneralConfig>(cs=>
+                    {
+                        cs.Add(x => x.Gid)
+                            .SetAsPrimaryKey()
+                            .SetHidden(true);
+                        cs.Add(x => x.Code)
+                            .SetCaption(LiveAzure.Resource.Model.General.GeneralConfig.Code)
+                            .SetEditable(false);
+                        cs.Add(x => x.Culture)
+                            .SetCaption(LiveAzure.Resource.Model.General.GeneralConfig.CultureName)
+                            .SetEditable(false);
+                        cs.Add(x => x.Ctype)
+                            .SetCaption(LiveAzure.Resource.Model.General.GeneralConfig.Ctype)
+                            .SetColumnRenderer(new ComboColumnRenderer("/Config/GetConfigTypes"));
+                        cs.Add(x => x.IntValue)
+                            .SetCaption(LiveAzure.Resource.Model.General.GeneralConfig.Integer);
+                        cs.Add(x => x.DecValue)
+                            .SetCaption(LiveAzure.Resource.Model.General.GeneralConfig.Decimal);
+                        cs.Add(x => x.StrValue)
+                            .SetCaption(LiveAzure.Resource.Model.General.GeneralConfig.String);
+                        cs.Add(x => x.DateValue)
+                            .SetCaption(LiveAzure.Resource.Model.General.GeneralConfig.Datetime);
+                        cs.Add(x => x.Remark)
+                            .SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+                    })
+                   .UpdateDefaultPager(pager=>
+                       pager
+                       .ShowSearch(false,false)
+                  ))
+                  
+        <br />
+               @{
+                   if(ViewBag.EnableEdit)
+                   {
+                    string s = @Html.GridUpdateButton(buttonText: LiveAzure.Resource.Stage.ConfigController.Edit, gridName: "ConfigGrid") +
+                        @Html.GridSaveButton(buttonText: LiveAzure.Resource.Stage.ConfigController.Save, gridName: "ConfigGrid") +
+                        @Html.GridCancelButton(buttonText: LiveAzure.Resource.Stage.ConfigController.Reset, gridName: "ConfigGrid");
+                    var wrapper = new HtmlString(s);
+                    <div>@wrapper</div>
+                   }
+                }
+<script type="text/javascript">
+    $(document).ready(
+        $("#ConfigItem").change(function () {
+            $("#ConfigGrid").jqGrid('setGridParam', { url: "/Config/ConfigList?gid=" + $("#ConfigItem").val() });
+            $("#ConfigGrid").trigger("reloadGrid");
+        }));
+</script>

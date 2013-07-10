@@ -1,0 +1,92 @@
+﻿@using LiveAzure.Models.General
+@using LiveAzure.Resource.Stage;
+@using LiveAzure.Resource.Model;
+@model GeneralPrivateCategory
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.6.2.js")" ></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate-vsdoc.js")" ></script>
+<script src="../../Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.validate-vsdoc.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    function submitForm() {
+        $("#programForm").submit();
+    }
+
+    function showProgramNode() {
+        document.getElementById("progMain").style.display = "none";
+        document.getElementById("progAdd").style.display = "none";
+        document.getElementById("progEdit").style.display = "none";
+        document.getElementById("progDetail").style.dispaly = "block";
+        var id = $("#Gid").val();
+        $.ajax({
+            type: "GET",
+            url: "/PrivateCategory/StandardCategoryItemNode",
+            data: { id: id },
+            success: function (html) {
+                $("#progDetail").html(html);
+            }
+        });
+    }
+    
+</script>
+<div id="Pro" style="margin: 2px;">
+    <h2>@ProgramController.editProgramNode</h2>
+    @using (@Ajax.BeginForm("SaveStandardCategoryNode", "PrivateCategory", new { gid = Model.Gid }, new AjaxOptions { UpdateTargetId = "" }, new { id = "programForm" }))
+    {
+        <table>
+            <tr>
+                <td>@ProgramController.parent
+                </td>
+                @Html.HiddenFor(model=>model.Gid)
+                @if (Model.Parent != null)
+                {
+                    <td>@Html.LabelForModel(Model.Parent.Name.Matter)
+                    </td>
+                }
+                else {
+                    <td>@Html.Label("")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>@ProgramController.code
+                </td>
+                <td>@Html.EditorFor(model => model.Code)
+                </td>
+            </tr>
+            <tr>
+                <td>@ProgramController.name
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Name.Matter)
+                </td>
+            </tr>
+            <tr>
+                <td>@ProgramController.order
+                </td>
+                <td>@Html.EditorFor(model => model.Sorting)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" value="确认" onclick="submitForm();" />
+                </td>
+                <td>
+                    <input type="reset" value="重置" />
+                </td>
+                <td>
+                    <input id="programItem" type="button" value="@LiveAzure.Resource.Stage.ProgramController.itemLink" onclick="showProgramNode()" style="visibility:hidden"/>
+                </td>
+            </tr>
+        </table>  
+        
+    }
+</div>
+<script type="text/javascript">
+    var showItemButton = $("#Terminal").val();
+
+    if (showItemButton == "true") {
+        document.getElementById("programItem").style.visibility = "visible";
+    }
+</script>
+

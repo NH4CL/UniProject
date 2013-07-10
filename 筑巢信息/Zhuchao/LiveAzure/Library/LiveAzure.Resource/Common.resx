@@ -1,0 +1,378 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionLevel" xml:space="preserve">
+    <value>GENERIC, WARNING, ERROR</value>
+  </data>
+  <data name="ActionSource" xml:space="preserve">
+    <value>SYSTEM, MEMBER, PRODUCT, PURCHASE, WAREHOUSE, ORDER, SHIPPING, MALL, UNION, KNOWLEDGE, FINANCE, PERFORMANCE, EXCHANGE, CALLCENTER</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddFailed" xml:space="preserve">
+    <value>Add Failed</value>
+  </data>
+  <data name="AdjustStatus" xml:space="preserve">
+    <value>NONE, APPROVED, REJECTED, RELEASED</value>
+  </data>
+  <data name="ArticleStatus" xml:space="preserve">
+    <value>NONE, PASSED, REJECTED, FREE</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="BillingType" xml:space="preserve">
+    <value>By Weight, By Volumn, By Piece</value>
+  </data>
+  <data name="CalculateMode" xml:space="preserve">
+    <value>FROM_AMOUNT, FROM_PIECE</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CartType" xml:space="preserve">
+    <value>COMMON, GIFT, SUIT, POINT, SECOND</value>
+  </data>
+  <data name="ChannelStatus" xml:space="preserve">
+    <value>Does not Support, Support</value>
+  </data>
+  <data name="ChooseType" xml:space="preserve">
+    <value>--Please Choose Type--</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ConfigParamType" xml:space="preserve">
+    <value>INTEGER, DECIMAL, STRING, DATETIME</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="CouponStatus" xml:space="preserve">
+    <value>NONE, VALID</value>
+  </data>
+  <data name="CultureType" xml:space="preserve">
+    <value>LANGUAGE, CURRENCY</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>Be Sure to Delete?</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Delete Failed</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Detial</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>EditItem</value>
+  </data>
+  <data name="EnvelopeStatus" xml:space="preserve">
+    <value>NONE, DEFAULT, OTHER</value>
+  </data>
+  <data name="FinanceStatus" xml:space="preserve">
+    <value>NONE, CONFIRMED, CLOSED</value>
+  </data>
+  <data name="FocusProductType" xml:space="preserve">
+    <value>DEDUCTION, STOCKOUT</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>UNKNOWN, MALE, FEMALE</value>
+  </data>
+  <data name="GenericStatus" xml:space="preserve">
+    <value>NONE, VALID</value>
+  </data>
+  <data name="HangStatus" xml:space="preserve">
+    <value>NONE, HANGED, CHANGEING</value>
+  </data>
+  <data name="InventoryStatus" xml:space="preserve">
+    <value>NONE, CONFIRMED, SNAPSHOT</value>
+  </data>
+  <data name="IpStatus" xml:space="preserve">
+    <value>DISABLED,ENABLED</value>
+  </data>
+  <data name="LargeObjectSource" xml:space="preserve">
+    <value>NONE, DATEBASE, OPERATIONSYSTEM, WEBSITEURL</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="LockStatus" xml:space="preserve">
+    <value>UNLOCK, LOCKED</value>
+  </data>
+  <data name="MeasureUnit" xml:space="preserve">
+    <value>PIECE, WEIGHT, VOLUME, FLUID, AREA, LINEAR, CURRENCY</value>
+  </data>
+  <data name="MessageStatus" xml:space="preserve">
+    <value>PENDING, SENDSUCCESS, SENDFAILED, CANCELLED</value>
+  </data>
+  <data name="MessageType" xml:space="preserve">
+    <value>SYSTEM, SMS, EMAIL</value>
+  </data>
+  <data name="MovingStatus" xml:space="preserve">
+    <value>NONE, CONFIRMED</value>
+  </data>
+  <data name="MovingType" xml:space="preserve">
+    <value>FOR_WAREHOUSE, FOR_SHELF</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoPermission" xml:space="preserve">
+    <value>Sorry you have no privilege!</value>
+  </data>
+  <data name="NoteType" xml:space="preserve">
+    <value>ORDER, PURCHASE, DELIVERY, EXPRESS, PAYMENT, RESEND, MOVE, NONE</value>
+  </data>
+  <data name="OnSaleDependence" xml:space="preserve">
+    <value>NORMAL, MAIN, DEPEND_PERCISION, DEPEND_ROUND, DEPEND_CARRY, DEPEND_INTPART</value>
+  </data>
+  <data name="OnSaleStatus" xml:space="preserve">
+    <value>NONE, ONSALE</value>
+  </data>
+  <data name="OperationFailed" xml:space="preserve">
+    <value>Operation Failed</value>
+  </data>
+  <data name="OperationSucceed" xml:space="preserve">
+    <value>Operation succeed!</value>
+  </data>
+  <data name="OptionalInputMode" xml:space="preserve">
+    <value>TEXTBOX, COMBOBOX</value>
+  </data>
+  <data name="OptionalType" xml:space="preserve">
+    <value>GENERIC, ORGANIZATION, USER, PRODUCT, ORDER</value>
+  </data>
+  <data name="OrderStatus" xml:space="preserve">
+    <value>NONE, CONFIRMED, ARRANGED, DELIVERIED, CLOSED</value>
+  </data>
+  <data name="OrganizationStatus" xml:space="preserve">
+    <value>NONE, VALID</value>
+  </data>
+  <data name="OrganizationType" xml:space="preserve">
+    <value>CORPORATION, CHANNEL, WAREHOUSE, SUPPLIER, SHIPPER</value>
+  </data>
+  <data name="PayDirection" xml:space="preserve">
+    <value>TO_SCORE, TO_CASH, TO_INDIVIDUAL, TO_CORPBANK</value>
+  </data>
+  <data name="PayStatus" xml:space="preserve">
+    <value>NONE, ONPAYMENT, NOTICE, PAID</value>
+  </data>
+  <data name="PictureType" xml:space="preserve">
+    <value>PU, SKU</value>
+  </data>
+  <data name="PleaseSelectRow" xml:space="preserve">
+    <value>Please Select one-row Data First!</value>
+  </data>
+  <data name="PointStatus" xml:space="preserve">
+    <value>NONE, VALID, USED</value>
+  </data>
+  <data name="PointType" xml:space="preserve">
+    <value>POINT, CASH, COUPON, REWARD_UNION, REWARD_CPS, REWARD_AGENT</value>
+  </data>
+  <data name="PointUsed" xml:space="preserve">
+    <value>NONE, USED, CASHIER</value>
+  </data>
+  <data name="PrivateCategoryType" xml:space="preserve">
+    <value>PRODUCT, WAREHOUSE, SHIPPING, PURCHASE, SUPPLIER, RETURNTYPE, CMS_TYPE, CMS_FOLDER, PAY_TYPE</value>
+  </data>
+  <data name="ProductMode" xml:space="preserve">
+    <value>PU_SKU, PU_PARTS</value>
+  </data>
+  <data name="PromotionRelation" xml:space="preserve">
+    <value>CONTRADICT, COMPATIBLE</value>
+  </data>
+  <data name="PromotionStatus" xml:space="preserve">
+    <value>NONE, VALID</value>
+  </data>
+  <data name="PurchaseStatus" xml:space="preserve">
+    <value>NONE, CONFIRMED, CLOSED</value>
+  </data>
+  <data name="RelationType" xml:space="preserve">
+    <value>SUGGEST, HOTSALE</value>
+  </data>
+  <data name="Replay" xml:space="preserve">
+    <value>Replay</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ResourceType" xml:space="preserve">
+    <value>STRING, MONEY</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveSuccess" xml:space="preserve">
+    <value>SaveSuccess!</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="ShippingCheck" xml:space="preserve">
+    <value>NONE, PASSED, REJECTED, NOT_REQUIRED</value>
+  </data>
+  <data name="SplitBlock" xml:space="preserve">
+    <value>SMALL, LARGE, FRAGILE</value>
+  </data>
+  <data name="StandardCategoryType" xml:space="preserve">
+    <value>ORGANIZATION, CHANNEL, ROLE, PRODUCT, STOCKIN, STOCKOUT</value>
+  </data>
+  <data name="StockInStatus" xml:space="preserve">
+    <value>NONE, CONFIRMED</value>
+  </data>
+  <data name="StockOutStatus" xml:space="preserve">
+    <value>NONE, SCANNING, DELIVERIED, SIGNED</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Common global resources</value>
+  </data>
+  <data name="TodoType" xml:space="preserve">
+    <value>WAITFOR_CONFIRM, WAITFOR_DELIVERY, TAOBAO_TRANS_ERROR, TAOBAO_DELIVERY_ERROR</value>
+  </data>
+  <data name="TransType" xml:space="preserve">
+    <value>CASH, COD, SECURED</value>
+  </data>
+  <data name="UserEventType" xml:space="preserve">
+    <value>INBOUND, OUTBOUND, SEND_DM, CHAT</value>
+  </data>
+  <data name="UserPrivType" xml:space="preserve">
+    <value>PROGRAM, PROGRAM_NODE, ORGANIZATION, CHANNEL, WAREHOUSE, PRODUCT_CATEGORY, SUPPLIER_CATEGORY</value>
+  </data>
+  <data name="UserStatus" xml:space="preserve">
+    <value>NONE, VALID</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="YesNo" xml:space="preserve">
+    <value>No, Yes</value>
+  </data>
+</root>

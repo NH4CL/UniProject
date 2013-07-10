@@ -1,0 +1,36 @@
+﻿@using StockInResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockIn
+@using MVC.Controls
+@using MVC.Controls.Grid
+
+@{
+    Guid whID = new Guid();
+    if (ViewBag.WHID != null)
+    {//add by tianyou 2011/10/15
+        whID = (Guid)ViewBag.WHID;
+    }
+}
+
+@Html.Grid(
+    new GridControl()
+        .SetName("StockInGrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("StockInList", new { whID = whID }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseStockIn>(cs =>
+        {
+            cs.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(p => p.Code).SetCaption(StockInResource.Code);
+            cs.Add(p => p.InStatusName).SetCaption(StockInResource.Istatus);
+            cs.Add(p => p.Istatus).SetHidden(true);
+            cs.Add(p => p.StockInType).SetCaption(StockInResource.InType);
+            cs.Add(p => p.RefType).SetCaption(StockInResource.RefType);
+            cs.Add(p => p.Total).SetCaption(StockInResource.Total);
+            cs.Add(p => p.Prepared).SetCaption(StockInResource.Prepared);
+            cs.Add(p => p.Approved).SetCaption(StockInResource.Approved);
+            cs.Add(p => p.ApproveTime).SetCaption(StockInResource.ApproveTime);
+            cs.Add(p => p.PrintInSheet).SetCaption(StockInResource.PrintInSheet);
+        })
+    )

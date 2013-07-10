@@ -1,0 +1,41 @@
+使用说明：
+
+1.一般日志ActionLevel.GENERIC将存入文本文件中，
+  严重错误ActionLevel.ERROR将存入文本文件和数据库中，
+  this.ToString()当前类名
+  由于参数中已包括类名，模块名等，但没有包括方法名，所以日志内容中应包括方法名
+
+2.oEventBLL在BaseController和BaseBLL中已经创建，其他地方直接使用即可
+  
+3.完整的日志写法举例
+  oEventBLL.WriteEvent("Initialize 严重错误",
+        ModelEnum.ActionLevel.ERROR, ModelEnum.ActionSource.SYSTEM, this.ToString(),
+        CurrentSession.UserID, ModelEnum.NoteType.ORDER, Order.Gid);
+  参数说明：日志描述，日志级别（错误），来源（系统），当前类名，当前用户ID，参考单据类型（订单），参考单据ID（Gid）
+
+4.省略用法（一）
+  oEventBLL.WriteEvent("Initialize 一般日志",
+        ModelEnum.ActionLevel.GENERIC, ModelEnum.ActionSource.SYSTEM, this.ToString(), CurrentSession.UserID);
+  参数说明：日志描述，日志级别（普通），来源（系统），当前类名，当前用户ID
+  默 认 值：无参考单据
+
+5.省略用法（二）
+  oEventBLL.WriteEvent("Initialize 一般日志", this.ToString(), CurrentSession.UserID);
+  参数说明：日志描述，当前类名，当前用户ID
+  默 认 值：日志级别（普通），来源（系统），无参考单据
+
+6.省略用法（三）不建议使用此方法
+  oEventBLL.WriteEvent("Initialize 一般日志");
+  参数说明：日志描述，当前类名，当前用户ID
+  默 认 值：日志级别（普通），来源（系统），没有类名，没有用户，无参考单据
+
+7.没有数据库连接时也可以直接使用日志记录，例如
+  EventBLL oEventBLL = new EventBLL();
+  oEventBLL.WriteEvent(String.Format("OnStart 服务启动，延迟{0}周期启动连接", nDelayTime), this.ToString());
+  
+8.以下情况应记录日志（包括但不限于以下情况）
+  Controller 的 Initialize 方法内
+  点击重要按钮
+  try 的 catch 块内
+  状态翻转
+

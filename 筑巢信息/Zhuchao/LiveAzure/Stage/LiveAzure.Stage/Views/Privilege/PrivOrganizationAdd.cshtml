@@ -1,0 +1,52 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    ViewBag.Title = "PrivOrganizationAdd";
+    Layout = null;
+    string listUrl = "/Privilege/ListmemOrganization?orgSearchString=" + ViewBag.orgSearchStr;
+}
+
+@using (Ajax.BeginForm("PrivOrganizationAdd", "Privilege", new AjaxOptions { OnSuccess = "grid1Reload" }, new { id = "PrivOrg", name = "PrivOrg" }))
+{
+    <div id="OrgList">
+       @Html.Grid(new GridControl()
+        .SetName("orgList")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl(@listUrl)
+        .SetHeight("'100%'")
+        .SetColumns<LiveAzure.Models.Member.MemberOrganization>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Stage.OrganizationController.organization + @LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+            cs.Add(x => x.FullName.Matter).SetName("FullName").SetCaption(@LiveAzure.Resource.Stage.OrganizationController.organization + @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName);
+        })
+            )
+    </div>
+ 
+    <div>
+      <input type="button" id="oadd" name="oadd" value="@LiveAzure.Resource.Stage.PrivilegeController.add" onclick="add()"/>
+    </div>
+}
+    <script type="text/javascript">
+        function add() {
+            var id = $("#orgList").jqGrid("getGridParam", "selrow");
+            if (id != null) {
+                $.post("/Privilege/IsUserOwnOrg", { orgID: id }, function (IsUserORG) {
+                    if (IsUserORG == "True") {
+                        alert("@LiveAzure.Resource.Stage.PrivilegeController.IsUserOrganization");
+                    }
+                    else {
+                        $.post("/Privilege/PrivOrganization", { selectedOrg: id }, function () {
+                            showPrivOrganization();
+                            UnitPricePanel.CloseEditPanel();
+                        });
+                    }
+                });
+            }
+            else {
+                confirm('@LiveAzure.Resource.Stage.PrivilegeController.addOrgConfirm');
+            }
+        }
+    </script>

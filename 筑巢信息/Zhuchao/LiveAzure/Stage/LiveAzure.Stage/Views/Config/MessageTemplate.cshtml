@@ -1,0 +1,46 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@Html.Grid(new GridControl()
+            .SetName("grid")
+            .SetPageSize(20)
+            .SetHttpVerb(HttpVerbs.Get)
+            .SetIsAutoSize(false)
+            .SetListUrl("/Config/MessageTemplateList")
+            .SetWidth("821")
+            .SetHeight("'100%'")
+            .SetColumns<LiveAzure.Models.General.GeneralMessageTemplate>(template =>
+            {
+                template.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                template.Add(p => p.Code).SetCaption(LiveAzure.Resource.Model.General.GeneralMessageTemplate.Code);
+                template.Add(p => p.Organization).SetCaption(LiveAzure.Resource.Model.General.GeneralMessageTemplate.Organization);
+                template.Add(p=>p.Name).SetCaption(LiveAzure.Resource.Model.General.GeneralMessageTemplate.Name);
+            })
+                .UpdateDefaultPager(pager=>pager
+                    .ShowSearch(false,false)
+                )
+            )
+            <input type="button" value=@LiveAzure.Resource.Stage.ConfigController.Edit onclick="edit()" /><input type="button" value=@LiveAzure.Resource.Stage.ConfigController.View onclick="view()" />
+            <script type="text/javascript">
+                function edit() {
+                     var id = $("#grid").jqGrid("getGridParam", "selrow");
+                     //var rowData = $("#grid").jqGrid("getRowData", id);
+                     //$.getJSON("/Organization/Edit/id="+id, null, function(json))
+                     if (id == null) {
+                         alert("@LiveAzure.Resource.Stage.ConfigController.ChooseTemplate");
+                         return;
+                     }
+                     //window.open("/Config/MessageTemplateEdit?gid=" + id);
+                     document.location.replace("/Config/MessageTemplateEdit?gid=" + id);
+                 }
+                 function view() {
+                     var id = $("#grid").jqGrid("getGridParam", "selrow");
+                     //var rowData = $("#grid").jqGrid("getRowData", id);
+                     //$.getJSON("/Organization/Edit/id="+id, null, function(json))
+                     if (id == null) {
+                         alert("@LiveAzure.Resource.Stage.ConfigController.ChooseTemplate");
+                         return;
+                     }
+                     document.location.replace("/Config/MessageTemplateEdit?gid=" + id + "&view=true");
+                 }
+            </script>

@@ -1,0 +1,91 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using LiveAzure.Resource.Stage
+@using LiveAzure.Resource.Model.Member;
+@{
+    Layout = null;
+}
+<div id="programShortcutGrid">
+@Html.Grid(new GridControl()
+        .SetName("ProgramGrid")
+        .SetPageSize(10)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Config/ProgramShortcutList")
+        .SetEditUrl("/Config/EditShortcut")
+        .SetWidth("600")
+        .SetHeight("'100%'")
+        .SetColumns<LiveAzure.Models.Member.MemberUserShortcut>(cs =>
+        {
+            cs.Add(x => x.Gid).SetHidden(true);
+            cs.Add(x => x.ProgID)
+                .SetCaption(MemberUserShortcut.Program)
+                .SetColumnRenderer(new ComboColumnRenderer("/Config/GetProgramText"))
+                .SetEditable(false);
+            cs.Add(x => x.Sorting)
+                .SetCaption(MemberUserShortcut.Sorting);
+            cs.Add(x => x.Icon)
+                .SetCaption(MemberUserShortcut.Icon);
+        }))
+</div>
+@{
+    if (ViewBag.EnableEdit)
+    {
+        <input type="button" value="@ConfigController.Add" onclick="ShowAddProgramShortcutPage()" />
+        <input type="button" value="@ConfigController.Edit" onclick="ShowEditProgramShortcutPage()" />
+        <input type="button" value="@ConfigController.Delete" onclick="RemoveProgramShortcut()" />
+    }
+    }
+    <script type="text/javascript">
+        var UnitPricePanel = new OpenPanel();
+        UnitPricePanel.bLoading = true;
+        UnitPricePanel.width = 500;
+        UnitPricePanel.height = 600;
+        UnitPricePanel.title = "@LiveAzure.Resource.Stage.ConfigController.ProgramShortcut";
+        UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+        function ShowAddProgramShortcutPage() {
+            UnitPricePanel.OpenPanel();
+            $.ajax({
+                type: "POST",
+                url: "/Config/AddProgramShortcut",
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);
+                }
+            });
+        }
+
+        function ShowEditProgramShortcutPage() {
+            var programShortcutRowId = $("#ProgramGrid").jqGrid("getGridParam", "selrow",null,null);
+            if (programShortcutRowId == null) {
+                alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            }
+            else {
+                UnitPricePanel.OpenPanel();
+                $.ajax({
+                    type: "POST",
+                    url: "/Config/EditProgramShortcut",
+                    data: { shortcutGid: programShortcutRowId },
+                    success: function (data) {
+                        UnitPricePanel.EditPageHtml(data);
+                    }
+                });
+            }
+        }
+
+        function RemoveProgramShortcut() {
+            var programShortcutRowId = $("#ProgramGrid").jqGrid("getGridParam", "selrow");
+            if (programShortcutRowId == null) {
+                alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            }
+            else {
+                if (confirm('@OptionalController.DeleteConfirm')) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Config/RemoveShortcut",
+                        data: { shortcutGid: programShortcutRowId },
+                        success: RefreshProgramGrid()
+                    });
+                }
+            }
+        }
+    </script>

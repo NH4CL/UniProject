@@ -1,0 +1,62 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Product
+@model LiveAzure.Models.Product.ProductOnPayment
+<script src="../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function onSalePaymentSave() {
+        document.body.removeChild(document.getElementById("newEditPageDiv"));
+        document.body.removeChild(document.getElementById("newCoverPageDiv")); 
+        $("#ProductPaymentGrid").trigger('reloadGrid');
+    }
+
+</script>
+<div>
+    @Html.ValidationSummary(true)
+    @using (Ajax.BeginForm("SaveOnsalePayment", "Product", Model, new AjaxOptions { HttpMethod = "POST", OnSuccess = "onSalePaymentSave" }, new { id = "OnsalePaymentForm" }))
+    {
+    <div class="down_AddorEdit">
+        <table>
+            @Html.HiddenFor(model => model.Gid)
+            @Html.HiddenFor(model => model.OnSaleID)
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnPayment.OnSale)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.OnSale.Name.Matter)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnPayment.PayType)
+                </th>
+                <td>
+                    @if (ViewBag.bAddorEdit == true)
+                    {            
+                        @Html.DropDownListFor(model => model.PayType.Name.Matter, (List<SelectListItem>)ViewBag.oPaytypeList)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.PayType.Name.Matter) 
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.ModelBase.Remark)
+                </th>
+                <td>
+                    @Html.TextAreaFor(model => model.Remark)
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    </div>
+    }
+</div>

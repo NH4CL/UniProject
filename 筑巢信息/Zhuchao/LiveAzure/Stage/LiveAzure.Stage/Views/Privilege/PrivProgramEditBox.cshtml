@@ -1,0 +1,20 @@
+﻿@{
+    Layout=null;
+}
+@Html.TextBox("Matter", ViewData["Text"], new { style = "width:270px" })
+<input type="button" value="@LiveAzure.Resource.Common.Save" id="save" onclick="SaveText()" />
+<script type="text/javascript">
+    function SaveText() {
+        var matter = $("#Matter").val();
+        $.ajax({
+            type: "POST",
+            url: "/Privilege/Save",
+            data: { matter: matter },
+            success: function (data) {
+                $.post("/Privilege/PrivProgramNodeList", {}, function (html) {
+                    $("#NodeGrid").html(html);
+                }); 
+            }
+        });        
+    }
+</script>

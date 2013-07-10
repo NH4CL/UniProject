@@ -1,0 +1,971 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Purchase.PurchaseInformation
+<script type="text/javascript">
+    function doInware() {
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/outWare",
+            success: function (data) {
+               
+            },
+            error: function () {
+                alert('@LiveAzure.Resource.Stage.OrganizationController.errorAlert');
+            }
+        });  
+    }
+
+
+    var PurItemPanel = new OpenPanel();
+    PurItemPanel.bLoading = true;
+    PurItemPanel.width = 500;
+    PurItemPanel.height = 600;
+    PurItemPanel.title = "@LiveAzure.Resource.Stage.ProductController.UnitPrice";
+    PurItemPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    
+    function backIndex() {
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setZero",
+            success: function (data) {
+                window.location.href = "/Purchase/Index";
+            },
+            error: function () {
+                alert('@LiveAzure.Resource.Stage.OrganizationController.errorAlert');
+            }
+        });   
+    }
+
+
+    function showPurItemPage() {
+        PurItemPanel.OpenPanel();
+        var gid = $("#Gid").val();
+//        alert("gid = " + gid);
+        if (gid == "") {
+            alert("@LiveAzure.Resource.Stage.PurchaseController.SubmitFirst");
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Purchase/AddpurItem",
+                success: function (data) {
+                    PurItemPanel.EditPageHtml(data);
+                },
+                error: function () {
+                    alert('@LiveAzure.Resource.Stage.OrganizationController.errorAlert');
+                }
+            });
+        }
+    }
+
+    
+
+    var dataformat;
+
+    //结算
+    function doClose() {
+        $("#Pstatus option[value='2']").attr("selected", true);
+        $("#unlock").attr("disabled", true);
+        $("#confirm").attr("disabled", true);
+        $("#unconfirm").attr("disabled", true);
+        $("#hang").attr("disabled", true);
+        $("#unhang").attr("disabled", true);
+        $("#inware").attr("disabled", true);
+        $("#close").attr("disabled", true);
+        $("#delete").attr("disabled", true);
+        $("#log").attr("disabled", true);
+        $("#additem").attr("disabled", true);
+
+        //信息字段
+        $("#etd").attr("disabled", true);
+        $("#atd").attr("disabled", true);
+        $("#eta").attr("disabled", true);
+        $("#ata").attr("disabled", true);
+        $("#PortDate").attr("disabled", true);
+        $("#Brief").attr("disabled", true);
+        $("#aCurrency").attr("disabled", true);
+        $("#CalcMode").attr("disabled", true);
+        $("#Discount").attr("disabled",true);
+
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setClose",
+            success: function (data) {
+
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+
+        //从表按钮
+        $("#editpuritem").attr("disabled", true);
+        $("#saveputitem").attr("disabled", true);
+        $("#deletepuritem").attr("disabled", true);
+        $("#searchuser").attr("disabled", true);
+        $("#addsku").attr("disabled", true);
+
+
+    }
+
+    //确认
+    function doConfirm() {
+        $("#unlock").attr("disabled", true);
+        $("#confirm").attr("disabled", true);
+        $("#unconfirm").attr("disabled", false);
+        $("#hang").attr("disabled", true);
+        $("#delete").attr("disabled", true);
+        $("#close").attr("disabled", false);
+        $("#Pstatus option[value='1']").attr("selected", true);
+        $("#inware").attr("disabled",false);
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setConfirm",
+            success: function (data) {
+                
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+
+    //取消确认
+    function doUnconfirm() {
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setUnconfirm",
+            success: function (data) {
+                if(data == 1) {
+                    $("#unlock").attr("disabled", false);
+                    $("#confirm").attr("disabled", false);
+                    $("#unconfirm").attr("disabled", true);
+                    $("#hang").attr("disabled", false);
+                    $("#close").attr("disabled", false);
+                    $("#Pstatus option[value='0']").attr("selected", true);
+                    $("#inware").attr("disabled", true);
+                }
+                else {
+                    alert("@LiveAzure.Resource.Stage.PurchaseController.CancelConfirm");
+                }
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+
+    //挂起
+    function doHang() {
+        $("#hang").attr("disabled", true);
+        $("#unlock").attr("disabled", true);
+        $("#confirm").attr("disabled", true);
+        $("#unhang").attr("disabled", false);
+        $("#delete").attr("disabled", true);
+        $("#Hanged option[value='1']").attr("selected", true);
+        $("#additem").attr("disabled", false);
+        
+
+        $("#etd").attr("disabled", false);
+        $("#atd").attr("disabled", false);
+        $("#eta").attr("disabled", false);
+        $("#ata").attr("disabled", false);
+        $("#PortDate").attr("disabled", false);
+        $("#Brief").attr("disabled", false);
+        $("#aCurrency").attr("disabled", false);
+        $("#CalcMode").attr("disabled", false);
+        $("#Discount").attr("disabled",false);
+
+        $("#editpuritem").attr("disabled", false);
+        $("#saveputitem").attr("disabled", false);
+        $("#deletepuritem").attr("disabled", false);
+        $("#searchuser").attr("disabled", false);
+        $("#addsku").attr("disabled", false);
+
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setHang",
+            success: function (data) {
+
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+        
+    }
+
+    //解挂
+    function doUnhang() {
+        $("#form0").attr("method", "POST").submit();
+        $("#hang").attr("disabled", false);
+        $("#unlock").attr("disabled", false);
+        $("#confirm").attr("disabled", false);
+        $("#unhang").attr("disabled", true);
+        $("#delete").attr("disabled", false);
+        $("#Hanged option[value='1']").attr("selected", false);
+        $("#additem").attr("disabled", true);
+
+        $("#etd").attr("disabled", true);
+        $("#atd").attr("disabled", true);
+        $("#eta").attr("disabled", true);
+        $("#ata").attr("disabled", true);
+        $("#PortDate").attr("disabled", true);
+        $("#Brief").attr("disabled", true);
+        $("#aCurrency").attr("disabled", true);
+        $("#CalcMode").attr("disabled", true);
+        $("#Discount").attr("disabled",true)
+
+        $("#editpuritem").attr("disabled", true);
+        $("#saveputitem").attr("disabled", true);
+        $("#deletepuritem").attr("disabled", true);
+        $("#searchuser").attr("disabled", true);
+        $("#addsku").attr("disabled", true);
+
+        var ver = parseInt( $("#DocVersion").val() ) + 1;
+//        alert("ver = " + ver);
+        $("#DocVersion").val(ver);
+    }
+    
+    //锁定
+    function doLock() {
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setLock",
+            success: function (data) {
+                if (data == 1) {
+                    $("#lock").attr("disabled", true);
+                    $("#unlock").attr("disabled", false);
+                    $("#confirm").attr("disabled", false);
+                    $("#hang").attr("disabled", false);
+                    $("#delete").attr("disabled", false);
+                }
+                else {
+                    alert("@LiveAzure.Resource.Stage.PurchaseController.CannotLock");
+                }
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+
+
+    //解锁
+    function doUnlock() {
+        //按钮
+        $("#lock").attr("disabled", false);
+        $("#unlock").attr("disabled", true);
+        $("#confirm").attr("disabled", true);
+        $("#unconfirm").attr("disabled", true);
+        $("#hang").attr("disabled", true);
+        $("#unhang").attr("disabled", true);
+        $("#inware").attr("disabled", true);
+        $("#close").attr("disabled", true);
+        $("#delete").attr("disabled", true);
+        $("#log").attr("disabled", true);
+        $("#additem").attr("disabled", true);
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setUnlock",
+            success: function (data) {
+
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+
+    //作废
+    function doDelete() {
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/doDelete",
+            success: function (data) {
+
+                //按钮
+                $("#unlock").attr("disabled", true);
+                $("#confirm").attr("disabled", true);
+                $("#unconfirm").attr("disabled", true);
+                $("#hang").attr("disabled", true);
+                $("#unhang").attr("disabled", true);
+                $("#inware").attr("disabled", true);
+                $("#close").attr("disabled", true);
+                $("#delete").attr("disabled", true);
+                $("#log").attr("disabled", true);
+                $("#additem").attr("disabled", true);
+
+                //信息字段
+                $("#etd").attr("disabled", true);
+                $("#atd").attr("disabled", true);
+                $("#eta").attr("disabled", true);
+                $("#ata").attr("disabled", true);
+                $("#PortDate").attr("disabled", true);
+                $("#Brief").attr("disabled", true);
+                $("#aCurrency").attr("disabled", true);
+                $("#CalcMode").attr("disabled", true);
+                $("#Discount").attr("disabled",true);
+
+                //从表按钮
+                $("#editpuritem").attr("disabled", true);
+                $("#saveputitem").attr("disabled", true);
+                $("#deletepuritem").attr("disabled", true);
+                $("#searchuser").attr("disabled", true);
+                $("#addsku").attr("disabled", true);
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+    function yanChiMode() {
+        var ids;
+        var idsarray;
+        var iteminfor;
+        var totalquantity = 0;
+        var totalamount = 0;
+        ids = $("#gridPurItem").jqGrid('getDataIDs');
+        idsarray = ids.toString().split(',');
+        for (var i = 0; i < idsarray.length; i++) {
+            iteminfor = $("#gridPurItem").jqGrid("getRowData", idsarray[i]);
+            //                    totalquantity = totalquantity + parseInt(iteminfor.Quantity);
+            //                    totalamount = totalamount + parseInt(iteminfor.Amount);
+//            alert("iteminfor.Amount = " + iteminfor.Amount);
+
+            totalquantity = totalquantity + iteminfor.Quantity * 1;
+            totalamount = totalamount + iteminfor.Amount * 1;
+        }
+//        alert("totalquantity = " + totalquantity);
+//        alert("totalamount = " + totalamount);
+        $("#Quantity").val(totalquantity);
+        $("#Amount").val(totalamount);
+    }
+
+    function changeCalmode() {
+       
+        var calmode = $("#CalcMode option:selected").val();
+//        alert("calmode = " + calmode);
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/setCalmode",
+            data: { calmode: calmode },
+            success: function (data) {
+                $("#gridPurItem").trigger('reloadGrid');
+                setTimeout("yanChiMode()",3000);
+              
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+
+    //历史
+    function doHistory() {
+        window.location.href = "/Purchase/PurchaseHistory";
+    }
+
+
+
+
+
+
+    var initialpara;
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/readPara",
+            success: function (data) {                
+                //默认--订单状态
+                $("#DocVersion").attr("disabled", true);
+                $("#Code").attr("disabled", true);
+                $("#TrackLot").attr("disabled", true);
+                $("#aSupplier").attr("disabled", true);
+                $("#WhID").attr("disabled", true);
+                $("#Pstatus").attr("disabled", true);
+                $("#Hanged").attr("disabled", true);
+                $("#Amount").attr("readonly", "readonly");
+                $("#Quantity").attr("readonly", "readonly");
+                $("#finance").attr("disabled", false);
+                $("#history").attr("disabled", false);
+                initialpara = data.split(',');
+                
+                //订单已结算
+                if (initialpara[2] == 2) {
+
+                    $("#lock").attr("disabled", true);
+                    $("#unlock").attr("disabled", true);
+                    $("#confirm").attr("disabled", true);
+                    $("#unconfirm").attr("disabled", true);
+                    $("#hang").attr("disabled", true);
+                    $("#unhang").attr("disabled", true);
+                    $("#inware").attr("disabled", true);
+                    $("#close").attr("disabled", true);
+                    $("#delete").attr("disabled", true);
+                    $("#additem").attr("disabled", true);
+                    $("#editpuritem").attr("disabled", true);
+                    $("#saveputitem").attr("disabled", true);
+                    $("#deletepuritem").attr("disabled", true);
+                    
+                    
+                    //信息字段
+                    $("#etd").attr("disabled", true);
+                    $("#atd").attr("disabled", true);
+                    $("#eta").attr("disabled", true);
+                    $("#ata").attr("disabled", true);
+                    $("#PortDate").attr("disabled", true);
+                    $("#Brief").attr("disabled", true);
+                    $("#aCurrency").attr("disabled", true);
+                    $("#CalcMode").attr("disabled", true);
+                    $("#Discount").attr("disabled", true);
+                }
+                else {
+                    //订单被他人锁定
+                    if (initialpara[0] == 1) {
+                        alert("@LiveAzure.Resource.Stage.PurchaseController.HadBeenLocked");
+
+                        //按钮
+                        $("#lock").attr("disabled", true);
+                        $("#unlock").attr("disabled", true);
+                        $("#confirm").attr("disabled", true);
+                        $("#unconfirm").attr("disabled", true);
+                        $("#hang").attr("disabled", true);
+                        $("#unhang").attr("disabled", true);
+                        $("#inware").attr("disabled", true);
+                        $("#close").attr("disabled", true);
+                        $("#delete").attr("disabled", true);
+                        $("#additem").attr("disabled", true);
+                        $("#editpuritem").attr("disabled", true);
+                        $("#saveputitem").attr("disabled", true);
+                        $("#deletepuritem").attr("disabled", true);
+
+                        //信息字段
+                        $("#etd").attr("disabled", true);
+                        $("#atd").attr("disabled", true);
+                        $("#eta").attr("disabled", true);
+                        $("#ata").attr("disabled", true);
+                        $("#PortDate").attr("disabled", true);
+                        $("#Brief").attr("disabled", true);
+                        $("#aCurrency").attr("disabled", true);
+                        $("#CalcMode").attr("disabled", true);
+                        $("#Discount").attr("disabled", true);
+                    }
+                    //订单未锁定
+                    else if (initialpara[1] == 0) {
+                        //                        alert("未锁定");
+                        //按钮
+                        $("#unlock").attr("disabled", true);
+                        $("#confirm").attr("disabled", true);
+                        $("#unconfirm").attr("disabled", true);
+                        $("#hang").attr("disabled", true);
+                        $("#unhang").attr("disabled", true);
+                        $("#inware").attr("disabled", true);
+                        $("#close").attr("disabled", true);
+                        $("#delete").attr("disabled", true);
+                        $("#additem").attr("disabled", true);
+                        $("#editpuritem").attr("disabled", true);
+                        $("#saveputitem").attr("disabled", true);
+                        $("#deletepuritem").attr("disabled", true);
+
+                        //信息字段
+                        $("#etd").attr("disabled", true);
+                        $("#atd").attr("disabled", true);
+                        $("#eta").attr("disabled", true);
+                        $("#ata").attr("disabled", true);
+                        $("#PortDate").attr("disabled", true);
+                        $("#Brief").attr("disabled", true);
+                        $("#aCurrency").attr("disabled", true);
+                        $("#CalcMode").attr("disabled", true);
+                        $("#Discount").attr("disabled", true);
+                    }
+                    //订单锁定，未确认
+                    else if (initialpara[2] == 0) {
+                        //未挂起
+                        if (initialpara[3] == 0) {
+                            $("#lock").attr("disabled", true);
+                            $("#unlock").attr("disabled", false);
+                            $("#confirm").attr("disabled", false);
+                            $("#unconfirm").attr("disabled", true);
+                            $("#hang").attr("disabled", false);
+                            $("#unhang").attr("disabled", true);
+                            $("#inware").attr("disabled", true);
+                            $("#close").attr("disabled", true);
+                            $("#delete").attr("disabled", false);
+                            $("#additem").attr("disabled", true);
+                            $("#editpuritem").attr("disabled", true);
+                            $("#saveputitem").attr("disabled", true);
+                            $("#deletepuritem").attr("disabled", true);
+                            //信息字段
+                            $("#etd").attr("disabled", true);
+                            $("#atd").attr("disabled", true);
+                            $("#eta").attr("disabled", true);
+                            $("#ata").attr("disabled", true);
+                            $("#PortDate").attr("disabled", true);
+                            $("#Brief").attr("disabled", true);
+                            $("#aCurrency").attr("disabled", true);
+                            $("#CalcMode").attr("disabled", true);
+                            $("#Discount").attr("disabled", true);
+                        }
+                        //挂起
+                        else if (initialpara[3] == 1) {
+
+                            $("#lock").attr("disabled", true);
+                            $("#unlock").attr("disabled", true);
+                            $("#confirm").attr("disabled", true);
+                            $("#unconfirm").attr("disabled", true);
+                            $("#hang").attr("disabled", true);
+                            $("#unhang").attr("disabled", false);
+                            $("#inware").attr("disabled", true);
+                            $("#close").attr("disabled", true);
+                            $("#delete").attr("disabled", true);
+                            $("#additem").attr("disabled", false);
+                            $("#editpuritem").attr("disabled", false);
+                            $("#saveputitem").attr("disabled", false);
+                            $("#deletepuritem").attr("disabled", false);
+
+                            //信息字段
+                            $("#etd").attr("disabled", false);
+                            $("#atd").attr("disabled", false);
+                            $("#eta").attr("disabled", false);
+                            $("#ata").attr("disabled", false);
+                            $("#PortDate").attr("disabled", false);
+                            $("#Brief").attr("disabled", false);
+                            $("#aCurrency").attr("disabled", false);
+                            $("#CalcMode").attr("disabled", false);
+                            $("#Discount").attr("disabled", false);
+                        }
+                    }
+                    //订单锁定，确认
+                    else if (initialpara[2] == 1) {
+                        //                        alert("确认");
+                        $("#lock").attr("disabled", true);
+                        $("#unlock").attr("disabled", true);
+                        $("#confirm").attr("disabled", true);
+                        $("#unconfirm").attr("disabled", false);
+                        $("#hang").attr("disabled", true);
+                        $("#unhang").attr("disabled", true);
+                        $("#inware").attr("disabled", false);
+                        $("#close").attr("disabled", false);
+                        $("#delete").attr("disabled", true);
+                        $("#additem").attr("disabled", true);
+                        $("#editpuritem").attr("disabled", true);
+                        $("#saveputitem").attr("disabled", true);
+                        $("#deletepuritem").attr("disabled", true);
+                        //信息字段
+                        $("#etd").attr("disabled", true);
+                        $("#atd").attr("disabled", true);
+                        $("#eta").attr("disabled", true);
+                        $("#ata").attr("disabled", true);
+                        $("#PortDate").attr("disabled", true);
+                        $("#Brief").attr("disabled", true);
+                        $("#aCurrency").attr("disabled", true);
+                        $("#CalcMode").attr("disabled", true);
+                        $("#Discount").attr("disabled", true);
+                    }
+//                    else if (initialpara[2] == 2) {
+//                        $("#lock").attr("disabled", true);
+//                        $("#unlock").attr("disabled", true);
+//                        $("#confirm").attr("disabled", true);
+//                        $("#unconfirm").attr("disabled", true);
+//                        $("#hang").attr("disabled", true);
+//                        $("#unhang").attr("disabled", true);
+//                        $("#inware").attr("disabled", true);
+//                        $("#close").attr("disabled", true);
+//                        $("#delete").attr("disabled", true);
+//                        $("#additem").attr("disabled", true);
+
+//                        //信息字段
+//                        $("#etd").attr("disabled", true);
+//                        $("#atd").attr("disabled", true);
+//                        $("#eta").attr("disabled", true);
+//                        $("#ata").attr("disabled", true);
+//                        $("#PortDate").attr("disabled", true);
+//                        $("#Brief").attr("disabled", true);
+//                        $("#aCurrency").attr("disabled", true);
+//                        $("#CalcMode").attr("disabled", true);
+//                        $("#Discount").attr("disabled", true);
+//                    }
+                }
+
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+
+
+
+    })
+
+
+    function editPurItem() {
+        var puritemid = $("#gridPurItem").jqGrid("getGridParam", "selrow");
+        lastid = puritemid;
+        //        alert("lastid = " + lastid); 
+        if (puritemid == null)
+        { alert('@LiveAzure.Resource.Stage.OrganizationController.selRowAlert'); }
+        else {
+            $('#gridPurItem').editRow(puritemid);
+        }
+    }
+    function yanChiSave() {
+        var ids;
+        var idsarray;
+        var totalquantity = 0;
+        var totalamount = 0;
+        var iteminfor;
+        ids = $("#gridPurItem").jqGrid('getDataIDs');
+        idsarray = ids.toString().split(',');
+        for (var i = 0; i < idsarray.length; i++) {
+            iteminfor = $("#gridPurItem").jqGrid("getRowData", idsarray[i]);
+            totalquantity = totalquantity + iteminfor.Quantity * 1;
+            totalamount = totalamount + iteminfor.Amount * 1;
+        }
+        //                    alert("totalquantity = " + totalquantity);
+        //                    alert("totalamount = " + totalamount);
+        $("#Quantity").val(totalquantity);
+        $("#Amount").val(totalamount);
+    }
+
+    function yanshi() {
+
+        var saveinfor;
+        var savegid;
+        var saveprice;
+        var savequantity;
+        var saveamount;
+        var nCalMode = $("#CalcMode").val();
+        alert("nCalMode = " + nCalMode);
+
+        saveinfor = $("#gridPurItem").jqGrid("getRowData", lastid);
+        savecode = saveinfor.Code;
+        saveprice = saveinfor.Price;
+        savequantity = saveinfor.Quantity;
+        saveamount = saveinfor.Amount;
+       
+        if (nCalMode == 0) {
+            if (saveamount == "") {
+                alert("@LiveAzure.Resource.Stage.PurchaseController.TotalFeeCanNotBeNull");
+            }
+            else {
+                if (savecode != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Purchase/savePurchaseItem",
+                        data: { savecode: savecode, saveprice1: saveprice, savequantity1: savequantity, saveamount1: saveamount },
+                        success: function (data) {
+                            $("#gridPurItem").trigger('reloadGrid');
+                            setTimeout("yanChiSave()", 3000);
+                        },
+                        error: function () {
+                            alert('@LiveAzure.Resource.Stage.OrganizationController.errorAlert');
+                        }
+                    });
+                }
+                else {
+                    alert("@LiveAzure.Resource.Stage.PurchaseController.HaveNotSave");
+                } 
+            }
+        }
+        if (nCalMode == 1) {
+            if (saveprice == "") {
+                alert("@LiveAzure.Resource.Stage.PurchaseController.PriceCannotBenull");
+            }
+            else {
+                if (savecode != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Purchase/savePurchaseItem",
+                        data: { savecode: savecode, saveprice1: saveprice, savequantity1: savequantity, saveamount1: saveamount },
+                        success: function (data) {
+                            $("#gridPurItem").trigger('reloadGrid');
+                            setTimeout("yanChiSave()", 3000);
+                        },
+                        error: function () {
+                            alert('@LiveAzure.Resource.Stage.OrganizationController.errorAlert');
+                        }
+                    });
+                }
+                else {
+                    alert("@LiveAzure.Resource.Stage.PurchaseController.HaveNotSave");
+                }
+            }
+        }
+        
+
+
+    }
+
+    /*----------------------
+    ----------------------*/
+    function savePurItem(fromAuto) {        
+        var saveid = $("#gridPurItem").jqGrid("getGridParam", "selrow");
+        if (saveid == null) {   
+            if(fromAuto==false) {        
+                $('#gridPurItem').saveRow(lastid);
+                setTimeout("yanshi()", 3000);
+            }else{
+                /*------请不要删除以下两行  please don't delete the next rows---------*/
+                //var rowid = $('#gridPurItem tbody:first-child tr:last').attr('id');alert(rowid);
+                //jQuery("#gridPurItem").setSelection(rowid, true);                 
+                var selectedid = $("#gridPurItem tbody:first-child tr:last").attr("id");alert(selectedid);                
+                $('#gridPurItem').saveRow(selectedid);
+                lastid =selectedid;
+                setTimeout("yanshi()", 3000);
+            }
+        }
+        else {            
+            $('#gridPurItem').saveRow(saveid);
+            lastid = saveid;
+            setTimeout("yanshi()", 3000);
+        }
+    }
+
+    /*---------------------
+    查看采购单付款记录
+    ---------------------*/ 
+    var doFinance_Panel = new OpenPanel();
+    doFinance_Panel.width = 500;
+    doFinance_Panel.height = 600;
+    doFinance_Panel.title = "@LiveAzure.Resource.Stage.PurchaseController.PurchasePayHistory";
+    doFinance_Panel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";   
+    function doFinance(){    
+        doFinance_Panel.OpenPanel();
+        $.ajax({
+            type:"POST",
+            url:"/Purchase/PurchaseFinance",
+            success:function(html)
+            {
+                doFinance_Panel.EditPageHtml(html);
+            }
+        });
+    }
+</script>
+@{
+    string dataformat = ViewBag.datePattern;
+ }
+<div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.Print" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.PurchaseList" onclick="backIndex()" />
+            </td>
+        </tr>
+    </table>
+</div>
+@using (Ajax.BeginForm("PurchaseDetail", "Purchase", new AjaxOptions { }))
+{ 
+    <div>
+        <table class="DIY_table" border="1">
+            @Html.HiddenFor(model => model.Gid)
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.DocVersion
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.DocVersion)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Discount
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Discount)
+                    @*<input id="etd" type="text" value = "@Model.etd" />*@
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Code
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Code)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Pstatus
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Pstatus, (List<SelectListItem>)ViewBag.ostatuslist, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.etd
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.etd).AsDatePicker(new DatePicker())
+                    @*<input id="etd" type="text" value = "@Model.etd" />*@
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.TrackLot
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.TrackLot)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Supplier
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.aSupplier, (List<SelectListItem>)ViewBag.osupplierlist, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.atd
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.atd).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <p>@LiveAzure.Resource.Stage.PurchaseController.PurchaseTime</p>
+                </th>
+                <td>
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Warehouse
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.WhID, (List<SelectListItem>)ViewBag.owarehouselist, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.eta
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.eta).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Amount
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Amount)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Ptype
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.Pstatus)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.ata
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.ata).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Quantity
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Quantity)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Currency
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.aCurrency, (List<SelectListItem>)ViewBag.listorgunit, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.PortDate
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.PortDate).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Brief
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Brief)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Hanged
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Hanged, (List<SelectListItem>)ViewBag.ohangstatuslist, new { type = "width:150px" })
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.CalcMode
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.CalcMode, (List<SelectListItem>)ViewBag.ocalmodelist, new { type = "width:150px", onchange = "changeCalmode()" })
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+<div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Common.LockStatus.Split(',')[1]" id="lock" onclick="doLock()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Common.LockStatus.Split(',')[0]" id="unlock" onclick="doUnlock()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Common.OrderStatus.Split(',')[1]" id="confirm" onclick="doConfirm()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Common.OrderStatus.Split(',')[0]" id="unconfirm" onclick="doUnconfirm()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Common.OrderStatus.Split(',')[1]" id="hang" onclick="doHang()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Common.OrderStatus.Split(',')[0]" id="unhang" onclick="doUnhang()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.CreateStockIn" id="inware" onclick="doInware()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.CloseBill" id="close" onclick="doClose()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.Cancel" id="delete" onclick="doDelete()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.PayNote" id="finance" onclick="doFinance()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.History" id="history" onclick="doHistory()" />
+            </td>
+            <td>
+                <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.AddProduct" id="additem" onclick="showPurItemPage()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    @Html.Grid(new GridControl()
+    .SetName("gridPurItem")
+    .SetPageSize(10)
+    .SetIsAutoSize(false)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Purchase/listPurchaseItem")
+    .SetEditUrl("/Purchase/savePurchaseItemGrid")
+    .SetHeight("'100%'")
+    .SetWidth("600")
+    .SetColumns<LiveAzure.Models.Purchase.PurchaseItem>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true).SetName("Gid");
+        cs.Add(x => x.SkuItem.Product.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Name).SetEditable(false).SetName("Name");
+        cs.Add(x => x.SkuItem.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Code).SetEditable(false).SetName("Code");
+        cs.Add(x => x.SkuItem.Barcode).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode).SetEditable(false).SetName("Barcode");
+        cs.Add(x => x.Price).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseItem.Price);
+        cs.Add(x => x.Quantity).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseItem.Quantity);
+        cs.Add(x => x.InQty).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseItem.InQty).SetEditable(false);
+        cs.Add(x => x.Amount).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseItem.Amount);
+    })
+    )
+    <br />
+    <input type="button" id = "editpuritem" value="@LiveAzure.Resource.Common.Edit"  onclick="editPurItem()" />
+    <input type="button" id = "saveputitem" value="@LiveAzure.Resource.Common.Save"  onclick="savePurItem(false)" />
+    <input type="button" id = "deletepuritem" value="@LiveAzure.Resource.Common.Delete"  onclick="deletePurItem()" />
+</div>

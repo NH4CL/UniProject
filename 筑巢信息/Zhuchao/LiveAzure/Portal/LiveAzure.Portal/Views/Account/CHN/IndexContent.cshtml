@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;  
+}
+
+<div class="acc_right">
+    <div class="page_root">
+        <div class="page_root_pic">
+            <img alt="" src="@Url.Content("/Content/img/root.png")" />
+        </div>
+        <div class="page_root_content">
+            当前位置：
+        </div>
+    </div>
+    <span class="black">您好:欢迎进入普通用户中心</span><span style="float:right;">您目前是普通会员 您的积分为：0</span>
+    <div class="account">
+        <table>
+            <tr>
+            <td>
+            <b>您的账户目前总积分：0分</b> <a href="javascript:MyCredits();">查看积分链接</a>
+            </td>
+            <td>
+            <b>您的订单交易总数量：</b><a href="javascript:MyOrder();">进入订单列表</a>
+            </td>
+            </tr>
+            <tr>
+            <td><span>预存款余额：    </span></td>
+            <td>
+            <b>已回复的评论与咨询：</b><a href="javascript:MyComment();">立即查看</a>
+            </td>
+            </tr>
+        </table>
+    </div>
+    <div class="order">
+        <p><span class="black">我的订单</span></p>
+        <div id="OrderList">
+            @*@Html.Action("UserOrderList")*@
+        </div>
+    </div>
+</div>

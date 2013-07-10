@@ -1,0 +1,21 @@
+考虑到时区问题
+
+1. 数据库的日期字段全部更改为DateTimeOffset(0)类型
+
+2. 程序中不再使用DateTime类型，只允许使用DateTimeOffset类型，以下示例：
+
+3. 只有个别地方需要使用DateTime类型，例如淘宝接口，Cookie和Session等。
+
+a). 可空的日期转字符串
+  DateTimeOffset? DateValue { get;set; }
+  p.DateValue.Value.ToString(culture.DateTimeFormat);
+
+b). 不可空的日期转字符串
+  DateTimeOffset DateValue { get;set; }
+  p.DateValue.ToString(culture.DateTimeFormat);
+
+c). 手动新建一个日期
+  DateTimeOffset oUtcTime1 = new DateTimeOffset(2011, 8, 24, 13, 45, 24, TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now));
+
+d). 当前日期时间
+  DateTimeOffset oUtcTime1 = DateTimeOffset.Now;

@@ -1,0 +1,58 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseShelf
+@using MVC.Controls
+@using MVC.Controls.Grid
+@using SkuShelfResource = LiveAzure.Resource.Model.Warehouse.WarehouseSkuShelf
+@using SKUResource = LiveAzure.Resource.Model.Product.ProductInfoItem
+@using CommonResource = LiveAzure.Resource.Common
+@{
+    ViewBag.Title = "WarehouseSKUShelf";
+}
+
+<h2>WarehouseSKUShelf</h2>
+<table>
+    <tr>
+        <th>@LiveAzure.Resource.Model.Warehouse.WarehouseShelf.Warehouse</th>
+        <td>@Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "warehouseName" })</td>
+        <th>@LiveAzure.Resource.Model.Warehouse.WarehouseShelf.Code</th>
+        <td>@Html.TextBoxFor(model => model.Code, new { disabled = "disabled" })</td>
+        <th>@LiveAzure.Resource.Model.Warehouse.WarehouseShelf.Barcode</th>
+        <td>@Html.TextBoxFor(model => model.Barcode, new { disabled = "disabled" })</td>
+    </tr>
+    <tr> 
+        <th>@LiveAzure.Resource.Model.Warehouse.WarehouseShelf.Name</th>
+        <td>@Html.TextBoxFor(model => model.Name, new { disabled = "disabled" })</td>
+        <th>@LiveAzure.Resource.Model.Warehouse.WarehouseShelf.Brief</th>
+        <td>@Html.TextBoxFor(model => model.Brief, new { disabled = "disabled" })</td>
+        <th>@LiveAzure.Resource.Model.Warehouse.WarehouseShelf.Remark</th>
+        <td>@Html.TextAreaFor(model => model.Remark, new { disabled = "disabled" })</td>
+    </tr>
+</table>
+@Html.Grid(
+    new GridControl()
+        .SetName("SKU")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("ShelfSKUList", new { shelfID = Model.Gid }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseSkuShelf>(cs=>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.SkuItem).SetCaption(SkuShelfResource.SkuItem);
+                cs.Add(x => x.SkuID).SetCaption(SKUResource.FullName);
+                cs.Add(x => x.TrackLot).SetCaption(SkuShelfResource.TrackLot);
+                cs.Add(x => x.Quantity).SetCaption(SkuShelfResource.Quantity);
+                cs.Add(x => x.LockQty).SetCaption(SkuShelfResource.LockQty);                  
+            })
+            .UpdateDefaultPager(pager=>
+                pager
+                    .ShowSearch(false,false)
+            )
+        )
+<input type="button" id="btnCancel" value="@CommonResource.Cancel" />
+<script type="text/javascript">
+    $("#btnCancel").click(function () {
+        document.location.replace("/Warehouse/Shelf");
+    });
+</script>

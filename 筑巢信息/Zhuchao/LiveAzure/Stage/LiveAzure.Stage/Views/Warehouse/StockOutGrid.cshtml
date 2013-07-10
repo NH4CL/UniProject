@@ -1,0 +1,36 @@
+﻿@using OutResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockOut
+@using MVC.Controls
+@using MVC.Controls.Grid
+@{
+    Guid whID = (Guid)ViewBag.WHID;
+}
+@Html.Grid(
+    new GridControl()
+        .SetName("OutGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("StockOutList", new { whID = whID }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseStockOut>(cs=>
+            {
+                cs.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(p => p.Code).SetCaption(OutResource.Code);
+                cs.Add(p => p.Ostatus).SetHidden(true);
+                cs.Add(p => p.OutStatusName).SetCaption(OutResource.Ostatus);
+                cs.Add(p => p.OutType).SetCaption(OutResource.OutType);
+                cs.Add(p => p.RefType).SetHidden(true);
+                cs.Add(p => p.RefTypeName).SetCaption(OutResource.RefType);
+                cs.Add(p => p.RefID).SetCaption(OutResource.RefID);
+                //cs.Add(p => p.TakeMan).SetCaption(OutResource.TakeMan);
+                //cs.Add(p => p.SortMan).SetCaption(OutResource.SortMan);
+                //cs.Add(p => p.SendMan).SetCaption(OutResource.SendMan);
+                cs.Add(p => p.PrintOutSheet).SetCaption(OutResource.PrintOutSheet);
+                cs.Add(p => p.PrintEnvelope).SetCaption(OutResource.PrintEnvelope);
+                cs.Add(p => p.Total).SetCaption(OutResource.Total);
+                cs.Add(p => p.Prepared).SetCaption(OutResource.Prepared);
+                cs.Add(p => p.Approved).SetCaption(OutResource.Approved);
+                cs.Add(p => p.ApproveTime).SetCaption(OutResource.ApproveTime);
+            })
+    )

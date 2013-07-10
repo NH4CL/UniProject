@@ -1,0 +1,77 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@model LiveAzure.Models.Mall.MallSensitiveWord
+@{
+    ViewBag.Title = "SensitiveWord";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SensitiveWord</h2>
+<div>
+    @Html.Label("组织")
+    @Html.DropDownList("Org", (List<SelectListItem>)ViewBag.OrgList, new { onchange = "GetOrgID()" })
+    @Html.Label("渠道")
+    @Html.DropDownList("Channel", (List<SelectListItem>)ViewBag.ChlList, new { onchange = "GetChannelID()" })
+</div>
+<div id="DisableIPList">
+@Html.Grid(
+            new GridControl()
+            .SetName("Wordgrid")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Mall/SensitiveWordList")
+            .SetHeight("'100%'")
+            .SetWidth("300")
+            .SetColumns<LiveAzure.Models.Mall.MallSensitiveWord>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Keyword).SetCaption(@LiveAzure.Resource.Model.Mall.MallSensitiveWord.Keyword);
+                cs.Add(x => x.Channel.FullName.Matter).SetName("Channel").SetCaption(@LiveAzure.Resource.Model.Mall.MallSensitiveWord.ChlID);
+                cs.Add(x => x.Organization.FullName.Matter).SetName("Organization").SetCaption(@LiveAzure.Resource.Model.Mall.MallSensitiveWord.OrgID);
+            })
+    )
+</div>
+<input type="button" id="ADD" value="@LiveAzure.Resource.Common.Add" onclick="add()" />
+<input type="button" id="EDIT" value="@LiveAzure.Resource.Common.Edit" onclick="edit()" />
+<input type="button" id="DELETE" value="@LiveAzure.Resource.Common.Delete" onclick="del()" />
+<script type="text/javascript">
+    function add() {
+        window.location.href = "/Mall/SensitiveWordAddOrEdit";
+    }
+    function edit() {
+        var id = $("#Wordgrid").jqGrid("getGridParam", "selrow");
+        if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Mall/SensitiveWordAddOrEdit?id=" + id;
+        }
+    }
+    function del() {
+        var id = $("#Wordgrid").jqGrid("getGridParam", "selrow");
+        if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Mall/SensitiveWordDelete?id=" + id;
+        }
+    }
+    function GetOrgID() {
+        var OrgID = $("#Org").val();
+        $.ajax({
+            type: "POST",
+            url: "/Mall/GetOrgID",
+            data: { id: OrgID },
+            success: function () {
+                window.location.href = "/Mall/SensitiveWord?id=" + OrgID;
+            }
+        });
+    }
+    function GetChannelID() {
+        var id = $("#Channel").val();
+        $.ajax({
+            type: "POST",
+            url: "/Mall/GetChannelID",
+            data: { id: id },
+            success: function () {
+            $("#Wordgrid").trigger('reloadGrid');
+                    }
+                });
+            }
+</script>

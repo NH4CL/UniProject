@@ -1,0 +1,36 @@
+﻿@using MovResource = LiveAzure.Resource.Model.Warehouse.WarehouseMoving
+@using MVC.Controls
+@using MVC.Controls.Grid
+@{
+    Guid whID = (Guid)ViewBag.WHID;
+}
+@Html.Grid(
+    new GridControl()
+        .SetName("MovGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("MovingList", new { whID = whID }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseMoving>(cs =>
+        {
+            cs.Add(m => m.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(m => m.Code).SetCaption(MovResource.Code);
+            cs.Add(m => m.OldWarehouse).SetCaption(MovResource.OldWarehouse);
+            cs.Add(m => m.NewWarehouse).SetCaption(MovResource.NewWarehouse);
+            cs.Add(m => m.Mstatus).SetHidden(true);
+            cs.Add(m => m.MoveStatusName).SetCaption(MovResource.Mstatus);
+            cs.Add(m => m.MoveTypeName).SetCaption(MovResource.Mtype);
+            cs.Add(m => m.Reason).SetCaption(MovResource.Reason);
+            cs.Add(m => m.Total).SetCaption(MovResource.Total);
+            cs.Add(m => m.Prepared).SetCaption(MovResource.Prepared);
+            cs.Add(m => m.Approved).SetCaption(MovResource.Approved);
+            cs.Add(m => m.ApproveTime).SetCaption(MovResource.ApproveTime);
+            cs.Add(m => m.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+        })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )

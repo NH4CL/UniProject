@@ -1,0 +1,124 @@
+﻿@model LiveAzure.Models.Member.MemberOrganization
+           
+@{
+    ViewBag.Title = "编辑";
+}
+
+@using (Html.BeginForm("Edit","Organization",FormMethod.Post))
+{
+     @Html.HiddenFor(model => model.Gid)
+     
+     
+     @Html.HiddenFor(model => model.aLocation)
+     @Html.HiddenFor(model => model.aIntroduction)
+     @Html.HiddenFor(model => model.aParent)
+     @Html.HiddenFor(model => model.ExtendType)
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Code
+    @Html.EditorFor(model => model.Code)
+    @Html.ValidationMessageFor(model => model.Code)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.ExCode
+    @Html.EditorFor(model => model.ExCode)
+    @Html.ValidationMessageFor(model => model.ExCode)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Ostatus
+    @Html.DropDownListFor(model => model.Ostatus, (List<SelectListItem>)ViewBag.ostatuslist, new { type = "width:150px" })
+    @Html.ValidationMessageFor(model => model.Ostatus)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Otype
+    @Html.DropDownListFor(model => model.Otype, (List<SelectListItem>)ViewBag.otypelist, new { type = "width:150px" })
+    @Html.ValidationMessageFor(model => model.Otype)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.ExType
+    @Html.EditorFor(model => model.ExType)
+    @Html.ValidationMessageFor(model => model.ExType)
+    </div>
+    
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.FullName
+    @Html.HiddenFor(model => model.aFullName)   
+    @Html.EditorFor(model => model.FullName.Matter)
+    @Html.ValidationMessageFor(model => model.FullName.Matter)
+    </div>
+    
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName
+    @Html.HiddenFor(model => model.aShortName)
+    @Html.EditorFor(model => model.ShortName.Matter)
+    @Html.ValidationMessageFor(model => model.ShortName.Matter)
+    </div>
+    
+   
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.FullAddress
+    @Html.EditorFor(model => model.FullAddress)
+    @Html.ValidationMessageFor(model => model.FullAddress)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Contact
+    @Html.EditorFor(model => model.Contact)
+    @Html.ValidationMessageFor(model => model.Contact)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.WorkPhone
+    @Html.EditorFor(model => model.WorkPhone)
+    @Html.ValidationMessageFor(model => model.WorkPhone)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.CellPhone
+    @Html.EditorFor(model => model.CellPhone)
+    @Html.ValidationMessageFor(model => model.CellPhone)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.WorkFax
+    @Html.EditorFor(model => model.WorkFax)
+    @Html.ValidationMessageFor(model => model.WorkFax)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Email
+    @Html.EditorFor(model => model.Email)
+    @Html.ValidationMessageFor(model => model.Email)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.HomeUrl
+    @Html.EditorFor(model => model.HomeUrl)
+    @Html.ValidationMessageFor(model => model.HomeUrl)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Sorting
+    @Html.EditorFor(model => model.Sorting)
+    @Html.ValidationMessageFor(model => model.Sorting)
+    </div>
+    
+    <div>
+    @LiveAzure.Resource.Model.Member.OrganizationBase.Brief
+    @Html.EditorFor(model => model.Brief)
+    @Html.ValidationMessageFor(model => model.Brief)
+    </div>
+    
+    <div>
+    <input type="submit" value="@LiveAzure.Resource.Stage.OrganizationController.submit" />
+    <input type="reset" value="@LiveAzure.Resource.Stage.OrganizationController.reset" />
+    </div>
+}
+
+   

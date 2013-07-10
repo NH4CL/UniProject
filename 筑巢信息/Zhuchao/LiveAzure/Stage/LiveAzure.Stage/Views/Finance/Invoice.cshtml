@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Invoice";
+}
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Finance.FinanceInvoice
+<div>
+    @Html.Label(@LiveAzure.Resource.Model.Finance.FinanceInvoice.OrderID)
+    @Html.EditorFor(model => model.OrderID)
+    <input type="button" value="search" onclick="SearchInvoiceByOrder()" />
+</div>
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.FinanceController.EditInvoice";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function SearchInvoiceByOrder() {
+        var orderId = document.getElementById("OrderID").value;
+        $.ajax({
+            type: "POST",
+            url: "/Finance/InvoiceListTable",
+            data: { orderCode_Page: orderId },
+            success: function (data) {
+                $("#invoiceGridTable").html(data);
+            }
+        });
+    }
+
+    function RefreshInvoiceGrid() {
+        $('#InvoiceGrid').trigger('reloadGrid');
+    }
+</script>
+<div id="invoiceGridTable">
+
+    @Html.Grid(new GridControl()
+    .SetName("InvoiceGrid")
+    .SetPageSize(20)
+    .SetIsAutoSize(true)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Finance/InvoiceList")
+    .SetWidth("'50%'")
+    .SetHeight("'100%'")
+    .SetColumns<LiveAzure.Models.Finance.FinanceInvoice>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.OrderInfo).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.OrderInfo);
+        cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Code);
+        cs.Add(x => x.Title).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Title);
+        cs.Add(x => x.Matter).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Matter);
+        cs.Add(x => x.Istatus).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Istatus)
+                              .SetColumnRenderer(new ComboColumnRenderer("/Finance/GetIstatusText"));
+        cs.Add(x => x.Amount).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Amount);
+        cs.Add(x => x.SendNote).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.SendNote);
+    })
+)
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddInvoicePage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="ShowEditInvoicePage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemoveInvoice()" />
+</div>
+<script type="text/javascript">
+    function ShowAddInvoicePage() {
+        UnitPricePanel.OpenPanel();
+        $.post("/Finance/AddInvoice", {}, function (data) {
+            UnitPricePanel.EditPageHtml(data);
+        });
+    }
+
+    function ShowEditInvoicePage() {
+        var InvoiceRowId = $("#InvoiceGrid").jqGrid("getGridParam", "selrow");
+        if (InvoiceRowId == null) {
+            alert("@LiveAzure.Resource.Stage.OptionalController.Notice");
+        }
+        else {
+            UnitPricePanel.OpenPanel();
+            $.ajax({
+                type: "POST",
+                url: "/Finance/EditInvoice",
+                data: { invoiceGid: InvoiceRowId },
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);
+                }
+            });
+        }
+    }
+
+    function RemoveInvoice() {
+        var InvoiceRowId = $("#InvoiceGrid").jqGrid("getGridParam", "selrow");      //选中行的Gid
+        if (InvoiceRowId == null) {
+            alert("@LiveAzure.Resource.Stage.CategoryController.Notice");
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm')) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Finance/RemoveInvoice",
+                    data: { invoiceGid: InvoiceRowId },
+                    success: RefreshInvoiceGrid()
+                });
+            }
+        }
+    }
+</script>
+</div>

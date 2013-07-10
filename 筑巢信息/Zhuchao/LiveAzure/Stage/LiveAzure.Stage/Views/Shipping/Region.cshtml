@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Region";
+}
+
+
+<h2>ShipperRegion</h2>
+
+<div id ="choose">
+@Html.Label("请选择承运商")
+@Html.DropDownList("ChooseShip",(List<SelectListItem>)ViewBag.olist,"---请选择运营商---")
+<input type="button" id="confirm" value="确定" onclick="Confirm()" />
+</div>
+<div id="RegionTree">
+
+</div>
+
+<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "../Shipping/RegionTree",
+        data: {},
+        success: function (html) {
+            $("#RegionTree").html(html);
+        }
+    });
+    function Confirm() {
+        id = $("#ChooseShip").val();
+        $.ajax({
+
+            type: "POST",
+
+            url: "/Shipping/GetID",
+
+            data: { id: id },
+
+            success: function (data) {
+                $.ajax({
+                    type: "POST",
+                    url: "../Shipping/RegionTree",
+                    data: {},
+                    success: function (html) {
+                        $("#RegionTree").html(html);
+                    }
+                });
+            }
+
+        });
+    }
+</script>

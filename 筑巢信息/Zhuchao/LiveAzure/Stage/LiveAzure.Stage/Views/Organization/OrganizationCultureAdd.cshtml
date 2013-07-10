@@ -1,0 +1,248 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    Layout=null;
+}
+@model LiveAzure.Models.Member.MemberOrgCulture
+@{
+    if(ViewBag.notHasCode)
+    {
+        <table>
+            <tr>
+                <td>@LiveAzure.Resource.Model.Member.OrganizationBase.Code</td>
+                <td>
+                    <input type="text" id="organizationCode" onblur="CheckOrgCode();" />
+                </td>
+                <td style="color:Red;"><span id="codeCheckMessage"></span></td>
+            </tr>
+        </table>            
+    }
+    else
+    {
+        <span>@LiveAzure.Resource.Model.Member.OrganizationBase.Code:</span>
+        <span>@ViewBag.modeOrgCode</span>
+    }
+}
+<br />
+<p>@Html.Raw(LiveAzure.Resource.Stage.OrganizationController.OrgSupportCulture)</p>
+<div id="orgCultureList">
+    @Html.Grid(new GridControl()
+        .SetName("gridOrganizationCulture")
+        .SetPageSize(8)
+        .SetIsAutoSize(false)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Organization/OrgCultureGridList")
+        .SetHeight("'100%'")
+        .SetWidth("600")
+        .SetColumns<LiveAzure.Models.Member.MemberOrgCulture>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.aCulture).SetName("aCulture").SetHidden(true);
+            cs.Add(x => x.Culture.CultureName).SetCaption(@LiveAzure.Resource.Model.Member.MemberOrgCulture.Cultures).SetName("Culture");
+            cs.Add(x => x.Sorting).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Sorting);
+            cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+        })
+       )
+       
+    <div>
+        <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="AddOrgCulture()" />
+        <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="EditOrgCulture()" />
+        <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="DeleteOrgCulture()" />
+    </div>
+</div>
+<br />
+<p>@Html.Raw(LiveAzure.Resource.Stage.OrganizationController.OrgSupportCurrency)</p>
+<div id="orgUnitList">
+@Html.Grid(new GridControl()
+    .SetName("gridOrganizationUnit")
+    .SetPageSize(8)
+    .SetIsAutoSize(false)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Organization/OrgUnitGridList")
+    .SetEditUrl("/Organization/OrgUnitEdit")
+    .SetHeight("'100%'")
+    .SetWidth("600")
+    .SetColumns<LiveAzure.Models.Member.MemberOrgCulture>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.aCurrency).SetName("aCurrency").SetHidden(true);
+        cs.Add(x => x.Currency).SetCaption(LiveAzure.Resource.Model.Member.MemberOrgCulture.Currency);
+        cs.Add(x => x.Sorting).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Sorting);
+        cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+    })
+    )
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="AddOrgUnit()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="EditOrgUnit()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="DeleteOrgUnit()" />
+</div>
+</div>
+<br />
+@if (ViewBag.notHasCode)
+{
+    <input type="button" value="@LiveAzure.Resource.Common.Save" onclick="SaveNewOrg();" />
+}
+
+<script type="text/javascript">
+    function CheckOrgCode() {
+        var orgCode = $("#organizationCode").val();
+        if (orgCode == null || orgCode == "") {
+            $("#codeCheckMessage").html("@LiveAzure.Resource.Stage.OrganizationController.CodeNull");
+        }
+        else {
+            $.post("/Organization/CheckSaveCode", { organizationCode: orgCode }, function (backdata) {
+                if (backdata != "True") {
+                    $("#codeCheckMessage").html("@LiveAzure.Resource.Stage.OrganizationController.CodehasUsed");
+                }
+                else {
+                    $("#codeCheckMessage").html("");
+                }
+            });
+        }
+    }
+    var OrgCulturePanel = new OpenPanel();
+    OrgCulturePanel.bLoading = true;
+    OrgCulturePanel.width = 500;
+    OrgCulturePanel.height = 600;
+    OrgCulturePanel.title = "@LiveAzure.Resource.Common.Add";
+    OrgCulturePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+    function AddOrgCulture() {
+        OrgCulturePanel.OpenPanel();
+        $.post("/Organization/AddOrgCulturePage", {ctype:0}, back);
+        function back(html) {
+            OrgCulturePanel.EditPageHtml(html);
+        };
+    };
+
+    function EditOrgCulture() {
+        var uRowId = $("#gridOrganizationCulture").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+        OrgCulturePanel.OpenPanel();
+        var Rowdata = $("#gridOrganizationCulture").jqGrid("getRowData", uRowId);
+            $.ajax({
+                type: "POST",
+                url: "/Organization/EditOrgCulturePage",
+                data: { oCultureGid: uRowId,aCulture:Rowdata["aCulture"],aCurrency:Rowdata["aCurrency"] },
+                success: function (data) {
+                 OrgCulturePanel.EditPageHtml(data);
+                }
+            });
+        }
+    };
+
+    function DeleteOrgCulture() {
+        var uRowId = $("#gridOrganizationCulture").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+            var Rowdata = $("#gridOrganizationCulture").jqGrid("getRowData", uRowId);
+                $.ajax({
+                    type: "POST",
+                    url: "/Organization/RemoveOrgCulture",
+                    data: { oCultureGid: uRowId, aCulture:Rowdata["aCulture"], aCurrency:Rowdata["aCurrency"] },
+                    success: function (data) {
+                        $('#gridOrganizationCulture').trigger('reloadGrid');
+                    }
+                });
+            } 
+        }
+    };
+
+    function AddOrgUnit() {
+        OrgCulturePanel.OpenPanel();
+        $.post("/Organization/AddOrgCulturePage", { ctype: 1 }, back);
+        function back(html) {
+            OrgCulturePanel.EditPageHtml(html);
+        };
+    };
+
+    function EditOrgUnit() {
+        var uRowId = $("#gridOrganizationUnit").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+        OrgCulturePanel.OpenPanel();
+        var Rowdata = $("#gridOrganizationUnit").jqGrid("getRowData", uRowId);
+            $.ajax({
+                type: "POST",
+                url: "/Organization/EditOrgCulturePage",
+                data: { oCultureGid: uRowId,aCulture:Rowdata["aCulture"],aCurrency:Rowdata["aCurrency"] },
+                success: function (data) {
+                    OrgCulturePanel.EditPageHtml(data);
+                }
+            });
+        }
+    };
+
+    function DeleteOrgUnit() {
+        var uRowId = $("#gridOrganizationUnit").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+            var Rowdata = $("#gridOrganizationUnit").jqGrid("getRowData", uRowId);
+                $.ajax({
+                    type: "POST",
+                    url: "/Organization/RemoveOrgCulture",
+                    data: { oCultureGid: uRowId, aCulture:Rowdata["aCulture"],aCurrency:Rowdata["aCurrency"] },
+                    success: function (data) {
+                        $('#gridOrganizationUnit').trigger('reloadGrid');
+                    }
+                });
+            }
+        }
+    };
+
+    function CompleteSumbitOrgCulture()
+    {
+        $('#gridOrganizationCulture').trigger('reloadGrid');
+        $('#gridOrganizationUnit').trigger('reloadGrid');
+        OrgCulturePanel.CloseEditPanel();
+    };
+
+    function CompleteSumbitAddDetailForm()
+    {
+        alert("@LiveAzure.Resource.Common.SaveSuccess.");
+    };
+
+    function SaveNewOrg(){
+    var orgCode = $("#organizationCode").val();
+        $.post("/Organization/CheckSaveCode",{organizationCode: orgCode},function(backdata){
+            if(backdata=="True"){
+                $.post("/Organization/HasAddCulture",{},function(hasaddculture){
+                    if(hasaddculture=="True"){
+                        $.post("/Organization/saveNewOrganization",{organizationCode: orgCode},function(backdata){
+                            if(backdata != "True"){
+                                alert("@LiveAzure.Resource.Common.AddFailed");
+                            }
+                            else{
+                                alert("@LiveAzure.Resource.Common.SaveSuccess");
+                                $("#Tab_OrgDetail").click();
+                            }
+                        });
+                    }
+                    else{
+                        alert("@LiveAzure.Resource.Stage.OrganizationController.CultureNull"+"!");
+                    }
+                });
+                
+            }
+            else{
+                alert("@LiveAzure.Resource.Stage.OrganizationController.PleaseAddCorrectCode"+"!");
+                $("#organizationCode").focus();
+            }
+        });
+    };
+</script>

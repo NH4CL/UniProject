@@ -1,0 +1,32 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseInformation
+
+@using ShelfResource = LiveAzure.Resource.Model.Warehouse.WarehouseShelf
+
+@using MVC.Controls
+@using MVC.Controls.Grid
+
+@Html.Grid(
+    new GridControl()
+        .SetName("ShelfGrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetListUrl("/Warehouse/ShelfList?whID="+Model.Gid)
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseShelf>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code).SetCaption(ShelfResource.Code);
+            cs.Add(x => x.Barcode).SetEditable(true).SetCaption(ShelfResource.Barcode);
+            cs.Add(x => x.Name).SetEditable(true).SetCaption(ShelfResource.Name);
+            cs.Add(x => x.Reserved).SetCaption(ShelfResource.Reserved);
+            cs.Add(x => x.ShelfQuantity).SetCaption(ShelfResource.ShelfQuantity);
+            cs.Add(x => x.Brief).SetEditable(true).SetCaption(ShelfResource.Brief);
+            cs.Add(x => x.Remark).SetEditable(true).SetCaption(ShelfResource.Remark);
+        })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )

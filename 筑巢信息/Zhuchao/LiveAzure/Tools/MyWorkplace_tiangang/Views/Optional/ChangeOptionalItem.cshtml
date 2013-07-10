@@ -1,0 +1,75 @@
+﻿@model LiveAzure.Models.General.GeneralOptItem
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@{
+    ViewBag.Title = "ChangeOptionalItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+<div class="display-field">
+    @LiveAzure.Resource.Model.General.GeneralOptItem.Code
+    @Html.EditorFor(model => model.Code)
+    @Html.ValidationMessageFor(model => model.Code)
+</div>
+    
+<div class="display-field">
+    @LiveAzure.Resource.Model.General.GeneralOptItem.Name
+    @Html.EditorFor(model => model.Name.Matter)
+    @Html.ValidationMessageFor(model => model.Name.Matter)
+</div>
+
+<div class="display-field">
+    @LiveAzure.Resource.Model.General.GeneralOptItem.Sorting
+    @Html.EditorFor(model => model.Sorting)
+    @Html.ValidationMessageFor(model => model.Sorting)
+</div>
+    
+<div>
+    <input type="submit" value="Add" />   
+</div>
+
+@*<script type="text/javascript">
+    function ShowOptionalItem() {
+        $("#qq").fadeIn("slow");
+    }
+</script>  *@  
+        
+<div id="showOptItem">
+    @Html.Grid(new GridControl()
+        .SetName("grid")
+        .SetPageSize(10)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Optional/OptionalItemList")
+        .SetEditUrl("/Optional/EditOptionalItem")
+        .SetWidth("1500")
+        .SetColumns<LiveAzure.Models.General.GeneralOptItem>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code);
+            cs.Add(x => x.Name.Matter);
+            cs.Add(x => x.Sorting);
+        }))
+            <br />
+    @{
+    string s = @Html.GridAddButton(buttonText: "Add", gridName: "grid") +
+    @Html.GridUpdateButton(buttonText: "Update", gridName: "grid") +
+    @Html.GridSaveButton(buttonText: "Save", gridName: "grid") +
+    @Html.GridCancelButton(buttonText: "Cancel", gridName: "grid") +
+    @Html.GridDeleteButton(buttonText: "Delete", gridName: "grid", actionUrl: "/Optional/DeleteOptionalItem") +
+    "|" +
+    @Html.GridSaveButton(buttonText: "Save All", gridName: "grid", bulkUrl: "EditOptionalItem", parameterName: "OptionalItem") +
+    @Html.GridCancelButton(buttonText: "Cancel All", gridName: "grid", allRows: true);
+
+    var wrapper = new HtmlString(s);
+        <div>@wrapper</div>
+    }
+    </div>
+ 
+    <div>
+        
+    </div>
+    
+}

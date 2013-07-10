@@ -1,0 +1,25 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Order
+<div>
+    @Html.Grid(
+        new GridControl()
+        .SetName("OrderListGrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetListUrl("/Order/ListOrderProcess")
+        .SetEditUrl("")
+        .SetHeight("'100%'")
+        .SetWidth("300")
+        .SetColumns<LiveAzure.Models.Order.OrderProcess>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Model.Order.OrderProcess.Code);
+                cs.Add(x => x.Order.Code).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Code);
+                cs.Add(x => x.Matter).SetCaption(@LiveAzure.Resource.Model.Order.OrderProcess.Matter);
+                cs.Add(x => x.LastModifiedBy == null ? "" : "").SetName("Modifier").SetCaption(@LiveAzure.Resource.Model.ModelBase.LastModifiedBy);
+                cs.Add(x => x.LastModifyTime).SetName("ModifyTime").SetCaption(@LiveAzure.Resource.Model.ModelBase.LastModifyTime);
+                cs.Add(x => x.Remark).SetCaption(@LiveAzure.Resource.Model.ModelBase.Remark);
+            })
+    )
+</div>

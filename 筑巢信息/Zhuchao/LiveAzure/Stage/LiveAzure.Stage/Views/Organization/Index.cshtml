@@ -1,0 +1,149 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Member.MemberOrganization
+@{
+    ViewBag.Title = "Index";
+}
+@{
+    List<SelectListItem> memOrgs = new List<SelectListItem>();
+}
+<div id="divOrganization" style="width: 100%;">
+    @Html.Grid(new GridControl()
+        .SetName("gridOrganization")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Organization/List")
+        .SetHeight("'100%'")
+        .SetWidth("600")
+        .SetColumns<LiveAzure.Models.Member.MemberOrganization>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+                cs.Add(x => x.FullName).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.FullName);
+                cs.Add(x => x.ShortName).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.ShortName);
+                cs.Add(x => x.OrganStatusName).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Ostatus);
+                cs.Add(x => x.Sorting).SetCaption(LiveAzure.Resource.Model.Member.OrganizationBase.Sorting);
+            })
+       )
+    <br />
+    @if (ViewBag.privEnableEdit == "1"){
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.add" onclick="AddOrganization()" />
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.edit" id="edit" onclick="EditOrganization()" />
+    }
+    else
+    {
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.add" disabled="disabled"/>
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.edit" disabled="disabled"/>
+    }
+    <input type="button" value="@LiveAzure.Resource.Model.Member.OrganizationBase.Introduction" onclick="OrganizationIntroduction();" />
+    @if (ViewBag.privEnableDelete == "1")
+    {
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.delete" id="del" onclick="DeleteOrganization()" />
+    }
+    else
+    { 
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.delete" disabled="disabled"/>
+    }
+    <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.warehouse" id="warehouse" onclick="ShowWareHousePage();" />
+    <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.supplier" id="Supplier" onclick="ShowSupplierPage();" />
+    <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.shipper" id="Shipping" onclick="ShowShippingPage();" />
+    <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.role" id="role" onclick="listRole()"/>
+    <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.user" id="user" onclick="listUser()" />
+</div>
+
+<div id="userBlock">
+    <form id="hiddenform">
+    <input type="text" id="ParentOrgID" name="ParentOrgID" style="display: none" />
+    </form>
+</div>
+<script type="text/javascript">
+    function AddOrganization() {
+        //生成待添加的组织对象保存到缓存区
+        $.post("/Organization/AddNewOrganization", {}, function (back) {
+            if (back == "NoPrivilege") {
+                alert("@LiveAzure.Resource.Common.NoPermission");
+            }
+            else if (back == "Success") {
+                window.location.href = "/Organization/TabPage";
+            }
+        });
+    }
+    function EditOrganization() {
+        var id = $("#gridOrganization").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert('@LiveAzure.Resource.Stage.OrganizationController.selRowAlert'); 
+        }
+        else {
+            $.post("/Organization/setAddingFalse", {}, function (back) {
+                if (back == "NoPrivilege") {
+                    alert("@LiveAzure.Resource.Common.NoPermission");
+                }
+                else if (back == "Success") {
+                    window.location.href = "/Organization/TabPage?id=" + id;
+                }
+            });
+        }
+    }
+    function DeleteOrganization() {
+        var uRowId = $("#gridOrganization").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("@LiveAzure.Resource.Stage.OrganizationController.selRowAlert");
+            return false;
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Organization/RemoveOrganization",
+                    data: { oOrganizationGid: uRowId },
+                    success: function (data) {
+                        if (back == "NoPrivilege") {
+                            alert("@LiveAzure.Resource.Common.NoPermission");
+                        }
+                        else if (back == "Success") {
+                            $('#gridOrganization').trigger('reloadGrid');
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    function ShowWareHousePage() {
+        var ParentOrgID = $("#gridOrganization").jqGrid("getGridParam", "selrow");
+        window.location.href = "/Organization/WarehouseIndex?ParentOrgID=" + ParentOrgID;
+    }
+
+    function ShowSupplierPage() {
+        var ParentOrgID = $("#gridOrganization").jqGrid("getGridParam", "selrow");
+        window.location.href = "/Organization/SupplierIndex?ParentOrgID=" + ParentOrgID;
+    }
+
+    function ShowShippingPage() {
+        var ParentOrgID = $("#gridOrganization").jqGrid("getGridParam", "selrow");
+        window.location.href = "/Organization/ShippingIndex?ParentOrgID=" + ParentOrgID;
+    }
+
+    function listUser() {
+        var ParentOrgID = $("#gridOrganization").jqGrid("getGridParam", "selrow");
+        $("#ParentOrgID").val(ParentOrgID);
+        $("#hiddenform").attr("action", "/User/Index").attr("method", "POST").submit();
+    }
+
+    function listRole() {
+        var ParentOrgID = $("#gridOrganization").jqGrid("getGridParam", "selrow");
+        $("#ParentOrgID").val(ParentOrgID);
+        $("#hiddenform").attr("action", "/User/MemberRole").attr("method", "POST").submit();
+    }
+
+    function OrganizationIntroduction() {
+    var id = $("#gridOrganization").jqGrid("getGridParam", "selrow");
+        if (id == null)
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Organization/OrgIntroduction?OrgType=organization&Gid=" + id;
+        }
+    }
+
+</script>

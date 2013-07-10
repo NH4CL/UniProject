@@ -1,0 +1,424 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Member
+@using LiveAzure.Models.Order
+@using LiveAzure.Controls.LiveRegionSelector
+@ControlManager.RegionSelect()
+@model OrderInformation
+<style type="text/css">
+*{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+#OrderHeadMessage li
+{
+    float:left;
+    margin-left:20px;
+    position:relative;
+    top:10px;
+}
+#OrderHeadMessage ul
+{
+    clear:both;
+    width:100%;
+    height:40px;
+    border-bottom:2px solid #000;
+}
+
+#Message
+{
+    position:relative;
+}
+#Message p
+{
+    display:inline-block;
+    position:absolute;
+    width: 200px;
+    height:100%;
+}
+#Message p *
+{
+    margin-top:10px;
+    }
+#userMessage
+{
+    left:50%;
+    }
+#OrderStatuesInfo span
+{
+    margin-right:10px;
+    }
+#PriceMessageBlock li
+{
+    float:left;
+    margin-right:20px;
+}
+</style>
+<script type="text/javascript">
+    refreshPriceMessageDisplayPage();
+    refreshCashInformation();
+    refreshShippingListShow();
+    function refreshPriceMessageDisplayPage(){
+        $.post("/Order/PriceMessageDisplayPage",{},function(data){
+            $("#PriceMessageBlock").html(data);
+        });
+    };
+    function refreshCashInformation (){
+        $.post("/Order/CashInformation",{},function(data){
+            $("#CashInformationBlock").html(data);
+        });
+    };
+    function refreshShippingListShow (){
+        $.post("/Order/ShippingListShow", {}, function (data) {
+            $("#ShippingBlock").html(data);
+        });
+    };
+    function RemoveOrderItem(){
+        var ONSKUID = $("#OrderItemGrid").jqGrid("getGridParam", "selrow");
+        if(ONSKUID!=null){
+            $.post("/Order/OrderIremRemove",{ONSKUID:ONSKUID},function(back){
+                if(back=="True")
+                {
+                    $("#OrderItemGrid").trigger("reloadGrid");
+                    refreshCashInformation();
+                }
+                else alert("@LiveAzure.Resource.Stage.OrderController.FailToDelete");
+            });
+        }
+        else alert("@Html.Raw(@LiveAzure.Resource.Common.PleaseSelectRow)");
+    };
+    function EditOrderItem(){
+        var ONSKUID = $("#OrderItemGrid").jqGrid("getGridParam", "selrow");
+        if(ONSKUID!=null){
+            AddOrderItemPanel.title = "@LiveAzure.Resource.Model.Order.OrderInformation.OrderItems";
+            AddOrderItemPanel.OpenPanel();
+            $.post("/Order/OrderItemtoEdit",{ONSKUID:ONSKUID},function(html){
+                    AddOrderItemPanel.EditPageHtml(html);
+            });
+        }
+        else alert("@Html.Raw(@LiveAzure.Resource.Common.PleaseSelectRow)");
+    };
+    function SelectUser() {
+        window.location = "/User/Index?FromOrder=true";  
+    };
+    function openDlg() {
+        OpenEditPanel("CoverPage_OrderUserInfo", "EditPage_OrderUserInfo", "PartialPage_OrderUserInfo", null, "Draggable_OrderUserInfo", false);
+        $("#OrderUserGrid").trigger('reloadGrid');
+    };
+    function addUser() {
+        var selectGid = $("#OrderUserGrid").jqGrid("getGridParam", "selrow");
+        if (selectGid == null) {
+            var strSelectTip = "@Html.Raw(LiveAzure.Resource.Stage.OrderController.ChooseUserAddTips)";
+            alert(strSelectTip);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Order/OrderConsigneeInfo",
+                data: { bSelectAddress: true, memberAddressGid: selectGid },
+                success: function (html) {
+                    window.location = "/Order/OrderAdd";
+                }
+            });
+        }
+    };
+
+    function onCurrrencyChanged() {
+        var currencyGid = $("#aCurrency").val();
+        $.ajax({
+            type: "POST",
+            url: "/Order/SetOrderCurrency",
+            data: { currencyId: currencyGid }
+        });
+    };
+
+    function newOrderSaveSuccess(data) { 
+        window.location="/Order/Index";
+    };
+
+    /*------------定义弹出窗口-----------*/
+    var AddOrderItemPanel = new OpenPanel();//初始化窗口实例
+    AddOrderItemPanel.width = 800;
+    AddOrderItemPanel.height = 450;
+    AddOrderItemPanel.closeurl = "@Html.Raw(Url.Content("~/Content/themes/base/images/close.gif"))";
+    function ShowAddOrderItem() {
+        $.post("/Order/CanAddOrderItem",{},function(data){
+            if(data == "Success")
+            {
+                AddOrderItemPanel.title = "@LiveAzure.Resource.Model.Order.OrderInformation.OrderItems";
+                AddOrderItemPanel.OpenPanel();
+                $.post("/Order/OrderItemAddPage", {}, function (html) {
+                    AddOrderItemPanel.EditPageHtml(html);
+                });
+            }
+            else alert("@LiveAzure.Resource.Stage.OrderController.AddCustomer");
+        });
+    };
+
+</script>
+@using (@Ajax.BeginForm("SaveNewOrder", "Order", new AjaxOptions { OnSuccess = "newOrderSaveSuccess" }, new { id = "saveNewOrderForm" }))
+{
+    <div id="OrderHeadMessage">
+        <ul>
+            <li style="float:right;">
+                @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.DocVersion)
+                @Html.DisplayFor(model => model.DocVersion)
+            </li>
+            <li style="float:right;">
+                @Html.Label(@LiveAzure.Resource.Model.Member.MemberUser.DisplayName)
+                @if (Model.UserID == Guid.Empty)
+                {
+                    <input type="text" id="UserName" value="" disabled="disabled" />
+                    <input type="button" id="selectUser" value="@LiveAzure.Resource.Stage.OrderController.ChooseBuyer" onclick="SelectUser()" />
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.User.DisplayName)
+                }
+            </li>
+            <li style="margin-left:0;">
+                @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Organization) @ViewBag.organization
+                @*@if (Model.User != null)
+                {
+                    @ViewBag.organization                   
+                }*@
+            </li>
+            <li>
+                @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Channel)@ViewBag.channel
+               @* @if (Model.User != null)
+                {
+                    @ViewBag.channel
+                }*@
+            </li>
+        </ul>
+    </div>
+    <div id="OrderBody">
+        <table id="OrderBaseInfo" class="DIY_table">
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Ostatus)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.OrderStatusName)
+                </td>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Locking)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.LockStatusName)
+                </td>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.PayStatus)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.PayStatusName)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.LinkCode)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.LinkCode)
+                </td>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.TransType)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.TransType, (List<SelectListItem>)ViewBag.TransList)
+                </td>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.Currency)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.aCurrency, (List<SelectListItem>)ViewBag.Currency, new { onchange = "onCurrrencyChanged();" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.PayID)
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.PayID, (List<SelectListItem>)ViewBag.PayMode)
+                </td>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.PayNote)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.PayNote)
+                </td>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Consignee)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Consignee)
+                    <input type="button" value="@LiveAzure.Resource.Stage.OrderController.OrderConsigneeAdd" onclick="openDlg();" style="display:inline-block" />
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Location)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.aLocation, "RegionSelect", new { ID = "orderRegion", OnClick = "onLocationSelect" })
+                </td>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PostCode)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.PostCode)
+                </td>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Telephone)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Telephone)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Mobile)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Mobile)
+                </td>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Email)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Email)
+                </td>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.BuildingSign)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.BuildingSign)                    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.FullAddress)
+                </th>
+                <td>
+                    @Html.TextAreaFor(model => model.FullAddress)
+                </td>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.PostComment)
+                </th>
+                <td>
+                    @Html.TextAreaFor(model => model.PostComment)
+                </td>
+                <th>
+                    @Html.Label(@LiveAzure.Resource.Model.Order.OrderInformation.LeaveWord)
+                </th>
+                <td>
+                    @Html.TextAreaFor(model => model.LeaveWord)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.BestDelivery)
+                </th>
+                <td>
+                    @Html.TextAreaFor(model => model.BestDelivery)
+                </td>
+                <th></th><td></td>
+                <th></th><td></td>
+            </tr>
+        </table>
+        <div style="top:400px;right:10px;width:50px;">
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    </div>
+
+    <div id="EditPage_OrderUserInfo" class="EditPage">
+        <p id="Draggable_OrderUserInfo" style="background-color: Orange; width: 100%; height: 30px;
+            margin-top: 0;" class="Draggalbe">
+            <span id="PageTitle_OrderUserInfo" class="Title">User</span> <span id="Close_OrderUserInfo"
+                class="Close" onclick="CloseEditPanel('CoverPage_OrderUserInfo','EditPage_OrderUserInfo');"
+                style="float: right;">
+                <img alt="close" src="@Url.Content("~/Content/themes/base/images/close.gif")" /></span>
+        </p>
+        <div id="PartialPage_OrderUserInfo" class="PartialPage">
+            <div id="orderUserList">
+                @Html.Grid(
+                    new GridControl()
+                    .SetName("OrderUserGrid")
+                    .SetPageSize(10)
+                    .SetIsAutoSize(true)
+                    .SetListUrl("/Order/ListOrderUser")
+                    .SetEditUrl("")
+                    .SetHeight("'100%'")
+                    .SetWidth("300")
+                    .SetColumns<LiveAzure.Models.Member.MemberAddress>(cs =>
+                    {
+                        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                        cs.Add(x => x.User.LoginName).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.LoginName);
+                        cs.Add(x => x.User.LastName).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.LastName);
+                        cs.Add(x => x.User.FirstName).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.FirstName);
+                        cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Model.Member.MemberAddress.Code);
+                        cs.Add(x => x.FullAddress).SetCaption(@LiveAzure.Resource.Model.Member.MemberAddress.FullAddress);
+                    })
+                )
+            </div>
+            <div>
+                <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="addUser();" />
+            </div>
+        </div>
+    </div>
+    <div id="CoverPage_OrderUserInfo" class="CoverPage">
+    </div>
+
+<div id="OrderItemGridBlock">
+@Html.Grid(new GridControl()
+                    .SetName("OrderItemGrid")
+                    .SetPageSize(10)
+                    .SetIsAutoSize(true)
+                    .SetHttpVerb(HttpVerbs.Get)
+                    .SetListUrl("/Order/OrderItemList")
+                    .SetHeight("'100%'")
+                    .SetWidth("200")
+                    .SetColumns<LiveAzure.Models.Order.OrderItem>(ps =>
+                    {
+                        ps.Add(p => p.OnSkuID).SetAsPrimaryKey().SetHidden(true);
+                        ps.Add(p => p.Name).SetCaption(@LiveAzure.Resource.Model.Order.OrderItem.Name);
+                        ps.Add(p => p.SkuItem.Code).SetCaption(@LiveAzure.Resource.Model.Product.ProductOnItem.SkuItem);
+                        ps.Add(p => p.SkuItem.Barcode).SetCaption(@LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode);
+                        ps.Add(p => p.ExecutePrice).SetCaption(@LiveAzure.Resource.Model.Order.OrderItem.ExecutePrice);
+                        ps.Add(p => p.SalePrice).SetCaption(@LiveAzure.Resource.Model.Order.OrderItem.SalePrice);
+                        ps.Add(p => p.Quantity).SetCaption(@LiveAzure.Resource.Model.Order.OrderItem.Quantity);
+                        ps.Add(p => p.SkuItem.StdUnit).SetName("StdUnit").SetCaption(@LiveAzure.Resource.Model.Product.ProductInfoItem.StdUnit);
+                        ps.Add(p => p.ExecutePrice * p.Quantity).SetName("Amount").SetCaption("小计");
+                    })
+                    )
+<input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddOrderItem();"/>
+<input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="EditOrderItem();" />
+<input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemoveOrderItem();"/>
+</div>
+
+<div id="ShippingBlock"></div>
+}
+<div id="PriceMessageBlock"></div>
+<div id="CashInformationBlock" style="clear:both;"></div>
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Save" onclick="$('#saveNewOrderForm').submit();"/>
+</div>
+
+<script type="text/javascript">
+    function onLocationSelect(regionID, fullName) {
+        $.ajax({
+            type: "POST",
+            url: "/Order/OrderLocationChange",
+            data: { locationGid: regionID },
+            success: function (data) {
+                if (data == "success") {
+                    $.post("/Order/ShippingListShow", {}, function (data) {
+                        $("#ShippingBlock").html(data);
+                    });
+                }
+            }
+        });
+    }
+
+</script>

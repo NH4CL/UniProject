@@ -1,0 +1,65 @@
+﻿@using LiveAzure.Models.Product;
+@*@model ProductInformation*@
+@*@model List<LiveAzure.Models.General.GeneralPrivItem>*@
+@model LiveAzure.Models.Product.ProductInformation
+@ControlManager.StandardCategorySelect()
+@ControlManager.LiveEditor()
+<script type="text/javascript">
+    /*-----------------------------
+    初始化产品基础信息-PU
+    -----------------------------*/
+    $.ajax({
+        type: "POST",
+        url: "/Product/Grid",
+        success: function (html) {
+            $("#gridpanel").html(html);
+        }
+    });
+    function changeOrganization() {
+        var orgGid = document.getElementById("orgSelect").value;
+        $.ajax({
+            type: "POST",
+            url: "/Product/orgSelect",
+            data: { orgSelect: orgGid, isFromProduct: true },
+            success: function (html) {
+                $("#gridpanel").html(html);
+            }
+        });
+    }
+    function SearchKey() {
+        var key = document.getElementById("search").value;
+        var cate = document.getElementById("Selector1_val").value;
+        if (key == "") {
+            key = null;
+        }
+        if (cate == "") {
+            cate = "00000000-0000-0000-0000-000000000000";
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Product/setKey",
+            data: { Key: key, Cate: cate },
+            success: function () {
+                $("#grid").trigger('reloadGrid');
+            }
+        })
+    }
+</script>
+<div id="productMain">
+    <div id="listShow">
+        <div id="productTop">
+            <span id="productLeft">@LiveAzure.Resource.Stage.ProductController.Organization : @Html.DropDownListFor(model=>model.OrgID, ViewBag.organizationList as IEnumerable<SelectListItem>, new { id = "orgSelect", onchange = "changeOrganization()" })</span>
+            <span id="cate">@LiveAzure.Resource.Stage.ProductController.Category : @Html.EditorFor(model => model.StdCatID, "StandardCategorySelect",
+            new { ID = "Selector1", Type = LiveAzure.Models.ModelEnum.StandardCategoryType.PRODUCT})</span>
+            <span id="productRight">
+            <label>@LiveAzure.Resource.Stage.ProductController.SearchKey</label>
+               <input type="text" value="" name="search" id="search" />
+               <input type="button" value="@LiveAzure.Resource.Stage.ProductController.Search" onclick="SearchKey()" />
+            </span>
+        </div>
+        <div id="gridpanel">
+        </div>
+    </div>
+    <div id="tabShow">
+    </div>
+</div>

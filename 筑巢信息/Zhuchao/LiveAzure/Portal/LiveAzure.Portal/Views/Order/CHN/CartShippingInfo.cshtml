@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models;
+@using LiveAzure.Models.Shipping;
+<script type="text/javascript">
+</script>
+<div class="order_shipping">
+    <div class="radio_div">
+        @{
+            ShippingInformation bestShipper = (ShippingInformation)ViewBag.bestShipper;
+            if (bestShipper != null)
+            {
+                <input type="radio" id="@bestShipper.Gid" name="radio_shipping" checked="checked" disabled="disabled" />@bestShipper.FullName.GetResource(2052);
+            }
+            else
+            {
+                <div>找不到合适的承运商</div>
+            }
+        }        
+    </div>
+</div>

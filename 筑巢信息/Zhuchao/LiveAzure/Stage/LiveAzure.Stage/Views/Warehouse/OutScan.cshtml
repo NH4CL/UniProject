@@ -1,0 +1,195 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using NoteType = LiveAzure.Models.ModelEnum.NoteType
+@model LiveAzure.Models.Warehouse.WarehouseStockOut
+
+@{
+    ViewBag.Title = "WarehouseOutScan";
+}
+<h1>货物扫描</h1>
+        @ViewBag.Message
+        订单号 @Html.DisplayFor(model => model.RefID, "RefID", new { ID = "OrderCode", RefType = NoteType.ORDER })
+        数量 <input type="text" id="ItemCount" />
+        条码 <input type="text" id="ItemCode" />
+        @Html.Grid(
+            new GridControl()
+                .SetName("OutItemGrid")
+                .SetPageSize(20)
+                .SetIsAutoSize(false)
+                .SetListUrl(Url.Action("OutScanList", new{ outID = Model.Gid }))
+                .SetWidth("800")
+                .SetHeight("'100%'")
+                .SetIsRowNumber(true)
+                .SetColumns<LiveAzure.Models.Warehouse.WarehouseOutItem>(cs=>
+                    {
+                        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                        cs.Add(x => x.SkuID).SetHidden(true);
+                        cs.Add(x => x.SkuItem);
+                        cs.Add(x => x.Shelf);
+                        cs.Add(x => x.TrackLot);
+                        cs.Add(x => x.Quantity);
+                        cs.Add(x => 0).SetName("Scanned").SetCaption("Scanned");
+                    })
+                    .UpdateDefaultPager(pager=>
+                        pager
+                            .ShowSearch(false,false)
+                    )
+            )
+<h1>运输扫描</h1>
+        @ViewBag.Message
+        运单包裹数 <input type="text" id="txtDeliveryTotal" />
+        重量/体积 <input type="text" id="txtDeliveryCount" />
+        成运单号 <input type="text" id="txtDeliveryCode" />
+        <br /><br />
+
+        已扫描包裹数/总包裹数 &nbsp;&nbsp; <span id="DeliveryScanned">0</span>/<span id="DeliveryTotal">0</span>
+        @Html.Grid(
+            new GridControl()
+                .SetName("DeliveryScanGrid")
+                .SetPageSize(20)
+                .SetIsAutoSize(false)
+                .SetListUrl(Url.Action("OutDeliveryList", new { outID = Model.Gid }))
+                .SetWidth("800")
+                .SetHeight("'100%'")
+                .SetIsRowNumber(true)
+                .SetColumns<LiveAzure.Models.Warehouse.WarehouseOutDelivery>(cs=>
+                    {
+                        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                        cs.Add(x => x.ShipID)
+                            .SetColumnRenderer(new ComboColumnRenderer(
+                                Url.Action("GetDeliveryShippers",new { whID = Model.WhID })));
+                        cs.Add(x => x.Envelope).SetEditable(false);
+                        cs.Add(x => x.PackWeight);
+                    })
+                    .UpdateDefaultPager(pager=>
+                        pager
+                            .ShowSearch(false,false)
+                    )
+            )
+            @Html.Raw(
+                Html.GridUpdateButton(
+                buttonText:"Edit",
+                gridName:"DeliveryScanGrid")
+            )
+            <input type="button" id="btnConfirm" disabled="disabled" value="确认发货" />
+<script type="text/javascript">
+var outRowDatas = $("OutItemGrid").jqGrid("getRowData");
+var currentScan = 0;        //0订单扫描 1包裹扫描
+
+function isAllOutScanned() {
+    var result = true;
+    $.each(outRowDatas, function (index, row) {
+        if (row.Scanned < row.Quantity) {
+            result = false;
+            return;
+        }
+        return result;
+    });
+}
+
+function isAllDeliveryFinished() {
+    var result = true;
+    return result;
+}
+function scanSKU() {
+    //订单扫描
+    var result = false;
+    var barcode = "123"; //通过扫描其获得，待续
+    var temp = $("#ItemCount").val();  //数值型数据待验证
+    var itemCount;
+
+    if (temp == "") {
+        $("#ItemCount").val("1");
+        itemCount = 1;
+    }
+    else {
+        itemCount = parseInt(temp);
+    }
+    $("#ItemCode").val(barcode);
+    $.post("/Warehouse/BarcodeToSkuID", { barcode: barcode, stockOutGid: "@Model.Gid" },
+            function (skuID) {
+                if (skuID == "00000000-0000-0000-0000-000000000000") {
+                    alert("Not supported product!");
+                    result = false;
+                }
+                else {
+                    $.each(outRowDatas, function (index, row) {
+                        if (row.SkuID == skuID && row.Scanned < row.Quantity) {
+                            row.Scanned += itemCount;
+                            if (row.Scanned > row.Quantity)
+                                row.Scanned = row.Quantity;
+                            $("OutItemGrid").jqGrid("setRowData", row.Gid, row);
+                            $("#ItemCount").val("1");
+                            return;
+                        }
+                    });
+                    result = true;
+                }
+            });
+            return result;
+        }
+function scanDelivery() {
+    //扫描包裹
+    var result = false;
+
+    var envelope = "123"; //面单号，扫描读入
+
+    var txtDeliveryCount = $("#txtDeliveryCount");
+    var txtDeliveryCode = $("#txtDeliveryCode");
+    txtDeliveryCode.val(envelope);
+    var data = { ShipID: "@Model.ShipID", Envelope: envelope, PackWeight: parseFloat(txtDeliveryCount.val()) };
+    $("#DeliveryScanGrid").jqGrid("addRowData", "00000000-0000-0000-0000-000000000000", data);
+    result = true;
+    return result;
+}
+//扫描时触发的事件
+function scan() {
+    var result = false;
+    if (currentScan == 0) {
+        //订单扫描
+        result = scanSKU();
+        if (result) {
+            if (isAllOutScanned()) {
+                alert("SKU Scan Finished!");
+                $("#btnConfirm").removeAttr("disabled");
+            }
+        }
+    }
+    else {
+        //包裹扫描
+        result = scanDelivery();
+    }
+}
+//绑定焦点获取
+$(function () {
+    $("#ItemCode").focus(function () {
+        currentScan = 0;
+    });
+    $("#DeliveryCode").focus(function () {
+        currentScan = 1;
+    });
+    $("#txtDeliveryTotal").change(function () {
+        var txtbox = $("#txtDeliveryTotal");
+        $("#DeliveryTotal").text(txtbox.val());
+        txtbox.val("");
+    });
+    $("#btnConfirm").click(function () {
+        if (confirm("Are you sure to Confirm?")) {
+            var deliverydata = $("#DeliveryScanGrid").jqGrid("getRowData");
+            $.post("/Warehouse/ConfirmDelivery", { data : JSON.stringify(deliverydata), outID : "@Model.Gid" },
+                function (data) {
+                    if (data) {
+                        alert("Success");
+                        location.replace("/Warehouse/OutItem?itemID=@Model.Gid");
+                    } else {
+                        alert("Error");
+                        location.reload();
+                    }
+                });
+            return true;
+        } else {
+            return false;
+        }
+    });
+});
+</script>

@@ -1,0 +1,182 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using CommonResource = LiveAzure.Resource.Common
+@using StockInStatus = LiveAzure.Models.ModelEnum.StockInStatus
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@{
+    ViewBag.Title = "WarehouseStockIn";
+}
+    <table>
+        <tr>
+            <th>@WCResource.Organization</th>
+            <td>
+                <span id="spanOrgSelect">
+                    <select id="WarehouseOrgSelect" disabled="disabled"></select>
+                </span>
+            </td>
+            <th>@WCResource.Warehouse</th>
+            <td>
+                <span id="spanWarehouseSelect">
+                    <select id="WarehouseSelect" disabled="disabled"></select>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>@WCResource.Status</th>
+            <td>@Html.DropDownList("SearchStatus", ViewBag.InStatus as IEnumerable<SelectListItem>)</td>
+            <th>@WCResource.Type</th>
+            <td>@Html.DropDownList("SearchType", ViewBag.RefType as IEnumerable<SelectListItem>)</td>
+            <td>
+                <select id="SearchSelect">
+                    <option value="1">SKUName</option>
+                    <option value="2">SKUCode</option>
+                    <option value="3">SKUBarcode</option>
+                    <option value="4">Time</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" id="SearchItem" />
+            </td>
+            <td><input type="button" id="btnSearch" value="@CommonResource.Search" /></td>
+        </tr>
+    </table>
+    <div id="StockInList"></div>
+    @if (ViewBag.privEnablePrepare == "1")
+    {
+        <input type="button" id="btnStockInAdd" value="@CommonResource.Add" />
+        <input type="button" id="btnStockInEdit" value="@CommonResource.Edit" />
+        <input type="button" id="btnStockInDetail" value="@CommonResource.Detail" />
+    }
+    else
+    { 
+        <input type="button" value="@LiveAzure.Resource.Common.Add" disabled="disabled"/>
+        <input type="button" value="@LiveAzure.Resource.Common.Edit" disabled="disabled"/>
+        <input type="button" value="@CommonResource.Detail" disabled="disabled" />
+    }
+    @if (ViewBag.privEnablePrint == "1")
+    {
+        <input type="button" value="@WCResource.Print" onclick="PrintStockIn()" />
+    }
+    else
+    {
+        <input type="button" value="@WCResource.Print" disabled="disabled"/>
+    }
+    <script type="text/javascript">
+        $("#btnStockInAdd").click(function () {
+            var whID = $("#WarehouseSelect").val();
+            alert(whID);
+            document.location.replace("/Warehouse/StockInAdd?whID=" + whID);
+        });
+        $("#btnStockInEdit").click(function () {
+            var grid = $("#StockInGrid");
+            var inID = grid.jqGrid("getGridParam", "selrow");
+            if (inID == null) {
+                alert("@WCResource.SelectOneRow");
+            } else {
+                var row = grid.jqGrid("getRowData", inID);
+                if(row.Istatus == @((byte)StockInStatus.NONE)){
+                    document.location.replace("/Warehouse/StockInEdit?inID=" + inID);
+                } else {
+                    alert("入库单已确认，不能编辑");
+                }
+            }
+        });
+        $("#btnStockInDetail").click(function () {
+            var inID = $("#StockInGrid").jqGrid("getGridParam", "selrow");
+            if (inID == null) {
+                alert("@WCResource.SelectOneRow");
+            } else {
+                document.location.replace("/Warehouse/InItem?inID=" + inID);
+            }
+        });
+        $("#btnSearch").click(function () {
+            var status = $("#SearchStatus").val();
+            var type = $("#SearchType").val();
+            var param = "";
+            if (status != "") param += ("&status=" + status);
+            if (type != "") param += ("&type=" + type);
+            var SSearch = $("#SearchSelect").val();  
+            var item = $("#SearchItem").val();
+            if(item != "") {
+                param += ("&n"+"="+SSearch);
+                param += ("&itemVal"+"="+item);
+            }
+            $("#StockInGrid").jqGrid('setGridParam', { url: "/Warehouse/StockInList?whID=" + $("#WarehouseSelect").val() + param });
+            $("#StockInGrid").trigger("reloadGrid");
+        });
+   </script>
+   <script type="text/javascript">
+       function onChangeWarehouse() {
+           var whID = $("#WarehouseSelect").val();
+           var grid = $("#StockInGrid");
+           grid.jqGrid("setGridParam", { url: "/Warehouse/StockInList?whID=" + whID });
+           grid.trigger("reloadGrid");
+       } 
+       function updateWarehouseList() {
+           var warehouseSelect = $("#WarehouseSelect");
+           var spanWarehouseSelect = $("#spanWarehouseSelect");
+           var orgSelect = $("#OrgSelect");
+           var orgID = orgSelect.val();
+           warehouseSelect.unbind("change");
+           warehouseSelect.attr("disabled", "disabled");
+           $.ajax({
+               type: "post",
+               url: "/Warehouse/WarehouseSelect",
+               data: { id: 'WarehouseSelect', orgID: orgID },
+               async: false,
+               success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+           });
+           warehouseSelect = $("#WarehouseSelect");
+           warehouseSelect.change(function () {
+               onChangeWarehouse();
+           });
+           onChangeWarehouse();
+       }
+       $(function () {
+           $.ajax({
+               type: "post",
+               url: "/Warehouse/WarehouseOrgSelect",
+               data: { id: "OrgSelect" },
+               async: false,
+               success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+           });
+           var orgSelect = $("#OrgSelect");
+           orgSelect.change(function () {
+               updateWarehouseList();
+           });
+           updateWarehouseList();
+           var whID = $("#WarehouseSelect").val();
+           $.ajax({
+               type: "post",
+               url: "/Warehouse/StockInGrid",
+               data: { whID: whID },
+               async: false,
+               success: function (html) {
+                   $("#StockInList").html(html);
+               }
+           });
+       });
+
+       function PrintStockIn() {
+           var inID = $("#StockInGrid").jqGrid("getGridParam", "selrow");
+           if (inID == null) {
+               alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+           }
+           else {
+               $.ajax({
+                   type: "post",
+                   url: "/Warehouse/PrintStockIn",
+                   data: { stockInId: inID },
+                   success: function (html) {
+                       $("#body_frame").html(html);
+                   }
+               });
+           }
+       }
+</script>

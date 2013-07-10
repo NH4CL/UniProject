@@ -1,0 +1,93 @@
+﻿@using LiveAzure.Models.General
+@model GeneralPrivateCategory
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.6.2.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/jquery.ztree-2.6.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/treeObject.js")"></script>
+
+<script type="text/javascript">
+  <!--
+    var nTreeObject = new treeObject();
+    nTreeObject.createTree("tree", "/PrivateCategory/TreeLoad", "/PrivateCategory/TreeExpand", "", "rMenu", true);
+    function add_Node() {
+
+        nTreeObject.add_TreeNode("rMenu");
+
+        $.ajax({
+            type: "POST",
+            url: "/PrivateCategory/ProgramNodeAdd",
+            data: { id: nTreeObject.selectNode.id },
+            success: function (data) {
+                $("#progAdd").html(data);
+            }
+        });
+    }
+
+    function edit_Node() {
+        nTreeObject.edit_TreeNode("rMenu");
+
+        $.ajax({
+            type: "POST",
+            url: "/PrivateCategory/ProgramNodeEdit",
+            data: { id: nTreeObject.selectNode.id },
+            success: function (data) {
+                $("#progEdit").html(data);
+            }
+        });
+    }
+
+    function del_Node() {
+        nTreeObject.del_TreeNode("tree", "/PrivateCategory/TreeRemove", "/PrivateCategory/TreeLoad", "rMenu");
+    }
+
+    function ShowTree(cType) {
+        $.ajax({
+            type: "POST",
+            url: "/PrivateCategory/GetCType",
+            data: { privateCategoryType: cType },
+            success: function (data) {
+                $("#tree").html(data);
+            }
+        })
+    }
+      //-->
+</script>
+
+<div class="display-field" id="drowdowndiv" >
+    @LiveAzure.Resource.Model.General.GeneralPrivateCategory.Ctype
+    @Html.DropDownListFor(model => model.Ctype, (List<SelectListItem>)ViewBag.privateCategoryList, new { OnChange = "ShowTree(this.value)" })
+    @Html.ValidationMessageFor(model => model.Ctype)
+</div>
+
+<div id="otree">
+    @*@{Html.RenderAction("GetCType", "StandardCategory");}*@
+</div>
+
+<table style="width:100%">
+    <tr>
+        <td style="width:50%">
+            <div id="progMain">
+            <ul id="tree" class="tree" style="width: 230px; overflow: auto;">
+            </ul>
+            <div id="rMenu" style="position: absolute; visibility: hidden;">
+                <ul>
+                <li>
+                    <ul id="m_add" onclick="add_Node();">
+                        <li>增加节点</li></ul>
+                    <ul id="m_edit" onclick="edit_Node();">
+                        <li>编辑节点</li></ul>
+                    <ul id="m_delete" onclick="del_Node();">
+                        <li>删除节点</li></ul>
+                </li>
+                </ul>
+            </div>  
+            </div>
+        </td>
+        <td style="width:50%">
+            <div id="progAdd">
+            </div>
+            <div id="progEdit">
+            </div>
+        </td>
+    </tr>
+</table>

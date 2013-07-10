@@ -1,0 +1,82 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@Html.Grid(new GridControl()
+    .SetName("StandardCategoryGrid")
+    .SetPageSize(20)
+    .SetIsAutoSize(true)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Category/StandardCategoryList")
+    .SetWidth("'50%'")
+    .SetHeight("'100%'")
+    .SetColumns<LiveAzure.Models.General.GeneralStandardCategory>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.Parent).SetCaption(LiveAzure.Resource.Model.General.GeneralStandardCategory.Parent);
+        cs.Add(x => x.CategoryTypeName).SetCaption(LiveAzure.Resource.Model.General.GeneralStandardCategory.Ctype);
+        cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.General.GeneralStandardCategory.Code);
+        cs.Add(x => x.Name).SetCaption(LiveAzure.Resource.Model.General.GeneralStandardCategory.Name);
+        cs.Add(x => x.Sorting).SetCaption(LiveAzure.Resource.Model.General.GeneralStandardCategory.Sorting);
+    })
+)
+<input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddStandardCategoryPage()" />
+<input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="ShowEditStandardCategoryPage()" />
+<input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemoveStandardCategoryPage()" />
+
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.CategoryController.StandarCategory";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function ShowAddStandardCategoryPage() {  
+        UnitPricePanel.OpenPanel();      
+        var cType = document.getElementById("standardCategoryTypeSelect");
+        ctype = cType.options[cType.selectedIndex].value;
+        $.ajax({
+            type: "POST",
+            url: "/Category/StandardCategoryNodeAdd",
+            data: { categoryType: ctype },
+            success: function (data) {
+                UnitPricePanel.EditPageHtml(data);
+            }
+        });
+    }
+    function ShowEditStandardCategoryPage() {       
+        UnitPricePanel.OpenPanel(); 
+        var oRowId = $("#StandardCategoryGrid").jqGrid("getGridParam", "selrow");
+        if (oRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Category/StandardCategoryNodeEdit",
+                data: { oGid: oRowId },
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);
+                }
+            });
+        }
+    }
+    function RemoveStandardCategoryPage() {
+        var sRowId = $("#StandardCategoryGrid").jqGrid("getGridParam", "selrow");
+        if (sRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Category/RemoveStandardCategory",
+                    data: { id: sRowId },
+                    success: function (data) {
+                        $("#standardCategoryTree").html(data);
+                    }
+                });
+                $('#StandardCategoryGrid').trigger('reloadGrid');
+            }
+        }
+    }
+</script>

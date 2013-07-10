@@ -1,0 +1,117 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Product
+
+<script type="text/javascript">
+    function addOnsaleShipping() {
+        $.ajax({
+            type: "POST",
+            url: "/Tree/TestOnsaleShippingAddAndEdit",
+            data: { bAddorEdit: 'true' },
+            success: function (html) {
+                $("#editShipping").html("");
+                $("#addShipping").html(html);
+            }
+        });
+    }
+
+    function editOnsaleShipping() {
+        $.ajax({
+            type: "POST",
+            url: "/Tree/TestOnsaleShippingAddAndEdit",
+            data: { bAddorEdit: 'false' },
+            success: function (html) {
+                $("#addShipping").html("");
+                $("#editShipping").html(html);
+            }
+        });
+    }
+
+    function deleteOnsaleShipping() {
+        var selectGid = $("#ProductShippingGrid").jqGrid("getGridParam", "selrow");
+        if (selectGid == null) {
+            var strDeleteTip = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteTips)";
+            alert(strDeleteTip);
+        }
+        else {
+            var strConfirm = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteConfirm)";
+            var strDeleteSuccess = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteSuccess)";
+            var deleteInfo = $("#ProductShippingGrid").jqGrid("getRowData", selectGid);
+            var truthBeTold = window.confirm(strConfirm + " " + deleteInfo["FullName.Matter"] + "?");
+            $.ajax({
+                type: "POST",
+                url: "/Tree/DeleteOnsaleShipping",
+                data: { gid: selectGid },
+                success: function () {
+                    alert(strDeleteSuccess);
+                    $("#ProductShippingGrid").trigger('reloadGrid');
+                }
+            });
+        }
+    }
+
+    function setUrl() {
+        var courseData = $("#shipParamID").val();
+        $("#ProductShippingGrid").jqGrid("setGridParam", {
+            url: "/Tree/ListOnsaleShippingSearch",                                            //设置表格的url
+            datatype: "json",                                                           //设置数据类型
+            postData: { testData: courseData }
+        });
+        $("#ProductShippingGrid").trigger('reloadGrid');
+    }
+
+    function testModel() {
+        $.ajax({
+            type: "POST",
+            url: "/Tree/TestModelInsert",
+            success: function (data) {
+                alert(data);
+            }
+        });
+    }
+
+</script>
+<div>
+    Product Shipping
+</div>
+<div>
+    <input type="text" name="shipParam" id="shipParamID" />
+    <input type="button" value="search" id="btnSearch" onclick="setUrl();" />
+</div>
+<div>
+    @Html.Grid(
+                new GridControl()
+                .SetName("ProductShippingGrid")
+                .SetPageSize(10)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Tree/ListOnsaleShipping")
+                .SetEditUrl("")
+                .SetHeight("200")
+                .SetWidth("300")
+                .SetColumns<LiveAzure.Models.Product.ProductOnShipping>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.Shipper.FullName.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductOnShipping.Shipping);
+                    cs.Add(x => x.ShipWeight).SetCaption(LiveAzure.Resource.Model.Product.ProductOnShipping.ShipWeight);
+                    cs.Add(x => x.Solution).SetCaption(LiveAzure.Resource.Model.Product.ProductOnShipping.Solution);
+                    cs.Add(x => x.Condition).SetCaption(LiveAzure.Resource.Model.Product.ProductOnShipping.Condition);
+                    cs.Add(x => x.Discount).SetCaption(LiveAzure.Resource.Model.Product.ProductOnShipping.Discount);
+                    cs.Add(x => x.SupportCod).SetCaption(LiveAzure.Resource.Model.Product.ProductOnShipping.SupportCod);
+                    cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+                })
+                
+    )
+    <div>
+        <input type="button" name="addOnsaleShipping" value="ADD" onclick="addOnsaleShipping();" />
+        <input type="button" name="editOnsaleShipping" value="EDIT" onclick="editOnsaleShipping();" />
+        <input type="button" name="deleteOnsaleShipping" value="DELETE" onclick="deleteOnsaleShipping();" />
+    </div>
+    
+</div>
+<div id="addShipping">
+</div>
+<div id="editShipping">
+</div>
+<div>
+    <input type="button" value="test" onclick="testModel();" />
+</div>

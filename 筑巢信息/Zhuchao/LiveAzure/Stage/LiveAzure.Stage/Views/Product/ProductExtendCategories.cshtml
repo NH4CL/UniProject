@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Product
+@using MVC.Controls.Grid
+@using MVC.Controls
+@model LiveAzure.Models.Product.ProductExtendCategory
+@ControlManager.PrivateCategorySelect()
+<script type="text/javascript">
+    //设置或者取消扩展分类
+    function productSetDefault() {
+        var selectGid = $("#productCategoryGrid").jqGrid("getGridParam", "selrow");
+        if (selectGid == null) {
+            var strEditTip = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.EditTips)";
+            alert(strEditTip);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Product/SetDefultCategory",
+                data: { gid: selectGid },
+                success: function () {
+                    $("#productCategoryGrid").trigger('reloadGrid');
+                }
+            });
+        }
+    }
+    //删除选中的扩展分类
+    function deleteProductCategory() {
+        var selectGid = $("#productCategoryGrid").jqGrid("getGridParam", "selrow");
+        if (selectGid == null) {
+            var strDeleteTip = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteTips)";
+            alert(strDeleteTip);
+        }
+        else {
+            var strConfirm = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteConfirm)";
+            var strDeleteSuccess = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.DeleteSuccess)";
+            var deleteInfo = $("#productCategoryGrid").jqGrid("getRowData", selectGid);
+            var truthBeTold = window.confirm(strConfirm + " " + deleteInfo["Name.Matter"] + "?");
+            if (truthBeTold) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/DeleteProductCategory",
+                    data: { gid: selectGid },
+                    success: function () {
+                        alert(strDeleteSuccess);
+                        $("#productCategoryGrid").trigger('reloadGrid');
+                    }
+                });
+            }
+        }
+    }
+    //刷新扩展分类表格
+    function productExtendCategorySave() {
+        $("#productCategoryGrid").trigger('reloadGrid');
+    }
+
+</script>
+<div>
+    <div>
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Code :</span> <span style="font-weight: bold">@ViewBag.ProductCode</span>
+        <span>@LiveAzure.Resource.Model.Product.ProductInformation.Name :</span> <span style="font-weight: bold">@ViewBag.ProductName</span>
+    </div>
+    <div>
+        @Html.Grid(new GridControl()
+                .SetName("productCategoryGrid")
+                .SetPageSize(10)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Product/ProductCategoryList")
+                .SetHeight("'100%'")
+                .SetWidth("300")
+                .SetColumns<LiveAzure.Models.Product.ProductExtendCategory>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.PrivateCategory.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductExtendCategory.PrvCatID);
+                    cs.Add(x => x.IsDefault).SetCaption(LiveAzure.Resource.Model.Product.ProductExtendCategory.IsDefault);
+                })
+        )
+    </div>
+    <div>
+        <input type="button" name="setDefaultCategory" value="@LiveAzure.Resource.Stage.ProductController.SetDefult" onclick="productSetDefault();" />
+        <input type="button" name="deletePrivateCategory" value="@LiveAzure.Resource.Stage.ProductController.DeleteCategory" onclick="deleteProductCategory();" />
+    </div>
+    <div>
+        @using (Ajax.BeginForm("SaveExtendCategory", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "productExtendCategorySave" }, new { id = "savePrivateCategoryform" }))
+        {
+            <div>
+                @Html.Label(LiveAzure.Resource.Model.Product.ProductExtendCategory.PrvCatID)
+                @*@Html.DropDownListFor(model => model.PrvCatID, (List<SelectListItem>)ViewBag.oPrivateCategoryList)*@
+                @Html.EditorFor(model => model.PrvCatID, "PrivateCategorySelect",
+                     new { Type = LiveAzure.Models.ModelEnum.PrivateCategoryType.PRODUCT, ID = "PrivCat", OrgID = ViewBag.OrgID })
+            </div>
+            <div>
+                <input type="submit" name="addPrivateCategory" value="@LiveAzure.Resource.Common.Add" />
+            </div>
+        }
+    </div>
+</div>

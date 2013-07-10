@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Member.MemberLevel
+@using (@Ajax.BeginForm("LevelSave", "User", new AjaxOptions { UpdateTargetId = "MemberLevelTable", OnComplete = "CloseEditPanel" }))
+{
+    <div class="down_AddorEdit">
+        <table>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberLevel.Code
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Code)
+                    @Html.ValidationMessageFor(model => model.Code)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberLevel.Name
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Name, "Matter")
+                </td>
+            </tr>
+            <tr>
+                 <th>
+                    @LiveAzure.Resource.Model.Member.MemberLevel.Mlevel
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Mlevel)
+                    @Html.ValidationMessageFor(model => model.Mlevel)
+                </td>
+            </tr>
+            <tr>
+                 <th>
+                    @LiveAzure.Resource.Model.Member.MemberLevel.Discount
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Discount)
+                    @Html.ValidationMessageFor(model => model.Discount)
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit"/>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@(ViewBag.exist)' == 1) {
+            $("#Code").attr("readonly", "readonly");
+        }
+    });
+</script>

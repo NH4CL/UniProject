@@ -1,0 +1,23 @@
+﻿@{
+    Layout=null;
+}
+
+@Html.DropDownList("Drop",(List<SelectListItem>)ViewBag.olist,"---请选择---")
+<input type="button" value="保存" id="saveDrop" onclick="SaveDrop()" />
+
+<script type="text/javascript">
+    function SaveDrop() {
+        var matter = $("#Drop").val();
+        $.ajax({
+            type: "POST",
+            url: "/Privilege/Save",
+            data: { matter: matter },
+            success: function (data) {
+                $.post("/Privilege/PrivProgramNodeList", {}, function (html) {
+                    $("#NodeGrid").html(html);
+                    
+                });
+            }
+        });
+    }
+</script>

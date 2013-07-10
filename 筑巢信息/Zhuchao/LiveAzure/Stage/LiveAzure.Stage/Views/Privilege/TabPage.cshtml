@@ -1,0 +1,68 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tabs").tabs();
+    });
+    function showUserInfomation() {
+        $.post("/Privilege/UserInfomation", {}, function (html) {
+            $("#tabs-UserInfomation").html(html);
+        });
+    }
+    function showPrivProgram() {
+        $.post("/Privilege/PrivProgram", {}, function (html) {
+            $("#tabs-PrivProgram").html(html);
+        });
+    }
+    function showPrivOrganization() {
+        $.post("/Privilege/PrivOrganization", {}, function (html) {
+            $("#tabs-PrivOrganization").html(html);
+        });
+    }
+    function showPrivChannel() {
+        $.post("/Privilege/PrivChannel", {}, function (html) {
+            $("#tabs-PrivChannel").html(html);
+        });
+    }
+    function showPrivWarehouse() {
+        $.post("/Privilege/PrivWarehouse", {}, function (html) {
+            $("#tabs-PrivWarehouse").html(html);
+        });
+    }
+    function showPrivProduct() {
+        $.post("/Privilege/PrivProduct", {}, function (html) {
+            $("#tabs-PrivProduct").html(html);
+        });
+    }
+    function showPrivSupplier() {
+        $.post("/Privilege/PrivSupplier", {}, function (html) {
+            $("#tabs-PrivSupplier").html(html);
+        });
+    }
+</script>
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-UserInfomation" onclick="showUserInfomation();">@LiveAzure.Resource.Stage.PrivilegeController.userinfo</a></li>
+        <li><a href="#tabs-PrivProgram" onclick="showPrivProgram();">@LiveAzure.Resource.Stage.PrivilegeController.progarmPriv</a></li>
+        <li><a href="#tabs-PrivOrganization" onclick="showPrivOrganization();">@LiveAzure.Resource.Stage.PrivilegeController.organizationPriv</a></li>
+        <li><a href="#tabs-PrivChannel" onclick="showPrivChannel();">@LiveAzure.Resource.Stage.PrivilegeController.channelPriv</a></li>
+        <li><a href="#tabs-PrivWarehouse" onclick="showPrivWarehouse();">@LiveAzure.Resource.Stage.PrivilegeController.warehousePriv</a></li>
+        <li><a href="#tabs-PrivProduct" onclick="showPrivProduct();">@LiveAzure.Resource.Stage.PrivilegeController.productPriv</a></li>
+        <li><a href="#tabs-PrivSupplier" onclick="showPrivSupplier();">@LiveAzure.Resource.Stage.PrivilegeController.supplierPriv</a></li>
+    </ul>
+    <div id="tabs-UserInfomation">
+    </div>
+    <div id="tabs-PrivProgram">
+    </div>
+    <div id="tabs-PrivOrganization">
+    </div>
+    <div id="tabs-PrivChannel">
+    </div>
+    <div id="tabs-PrivWarehouse">
+    </div>
+    <div id="tabs-PrivProduct">
+    </div>
+    <div id="tabs-PrivSupplier">
+    </div>
+</div>

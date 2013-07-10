@@ -1,0 +1,8 @@
+﻿@{
+    ViewBag.Title = "TestSKUSelector";
+}
+@model List<Guid>
+
+<h2>TestSKUSelector</h2>
+@ControlManager.SKUSelect()
+@Html.EditorFor(model => model[0], "SKUSelect", new { ID = "Editor1" })

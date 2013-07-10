@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Product
+<script type="text/javascript">
+    function addProductToPromotion() {
+        var id = $("#PromotionSKUGrid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        } 
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Promotion/AddProductToPromotion",
+                data: { gid: id },
+                success: function (data) {
+                    if (data == "") {
+                        alert("@LiveAzure.Resource.Common.OperationFailed");
+                        $("#PromotionSKUGrid").trigger('reloadGrid');
+                    }
+                    else {
+                        var productInfo = data.split("|");
+                        $("#OnSkuItem_Gid").val(productInfo[0]);
+                        $("#OnSkuItem_FullName_Matter").val(productInfo[1]);
+                        $("#OnSkuItem_SkuItem_Code").val(productInfo[2]);
+                        $("#OnSkuItem_OnSale_Code").val(productInfo[3]);
+                        promotionSKUPanel.CloseEditPanel();
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+<div>
+    @Html.Grid(
+        new GridControl()
+        .SetName("PromotionSKUGrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetListUrl("/Promotion/ListPromotionProductSKUOnsale")
+        .SetHeight("'100%'")
+        .SetWidth("200")
+        .SetColumns<LiveAzure.Models.Product.ProductOnItem>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.OnSale.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductOnSale.Code);
+            cs.Add(x => x.SkuItem.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Code).SetName("SKUCode");
+            cs.Add(x => x.FullName.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.FullName).SetName("SKUFullName");           
+        })
+    )
+    <div>
+        <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="addProductToPromotion();" />
+    </div>
+</div>

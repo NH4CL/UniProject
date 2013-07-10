@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@model LiveAzure.Models.Shipping.ShippingEnvelope
+           
+@using (@Ajax.BeginForm("SaveEnvelopeTemplate", "Shipping", new AjaxOptions { OnComplete ="ShowSaveSuccess()" }, new { id = "EditEnvelopeTemplateForm" }))
+{
+    <table>
+        <tr>
+            <td>@Html.Label(LiveAzure.Resource.Model.Shipping.ShippingEnvelope.ShipID) &nbsp @Html.DropDownListFor(model => model.ShipID, (List<SelectListItem>)ViewBag.shipperList, new { onchange = "ChangeShipper(this.value)" })</td>
+        </tr>
+        <tr>
+            <td>@Html.Label(LiveAzure.Resource.Model.Shipping.ShippingEnvelope.Code) &nbsp 
+            @if (Model == null)
+            {
+                @Html.EditorFor(model => model.Code)
+            }
+            else
+            {
+                if (Model.Code == null)
+                {
+                    @Html.EditorFor(model => model.Code)
+                }
+                else
+                {
+                    @Html.HiddenFor(model => model.Code);
+                    @Html.TextBox("Code", Model.Code, new { disabled = true })
+                }
+            }</td>
+        </tr>
+        <tr>
+            <td>@Html.Label(LiveAzure.Resource.Model.Shipping.ShippingEnvelope.Template)&nbsp (参数依次为：打印内容/起始横坐标/起始纵坐标/打印区域宽/打印区域高/字体/字号)</td>
+        </tr>
+        <tr><td>@Html.TextAreaFor(model => model.Template.CLOB, 20, 55, new { })</td></tr>
+    </table>
+    
+    <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SumbitEditForm()" />
+<script type="text/javascript">
+    function ChangeShipper(shipid) {
+        $.ajax({
+            type: "post",
+            url: "/Shipping/Index",
+            data: { shippingGid:shipid },
+            success: function (html) {
+                $("#body_frame").html(html);
+            }
+        });
+    }
+
+    function SumbitEditForm() {
+        $("#EditEnvelopeTemplateForm").submit();
+    }
+
+    function ShowSaveSuccess() {
+        alert("@LiveAzure.Resource.Common.SaveSuccess");
+    }
+</script>
+}

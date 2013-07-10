@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "添加新地址";
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml"; 
+}
+<div class="add_new_address">
+    <div class="page_root">
+        <div class="page_root_pic">
+            <img alt="" src="@Url.Content("/Content/img/root.png")" />
+        </div>
+        <div class="page_root_content">
+            当前位置：
+        </div>
+    </div>
+    <div class="new_address_info">
+        <div class="order_info_title">
+            收货人信息
+        </div>
+        <div class="new_address_info_content">
+            <table>
+                <tr>
+                    <th>收货人姓名：</th>
+                    <td><input type="text" /><b>*</b></td>
+                </tr>
+                <tr>
+                    <th>省份：</th>
+                    <td><select></select><select></select><select></select><b>*</b></td>
+                </tr>
+                <tr>
+                    <th>地址：</th>
+                    <td><input type="text" /><b>*</b></td>
+                </tr>
+                <tr>
+                    <th>邮编：</th>
+                    <td><input type="text" /><b>*有助于快速确认送货地址</b></td>
+                </tr>
+                <tr>
+                    <th>联系电话：</th>
+                    <td><input type="text" /><b>*注：电话或手机必须填写一个</b></td>
+                </tr>
+                <tr>
+                    <th>手机：</th>
+                    <td><input type="text" /></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="button" value="配送到这地址" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

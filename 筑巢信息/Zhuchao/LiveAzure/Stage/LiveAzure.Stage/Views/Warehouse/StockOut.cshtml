@@ -1,0 +1,232 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using ModelEnum = LiveAzure.Models.ModelEnum
+@using CommonResource = LiveAzure.Resource.Common
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+
+@{
+    ViewBag.Title = "WarehouseStockOut";
+}
+    <table>
+        <tr>
+            <th>@WCResource.Organization</th>
+            <td>
+                <span id="spanOrgSelect">
+                    <select id="WarehouseOrgSelect" disabled="disabled"></select>
+                </span>
+            </td>
+            <th>@WCResource.Warehouse</th>
+            <td>
+                <span id="spanWarehouseSelect">
+                    <select id="WarehouseSelect" disabled="disabled"></select>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>@WCResource.Status</th>
+            <td>@Html.DropDownList("SearchStatus", ViewBag.InStatus as IEnumerable<SelectListItem>)</td>
+            <th>@WCResource.Type</th>
+            <td>@Html.DropDownList("SearchType", ViewBag.RefType as IEnumerable<SelectListItem>)</td>
+            <td>
+                <select id="SearchSelect">
+                    <option value="1">SKUName</option>
+                    <option value="2">SKUCode</option>
+                    <option value="3">SKUBarcode</option>
+                    <option value="4">Time</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" id="SearchItem" />
+            </td>
+            <td><input type="button" id="btnSearch" value="@CommonResource.Search" /></td>
+        </tr>
+    </table>
+    <div id="StockOutList"></div>
+    @if (ViewBag.privEnablePrepare == "1")
+    {//允许制表
+        <input type="button" id="btnAddStockOut" value="@CommonResource.Add" />
+        <input type="button" id="btnEditStockOut" value="@CommonResource.Edit" />
+        <input type="button" id="btnStockOutDetail" value="@CommonResource.Detail" />
+    }
+    else
+    { 
+        <input type="button" value="@LiveAzure.Resource.Common.Add" disabled="disabled"/>
+        <input type="button" value="@LiveAzure.Resource.Common.Edit" disabled="disabled"/>
+        <input type="button" value="@CommonResource.Detail" disabled="disabled" />
+    }
+    
+    @if (ViewBag.privEnableApprove == "1")
+    {//允许扫描/确认
+        <input type="button" id="btnStockOutScan" value="@WCResource.StockOutScan" />
+    }
+    else
+    {
+        <input type="button" value="@WCResource.StockOutScan" disabled="disabled" />
+    }
+    @if (ViewBag.privEnablePrint == "1")
+    {//允许打印
+        <input type="button" value="@WCResource.Print" onclick="GotoPrint()" />
+        <input type="button" value="PrintShippingEnvelope" onclick="PrintEnvelope()" />
+    }
+    else
+    {
+        <input type="button" value="@WCResource.Print" disabled="disabled"/>
+        <input type="button" value="PrintShippingEnvelope" disabled="disabled" />
+    }
+    
+    <script type="text/javascript">
+        $("#btnAddStockOut").click(function () {
+            var whID = $("#WarehouseSelect").val();
+            document.location.replace("/Warehouse/StockOutAdd?whID=" + whID);
+        });
+        $("#btnEditStockOut").click(function () {
+            var grid = $("#OutGrid");
+            var outID = grid.jqGrid("getGridParam", "selrow");
+            if (outID == null) {
+                alert("@WCResource.SelectOneRow");
+            } else {
+                var row = grid.jqGrid("getRowData", outID);
+                if(row.Ostatus != @((byte)ModelEnum.StockOutStatus.NONE))
+                {
+                    alert("@LiveAzure.Resource.Stage.WarehouseController.HasConfirm");
+                } else {
+                    document.location.replace("/Warehouse/StockOutEdit?outID=" + outID);
+                }
+            }
+        });
+        $("#btnStockOutDetail").click(function () {
+            var outID = $("#OutGrid").jqGrid("getGridParam", "selrow");
+            if (outID == null) {
+                alert("@WCResource.SelectOneRow");
+            } else {
+                document.location.replace("/Warehouse/OutItem?outID=" + outID);
+            }
+        });
+        $("#btnSearch").click(function () {
+            var status = $("#SearchStatus").val();
+            var type = $("#SearchType").val();
+            var param = "";
+            if (status != "") param += ("&status=" + status);
+            if (type != "") param += ("&type=" + type);
+            var SSearch = $("#SearchSelect").val();  
+            var item = $("#SearchItem").val();
+            if(item != "") {
+                param += ("&n"+"="+SSearch);
+                param += ("&itemVal"+"="+item);
+            }
+            $("#OutGrid").jqGrid('setGridParam', { url: "/Warehouse/StockOutList?whID=" + $("#WarehouseSelect").val() + param });
+            $("#OutGrid").trigger("reloadGrid");
+        });
+        $("#btnStockOutScan").click(function () {
+            var grid = $("#OutGrid");
+            var outID = grid.jqGrid("getGridParam", "selrow");
+            if (outID == null) {
+                alert("@WCResource.SelectOneRow");
+            } else {
+                var row = grid.jqGrid("getRowData", outID);
+                if (row.Ostatus != @((byte)ModelEnum.StockOutStatus.NONE)) {
+                    alert("出库单状态不正确，无法扫描");
+                }
+                else if (row.RefType != @((byte)ModelEnum.NoteType.ORDER)) {
+                    alert("出库单关联单据不是订单，不能出库扫描");
+                }
+                else if(row.RefID == "" || row.RefID == "00000000-0000-0000-0000-000000000000") {
+                    alert("出库单关联订单号为空，无法出库扫描");
+                }
+                else {
+                    document.location.replace("/Warehouse/OutScan?outID=" + outID);
+                }
+            }
+        });
+
+    </script>
+    <script type="text/javascript">
+        function onChangeWarehouse() {
+            var whID = $("#WarehouseSelect").val();
+            var grid = $("#OutGrid");
+            grid.jqGrid("setGridParam", { url: "/Warehouse/StockOutList?whID=" + whID });
+            grid.trigger("reloadGrid");
+        }
+        function updateWarehouseList() {
+            var warehouseSelect = $("#WarehouseSelect");
+            var spanWarehouseSelect = $("#spanWarehouseSelect");
+            var orgSelect = $("#OrgSelect");
+            var orgID = orgSelect.val();
+            warehouseSelect.unbind("change");
+            warehouseSelect.attr("disabled", "disabled");
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/WarehouseSelect",
+                data: { id: 'WarehouseSelect', orgID: orgID },
+                async: false,
+                success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+            });
+            warehouseSelect = $("#WarehouseSelect");
+            warehouseSelect.change(function () {
+                onChangeWarehouse();
+            });
+            onChangeWarehouse();
+        }
+        $(function () {
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/WarehouseOrgSelect",
+                data: { id: "OrgSelect" },
+                async: false,
+                success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+            });
+            var orgSelect = $("#OrgSelect");
+            orgSelect.change(function () {
+                updateWarehouseList();
+            });
+            updateWarehouseList();
+            var whID = $("#WarehouseSelect").val();
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/StockOutGrid",
+                data: { id: "StockOutList", whID: whID },
+                async: false,
+                success: function (html) {
+                    $("#StockOutList").html(html);
+                }
+            });
+        });
+
+        function GotoPrint() {
+            var outID = $("#OutGrid").jqGrid("getGridParam", "selrow");
+            if (outID == null) {
+                alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            }
+            else {
+                $.ajax({
+                    type: "post",
+                    url: "/Warehouse/PrintStockOut",
+                    data: { stockOutId: outID },
+                    success: function (html) {
+                        $("#body_frame").html(html);
+                    }
+                });
+            }
+        }
+
+        function PrintEnvelope() {
+            var outID = $("#OutGrid").jqGrid("getGridParam", "selrow");
+            var RefType = $("#OutGrid").jqGrid("getCell", outID, "RefType");
+            var RefId = $("#OutGrid").jqGrid("getCell", outID, "RefID");
+
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/PrintEnvelope",
+                data: { sGid: outID,
+                        refType: RefType,
+                        RefCode: RefId },
+                success: function () { }
+            });
+        }
+</script>

@@ -1,0 +1,247 @@
+﻿@{
+    ViewBag.Title = "StockOutTemplate";
+    Layout = null;
+}
+@model List<LiveAzure.Stage.Controllers.StockOutBill>
+
+@using LiveAzure.Resource.Model.Warehouse
+@using LiveAzure.Resource.Model.Order
+
+<style type="text/css" media="print">
+    .page
+    {
+        page-break-after:auto;
+    }
+</style>
+<script type="text/javascript">
+
+$(document).ready(
+        printDo(1)
+        );
+
+    function printDo(oper) {
+        if (oper < 10) {
+            bdhtml = window.document.body.innerHTML;
+            sprnstr = "<!--startprint" + oper + "-->";
+            eprnstr = "<!--endprint" + oper + "-->";
+            prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18);
+            prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+            window.document.body.innerHTML = prnhtml;
+            window.print();
+            PrintComplete();
+        }
+        else {
+            PageSetup_Null();
+            window.print();
+        }
+    }
+
+    function PrintComplete() {
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/StockOut",
+            data: { },
+            success:
+            function (html) {
+                $("#body_frame").html(html);
+                }
+        });
+    }
+</script>
+
+<div style="display:none">
+<!--startprint1-->
+@{
+    foreach (var item in Model)
+    {
+        <div class=page>
+            
+        <table cellspacing="0" cellpadding="0" width="100%" border="0">
+            <tbody>
+                <tr>
+                    <td width="30%" align="left">
+                    www.zhuchao.com
+                    </td>
+                    <td rowspan="2" align="left">
+                    <span style="font-size:xx-large">@LiveAzure.Resource.Stage.WarehouseController.DeliveryForm</span>
+                    </td>
+                    <td rowspan="2" align="right"><span style="font-family:C39HrP36DmTt; font-size:60px">@item.StockOut.Code</span></td>
+                </tr>
+                <tr>
+                    <td>@WarehouseStockOut.Code：@item.StockOut.Code</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <table class="print_table" style="font-size:13px" width="100%" height="">
+            <tbody>
+                <tr width="30%">
+                        <td>@LiveAzure.Resource.Stage.WarehouseController.Customer：@{if (item.Order.User != null)
+                                  {
+                                        <span>@item.Order.User.NickName</span>
+                                  }
+                                   }</td>
+                    <td width="30%">@WarehouseStockOut.RefID: &nbsp @if (item.Order != null)
+                                                                    { @item.Order.Code}</td>
+                    <td width="40%">@OrderShipping.Shipper：&nbsp @{
+                                                                    if (item.StockOut.Shipper != null)
+                                                                    {
+                                                                            @item.StockOut.Shipper.FullName.Matter
+                                                                    }
+                                                                    }
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%">@OrderInformation.Consignee：&nbsp @item.Order.Consignee</td>
+                    <td width="30%">@OrderInformation.PayType:&nbsp @{if (item.Order.PayType != null)
+                                                                      {
+                                                                        @item.Order.PayType.Name.Matter
+                                                                      }
+                                                                    }</td>
+                    
+                     <td width="40%">@LiveAzure.Resource.Stage.WarehouseController.Deliverer：&nbsp @{ if (item.Order.Organization != null)
+                                                  {
+                                                        @item.Order.Organization.FullName.Matter
+                                                  }
+                                                    }</td>
+                </tr>
+                <tr>
+                    <td width="30%">@LiveAzure.Resource.Model.Order.OrderInformation.Telephone:&nbsp @item.Order.Telephone &nbsp @item.Order.Mobile</td>
+                    <td width="30%">@LiveAzure.Resource.Model.Order.OrderInformation.Currency: &nbsp @item.Order.Currency.Name.Matter</td>
+                    <td width="40%">@LiveAzure.Resource.Model.Member.OrganizationBase.WorkPhone：&nbsp 
+                    @{if (item.Order.Organization != null)
+                      {
+                        @item.Order.Organization.WorkPhone
+                      }
+                    }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="left">@OrderInformation.FullAddress：&nbsp @item.Order.FullAddress&nbsp;<!-- 收货人地址 --> @item.Order.PostCode&nbsp;<!-- 邮政编码 --></td>
+                    
+                </tr>
+            </tbody>
+        </table>
+        <table class="print_table" width="100%" border="1" style="font-size:13px;border-top-color: rgb(0,0,0); border-collapse: collapse; border-bottom-color: rgb(0,0,0); border-right-color: rgb(0,0,0); border-left-color: rgb(0,0,0)">
+            <tbody>
+                <tr align="center">
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Warehouse.WarehouseOutItem.Shelf</td>
+                    <td bgcolor="#cccccc">@OrderItem.SkuItem</td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Warehouse.WarehouseOutItem.TrackLot</td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode</td>
+                    <td bgcolor="#cccccc">@OrderItem.Name</td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Product.ProductInfoItem.Specification</td>
+                    <td bgcolor="#cccccc">@OrderItem.ExecutePrice <!-- 商品单价 --></td>
+                    <td bgcolor="#cccccc">@OrderItem.Quantity<!-- 商品数量 --></td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Stage.WarehouseController.Subtotal <!-- 价格小计 --></td>
+                </tr>
+                @{
+                    foreach (var itemIn in item.OutSkus)
+                    {
+                <tr>
+                    <td>@itemIn.OutItem.Shelf.Code</td>
+                    <td>@itemIn.OutItem.SkuItem.Code<!--系统sku--></td>
+                    <td>@itemIn.OutItem.TrackLot</td>
+                    <td>@itemIn.OutItem.SkuItem.Barcode<!--产品条码--></td>
+                    <td>@itemIn.OutItem.SkuItem.FullName.Matter<!-- 商品名称 --> </td>
+                    <td>@itemIn.OutItem.SkuItem.Specification.Matter<!--规格--></td>
+                    <td>@Math.Round(itemIn.OderItem.ExecutePrice, 2)<!-- 商品单价 --></td>
+                    <td>@{
+                        decimal i = itemIn.OutItem.Quantity;   <!--某件商品的数量-->
+                        decimal j = itemIn.OutItem.SkuItem.NetPiece;    <!--该商品的包装规格-->
+                        decimal bag = 0;    <!--商品转换成包-->
+                        decimal piece = i;      <!--余下多少个-->
+                        if (j != 0)
+                        {
+                            bag = Math.Floor(i / j);
+                            piece = i % j;
+                        }
+                            
+                        <span>@Math.Round(i, 2) ( @bag @LiveAzure.Resource.Stage.WarehouseController.Package @piece.ToString("#.##", null) @LiveAzure.Resource.Stage.WarehouseController.Piece)</span>
+                        }
+                    </td>
+                    <td>@{
+                            <span>@Math.Round(item.Order.ExecuteAmount, 2)</span> <!-- 商品金额小计 -->
+                        }
+                    </td>
+                </tr>
+                    }
+                <tr>
+                    <!-- 发票抬头和发票内容 -->
+                    <td colspan="7">@LiveAzure.Resource.Model.ModelBase.Remark：&nbsp @item.Order.Remark</td>
+                    <!-- 商品总金额 -->
+                    <td>@OrderInformation.Pieces：@Math.Round(item.Order.Pieces, 2)</td>
+                    <td>@OrderInformation.SaleAmount：@Math.Round(item.Order.ExecuteAmount, 2)</td><!--商品总数量-->
+                </tr>
+                    }
+            </tbody>
+        </table>
+        @{
+                    if (item.Order != null)
+                    {
+                <table class="print_table" style="font-size:13px" width="100%" border="0">
+                    <tbody>
+                        <tr align="right">
+                            <td>
+                                @LiveAzure.Resource.Model.Order.OrderInformation.ExecuteAmount：<strong>@Math.Round(item.Order.ExecuteAmount, 2)</strong> 
+                                + @OrderInformation.ShippingFee：<strong>@Math.Round(item.Order.ShippingFee, 2)</strong> 
+                                @{  if (@item.Order.TaxFee != 0)
+                                    { 
+                                        <span>  + @OrderInformation.TaxFee：<strong>@Math.Round(item.Order.TaxFee, 2)</strong> </span> 
+                                    }
+                                    }
+                                @{  if (item.Order.Insurance != 0)
+                                    { 
+                                        <span> + @OrderInformation.Insurance：<strong>@Math.Round(item.Order.Insurance, 2)</strong></span>
+                                    }} 
+                                @{  if (item.Order.PaymentFee != 0)
+                                    {
+                                        <span> + @OrderInformation.PaymentFee：<strong>@Math.Round(item.Order.PaymentFee, 2)</strong><br /></span>
+                                    }}
+                                @{  if (item.Order.PackingFee != 0)
+                                    {
+                                        <span>+ @OrderInformation.PackingFee：<strong>@Math.Round(item.Order.PackingFee, 2)</strong></span>
+                                    }}
+                                @{  if (item.Order.ResidenceFee != 0)
+                                    {
+                                        <span>+ @OrderInformation.ResidenceFee：<strong>@Math.Round(item.Order.ResidenceFee, 2)</strong></span>
+                                    }}
+                                @{  if (item.Order.LiftGateFee != 0)
+                                    {    
+                                        <span>+ @OrderInformation.LiftGateFee：<strong>@Math.Round(item.Order.LiftGateFee, 2)</strong></span>
+                                    }}
+                                @{  if (item.Order.InstallFee != 0)
+                                    {
+                                        <span>+ @OrderInformation.InstallFee：<strong>@Math.Round(item.Order.InstallFee, 2)</strong></span>
+                                    }}
+                                @{  if (item.Order.OtherFee != 0)
+                                    {
+                                        <span>+ @OrderInformation.OtherFee：<strong>@Math.Round(item.Order.OtherFee, 2)</strong></span>
+                                    }}
+                                    = @OrderInformation.TotalFee：<strong>@Math.Round(item.Order.TotalFee, 2)</strong></td>
+                        </tr>
+                        <tr align="right">
+                            <td>- @OrderInformation.TotalPaid：<strong>@Math.Round(item.Order.TotalPaid, 2)</strong> 
+                            @{  if (item.Order.PointPay != 0)
+                                {
+                                    <span>-  @OrderInformation.PointPay：<strong>@Math.Round(item.Order.PointPay, 2)</strong></span>
+                                }}
+                            @if (item.Order.CouponPay != 0)
+                            {
+                                <span>- @OrderInformation.CouponPay：<strong>@Math.Round(item.Order.CouponPay, 2)</strong></span>
+                            }
+                            @if (item.Order.BounsPay != 0)
+                            {
+                                <span>- @OrderInformation.BounsPay：<strong>@Math.Round(item.Order.BounsPay, 2)</strong></span>
+                            }
+                                = @OrderInformation.OrderAmount：@Math.Round(item.Order.OrderAmount, 2)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                    }
+    }
+        </div>
+    }
+}
+<!--endprint1-->
+</div>

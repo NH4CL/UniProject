@@ -1,0 +1,61 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models;
+
+@{
+    ViewBag.Title = "主页";
+}
+@*<script type="text/javascript">
+    function addProgItemNode() {
+        var returnvalue = new String(window.showModalDialog("/Home/ProgItemNode", "Width=100,Height=100"));
+
+     }
+</script>*@
+<h2>@ViewBag.Message</h2>
+<h1>@ViewBag.test</h1>
+@*<div id="gridpanel">
+    @Html.Grid(new GridControl()
+            .SetName("gridtest")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Home/ListProgs")
+            .SetEditUrl("")
+            .SetHeight("200")
+            .SetWidth("200")
+            .SetColumns<LiveAzure.Models.General.GeneralProgNode>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Name.Matter).SetCaption("名称").AddEvent("click", "doCascade");
+                cs.Add(x => x.Code).SetCaption("代码");
+
+            })
+            
+    )
+
+    @{
+        string s = @Html.GridAddButton(buttonText: "Add", gridName: "gridtest") +
+        @Html.GridUpdateButton(buttonText: "Update", gridName: "gridtest") +
+        @Html.GridSaveButton(buttonText: "Save", gridName: "gridtest") +
+        @Html.GridCancelButton(buttonText: "Cancel", gridName: "gridtest") +
+        @Html.GridDeleteButton(buttonText: "Delete", gridName: "gridtest", actionUrl: "") +
+        @Html.GridCancelButton(buttonText: "Cancel All", gridName: "gridtest", allRows: true);
+                    
+        var wrapper = new HtmlString(s);
+        <div>
+            <input type="button" name="add" value="ADD" onclick="addProgItemNode()" />
+            <input type="button" name="edit" value="EDIT" onclick="editProgItemNode()" />
+            @wrapper
+        </div>
+    }
+    
+</div>*@
+
+
+<p>
+    若要了解有关 ASP.NET MVC 的更多信息，请访问 <a href="http://asp.net/mvc" title="ASP.NET MVC 网站">http://asp.net/mvc</a>。
+</p>
+@*<script type="text/javascript">
+    function doCascade() {
+        alert("1");
+    }
+</script>*@

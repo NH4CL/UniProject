@@ -1,0 +1,210 @@
+﻿@using LiveAzure.Models.General;
+@model GeneralRegion
+           @if (ViewBag.ImportSuccess)
+           { 
+               <script type='text/javascript'>
+                   window.parent.document.getElementById("CoverPage").setAttribute("style", "");
+                   window.parent.document.getElementById("WaittingPage").setAttribute("style", "");
+               </script>
+           }
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.RegionController.Region";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    var regionTreeType = "FULL";
+    var shortTreeCreate = false;
+    var oRegionTree = new treeObject();
+    var deleteConfirm = "@Html.Raw(LiveAzure.Resource.Stage.RegionController.Confirm)";
+    oRegionTree.createTree("regionTree", "/Region/TreeLoad", "/Region/TreeExpand", "", "rRegionMenu", false, deleteConfirm);
+
+    var oRegionShortNameTree = new treeObject();
+    /*
+        添加区域
+    */
+    function add_RegionNode() {
+        UnitPricePanel.OpenPanel();
+        var treeNodeId;
+        if (regionTreeType == "FULL") {
+            oRegionTree.add_TreeNode("rRegionMenu");
+            if (oRegionTree.selectNode == null) {
+                treeNodeId = "00000000-0000-0000-0000-000000000000";
+            }
+            else {
+                treeNodeId = oRegionTree.selectNode.id;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Region/AddNewRegion",
+                data: { id: treeNodeId },
+                success: function (html) {
+                    UnitPricePanel.EditPageHtml(html);
+                }
+            });
+        }
+        else {
+            oRegionShortNameTree.add_TreeNode("rRegionMenu");
+            if (oRegionShortNameTree.selectNode == null) {
+                treeNodeId = "00000000-0000-0000-0000-000000000000";
+            }
+            else {
+                treeNodeId = oRegionShortNameTree.selectNode.id;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Region/AddNewRegion",
+                data: { id: treeNodeId },
+                success: function (html) {
+                    UnitPricePanel.EditPageHtml(html);
+                }
+            });
+        }
+
+    }
+    /*
+        编辑区域
+    */
+    function edit_RegionNode() {
+        UnitPricePanel.OpenPanel();
+        if (regionTreeType == "FULL") {
+            oRegionTree.edit_TreeNode("rRegionMenu");
+            $.ajax({
+                type: "POST",
+                url: "/Region/RegionEdit",
+                data: { id: oRegionTree.selectNode.id },
+                success: function (html) {
+                    UnitPricePanel.EditPageHtml(html);
+                }
+            });
+        }
+        else {
+            oRegionShortNameTree.edit_TreeNode("rRegionMenu");
+            $.ajax({
+                type: "POST",
+                url: "/Region/RegionEdit",
+                data: { id: oRegionShortNameTree.selectNode.id },
+                success: function (html) {
+                    UnitPricePanel.EditPageHtml(html);
+                }
+            });
+        }
+
+    }
+    /*
+        删除区域
+    */
+    function del_RegionNode() {
+        if (regionTreeType == "FULL") {
+            oRegionTree.del_TreeNode("regionTree", "/Region/TreeRemove", "/Region/TreeLoad", "rRegionMenu");
+        }
+        else {
+            oRegionShortNameTree.del_TreeNode("regionTree", "/Region/TreeRemove", "/Region/TreeLoad", "rRegionMenu"); 
+        }
+    }
+
+    /*
+        导入地区
+    */
+    function regionImport() {
+        $("#regionImport").html("");
+        $.ajax({
+            type: "POST",
+            url: "/Region/RegionImport",
+            success: function (html) {
+                $("#regionImport").html(html);
+            }
+        });
+    }
+
+    /*
+    选择全称的树
+    */
+    function regionFullTreeSelect() {
+        regionTreeType = "FULL";
+
+        oRegionTree.createTree("regionTree", "/Region/TreeLoad", "/Region/TreeExpand", "", "rRegionMenu", false);
+
+        //$("#regionEdit").html("");
+        //$("#regionAdd").html("");
+        
+
+        $("#shortNameTree").hide();
+        $("#regionTree").show();
+    }
+    /*
+        选择简称的树
+    */
+    function regionShortTreeSelect() {
+        regionTreeType = "SHORT";
+        
+        oRegionShortNameTree.createTree("shortNameTree", "/Region/ShortNameTreeLoad", "/Region/ShortNameTreeExpand", "", "rRegionMenu", false);
+
+        //$("#regionEdit").html("");
+        //$("#regionAdd").html("");
+        $("#regionTree").hide(); 
+        $("#shortNameTree").show();
+    }
+
+</script>
+<div id="regionMainPage">
+    <div id="regionSelect">
+        <table>
+            <tr>
+                <td>
+                    @LiveAzure.Resource.Stage.RegionController.Region
+                </td>
+                <td>
+                    <input id="radioFullNameID" type="radio" name="radioName" checked="checked" value="fullname" onclick="regionFullTreeSelect();" />@LiveAzure.Resource.Model.General.GeneralRegion.FullName
+                    <input id="radioShortNameID" type="radio" name="radioName" value="shortname" onclick="regionShortTreeSelect();" />@LiveAzure.Resource.Model.General.GeneralRegion.ShortName
+                    <input id="btnImportRegionID" type="button" name="ImportName" onclick="regionImport();" value="@LiveAzure.Resource.Stage.RegionController.Import" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="content_main_left">
+        <div id="regionTree" class="tree" style="width: 230px; overflow: auto;">
+        </div>
+    
+        <div id="shortNameTree" class="tree" style="width: 230px; overflow: auto; display: none;">
+        </div>
+    </div>
+    <input type="hidden" id = "editAble" value="@ViewBag.EnableEdit" />   
+    <div class="content_main_right">
+        <div id="rRegionMenu" style="position: absolute; visibility: hidden;">
+            <ul>
+                <li>
+                    <ul id="m_add" onclick="add_RegionNode();">
+                        <li>@LiveAzure.Resource.Stage.RegionController.Add</li></ul>
+                    <ul id="m_edit" onclick="edit_RegionNode();">
+                        <li>@LiveAzure.Resource.Stage.RegionController.Edit</li></ul>
+                    <ul id="m_delete" onclick="del_RegionNode();">
+                        <li>@LiveAzure.Resource.Stage.RegionController.Delete</li></ul>
+                </li>
+            </ul>
+        </div>
+   
+        <div id="EditPage_Region" class="EditPage">
+            <p id="Draggable_Region" style="background-color: Orange; width: 100%; height: 30px; margin-top: 0;" class="Draggalbe">
+                <span id="PageTitle_Region" class="Title">@LiveAzure.Resource.Stage.RegionController.Edit</span>
+                <span id="Close_Region" class="Close" onclick="CloseEditPanel('CoverPage_Region','EditPage_Region');" style="float:right;"><img alt="close" src="@Url.Content("~/Content/themes/base/images/close.gif")" /></span>
+            </p>
+            <div id="PartialPage_Region" class="PartialPage">
+            </div>
+        </div>
+        <div id="CoverPage_Region" class="CoverPage">
+        </div>
+
+        <div id="regionImport"></div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    var displayAble = document.getElementById("editAble").value;
+    if (displayAble == true)
+        document.getElementById("m_edit").style.display = "block";
+    else
+        document.getElementById("m_edit").style.display = "hidden";
+</script>

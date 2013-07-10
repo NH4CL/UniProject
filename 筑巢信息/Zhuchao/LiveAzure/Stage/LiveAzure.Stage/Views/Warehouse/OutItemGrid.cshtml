@@ -1,0 +1,30 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using OutItemResource = LiveAzure.Resource.Model.Warehouse.WarehouseOutItem
+@using SKUResource = LiveAzure.Resource.Model.Product.ProductInfoItem
+@{
+    Guid outID = (Guid)ViewBag.OutID;
+}
+@Html.Grid(
+    new GridControl()
+        .SetName("OutItemGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("OutItemList", new { outID = outID }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseOutItem>(cs=>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.SkuID).SetCaption(SKUResource.Code);
+                cs.Add(x => x.SkuItem).SetCaption(OutItemResource.SkuItem +" "+SKUResource.FullName);
+                cs.Add(x => x.Shelf).SetCaption(OutItemResource.Shelf);
+                cs.Add(x => x.TrackLot).SetCaption(OutItemResource.TrackLot);
+                cs.Add(x => x.Quantity).SetCaption(OutItemResource.Quantity);
+            })
+            .UpdateDefaultPager(pager=>
+                pager
+                    .ShowSearch(false,false)
+            )
+   )

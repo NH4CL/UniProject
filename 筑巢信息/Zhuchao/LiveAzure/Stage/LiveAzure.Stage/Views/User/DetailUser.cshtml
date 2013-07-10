@@ -1,0 +1,106 @@
+﻿@model LiveAzure.Models.Member.MemberUser
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>MemberUser</legend>
+
+    <div class="display-label">OrgID</div>
+    <div class="display-field">@Model.OrgID</div>
+
+    <div class="display-label">RoleID</div>
+    <div class="display-field">@Model.RoleID</div>
+
+    <div class="display-label">ChlID</div>
+    <div class="display-field">@Model.ChlID</div>
+
+    <div class="display-label">LoginName</div>
+    <div class="display-field">@Model.LoginName</div>
+
+    <div class="display-label">aManager</div>
+    <div class="display-field">@Model.aManager</div>
+
+    <div class="display-label">Ustatus</div>
+    <div class="display-field">@Model.Ustatus</div>
+
+    <div class="display-label">NickName</div>
+    <div class="display-field">@Model.NickName</div>
+
+    <div class="display-label">FirstName</div>
+    <div class="display-field">@Model.FirstName</div>
+
+    <div class="display-label">LastName</div>
+    <div class="display-field">@Model.LastName</div>
+
+    <div class="display-label">DisplayName</div>
+    <div class="display-field">@Model.DisplayName</div>
+
+    <div class="display-label">aPasscode</div>
+    <div class="display-field">@Model.aPasscode</div>
+
+    <div class="display-label">Passcode</div>
+    <div class="display-field">@Model.Passcode</div>
+
+    <div class="display-label">SaltKey</div>
+    <div class="display-field">@Model.SaltKey</div>
+
+    <div class="display-label">aCulture</div>
+    <div class="display-field">@Model.aCulture</div>
+
+    <div class="display-label">Title</div>
+    <div class="display-field">@Model.Title</div>
+
+    <div class="display-label">Gender</div>
+    <div class="display-field">@Model.Gender</div>
+
+    <div class="display-label">HeadPic</div>
+    <div class="display-field">@Model.HeadPic</div>
+
+    <div class="display-label">UserSign</div>
+    <div class="display-field">@Model.UserSign</div>
+
+    <div class="display-label">Brief</div>
+    <div class="display-field">@Model.Brief</div>
+
+    <div class="display-label">Birthday</div>
+    <div class="display-field">@String.Format("{0:g}", Model.Birthday)</div>
+
+    <div class="display-label">Email</div>
+    <div class="display-field">@Model.Email</div>
+
+    <div class="display-label">LastLoginTime</div>
+    <div class="display-field">@String.Format("{0:g}", Model.LastLoginTime)</div>
+
+    <div class="display-label">LastLoginIP</div>
+    <div class="display-field">@Model.LastLoginIP</div>
+
+    <div class="display-label">UserStatusName</div>
+    <div class="display-field">@Model.UserStatusName</div>
+
+    <div class="display-label">GenderName</div>
+    <div class="display-field">@Model.GenderName</div>
+
+    <div class="display-label">Deleted</div>
+    <div class="display-field">@Model.Deleted</div>
+
+    <div class="display-label">CreateTime</div>
+    <div class="display-field">@String.Format("{0:g}", Model.CreateTime)</div>
+
+    <div class="display-label">LastModifiedBy</div>
+    <div class="display-field">@Model.LastModifiedBy</div>
+
+    <div class="display-label">LastModifyTime</div>
+    <div class="display-field">@String.Format("{0:g}", Model.LastModifyTime)</div>
+
+    <div class="display-label">Remark</div>
+    <div class="display-field">@Model.Remark</div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "EditUser", new { id=Model.Gid }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+

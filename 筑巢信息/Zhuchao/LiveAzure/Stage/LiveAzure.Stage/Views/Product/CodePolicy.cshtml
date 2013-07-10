@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "CodePolicy";
+}
+@model LiveAzure.Models.Member.MemberOrganization
+        
+<div>
+    @LiveAzure.Resource.Model.Member.MemberUser.Organization
+    @Html.DropDownList("codepolicy", (List<SelectListItem>)ViewBag.organization, new { onchange="ShowEditCodePolicyPage(this)" })
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#editCodePolicy").show();
+        $.ajax({
+            type: "POST",
+            url: "/Product/EditCodePolicy",
+            data: { orgGid: "00000000-0000-0000-0000-000000000000" },
+            success: function (data) {
+                $("#editCodePolicy").html(data);
+            }
+        });
+    });
+    function ShowEditCodePolicyPage(org) {
+        //$("#editCodePolicy").show();
+        $.ajax({
+            type: "POST",
+            url: "/Product/EditCodePolicy",
+            data: { orgGid: org.value },
+            success: function (data) {
+                $("#editCodePolicy").html(data);
+            }
+        });
+    }
+</script>
+@using (@Ajax.BeginForm("SaveCodePolicy", "Product", new AjaxOptions { UpdateTargetId = "editCodePolicy" }, new { id = "editCodePolicyForm" }))
+{
+    <div id="editCodePolicy">
+        
+    </div>
+}

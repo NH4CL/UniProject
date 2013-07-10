@@ -1,0 +1,179 @@
+﻿@{
+    ViewBag.Title = "Payable";
+}
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Finance.FinancePayment
+
+<div id="financePayment">       
+<div>
+    @LiveAzure.Resource.Model.Finance.FinancePayment.Organization
+    @Html.DropDownListFor(model => model.OrgID, (List<SelectListItem>)ViewBag.organizationSelectList, new { onchange = "GetGridByOrgID(this.value)" })
+</div>     
+<div id="PaymentGridTable">
+    @Html.Grid(new GridControl()
+    .SetName("PayableGrid")
+    .SetPageSize(20)
+    .SetIsAutoSize(true)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Finance/PayableList")
+    .SetWidth("'50%'")
+    .SetHeight("'100%'")
+    .SetColumns<LiveAzure.Models.Finance.FinancePayment>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.Organization).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Organization);
+        cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Code);
+        cs.Add(x => x.PaymentType).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Ptype);
+        cs.Add(x => x.PayTo).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.PayTo)
+                            .SetColumnRenderer(new ComboColumnRenderer("/Finance/GetPayToText"));
+        cs.Add(x => x.Pstatus).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Pstatus)
+                              .SetColumnRenderer(new ComboColumnRenderer("/Finance/GetFinanceStatusText"));
+        cs.Add(x => x.RefTypeName).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.RefType);
+        cs.Add(x => x.RefID).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.RefID);
+        cs.Add(x => x.PayDate).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.PayDate);
+        cs.Add(x => x.Reason).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Reason);
+        cs.Add(x => x.Currency).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Currency);
+        cs.Add(x => x.Amount).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Amount);
+        cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+    }))
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddPayablePage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="ShowEditPayablePage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemovePayable()" />
+    <input type="button" id="ConfirmPayment" value="@LiveAzure.Resource.Common.Confirm" onclick="ConfirmPayable()" />
+    <input type="button" id="ClosePayment" value="@LiveAzure.Resource.Stage.FinanceController.ClosePayment" onclick="ClosePayable()" />
+</div>
+</div>
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.FinanceController.EditPayable";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+    function GetGridByOrgID(org) {
+        $.ajax({
+            type: "POST",
+            url: "/Finance/PayableListTable",
+            data: { orgID: org },
+            success: function (data) {
+                success: RefreshPayableGrid();
+            }
+        });
+    }
+
+    function RefreshPayableGrid() {
+        $('#PayableGrid').trigger('reloadGrid');
+    }
+
+        function ShowAddPayablePage() {
+        UnitPricePanel.OpenPanel();
+        $.post("/Finance/AddPayable", {}, function (data) {
+            UnitPricePanel.EditPageHtml(data);
+        });
+    }
+
+    function ShowEditPayablePage() {
+        var PayableRowId = $("#PayableGrid").jqGrid("getGridParam", "selrow");
+        if (PayableRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        }
+        else {
+            UnitPricePanel.OpenPanel();
+            $.ajax({
+                type: "POST",
+                url: "/Finance/EditPayable",
+                data: { PayableGid: PayableRowId },
+                success: function (data) {
+                    UnitPricePanel.EditPageHtml(data);
+                }
+            });
+        }
+    }
+
+    function RemovePayable() {
+        var PayableRowId = $("#PayableGrid").jqGrid("getGridParam", "selrow");      //选中行的Gid
+        if (PayableRowId == null) {
+            alert("@LiveAzure.Resource.Stage.CategoryController.Notice");
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm')) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Finance/RemovePayable",
+                    data: { PayableGid: PayableRowId },
+                    success: RefreshPayableGrid()
+                });
+            }
+        }
+    }
+
+    function ConfirmPayable() {
+        var PayableRowId = $("#PayableGrid").jqGrid("getGridParam", "selrow");      //选中行的Gid
+        var Pstatus = $("#PayableGrid").jqGrid("getCell", PayableRowId, "Pstatus");
+        if (PayableRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        }
+        else {
+            if(Pstatus == 1)
+            {
+                alert("The order had been paid");
+            }
+            else
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "/Finance/ConfirmPayable",
+                    data: { payableGid: PayableRowId },
+                    success: RefreshPayableGrid()
+                });
+            }
+        }
+    }
+
+    function ClosePayable()
+    {
+        var PayableRowId = $("#PayableGrid").jqGrid("getGridParam", "selrow");
+        var Pstatus = $("#PayableGrid").jqGrid("getCell", PayableRowId, "Pstatus");
+
+        if(PayableRowId!=null)
+        {
+            if(Pstatus==2)
+            {
+                alert("It had been closed");
+            }
+            else
+            {
+            if(Pstatus == 0)
+            {
+                alert("The bill need to be Confirm");
+            }
+            else
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "/Finance/PayablesToClose",
+                    data: { payableGid: PayableRowId },
+                    success: function(data){
+                        $("#financePayment").html(data);
+                    }
+                });
+                }
+            }
+        }
+        else
+        {
+            $.ajax({
+                    type: "POST",
+                    url: "/Finance/PayablesToClose",
+                    data: { },
+                    success: function(data){
+                        $("#financePayment").html(data);
+                    }
+                });
+        }
+    }
+</script>
+</div>

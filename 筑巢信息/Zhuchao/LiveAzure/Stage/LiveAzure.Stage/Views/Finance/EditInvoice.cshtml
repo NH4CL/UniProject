@@ -1,0 +1,83 @@
+﻿@model LiveAzure.Models.Finance.FinanceInvoice
+@using (@Ajax.BeginForm("SaveEditInvoice", "Finance", new AjaxOptions { OnSuccess = "RefreshInvoiceGrid();ClosePanel();" }, new { id = "editInvoiceForm" }))
+{
+<div class="down_AddorEdit">    
+    @Html.HiddenFor(model => model.Gid)
+    <table>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Finance.FinanceInvoice.OrderInfo)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.OrderInfo.Code)
+                @Html.ValidationMessageFor(model => model.OrderInfo.Code)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Finance.FinanceInvoice.Code)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Code)
+                @Html.ValidationMessageFor(model => model.Code)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Finance.FinanceInvoice.Title)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Title)
+                @Html.ValidationMessageFor(model => model.Title)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Finance.FinanceInvoice.Matter)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Matter)
+                @Html.ValidationMessageFor(model => model.Matter)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Finance.FinanceInvoice.Istatus)
+            </th>
+            <td>
+                @Html.DropDownListFor(model => model.Istatus, (List<SelectListItem>)ViewBag.EditIstatusList)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Finance.FinanceInvoice.Amount)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Amount)
+                @Html.ValidationMessageFor(model => model.Amount)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Finance.FinanceInvoice.SendNote)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.SendNote)
+                @Html.ValidationMessageFor(model => model.SendNote)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.ModelBase.Remark)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Remark)
+                @Html.ValidationMessageFor(model => model.Remark)
+            </td>
+        </tr>
+    </table>
+    <div>
+        <input type="submit" value="@LiveAzure.Resource.Common.Submit" onclick="CloseEditPanel('CoverPage_Invoice', 'EditPage_Invoice')" />
+    </div>
+</div>
+}

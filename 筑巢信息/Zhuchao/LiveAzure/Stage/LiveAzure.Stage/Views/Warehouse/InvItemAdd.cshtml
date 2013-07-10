@@ -1,0 +1,82 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseInvItem
+@{
+    Layout = null; 
+ }
+@using InvItemResource = LiveAzure.Resource.Model.Warehouse.WarehouseInvItem
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@using CommonResource = LiveAzure.Resource.Common
+@ControlManager.SKUSelect()
+@{
+    ViewBag.Title = "WarehouseInvItemAdd";
+}
+
+<h2>WarehouseInvItemAdd</h2>
+@using (Html.BeginForm("InvItemAddDB", "Warehouse", FormMethod.Post, new { id = "InvItemAddForm" }))
+{
+    <table>
+        <tr>
+            <th>@InvItemResource.SkuItem</th>
+            <td>
+                @Html.HiddenFor(model => model.InvID)
+                @Html.EditorFor(model => model.SkuID, "SKUSelect", new { ID = "SkuSelect", OrgID = Model.Inventory.Warehouse.aParent })
+            </td>
+        </tr>
+        <tr>
+            <th>@InvItemResource.Shelf</th>
+            <td>@Html.DropDownListFor(model => model.ShelfID, ViewBag.ShelfList as IEnumerable<SelectListItem>)</td>
+        </tr>
+        <tr>
+            <th>@InvItemResource.TrackLot</th>
+            <td>@Html.TextBoxFor(model => model.TrackLot, new { id = "txtTrackLot" })</td>
+        </tr>
+        <tr>
+            <th>@InvItemResource.Quantity</th>
+            <td>@Html.TextBoxFor(model => model.Quantity, new { id = "txtQuantity" })</td>
+        </tr>
+        <tr>
+            <th>@LiveAzure.Resource.Model.ModelBase.Remark</th>
+            <td>@Html.TextAreaFor(model => model.Remark)</td>
+        </tr>
+    </table>
+    <input type="submit" id="btnAdd" value="@CommonResource.Add" />
+    <input type="reset" id="btnResetInItem" value="@CommonResource.Reset" />
+}
+<script type="text/javascript">
+    $("#btnResetInItem").click(function () {
+        document.location.replace("/Warehouse/InvItemAdd?itemID=@Model.InvID");
+    });
+</script>
+<script type="text/javascript">
+    var RegxNum = /^[0-9]+(\.[0-9]+)?$/;
+    $("#txtQuantity").blur(function () {
+        var input = $(this);
+        var value = input.val();
+        if (!RegxNum.test(value)) {
+            alert("@WCResource.WrongNum");
+            input.val("@Model.Quantity");
+        }
+        if (value == "0") {
+            alert("@WCResource.NumMustGreaterThanZero");
+        }
+    });
+    $("#txtTrackLot").blur(function () {
+        var input = $(this);
+        var value = input.val();
+        if (!RegxNum.test(value)) {
+            alert("@WCResource.WrongNum");
+            input.val("@Model.TrackLot");
+        }
+    });
+    $("#InvItemAddForm").submit(function (e) {
+        if ($("#SKU_val").val() == "") {
+            alert("@WCResource.SKURequired");
+            e.preventDefault();
+        }
+    });
+    $("#btnAdd").click(function () {
+        if ($("#txtQuantity").val() == 0) {
+            alert("数量不能为0");
+            return false;
+        }
+    });
+</script>

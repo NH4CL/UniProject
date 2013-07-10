@@ -1,0 +1,21 @@
+﻿@{
+    Layout = null; 
+}
+
+<div class="acc_right">
+    <div class="page_root">
+        <div class="page_root_pic">
+            <img alt="" src="@Url.Content("/Content/img/root.png")" />
+        </div>
+        <div class="page_root_content">
+            当前位置：
+        </div>
+    </div>
+    <div class="My_Order">
+        <div class="Order_title">
+            <b>发表评论</b></div>
+                    <div class="comment_emit_content">
+	            <form name="evaForm" id="evaForm" method="post" action="">		            <table cellpadding="0" cellspacing="0" border="0" width="800">			            <tr>				            <td style="width:100px;">评价等级：</td>				            <td>					            <input name="comment_level" value="1" type="radio"/>					            <img src="@Url.Content("/Content/img/pic_star_05.gif")" width="83" height="14" alt="一颗星"/>					            <input name="comment_level" value="2" type="radio"/>					            <img src="@Url.Content("/Content/img/pic_star_04.gif")" width="83" height="14" alt="二颗星"/>					            <input name="comment_level" value="3" type="radio"/>					            <img src="@Url.Content("/Content/img/pic_star_03.gif")" width="83" height="14" alt="三颗星"/>					            <input name="comment_level" value="4" type="radio"/>					            <img src="@Url.Content("/Content/img/pic_star_02.gif")" width="83" height="14" alt="四颗星"/>					            <input name="comment_level" value="5" type="radio" checked="checked"/>					            <img src="@Url.Content("/Content/img/pic_star_01.gif")" width="83" height="14" alt="五颗星"/>				            </td>			            </tr>			            <tr>				            <td>评论内容：</td>				            <td>					            <textarea name="comment_content" id="comment_content" cols="" rows="" ></textarea>					            <label for="comment_content" id="checkcomment_content"></label>				            </td>			            </tr>			            <tr>				            				            <td align="left">					            <input type="image" src="@Url.Content("/Content/img/submit.jpg")" />				            </td>			            </tr>		            </table>	            </form>	        </div>
+		</div>    </div>
+
+

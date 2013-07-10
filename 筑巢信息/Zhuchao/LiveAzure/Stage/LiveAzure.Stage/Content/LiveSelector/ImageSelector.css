@@ -1,0 +1,10 @@
+﻿.ImageSelect
+{
+    background-color:White;
+}
+
+.ImageSelect ul li:hover
+{
+    background-color:Lime;
+    cursor:pointer;
+}

@@ -1,0 +1,92 @@
+﻿@model LiveAzure.Models.Shipping.ShippingArea
+@{
+    Layout = null;
+}
+<div id="RoleAddMain">
+    @using (@Html.BeginForm("RegionAttribute", "Shipping", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model=>model.Gid)
+        <h2></h2>
+        <div style="margin: 2px;">
+            <table>
+                <tr>
+                    <td>
+                    </td>
+                    <td>@Html.HiddenFor(model=>model.ShipID)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>@Html.HiddenFor(model=>model.RegionID)
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.SupportCod
+                    </td>
+                    <td>@Html.DropDownListFor(model => model.SupportCod, ViewData["oSupport"] as IEnumerable<SelectListItem>, new { style="width:200px"})
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.Residential
+                    </td>
+                    <td>@Html.EditorFor(model=>model.Residential,"Cash")
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.LiftGate
+                    </td>
+                    <td>@Html.EditorFor(model=>model.LiftGate,"Cash")
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.Installation
+                    </td>
+                    <td>@Html.EditorFor(model=>model.Installation,"Cash")
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.PriceWeight
+                    </td>
+                    <td>@Html.EditorFor(model=>model.PriceWeight,"Cash")
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.PriceVolume
+                    </td>
+                    <td>@Html.EditorFor(model=>model.PriceVolume,"Cash")
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.PricePiece
+                    </td>
+                    <td>@Html.EditorFor(model=>model.PricePiece,"Cash")
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.PriceHigh
+                    </td>
+                    <td>@Html.EditorFor(model=>model.PriceHigh,"Cash")
+                    </td>
+                </tr>
+                <tr>
+                    <td>@LiveAzure.Resource.Model.Shipping.ShippingArea.PriceLow
+                    </td>
+                    <td>@Html.EditorFor(model=>model.PriceLow,"Cash")
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <input type="submit" value="@LiveAzure.Resource.Common.Submit"  />
+                    </td>
+                    <td>
+                        <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    
+    }
+</div>

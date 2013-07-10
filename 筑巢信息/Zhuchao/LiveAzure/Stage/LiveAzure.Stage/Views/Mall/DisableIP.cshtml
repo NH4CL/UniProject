@@ -1,0 +1,64 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@{
+    ViewBag.Title = "DisableIP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>
+    DisableIP</h2>
+<div>
+    @Html.Label("组织")
+    @Html.DropDownList("Org", (List<SelectListItem>)ViewBag.OrgList, new { onchange = "GetOrgID()" })
+    @Html.Label("渠道")
+    @Html.DropDownList("Channel", (List<SelectListItem>)ViewBag.ChlList, new { onchange = "GetChannelID()" })
+</div>
+<div id="DisableIPList">
+
+</div>
+<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "/Mall/DisableIPList",
+        success: function (html) {
+            $("#DisableIPList").html(html);
+        }
+    });
+    function GetOrgID() {
+        var OrgID = $("#Org").val();
+        $.ajax({
+            type: "POST",
+            url: "/Mall/GetOrgID",
+            data: { id: OrgID },
+            success: function () {
+                window.location.href = "/Mall/DisableIP?id=" + OrgID;
+//                $.ajax({
+//                    type: "POST",
+//                    url: "/Mall/DisableIP",
+//                    data: { id: OrgID },
+//                    success: function (data) {
+
+//                    }
+//                });
+            }
+        });
+    }
+    function GetChannelID() {
+        var id = $("#Channel").val();
+        alert(id);
+        $.ajax({
+            type: "POST",
+            url: "/Mall/GetChannelID",
+            data: { id: id },
+            success: function (data) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Mall/DisableIPList",
+                    data: {},
+                    success: function (html) {
+                        $("#DisableIPList").html(html);
+                    }
+                });
+            }
+        });
+    }
+</script>

@@ -1,0 +1,61 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Member.MemberOrgChannel
+@using (@Ajax.BeginForm("SaveNewOrgChannel", "Organization", new AjaxOptions { OnSuccess = "CompleteSumbitOrgChannel()" }, new { Id = "AddOrgChannelForm" }))
+{
+    <table>
+        <tr>
+            <td>@LiveAzure.Resource.Model.Member.MemberOrgChannel.Channel</td>
+            <td>
+                @Html.DropDownListFor(model => model.ChlID, (List<SelectListItem>)ViewBag.OrgChannelSelectList)
+            </td>
+        </tr>
+        <tr>
+            <td>@LiveAzure.Resource.Model.Member.MemberOrgChannel.Cstatus</td>
+            <td>
+                @Html.DropDownListFor(model => model.Cstatus, (List<SelectListItem>)ViewBag.OrgChannelStatusSelectList)
+            </td>
+        </tr>
+        <tr>
+            <td>@LiveAzure.Resource.Model.Member.MemberOrgChannel.RemoteUrl</td>
+            <td>
+                @Html.EditorFor(model => model.RemoteUrl)
+            </td>
+        </tr>    
+        <tr>
+            <td>@LiveAzure.Resource.Model.Member.MemberOrgChannel.ConfigKey</td>
+            <td>
+                @Html.EditorFor(model => model.ConfigKey)
+            </td>
+        </tr>
+        <tr>
+            <td>@LiveAzure.Resource.Model.Member.MemberOrgChannel.SecretKey</td>
+            <td>
+                @Html.EditorFor(model => model.SecretKey)
+            </td>
+        </tr>
+        <tr>
+            <td>@LiveAzure.Resource.Model.Member.MemberOrgChannel.SessionKey</td>
+            <td>
+                @Html.EditorFor(model => model.SessionKey)
+            </td>
+        </tr>
+        <tr>
+            <td>@LiveAzure.Resource.Model.ModelBase.Remark</td>
+            <td>
+                @Html.EditorFor(model => model.Remark)
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SumbitAddOrgChannelForm()" />
+    <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+    
+    <script type="text/javascript">
+
+        function SumbitAddOrgChannelForm() {
+            $("#AddOrgChannelForm").submit();
+        }
+
+    </script>
+}

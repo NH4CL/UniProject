@@ -1,0 +1,38 @@
+﻿@using MVC.Controls.Grid
+@{
+    Layout = null;
+}
+@Html.Grid(new GridControl()
+        .SetName("MemberOrgChannelGrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Organization/MemberOrgChannelList")
+        .SetHeight("'100%'")
+        .SetWidth("200")
+        .SetColumns<LiveAzure.Models.Member.MemberOrgChannel>(ps =>
+            {
+                ps.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                ps.Add(p => p.Organization.FullName.Matter).SetName("OrgName").SetCaption(@LiveAzure.Resource.Model.Member.MemberOrgChannel.Organization);
+                ps.Add(p => p.Channel.FullName.Matter).SetName("ChannelName").SetCaption(@LiveAzure.Resource.Model.Member.MemberOrgChannel.Channel);
+                                             
+            })
+        )
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="editMemberOrgChannel();" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="" />
+</div>
+<div id="MemberOrgChannelBlock"></div>
+<script type="text/javascript">
+    function editMemberOrgChannel() {
+        var id = $("#MemberOrgChannelGrid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        }
+        else {
+            $.post("/Organization/MemberOrgChannelEditPage", { Gid: id }, function (backdata) {
+                $("#MemberOrgChannelBlock").html(backdata);
+            });
+        }
+    }
+</script>

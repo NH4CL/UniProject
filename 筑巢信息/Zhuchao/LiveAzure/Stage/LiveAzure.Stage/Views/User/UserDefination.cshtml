@@ -1,0 +1,45 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Tab;
+@{
+    ViewBag.Title = "UserDefination";
+    
+}
+<script type="text/javascript">
+    var URLParams = new Array();
+    var aParams = document.location.search.substr(1).split('?').toString();
+    var aParam = aParams.split('=');
+    URLParams[aParam[0]] = aParam[1];
+    var id = URLParams["id"];
+    var guid = '*' + '@(ViewBag.staticGuid)' + '*';
+    if (guid == "**")
+    {
+//        alert("1");    
+    }
+    else
+    {
+//        alert("2");
+        id = '@ViewBag.staticGuid';
+    }
+    $(document).ready(function () {
+//        alert("id = " + id);
+        $.ajax({
+            type: "POST",
+            url: "/User/GetUserTabpage",
+            data: { strId: id },
+            datatype: "html",
+            success: function (data) {
+
+                $('#userContent').html(data);
+            },
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed!");
+            }
+        });
+    });
+</script>
+<div id = "userContent">
+
+</div>
+
+
+

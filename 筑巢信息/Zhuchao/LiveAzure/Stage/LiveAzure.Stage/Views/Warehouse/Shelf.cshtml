@@ -1,0 +1,211 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using ShelfResource = LiveAzure.Resource.Model.Warehouse.WarehouseShelf
+@using CommonResource = LiveAzure.Resource.Common
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@{
+    ViewBag.Title = "Shelf";
+}
+<table>
+    <tr>
+        <th>@WCResource.Organization</th>
+        <td>
+            <span id="spanOrgSelect">
+                <select id="WarehouseOrgSelect" disabled="disabled"></select>
+            </span>
+        </td>
+        <th>@WCResource.Warehouse</th>
+        <td>
+            <span id="spanWarehouseSelect">
+                <select id="WarehouseSelect" disabled="disabled"></select>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th>@ShelfResource.Code</th>
+        <td><input type="text" id="SearchCode" /></td>
+        <th>@ShelfResource.Barcode</th>
+        <td><input type="text" id="SearchBarcode" /></td>
+        <th>@ShelfResource.Name</th>
+        <td><input type="text" id="SearchName" /></td>
+        <td><input type="button" id="btnSearch" value="@CommonResource.Search" /></td>
+    </tr>
+</table>
+<div id="divShelfGrid"></div>
+@if (ViewBag.privEnableEditShelf == "1")
+{
+<input type="button" id="btnViewSKU" value="@ShelfResource.ShelfItems" />
+<input type="button" id="btnAddShelf" value="@CommonResource.Add" />
+<input type="button" id="btnEditShelf" value="@CommonResource.Edit" />
+<input type="button" id="ExcelImporting" value="@WCResource.ImportExcel" />
+}
+else
+{ 
+<input type="button" value="@ShelfResource.ShelfItems" disabled="disabled" />
+<input type="button" value="@CommonResource.Add" disabled="disabled" />
+<input type="button" value="@CommonResource.Edit" disabled="disabled" />
+<input type="button" value="@WCResource.ImportExcel" disabled="disabled" />
+}
+@if (ViewBag.privEnableDelete == "1")
+{
+<input type="button" id="btnDeleteShelf" value="@CommonResource.Delete" />
+}
+else
+{ 
+<input type="button" value="@CommonResource.Delete" disabled="disabled"/>
+}
+
+<!--Excel导入货架-->
+<div id="fileUpload" style="display:none">
+    @using (Html.BeginForm("UpdateXls", "Warehouse", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" id="uploadFile" name="uploadFile" value="@WCResource.SelectExcel" /><br/>
+        <input type="hidden" name="WhlID" id="WhlID"/>
+        <input type="submit" id="btnUpload" value="@WCResource.Import"/>
+        <input type="button" id="btnCancelImport" value="@CommonResource.Cancel" />
+        <a href="@Url.Content("~/Content/Files/ImportWarehouseShelf.xls")">@WCResource.DownloadXLS</a>
+        <a href="@Url.Content("~/Content/Files/ImportWarehouseShelf.xlsx")">@WCResource.DownloadXLSX</a>
+    }
+</div>
+<script type="text/javascript">
+    function onChangeWarehouse() {
+        var whID = $("#WarehouseSelect").val();
+        var grid = $("#ShelfGrid");
+        grid.jqGrid("setGridParam", { url: "/Warehouse/ShelfList?whID=" + whID });
+        grid.trigger("reloadGrid");
+    }
+    function updateWarehouseList() {
+        var warehouseSelect = $("#WarehouseSelect");
+        var spanWarehouseSelect = $("#spanWarehouseSelect");
+        var orgSelect = $("#OrgSelect");
+        var orgID = orgSelect.val();
+        warehouseSelect.unbind("change");
+        warehouseSelect.attr("disabled", "disabled");
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseSelect",
+            data: { id: 'WarehouseSelect', orgID: orgID },
+            async: false,
+            success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+        });
+        warehouseSelect = $("#WarehouseSelect");
+        warehouseSelect.change(function () {
+            onChangeWarehouse();
+        });
+        onChangeWarehouse();
+    }
+    $(function () {
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseOrgSelect",
+            data: { id: "OrgSelect" },
+            async: false,
+            success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+        });
+        var orgSelect = $("#OrgSelect");
+        orgSelect.change(function () {
+            updateWarehouseList();
+        });
+        updateWarehouseList();
+        onChangeWarehouse();
+        var whID = $("#WarehouseSelect").val();
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/ShelfGrid",
+            data: { id: "divShelfGrid", whID: whID },
+            async: false,
+            success: function (html) {
+                $("#divShelfGrid").html(html);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $("#btnViewSKU").click(function () {
+        var shelfID = $("#ShelfGrid").jqGrid("getGridParam", "selrow");
+        if (shelfID == null) {
+            alert("@WCResource.SelectOneRow");
+        }
+        else {
+            document.location.replace("/Warehouse/ShelfSKU?shelfID=" + shelfID);
+        }
+    });
+    $("#btnEditShelf").click(function () {
+        var shelfID = $("#ShelfGrid").jqGrid("getGridParam", "selrow");
+        if (shelfID == null) {
+            alert("@WCResource.SelectOneRow");
+        }
+        else {
+            document.location.replace("/Warehouse/ShelfEdit?shelfID=" + shelfID);
+        }
+    });
+    $("#btnAddShelf").click(function () {
+        var whID = $("#WarehouseSelect").val();
+        document.location.replace("/Warehouse/ShelfAdd?whID=" + whID);
+    });
+    $("#btnDeleteShelf").click(function () {
+        var grid = $("#ShelfGrid");
+        var shelfID = grid.jqGrid("getGridParam", "selrow");
+        if (shelfID == null) {
+            alert("@WCResource.SelectOneRow");
+        } else {
+            if (confirm("@WCResource.ConfirmDelete")) {
+                $.post("/Warehouse/ShelfDeleteDB", { shelfID: shelfID },
+                    function (result) {
+                        if (result == "NoPrivilege") {
+                            alert("@LiveAzure.Resource.Common.NoPermission");
+                        }
+                        else if (result) {
+                            alert("@WCResource.DeleteSuccess");
+                            grid.jqGrid("delRowData", shelfID);
+                        } else {
+                            alert("@WCResource.Error");
+                        }
+                    });
+            }
+        }
+    });
+    //Excel数据导入按钮
+    $("#ExcelImporting").click(function () {
+        $("#ShelfSKU").empty();
+        $("#fileUpload").fadeIn("slow");
+    });
+    //导入货架数据
+    $("#btnUpload").click(function () {
+        var fileName = $("#uploadFile").val();
+        var seat = fileName.lastIndexOf(".");
+        var extension = fileName.substring(seat).toLowerCase();
+        var ddlWarehouse = $("#WarehouseSelect");
+        var hidWarehouse = $("#WhlID");
+        if (extension != ".xls" && extension != ".xlsx") {
+            alert("@WCResource.SelectExcel");
+            return false;
+        } else {
+            hidWarehouse.val(ddlWarehouse.val());
+            return true;
+        }
+    });
+    //取消导入货架
+    $("#btnCancelImport").click(function () {
+        $("#fileUpload").fadeOut();
+    });
+    //搜索功能的实现
+    $("#btnSearch").click(function () {
+        var code = $("#SearchCode").val();
+        var barcode = $("#SearchBarcode").val();
+        var name = $("#SearchName").val();
+        var param = "";
+        if (code != "") param += ("&code=" + code);
+        if (barcode != "") param += ("&barcode=" + barcode);
+        if (name != "") param += ("&name=" + name);
+        $("#ShelfGrid").jqGrid('setGridParam',
+        { url: "/Warehouse/ShelfList?whID=" + $("#WarehouseSelect").val() + param });
+        $("#ShelfGrid").trigger("reloadGrid");
+    });
+</script>

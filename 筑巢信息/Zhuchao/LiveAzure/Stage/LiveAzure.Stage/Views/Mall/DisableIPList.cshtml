@@ -1,0 +1,46 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@model LiveAzure.Models.Mall.MallDisabledIp
+@{
+    Layout = null;
+}
+<div>
+    @Html.Grid(
+            new GridControl()
+                          .SetName("gridlist")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+                       .SetListUrl("/Mall/DisableIPListDetail")
+            .SetHeight("'100%'")
+            .SetWidth("300")
+            .SetColumns<LiveAzure.Models.Mall.MallDisabledIp>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.IpAddress).SetCaption(@LiveAzure.Resource.Model.Mall.MallDisabledIp.IpAddress);
+                cs.Add(x => x.Channel.FullName.Matter).SetName("Channel").SetCaption(@LiveAzure.Resource.Model.Mall.MallDisabledIp.ChlID);
+                cs.Add(x => x.Organization.FullName.Matter).SetName("Organization").SetCaption(@LiveAzure.Resource.Model.Mall.MallDisabledIp.OrgID);
+            })
+    )
+</div>
+<input type="button" id="ADD" value="@LiveAzure.Resource.Common.Add" onclick="add()" />
+<input type="button" id="EDIT" value="@LiveAzure.Resource.Common.Edit" onclick="edit()" />
+<input type="button" id="DELETE" value="@LiveAzure.Resource.Common.Delete" onclick="del()" />
+<script type="text/javascript">
+    function add() {
+        window.location.href = "/Mall/DisableIPAddOrEdit";
+    }
+    function edit() {
+        var id = $("#gridlist").jqGrid("getGridParam", "selrow");
+        if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Mall/DisableIPAddOrEdit?id=" + id;
+        }
+    }
+    function del() {
+        var id = $("#gridlist").jqGrid("getGridParam", "selrow");
+        if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Mall/DisableIPDelete?id=" + id;
+        }
+    }
+</script>

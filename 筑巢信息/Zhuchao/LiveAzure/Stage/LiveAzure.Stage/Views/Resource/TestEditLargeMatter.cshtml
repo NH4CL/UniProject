@@ -1,0 +1,12 @@
+﻿@using LiveAzure.Controls.LiveEditor
+
+@model LiveAzure.Models.General.GeneralLargeObject
+@ControlManager.LiveEditor()
+@{
+    ViewBag.Title = "TestEditLargeMatter";
+}
+
+<h2>TestEditLargeMatter</h2>
+注意，绑定模型传回数据必须添加[ValidateInput(false)]属性，否则无法传递<br />
+
+@Html.EditorFor(model => model, "LargeMatter", new { ID = "TestLarge" })

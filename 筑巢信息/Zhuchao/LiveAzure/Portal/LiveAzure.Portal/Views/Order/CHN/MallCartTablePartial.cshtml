@@ -1,0 +1,134 @@
+﻿@{
+//Layout = "~/Views/Shared/CHN/_Layout.cshtml";
+Layout = null;
+}
+@using LiveAzure.Portal.Models
+@model MallCartInfo
+<script type="text/javascript">
+</script>
+@{
+string orgName = @Model.organizationName;
+string orgGid = @Model.orgGid.ToString();
+}
+<div class="cart_product_info">
+    <div class="cart_org">
+        <div class="cart_org_name">
+            <span>@orgName</span>
+        </div>
+        <div class="cart_org_back">
+        </div>
+    </div>
+    <table class="cart_org_proinfo">
+        <tr class="cart_org_proinfo_title">
+            <td class="cart_procheck">
+                <input type="checkbox" name="@orgName" onclick="changePageCheckBox(this);" />
+            </td>
+            <td class="cart_propic">
+                商品图片
+            </td>
+            <td class="cart_proname">
+                商品名称
+            </td>
+            <td class="cart_proprice">
+                单价
+            </td>
+            <td class="cart_pronumber">
+                数量
+            </td>
+            <td class="cart_pronumber">
+                套装数量
+            </td>
+            <td class="cart_prodiscount">
+                折扣
+            </td>
+            <td class="cart_proamount">
+                小计
+            </td>
+        </tr>
+        @{
+            List<MallCartProduct> listMallCart = (List<MallCartProduct>)ViewBag.oMallCartProductList;
+            if (listMallCart != null)
+            {
+                for (int i = 0; i < listMallCart.Count; i++)
+                {
+            <tr class="cart_org_proinfo_content">
+                <td class="cart_procheck_content">
+                    @{
+                    string mallCartGid = listMallCart.ElementAt(i).mallCartGid.ToString();
+                    }
+                    <input type="checkbox" id="@mallCartGid" name="@orgName" />
+                </td>
+                <td class="cart_propic_content">
+                    @{
+                    string strPic = listMallCart.ElementAt(i).productPicture;
+                    string strProductName = listMallCart.ElementAt(i).productName;
+                    }
+                    <img src="@strPic" alt="@strProductName" />
+                </td>
+                <td class="cart_proname_content">
+                    @strProductName
+                </td>
+                <td class="cart_proprice_content">
+                    @{
+                    string strSalePrice = listMallCart.ElementAt(i).productSalePrice.ToString("#0.00");                    
+                    }
+                    @strSalePrice
+                </td>
+                <td class="cart_pronumber_content">
+                    @{
+                        string productQuantity = listMallCart.ElementAt(i).productCount.ToString("#0.00");
+                        
+                        //如果是PU-SKU模式，则直接显示数量；如果是PU-PARTS模式，则将
+                        if (listMallCart.ElementAt(i).productMode == (byte)LiveAzure.Models.ModelEnum.ProductMode.PU_SKU)
+                        {                            
+                            <input name="@listMallCart.ElementAt(i).mallCartGid.ToString()" type="button" value="-" onclick="changeProductCount(this, '-');" /><input name="@listMallCart.ElementAt(i).mallCartGid.ToString()text" type="text" value="@productQuantity" onfocus="getPresentNum(this);" onblur="checkProductNum(this);" /><input name="@listMallCart.ElementAt(i).mallCartGid" type="button" value="+" onclick="changeProductCount(this, '+');" />
+                            <div id="@listMallCart.ElementAt(i).mallCartGid.ToString()factNum">实际数量：@listMallCart.ElementAt(i).productQuantity.ToString("#0.00") (@listMallCart.ElementAt(i).standardUnit) = @listMallCart.ElementAt(i).productFactCount.ToString("#0.00") (@listMallCart.ElementAt(i).defaultUnit)</div>
+                        }
+                        else if (listMallCart.ElementAt(i).productMode == (byte)LiveAzure.Models.ModelEnum.ProductMode.PU_PARTS)
+                        {
+                            <input type="text" value="@productQuantity" disabled="disabled" /><span>*</span>@listMallCart.ElementAt(i).productSetCount
+                            <div id="@listMallCart.ElementAt(i).mallCartGid.ToString()factNum">实际数量：@listMallCart.ElementAt(i).productQuantity.ToString("#0.00") (@listMallCart.ElementAt(i).standardUnit) = @listMallCart.ElementAt(i).productFactCount.ToString("#0.00") (@listMallCart.ElementAt(i).defaultUnit)</div>
+                        }
+                    }
+                </td>
+                <td class="cart_pronumber_content">
+                    @{
+                        //如果是PU-PARTS模式，则加减套装数量
+                        if (listMallCart.ElementAt(i).productMode == (byte)LiveAzure.Models.ModelEnum.ProductMode.PU_PARTS)
+                        {
+                            <input name="@listMallCart.ElementAt(i).mallCartGid.ToString()" type="button" value="-" onclick="changeProductCount(this, '-');" /><input name="@listMallCart.ElementAt(i).mallCartGid.ToString()text" type="text" value="@listMallCart.ElementAt(i).productSetCount" /><input name="@listMallCart.ElementAt(i).mallCartGid" type="button" value="+" onclick="changeProductCount(this, '+');" />
+                        }
+                    }
+                </td>
+                <td class="cart_prodiscount_content">
+                    @listMallCart.ElementAt(i).productDiscount
+                </td>
+                <td id="@listMallCart.ElementAt(i).mallCartGid.ToString()tdPrice" class="cart_proamount_content">
+                    @{
+                        string strPriceSum = listMallCart.ElementAt(i).productPriceSum.ToString("#0.00");                        
+                    }
+                    @strPriceSum
+                </td>
+            </tr>
+                }
+            }
+        }
+    </table>
+    <div class="cart_org_bottom">
+        <div class="cart_org_operation">
+            <input type="button" value="删除选中" onclick="getSelectProduct();" />
+        </div>
+        <div class="cart_org_amount">
+            <div style="display:inline-block" id="@orgGid.ToString()priceSum">
+                商品数量总计：@{@Model.productCount.ToString("#0.00")}
+                件 赠送积分总计：@{@Model.backPoint}分 购物金额小计 ￥@{@Model.salePriceSum.ToString("#0.00")}
+                ，比市场价 ￥@{@Model.marketPriceSum.ToString("#0.00")}
+                节省了 ￥@{ string priceLower = Model.priceLower.ToString("#0.00"); }@priceLower
+                元
+            </div>
+            <div style="display:inline-block">
+                <input type="button" value="去结算" name="@orgGid" onclick="gotoCart(this);" />
+            </div>
+        </div>
+    </div>
+</div>

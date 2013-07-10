@@ -1,0 +1,28 @@
+﻿@model IEnumerable<LiveAzure.Models.Member.MemberUserShortcut>
+@{
+    Layout = null;
+    }
+<ol style="list-style:none;padding:8px 0 0 5px;margin:0">
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        if (item.Program.ProgUrl != null)
+        {
+            <li class="shortcut_button" style="float:left;margin:0 10px 0 0;">
+                <a onclick="openIframe('@item.Program.ProgUrl','@item.ProgID');"style="width:120px;height:30px;padding-left:2px;padding-right:2px">
+                    <span>@item.Program.Name.GetResource((int)ViewBag.CurrentCul)</span>
+                </a>
+            </li>
+        }
+    }
+}
+</ol>
+
+<script type="text/javascript">
+    function openIframe(url, proId) {
+        $.post("/Home/getCurrentPath", { programId: proId }, function () {
+            $("#frame_page").attr("src", url);
+        });
+    }
+</script>

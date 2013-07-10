@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A52B5C01-3629-451B-A1D4-6F52A2C4C57D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LiveAzure.Controls</RootNamespace>
+    <AssemblyName>LiveAzure.Controls</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LiveEditor\LiveEditor.cs" />
+    <Compile Include="LiveEditor\LiveEditorExtensions.cs" />
+    <Compile Include="LiveRegionSelector\RegionSelector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="LiveChat\" />
+    <Folder Include="LiveImageSelector\" />
+    <Folder Include="LivePrivateCategorySelector\" />
+    <Folder Include="LiveProgramSelector\" />
+    <Folder Include="LiveStandardCategorySelector\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LiveEditor\CKEditor\adapters\jquery.js" />
+    <Content Include="LiveEditor\CKEditor\ckeditor.js" />
+    <Content Include="LiveEditor\CKEditor\ckeditor_basic.js" />
+    <Content Include="LiveEditor\CKEditor\ckeditor_basic_source.js" />
+    <Content Include="LiveEditor\CKEditor\ckeditor_source.js" />
+    <Content Include="LiveEditor\CKEditor\config.js" />
+    <Content Include="LiveEditor\CKEditor\contents.css" />
+    <Content Include="LiveEditor\CKEditor\images\spacer.gif" />
+    <Content Include="LiveEditor\CKEditor\lang\af.js" />
+    <Content Include="LiveEditor\CKEditor\lang\ar.js" />
+    <Content Include="LiveEditor\CKEditor\lang\bg.js" />
+    <Content Include="LiveEditor\CKEditor\lang\bn.js" />
+    <Content Include="LiveEditor\CKEditor\lang\bs.js" />
+    <Content Include="LiveEditor\CKEditor\lang\ca.js" />
+    <Content Include="LiveEditor\CKEditor\lang\cs.js" />
+    <Content Include="LiveEditor\CKEditor\lang\cy.js" />
+    <Content Include="LiveEditor\CKEditor\lang\da.js" />
+    <Content Include="LiveEditor\CKEditor\lang\de.js" />
+    <Content Include="LiveEditor\CKEditor\lang\el.js" />
+    <Content Include="LiveEditor\CKEditor\lang\en-au.js" />
+    <Content Include="LiveEditor\CKEditor\lang\en-ca.js" />
+    <Content Include="LiveEditor\CKEditor\lang\en-gb.js" />
+    <Content Include="LiveEditor\CKEditor\lang\en.js" />
+    <Content Include="LiveEditor\CKEditor\lang\eo.js" />
+    <Content Include="LiveEditor\CKEditor\lang\es.js" />
+    <Content Include="LiveEditor\CKEditor\lang\et.js" />
+    <Content Include="LiveEditor\CKEditor\lang\eu.js" />
+    <Content Include="LiveEditor\CKEditor\lang\fa.js" />
+    <Content Include="LiveEditor\CKEditor\lang\fi.js" />
+    <Content Include="LiveEditor\CKEditor\lang\fo.js" />
+    <Content Include="LiveEditor\CKEditor\lang\fr-ca.js" />
+    <Content Include="LiveEditor\CKEditor\lang\fr.js" />
+    <Content Include="LiveEditor\CKEditor\lang\gl.js" />
+    <Content Include="LiveEditor\CKEditor\lang\gu.js" />
+    <Content Include="LiveEditor\CKEditor\lang\he.js" />
+    <Content Include="LiveEditor\CKEditor\lang\hi.js" />
+    <Content Include="LiveEditor\CKEditor\lang\hr.js" />
+    <Content Include="LiveEditor\CKEditor\lang\hu.js" />
+    <Content Include="LiveEditor\CKEditor\lang\is.js" />
+    <Content Include="LiveEditor\CKEditor\lang\it.js" />
+    <Content Include="LiveEditor\CKEditor\lang\ja.js" />
+    <Content Include="LiveEditor\CKEditor\lang\ka.js" />
+    <Content Include="LiveEditor\CKEditor\lang\km.js" />
+    <Content Include="LiveEditor\CKEditor\lang\ko.js" />
+    <Content Include="LiveEditor\CKEditor\lang\lt.js" />
+    <Content Include="LiveEditor\CKEditor\lang\lv.js" />
+    <Content Include="LiveEditor\CKEditor\lang\mn.js" />
+    <Content Include="LiveEditor\CKEditor\lang\ms.js" />
+    <Content Include="LiveEditor\CKEditor\lang\nb.js" />
+    <Content Include="LiveEditor\CKEditor\lang\nl.js" />
+    <Content Include="LiveEditor\CKEditor\lang\no.js" />
+    <Content Include="LiveEditor\CKEditor\lang\pl.js" />
+    <Content Include="LiveEditor\CKEditor\lang\pt-br.js" />
+    <Content Include="LiveEditor\CKEditor\lang\pt.js" />
+    <Content Include="LiveEditor\CKEditor\lang\ro.js" />
+    <Content Include="LiveEditor\CKEditor\lang\ru.js" />
+    <Content Include="LiveEditor\CKEditor\lang\sk.js" />
+    <Content Include="LiveEditor\CKEditor\lang\sl.js" />
+    <Content Include="LiveEditor\CKEditor\lang\sr-latn.js" />
+    <Content Include="LiveEditor\CKEditor\lang\sr.js" />
+    <Content Include="LiveEditor\CKEditor\lang\sv.js" />
+    <Content Include="LiveEditor\CKEditor\lang\th.js" />
+    <Content Include="LiveEditor\CKEditor\lang\tr.js" />
+    <Content Include="LiveEditor\CKEditor\lang\uk.js" />
+    <Content Include="LiveEditor\CKEditor\lang\vi.js" />
+    <Content Include="LiveEditor\CKEditor\lang\zh-cn.js" />
+    <Content Include="LiveEditor\CKEditor\lang\zh.js" />
+    <Content Include="LiveEditor\CKEditor\lang\_languages.js" />
+    <Content Include="LiveEditor\CKEditor\lang\_translationstatus.txt" />
+    <Content Include="LiveEditor\CKEditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\a11yhelp\lang\en.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\a11yhelp\lang\he.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\about\dialogs\about.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\adobeair\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\ajax\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\autogrow\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\bbcode\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\colordialog\dialogs\colordialog.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\devtools\lang\en.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\devtools\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\div\dialogs\div.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\docprops\dialogs\docprops.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\docprops\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\find\dialogs\find.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\flash\dialogs\flash.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\flash\images\placeholder.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\dialogs\button.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\dialogs\checkbox.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\dialogs\form.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\dialogs\hiddenfield.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\dialogs\radio.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\dialogs\select.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\dialogs\textarea.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\dialogs\textfield.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\forms\images\hiddenfield.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\iframedialog\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\iframe\dialogs\iframe.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\iframe\images\placeholder.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\image\dialogs\image.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\link\dialogs\link.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\link\images\anchor.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\liststyle\dialogs\liststyle.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\pagebreak\images\pagebreak.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\pastetext\dialogs\pastetext.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\placeholder\dialogs\placeholder.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\placeholder\lang\en.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\placeholder\lang\he.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\placeholder\placeholder.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\placeholder\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_address.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_blockquote.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_div.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_h1.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_h2.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_h3.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_h4.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_h5.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_h6.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_p.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\showblocks\images\block_pre.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\dialogs\smiley.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\angel_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\angry_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\broken_heart.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\confused_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\cry_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\devil_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\embaressed_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\envelope.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\heart.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\kiss.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\lightbulb.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\omg_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\regular_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\sad_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\shades_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\teeth_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\thumbs_down.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\thumbs_up.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\tounge_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\whatchutalkingabout_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\smiley\images\wink_smile.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\specialchar\lang\en.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\stylesheetparser\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\styles\styles\default.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\tableresize\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\table\dialogs\table.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\templates\dialogs\templates.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\templates\templates\default.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\templates\templates\images\template1.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\templates\templates\images\template2.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\templates\templates\images\template3.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\dialogs\uicolor.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\lang\en.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\lang\he.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\uicolor.gif" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\yui\assets\hue_bg.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\yui\assets\hue_thumb.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\yui\assets\picker_mask.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\yui\assets\picker_thumb.png" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\yui\assets\yui.css" />
+    <Content Include="LiveEditor\CKEditor\plugins\uicolor\yui\yui.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="LiveEditor\CKEditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="LiveEditor\CKEditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="LiveEditor\CKEditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="LiveEditor\CKEditor\plugins\xml\plugin.js" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\dialog.css" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\editor.css" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\icons.png" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\icons_rtl.png" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\images\dialog_sides.gif" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\images\dialog_sides.png" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\images\dialog_sides_rtl.png" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\images\mini.gif" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\images\noimage.png" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\images\sprites.png" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\images\sprites_ie6.png" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\images\toolbar_start.gif" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\skin.js" />
+    <Content Include="LiveEditor\CKEditor\skins\kama\templates.css" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\dialog.css" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\editor.css" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\icons.png" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\icons_rtl.png" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\images\dialog_sides.gif" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\images\dialog_sides.png" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\images\dialog_sides_rtl.png" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\images\mini.gif" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\images\noimage.png" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\images\sprites.png" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\images\sprites_ie6.png" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\skin.js" />
+    <Content Include="LiveEditor\CKEditor\skins\office2003\templates.css" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\dialog.css" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\editor.css" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\icons.png" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\icons_rtl.png" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\images\dialog_sides.gif" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\images\dialog_sides.png" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\images\dialog_sides_rtl.png" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\images\mini.gif" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\images\noimage.png" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\images\sprites.png" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\images\sprites_ie6.png" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\images\toolbar_start.gif" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\skin.js" />
+    <Content Include="LiveEditor\CKEditor\skins\v2\templates.css" />
+    <Content Include="LiveEditor\CKEditor\themes\default\theme.js" />
+    <Content Include="LiveTree\LiveTree\jquery-1.4.2.js" />
+    <Content Include="LiveTree\LiveTree\jquery.ztree-2.6.js" />
+    <Content Include="LiveTree\LiveTree\jquery.ztree-2.6.min.js" />
+    <Content Include="LiveTree\LiveTree\treeObject.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LiveEditor\CKEditor\.htaccess" />
+    <None Include="LiveEditor\CKEditor\ckeditor.pack" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LiveAzure.Models\LiveAzure.Models.csproj">
+      <Project>{CE38881A-6DA3-42BD-A336-488761B6747E}</Project>
+      <Name>LiveAzure.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LiveAzure.Resource\LiveAzure.Resource.csproj">
+      <Project>{B2DD90AD-939C-434D-A2D1-989BCBD87BBF}</Project>
+      <Name>LiveAzure.Resource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LiveAzure.Utility\LiveAzure.Utility.csproj">
+      <Project>{0C6E60FD-A7DD-491A-8309-01D373E0B07C}</Project>
+      <Name>LiveAzure.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MVC.Controls\MVC.Controls.csproj">
+      <Project>{1ADB25C4-9475-4B7D-B016-EBBB66403215}</Project>
+      <Name>MVC.Controls</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

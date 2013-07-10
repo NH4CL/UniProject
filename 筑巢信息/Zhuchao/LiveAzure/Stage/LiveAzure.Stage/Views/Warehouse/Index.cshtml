@@ -1,0 +1,225 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using CommonResource = LiveAzure.Resource.Common
+@using LedgerResource = LiveAzure.Resource.Model.Warehouse.WarehouseLedger
+@using SKUResource = LiveAzure.Resource.Model.Product.ProductInfoItem
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@{
+    ViewBag.Title = "Index";
+}
+<table>
+    <tr>
+        <th>@WCResource.Organization</th>
+        <td>
+            <span id="spanOrgSelect">
+                <select id="WarehouseOrgSelect" disabled="disabled"></select>
+            </span>
+        </td>
+        <th>@WCResource.Warehouse</th>
+        <td>
+            <span id="spanWarehouseSelect">
+                <select id="WarehouseSelect" disabled="disabled"></select>
+            </span>
+        </td>
+    </tr>
+    <tr>
+         <th>@WCResource.SKU</th>
+        <td><input  type="text" value="" id="SKUCode" /></td>
+        <th>@WCResource.Name</th>
+        <td><input type="text" value="" id="SKUName" /></td>
+        <td>
+            <input type="button" id="btnSearch" value="@CommonResource.Search" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+        @if (ViewBag.privEnableEdit == "1"){
+            <input type="button" id="btnEdit" value="@CommonResource.Edit" />
+        }
+        else
+        {
+            <input type="button" value="@CommonResource.Edit" disabled="disabled"/>
+        }
+            <input type="button" id="btnDetail" value="@CommonResource.Detail" />
+            <input type="button" value="@WCResource.Print" onclick="GotoPrintLedger()" />
+        </td>
+    </tr>
+</table>
+@Html.Grid(
+    new GridControl()
+        .SetName("gridLedgerList")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("WarehouseLedgerList"))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseLedger>(cs =>
+        {
+            cs.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(p => p.SkuID).SetCaption(SKUResource.FullName);
+            cs.Add(p => p.SkuItem.Barcode).SetCaption(SKUResource.Barcode);
+            cs.Add(p => p.SkuItem.Code).SetCaption(SKUResource.Code);
+            cs.Add(p => p.InQty).SetCaption(LedgerResource.InQty);
+            cs.Add(p => p.OutQty).SetCaption(LedgerResource.OutQty);
+            cs.Add(p => p.RealQty).SetCaption(LedgerResource.RealQty);
+            cs.Add(p => p.LockQty).SetCaption(LedgerResource.LockQty);
+            cs.Add(p => p.CanSaleQty).SetCaption(LedgerResource.CanSaleQty);
+            cs.Add(p => p.CanDelivery).SetCaption(LedgerResource.CanDelivery);
+            cs.Add(p => p.TobeDelivery).SetCaption(LedgerResource.TobeDelivery);
+            cs.Add(p => p.Arranged).SetCaption(LedgerResource.Arranged);
+            cs.Add(p => p.Presale).SetCaption(LedgerResource.Presale);
+            cs.Add(p => p.Ontheway).SetCaption(LedgerResource.Ontheway);
+            cs.Add(p => p.SafeQty).SetCaption(LedgerResource.SafeQty);
+            cs.Add(p => p.MaxQty).SetCaption(LedgerResource.MaxQty);
+            cs.Add(p => p.AverageCost.Matter).SetName("AverageCost").SetCaption(LedgerResource.AvgCost);
+        })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )
+    <fieldset>
+        <legend id="ExplainField">相关名词解析</legend>
+        <div id="Explain" style="display:none">
+            <p><span>已排单:</span></p>
+            <p><span>已留货:</span></p>
+            <p><span>冻结库存:</span></p>
+            <p><span>安全库存:</span></p>
+            <p><span>最大库存:</span></p>        
+            <p><span>预售库存:</span></p>
+            <p><span>在途库存数:</span></p>
+            <p><span>可用现货库存:</span></p>
+            <p><span>可用销售库存数:</span></p>
+        </div>
+    </fieldset>
+    <script type="text/javascript">
+        /*--------------------------------
+        update warehouse dropdown list
+        ---------------------------------*/
+        function updateWarehouseList() {
+        var warehouseSelect = $("#WarehouseSelect");
+        var spanWarehouseSelect = $("#spanWarehouseSelect");
+        var orgSelect = $("#OrgSelect");
+        var orgID = orgSelect.val();
+        warehouseSelect.unbind("change");
+        warehouseSelect.attr("disabled", "disabled");
+        $.ajax({
+        type: "post",
+        url: "/Warehouse/WarehouseSelect",
+        data: { id: 'WarehouseSelect', orgID: orgID },
+        async: false,
+        success:
+        function (html) {
+        spanWarehouseSelect.html(html);
+        }
+        });
+        warehouseSelect = $("#WarehouseSelect");
+        $("#gridLedgerList").trigger("reloadGrid");
+        }
+        /*--------------------------------
+        page initialization
+        --------------------------------*/
+        $(function () {
+            $.ajax({
+                type: "post",
+                url: "/Warehouse/WarehouseOrgSelect",
+                data: { id: "OrgSelect" },
+                async: false,
+                success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+            });
+            var orgSelect = $("#OrgSelect");
+            orgSelect.change(function () {
+                updateWarehouseList();
+            });
+            updateWarehouseList();
+            var whID = $("#WarehouseSelect").val();
+        });
+</script>
+<script type="text/javascript">
+    $("#btnSearch").click(function () {
+        var whID = $("#WarehouseSelect").val();
+        var SKUCode = $("#SKUCode").val();
+        var SKUName = $("#SKUName").val();
+        alert(SKUName);
+        var grid = $("#gridLedgerList");
+        var param = "";
+        param += ("whID=" + whID);
+        if (SKUCode != "") param += ("&code=" + SKUCode);
+        if (SKUName != "") param += ("&name=" + SKUName);
+        grid.jqGrid('setGridParam', { url: "/Warehouse/WarehouseLedgerList?" + param });
+        grid.trigger("reloadGrid");
+    });
+</script>
+
+<script type="text/javascript">
+    $("#btnDetail").click(function(){
+        var ledgerID = $("#gridLedgerList").jqGrid("getGridParam", "selrow");
+        if (ledgerID == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        var LedgerDetialPanel = new OpenPanel();
+        LedgerDetialPanel.bLoading = true;
+        LedgerDetialPanel.width = 600;
+        LedgerDetialPanel.height = 700;
+        LedgerDetialPanel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+        LedgerDetialPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+        LedgerDetialPanel.OpenPanel();
+        $.ajax({
+            type:"post",
+            url:"/Warehouse/SKUDetail",
+            async:false,
+            data:{ledgerID:ledgerID},
+            success: function(html){
+                LedgerDetialPanel.EditPageHtml(html);
+            }
+        });
+    });
+    $("#btnEdit").click(function(){
+        var ledgerID = $("#gridLedgerList").jqGrid("getGridParam", "selrow");
+        if (ledgerID == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        var LedgerEditPanel = new OpenPanel();
+        LedgerEditPanel.bLoading = true;
+        LedgerEditPanel.width =600;
+        LedgerEditPanel.height = 700;
+        LedgerEditPanel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+        LedgerEditPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+        LedgerEditPanel.OpenPanel();
+        $.ajax({
+            type:"post",
+            url:"/Warehouse/LedgerEdit",
+            async:false,
+            data:{ledgerID:ledgerID},
+            success: function(html){
+                LedgerEditPanel.EditPageHtml(html);
+            }
+        });
+    });
+    $("#ExplainField").click(function(){
+        var explain = $("#Explain");
+        if(explain.css("display") == "none"){
+            explain.slideDown();
+        }else{
+            explain.fadeOut();
+        }
+    });
+
+    function GotoPrintLedger()
+    {
+        $.ajax({
+                    type: "post",
+                    url: "/Warehouse/PrintLedger",
+                    data: { },
+                    success: function (html) {
+                        $("#body_frame").html(html);
+                    }
+                });   
+    }
+</script>

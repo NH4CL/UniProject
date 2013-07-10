@@ -1,0 +1,64 @@
+﻿@model Guid?
+@{
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    string TextID = string.Concat(id, "_txt");
+    string ValueID = string.Concat(id, "_val");
+    string ObjID = string.Concat("obj", id);
+    string ErrorEvent = ViewBag.OnError as string;
+    byte? RefType = ViewBag.RefType as byte?;
+}
+<input type="text" id="@TextID" />
+@Html.HiddenFor(model => model, new { id = ValueID })
+
+<script type="text/javascript">
+    var @(ObjID) = new RefIDSelector();
+    @(ObjID).init("@id", "@ErrorEvent");
+</script>
+@{
+    if(RefType == null)
+    {
+        <script type="text/javascript">
+            objRefID.destroy();
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            objRefID.create(@RefType);
+        </script>
+        if (Model.HasValue)
+        {
+            if(Model != Guid.Empty)
+            {
+                <script type="text/javascript">
+                    $.ajax({
+                        type: "post",
+                        url: "/Resource/GetRefCode",
+                        data: { refType : @RefType , refID : "@Model.Value" },
+                        async: false,
+                        success: function (data) {
+                            var code = data.toString();
+                            $("#@TextID").val(code);
+                        }
+                    });
+                </script>
+            }
+            else
+            {
+                <script type="text/javascript">
+                    $("#@ValueID").val("");
+                </script>
+            }
+        }
+        else
+        {
+            <script type="text/javascript">
+                $("#@TextID").attr("disabled", "disabled");
+            </script>
+        }
+    }
+}

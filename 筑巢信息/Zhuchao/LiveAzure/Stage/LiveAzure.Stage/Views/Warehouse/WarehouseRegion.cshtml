@@ -1,0 +1,43 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@Html.DropDownList("Organization", ViewBag.Org as IEnumerable<SelectListItem>)
+@Html.DropDownList("Warehouse", ViewBag.Whl as IEnumerable<SelectListItem>)
+<br />
+@Html.Grid(
+    new GridControl()
+        .SetName("grid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl("/Warehouse/WarehouseRegionList")
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseRegion>(cs=>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Region.Code);
+            cs.Add(x => x.Region.ShortName);
+            cs.Add(x => x.Region);
+        })
+        .UpdateDefaultPager(pager=>
+            pager
+                .ShowSearch(false,false)
+        )
+    )
+    @using (Html.BeginForm("WarehouseRegionEdit","Warehouse"))
+    {
+        <input type="hidden" id="whID" name="whID" />
+        <input type="submit" id="btnEdit" value="Edit" />
+        <script type="text/javascript">
+            $("#btnEdit").click(function () {
+                var id = $("#Warehouse").val();
+                if (id != null) {
+                    $("#whID").val(id);
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        </script>
+    }

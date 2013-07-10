@@ -1,0 +1,94 @@
+﻿@{
+    Layout = null;
+    }
+<script type="text/javascript">
+    var zShipAreaTree;
+    var shipAreaSetting;
+
+    shipAreaSetting = {
+        checkable: true,
+        checkType: { "Y": "", "N": "" },
+        checkedCol: "nodeChecked",                                                      //自定义勾选框状态的字段名
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "/Product/ShippingRegionTreeExpand", 												//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        callback: {
+            change: zTreeShipAreaOnChange
+        }
+    };
+
+    $(document).ready(function () {
+        reloadShipAreaTree();
+    });
+
+    //重新加载树
+    function reloadShipAreaTree() {
+        $.ajax({
+            type: "POST",
+            url: "/Product/ShippingRegionTreeLoad",
+            success: function (data) {
+                var shipAreadata = jQuery.parseJSON(data);
+                zShipAreaTree = $("#ShippingRegionTree").zTree(shipAreaSetting, shipAreadata);
+            }
+        });
+    }
+
+    function zTreeShipAreaOnChange(event, treeId, treeNode) {
+        if (treeNode.nodeChecked == true) {
+            $.ajax({
+                type: "POST",
+                url: "/Product/AddShippingRegion",
+                data: { id: treeNode.id },
+                success: function (data) {
+                    if (data == 'success') {
+                        var successTips = "@Html.Raw(LiveAzure.Resource.Common.SaveSuccess)";
+                        alert(successTips);
+                    }
+                    else {
+                        alert("Add failue!");
+                        treeNode.nodeChecked = false;
+                    }
+                }
+            });
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Product/DeleteShippingRegion",
+                data: { id: treeNode.id }
+            });
+        }
+    }
+
+    function setShipArea() {
+        var setShipAreaTrue = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.SaveShipAreaNotInShipping)";
+        var setShipAreaFalse = "@Html.Raw(LiveAzure.Resource.Stage.ProductController.SaveShipAreaInShipping)";
+        $.ajax({
+            type: "POST",
+            url: "/Product/SetInShipArea",
+            success: function (data) {
+                if (data == "True") {
+                    $("#setShipAreaID").val(setShipAreaFalse);
+                }
+                else {
+                    $("#setShipAreaID").val(setShipAreaTrue);
+                }                
+            }
+        });
+    }
+
+    function closeShipArea() {
+        $("#setShippingArea").html("");
+    }
+
+</script>
+<div>
+    <ul id="ShippingRegionTree" class="tree">
+    </ul>
+</div>
+<div>
+    @*<input type="button" id="setShipAreaID" name="setShiparea" onclick="setShipArea();" value="@LiveAzure.Resource.Stage.ProductController.SaveShipAreaInShipping" />*@
+</div>

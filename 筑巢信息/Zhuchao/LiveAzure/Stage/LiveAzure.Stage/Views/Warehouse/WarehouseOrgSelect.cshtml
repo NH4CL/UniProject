@@ -1,0 +1,14 @@
+﻿@{
+    IEnumerable<SelectListItem> orgList = (IEnumerable<SelectListItem>)ViewBag.OrgList;
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    Guid selectedOrg = new Guid();
+    if (ViewBag.SelectedOrg != null)
+    {
+        selectedOrg = (Guid)ViewBag.SelectedOrg;
+    }
+}
+@Html.DropDownList(id, orgList, new { id = id, value = selectedOrg })

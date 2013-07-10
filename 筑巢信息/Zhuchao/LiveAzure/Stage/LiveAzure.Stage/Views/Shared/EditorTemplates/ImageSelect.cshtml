@@ -1,0 +1,21 @@
+﻿@model string
+@{
+    string id = ViewBag.ID == null ? Guid.NewGuid().ToString() : (string)ViewBag.ID;
+    string ValueID = id + "_val";
+    string NameID = id + "_name";
+    string ImgID = id + "_img";
+    string rootURL = (string)ViewBag.Root;
+}
+
+@Html.HiddenFor(model => model, new { id = ValueID })
+<input type="text" id="@NameID" />
+<img id="@ImgID" />
+
+<div id="@id" class="ImageSelect" style=" display:none; position:fixed;height:200px;overflow-x:hidden;overflow-y:scroll;border:solid 1px">
+	<ul style="list-style:none; margin:2px; padding:2px">
+    	<li id="Template" style="display:none;"><img /><span></span></li>
+    </ul>
+    <script type="text/javascript">
+        initImageSelector("@id", "@rootURL", "@NameID", "@ValueID", "@ImgID");
+    </script>
+</div>

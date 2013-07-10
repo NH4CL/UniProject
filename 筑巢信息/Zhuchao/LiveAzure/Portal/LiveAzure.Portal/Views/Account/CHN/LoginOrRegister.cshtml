@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "登陆注册页面";
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml";
+}
+<div class="register_page">
+    @Html.Action("Login")
+    @Html.Action("Register")
+</div>
+@*
+<script type="text/javascript">
+    $.ajax({
+        type:"post",
+        url: "/Account/Login",
+        async: false,
+        success:function(html){
+            $("#Login").html(html);
+        }
+    });
+    $.ajax({
+        type:"post",
+        url: "/Account/Register",
+        async: false,
+        success:function(html){
+            $("#Register").html(html);
+        }
+    });
+</script>*@

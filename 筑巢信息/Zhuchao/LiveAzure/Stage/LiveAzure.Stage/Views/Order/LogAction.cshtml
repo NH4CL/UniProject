@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+<script type="text/javascript">
+    jQuery("Loggrid").jqGrid({
+   colModel: [ {name:'Time', index:'Time',sortable:true}]
+});
+</script>
+@Html.Grid(new GridControl()
+            .SetName("Loggrid")            
+            .SetIsAutoSize(true)
+            .SetListUrl("/Order/ListGeneralAction") 
+            .SetPageSize(10)                      
+            .SetHeight("'100%'")
+            .SetWidth("200")
+            
+            .SetColumns<LiveAzure.Models.General.GeneralAction>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.User.LoginName).SetCaption(LiveAzure.Resource.Model.Member.MemberUser.LoginName).SetName("Name");
+                cs.Add(x => x.LastModifyTime).SetCaption(LiveAzure.Resource.Model.ModelBase.LastModifyTime).SetName("Time");
+                cs.Add(x => x.Matter).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.Matter);
+            }) 
+                      
+           
+    )

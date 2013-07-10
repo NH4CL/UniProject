@@ -1,0 +1,27 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    Guid orgid = ViewBag.orgid;
+    string str = ViewBag.str;
+    }
+@Html.Grid(new GridControl()
+        .SetName("searchUserList")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetListUrl("/Privilege/ListSearchUser?str=" + str + "&orgID=" + orgid)
+        .SetHttpVerb(HttpVerbs.Post)
+        .SetHeight("'100%'")
+        .SetWidth("'30%'")
+        .SetColumns<LiveAzure.Models.Member.MemberUser>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.LoginName).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.LoginName);
+            cs.Add(x => x.Organization.FullName.Matter).SetName("OrgName").SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.Organization);
+            cs.Add(x => x.Role.Name.Matter).SetName("RoleName").SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.Role);
+            cs.Add(x => x.Email).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.Email);
+            cs.Add(x => x.Birthday).SetCaption(@LiveAzure.Resource.Model.Member.MemberUser.Birthday);
+        })
+)

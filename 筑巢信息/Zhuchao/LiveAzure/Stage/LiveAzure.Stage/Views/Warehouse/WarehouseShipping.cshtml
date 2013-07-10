@@ -1,0 +1,40 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@Html.DropDownList("Organization", ViewBag.Org as IEnumerable<SelectListItem>)
+@Html.DropDownList("Warehouse", ViewBag.Whl as IEnumerable<SelectListItem>)
+<br />
+@Html.Grid(
+    new GridControl()
+        .SetName("grid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl("/Warehouse/WarehouseShippingList")
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseShipping>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Warehouse);
+            cs.Add(x => x.Shipper).SetEditable(true);
+            cs.Add(x => x.Remark).SetEditable(true);
+        })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )
+<input type="button" id="btnEditShipping" value="Edit" />
+@Html.Raw(Html.GridDeleteButton(
+    buttonText: "Delete",
+    gridName: "grid",
+    actionUrl: Url.Action("DeleteWarehouseShipping")))
+<br /><div id="Shipping"></div>
+
+<script type="text/javascript">
+    $("#btnEditShipping").click(function () {
+        var whID = $("#Warehouse").val();
+        document.location.replace("/Warehouse/WarehouseShippingEdit?whID=" + whID);
+    });
+</script>

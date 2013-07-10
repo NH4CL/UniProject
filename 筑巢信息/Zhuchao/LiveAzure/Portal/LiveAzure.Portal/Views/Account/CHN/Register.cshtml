@@ -1,0 +1,154 @@
+﻿<div class="register_frame">
+    <div class="register_title">
+        <b>注册新用户</b>
+    </div>
+    @using (Ajax.BeginForm("RegisterUser", new AjaxOptions { OnSuccess = "regSuccess", OnFailure = "regFailure", OnBegin = "regBegin()",  }))
+    {
+         <div class="login_register_table">
+        <div class="login_table_tr">
+            <span>
+                @LiveAzure.Resource.Model.Member.MemberUser.LoginName
+            </span>
+            @Html.TextBox("loginName", string.Empty, new { id = "regName" })
+            <label id="name_Required" style="display:none">@LiveAzure.Resource.Model.Member.MemberUser.LoginNameRequired</label>
+            <label id="name_lengthRules" style="display:none">@LiveAzure.Resource.Model.Member.MemberUser.LoginNameLong</label>
+        </div>
+        <div class="login_table_tr">
+            <span>
+                @LiveAzure.Resource.Model.Member.MemberUser.Passcode
+            </span>
+            @Html.Password("password", string.Empty, new { id = "regPW" })
+            <label id="pw_Required" style="display:none">@LiveAzure.Resource.Model.Member.MemberUser.PasscodeRequired</label>
+            <label id="pw_lengthRules" style="display:none">@LiveAzure.Resource.Model.Member.MemberUser.PasscodeLong</label>
+        </div>
+        <div class="login_table_tr">
+            <span>
+                @LiveAzure.Resource.Model.Member.MemberUser.Passcode
+            </span>
+            @Html.Password("password2", string.Empty, new { id = "regPWagain" })
+            <label id="pa_Required" style="display:none">@LiveAzure.Resource.Model.Member.MemberUser.PasscodeRequired</label>
+        </div>
+        <div class="login_table_tr">
+            <span>电子邮箱 </span>
+            @Html.TextBox("email")
+            <label id="e_Required" style="display:none">电子邮件为必填项</label>
+            <label id="e_NotInRightStyle" style="display:none">电子邮件格式不合法</label>
+        </div>
+        <div class="login_table_tr">
+            <span>幸运号码 </span>
+            @Html.TextBox("email")
+        </div>
+        <div class="login_table_tr">
+            <span></span>
+            <input type="checkbox" id="Agreement" checked="checked" />我已经阅读并同意&nbsp<a>会员注册协议</a>&nbsp和&nbsp<a>隐私保护政策</a>
+        </div>
+        <div class="login_table_tr">
+            <span></span>
+            <input type="submit" id="btnRegister" value="立即注册" />
+        </div>
+    </div>
+    }
+</div>
+<script src="../../../Scripts/jquery-1.5.1-vsdoc.js" type="text/javascript"></script>
+    <!--注册模块-->
+<script type="text/javascript">
+    var regName = $("#regName");
+    var regPW = $("#regPW");
+    var regPWagain = $("#regPWagain");
+    var email = $("#email");
+    var btnRegister = $("#btnRegister");
+    checkRegister = true;
+    //用户名检测
+    regName.blur(function () {
+        var name = regName.val();
+        if (name == null) $("#name_Required").css("display", "block");
+        else if (name.length > 128) {
+            $("#name_Required").css("display", "none");
+            $("#name_lengthRules").css("display", "block");
+        }
+        else {
+            $("#name_lengthRules").css("display", "none");
+            $.ajax({
+                type: "post",
+                url: "/Account/CheckUserExist",
+                data: { loginName: name },
+                success: function (result) {
+                    if (result) {
+                        alert("用户名已注册");
+                    }
+                }
+            });
+        }
+    });
+    //密码安全度检测
+    regPW.blur(function () {
+        var pw = regPW.val();
+        if (pw == null) $("#pw_Required").css("display", "block");
+        else if (pw.length < 6) alert("密码长度最小为6个字节");
+        else if (pw.length > 100) {
+            $("#pw_Required").css("display", "none");
+            $("#pw_lengthRules").css("display", "block");
+        }
+    });
+    //密码确认
+    regPWagain.blur(function () {
+        var pwAgain = regPWagain.val();
+        if (pwAgain == null) $("#pa_Required").css("display", "block");
+        var pw = regPW.val();
+        if (pw != pwAgain) alert("两次输入的密码不匹配");
+    });
+    email.blur(function () {
+        var mail = email.val();
+        if (mail == null) $("#e_Required").css("display", "block");
+        else {
+            var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/;
+            if (!reg.test(mail)) alert("邮箱格式不合法");
+        }
+    });
+    function regSuccess(result) {
+        switch (result) {
+            case 0:
+                alert("注册成功");
+                document.location.replace("/Home/index");
+                break;
+            case 1: alert("用户名不合法"); break;
+            case 2: alert("密码不合法"); break;
+            case 3: alert("邮箱不合法"); break;
+            default: alert("服务器繁忙，请稍后再试"); break;
+        }
+    }
+
+    function regFailure() {
+        alert("网络错误");
+    }
+
+    function regBegin() {
+        var name = regName.val();
+        if (name == null || !checkRegister) {
+            alert("请确认用户名是否输入");
+            return false;
+        }
+        var pw = regPW.val();
+        if (pw == null || pw.length > 100 || pw.length < 6) {
+            alert("请确认密码长度是否合法");
+            return false;
+        }
+        var pwAgain = regPWagain.val();
+        if (pw != pwAgain) {
+            alert("两次输入的密码不匹配");
+            return false;
+        }
+        if ($("#Agreement").attr("checked") != checked) {
+            alert("您没有同意条款，不能注册");
+            return false;
+        }
+        var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/;
+        var mail = email.val();
+        if (mail == null || !reg.test(mail)) {
+            alert("请确确认邮箱合法");
+            return false;
+        }
+    }
+</script>
+
+

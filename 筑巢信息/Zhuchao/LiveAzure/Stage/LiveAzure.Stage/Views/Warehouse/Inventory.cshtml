@@ -1,0 +1,178 @@
+﻿@using CommonResource = LiveAzure.Resource.Common
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+
+@{
+    ViewBag.Title = "WarehouseInventory";
+}
+<table>
+    <tr>
+        <th>@WCResource.Organization</th>
+        <td>
+            <span id="spanOrgSelect">
+                <select id="WarehouseOrgSelect" disabled="disabled"></select>
+            </span>
+        </td>
+        <th>@WCResource.Warehouse</th>
+        <td>
+            <span id="spanWarehouseSelect">
+                <select id="WarehouseSelect" disabled="disabled"></select>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th>@WCResource.Status</th>
+        <td>@Html.DropDownList("SearchStatus", ViewBag.InvStatus as IEnumerable<SelectListItem>)</td>
+        <td>
+                <select id="SearchSelect">
+                    <option value="1">SKUName</option>
+                    <option value="2">SKUCode</option>
+                    <option value="3">SKUBarcode</option>
+                    <option value="4">Time</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" id="SearchItem" />
+            </td>
+        <td><input type="button" id="btnSearch" value="@CommonResource.Search" /></td>
+    </tr>
+</table>
+<div id="InventoryList"></div>
+@if (ViewBag.privEnablePrepare == "1")
+{
+<input type="button" id="btnAddInv" value="@CommonResource.Add" />
+<input type="button" id="btnEditInv" value="@CommonResource.Edit" />
+<input type="button" id="btnViewInvItem" value="@WCResource.InventoryItems" />
+}
+else
+{ 
+<input type="button" value="@CommonResource.Add" disabled="disabled" />
+<input type="button" value="@CommonResource.Edit" disabled="disabled" />
+    <input type="button" value="@WCResource.InventoryItems" disabled="disabled" />
+}
+@if (ViewBag.privEnableDelete == "1")
+{
+<input type="button" id="btnDeleteInv" value="@CommonResource.Delete" />
+}
+else
+{ 
+<input type="button" value="@CommonResource.Delete" disabled="disabled" />
+}
+@if (ViewBag.privEnablePrint == "1")
+{
+<input type="button" id="btnPrint" value="@WCResource.Print" />
+}
+else
+{ 
+<input type="button" value="@WCResource.Print" disabled="disabled" />
+}
+<script type="text/javascript">
+    $("#btnAddInv").click(function () {
+        var whID = $("#WarehouseSelect").val();
+        document.location.replace("/Warehouse/InventoryAdd?whID=" + whID);
+    });
+    $("#btnEditInv").click(function () {
+        var invID = $("#InvGrid").jqGrid("getGridParam", "selrow");
+        if(invID == null) {
+            alert("Please select one item!");
+            return;
+        }
+        document.location.replace("/Warehouse/InventoryEdit?invID=" + invID);
+    });
+    $("#btnDeleteInv").click(function () {
+        var grid = $("#InvGrid");
+        var invID = grid.jqGrid("getGridParam", "selrow");
+        if (invID == null) {
+            alert("请选择盘点记录");
+        } else {
+            if (confirm("Are you sure to delete?")) {
+                $.post("/Warehouse/InventoryDeleteDB", { invID: invID },
+                    function (result) {
+                        if (result) {
+                            grid.jqGrid("delRowData", invID);
+                        } else {
+                            alert("Error!");
+                        }
+                    });
+            }
+        }
+    });
+    $("#btnViewInvItem").click(function () {
+        var id = $("#InvGrid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert("place choise Inventory first!");
+            return false;
+        }
+        document.location.replace("/Warehouse/InvItem?invID=" + id);
+    });
+    $("#btnSearch").click(function () {
+        var status = $("#SearchStatus").val();
+        var param = "";
+        if (status != "") param += ("&status=" + status);
+        var SSearch = $("#SearchSelect").val();
+        var item = $("#SearchItem").val();
+        if (item != "") {
+            param += ("&n" + "=" + SSearch);
+            param += ("&itemVal" + "=" + item);
+        }
+        $("#InvGrid").jqGrid('setGridParam', { url: "/Warehouse/InventoryList?whID=" + $("#WarehouseSelect").val() + param });
+        $("#InvGrid").trigger("reloadGrid");
+    });
+</script>
+<script type="text/javascript">
+    function onChangeWarehouse() {
+        var whID = $("#WarehouseSelect").val();
+        var grid = $("#InvGrid");
+        grid.jqGrid("setGridParam", { url: "/Warehouse/StockInList?whID=" + whID });
+        grid.trigger("reloadGrid");
+    }
+    function updateWarehouseList() {
+        var warehouseSelect = $("#WarehouseSelect");
+        var spanWarehouseSelect = $("#spanWarehouseSelect");
+        var orgSelect = $("#OrgSelect");
+        var orgID = orgSelect.val();
+        warehouseSelect.unbind("change");
+        warehouseSelect.attr("disabled", "disabled");
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseSelect",
+            data: { id: 'WarehouseSelect', orgID: orgID },
+            async: false,
+            success:
+                function (html) {
+                    spanWarehouseSelect.html(html);
+                }
+        });
+        warehouseSelect = $("#WarehouseSelect");
+        warehouseSelect.change(function () {
+            onChangeWarehouse();
+        });
+        onChangeWarehouse();
+    }
+    $(function () {
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/WarehouseOrgSelect",
+            data: { id: "OrgSelect" },
+            async: false,
+            success:
+                function (html) {
+                    $("#spanOrgSelect").html(html);
+                }
+        });
+        var orgSelect = $("#OrgSelect");
+        orgSelect.change(function () {
+            updateWarehouseList();
+        });
+        updateWarehouseList();
+        var whID = $("#WarehouseSelect").val();
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/InventoryGrid",
+            data: { whID: whID },
+            async: false,
+            success: function (html) {
+                $("#InventoryList").html(html);
+            }
+        });
+    });
+</script>

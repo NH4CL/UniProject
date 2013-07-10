@@ -1,0 +1,27 @@
+﻿@model Guid?
+@{
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    byte refType = (byte)ViewBag.RefType;
+}
+<input type="text" id="@id" disabled="disabled"/>
+@{
+    if(Model.HasValue)
+    {
+        <script type="text/javascript">
+            $.ajax({
+                type: "post",
+                url: "/Resource/GetRefCode",
+                data: { refType : @refType , refID : "@Model.Value" },
+                async: false,
+                success: function (data) {
+                    var code = data.toString();
+                    $("#@id").val(code);
+                }
+            });
+        </script>
+    }
+}

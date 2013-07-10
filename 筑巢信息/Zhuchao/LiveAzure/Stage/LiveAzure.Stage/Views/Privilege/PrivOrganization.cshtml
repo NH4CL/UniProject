@@ -1,0 +1,128 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Member.MemberPrivilege
+           
+@{
+    ViewBag.Title = "PrivOrganization";
+    Layout = null;
+}
+
+<div id="privOrganization">
+@{
+    ViewBag.memOrgReload = ViewBag.memOrg;
+    }
+
+@using (Ajax.BeginForm("PrivOrganization", "Privilege", new AjaxOptions { OnSuccess = "grid1Reload" }, new { id = "PrivOrg", name = "PrivOrg" }))
+{
+     @Html.ValidationSummary(true)
+     <div>
+       <input type="checkbox" id="oPstatus" name="oPstatus" onclick="onShow()"/>
+       <span>@LiveAzure.Resource.Stage.PrivilegeController.on</span>
+     </div>
+    
+    <div id = "listPrivOrg">
+      <input type="hidden" id="optitemCount" name="optitemCount" value = "@ViewBag.PrvOrgCount" />
+      <input type="hidden" id="prvID" name="prvID"/>
+      @{
+            string listurl = "/Privilege/ListPrivOrganization";
+          }
+    @Html.Grid(new GridControl()
+        .SetName("gridPrivOrg")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl(@listurl)
+        .SetHeight("'100%'")
+        .SetColumns<LiveAzure.Models.Member.MemberOrganization>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Stage.OrganizationController.organization+@LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+            cs.Add(x => x.FullName.Matter).SetName("FullName").SetCaption(@LiveAzure.Resource.Stage.OrganizationController.organization+@LiveAzure.Resource.Model.Member.OrganizationBase.ShortName);
+        })
+            )
+    <input type="button" id="delOrg" name="delOrg" value="@LiveAzure.Resource.Stage.PrivilegeController.delete" onclick="DeletePriOrg()"/>
+    </div>
+     <br />
+    
+    <table>
+        <tr>
+            <th>@LiveAzure.Resource.Stage.PrivilegeController.keyword:</th>
+            <td> @Html.TextBox("orgSearchString") &nbsp;</td>
+            <td><input type="button" id="orgSearch" name="orgSearch" value="@LiveAzure.Resource.Stage.PrivilegeController.search" onclick="searchOrg()"/></td>
+        </tr>    
+    </table>
+}
+</div>
+ <script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.PrivilegeController.organizationPriv";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+     function grid1Reload() {
+         $("#gridPrivOrg").trigger('reloadGrid');
+     }
+
+     function DeletePriOrg() {
+         var id = $("#gridPrivOrg").jqGrid("getGridParam", "selrow");
+         if (confirm('@LiveAzure.Resource.Stage.PrivilegeController.delConfirm')) {
+             $.post("/Privilege/DeletePriOrg", { Gid: id }, function (data) {
+                 $("#gridPrivOrg").trigger('reloadGrid');
+             });
+         }
+     }
+
+     function onShow() {
+        var IsCheck;
+         if ($("#oPstatus").attr('checked')) {
+             $("#oadd").attr("disabled", false);
+             $("#delOrg").attr("disabled", false);
+             IsCheck = true;
+         }
+         else {
+             $("#oadd").attr("disabled", true);
+             $("#delOrg").attr("disabled", true);
+             IsCheck = false;
+         }
+         $.ajax({
+            type: "POST",
+            url: "/Privilege/DelAll",
+            data: { IsCheck: IsCheck, ptype: 2 },
+            datatype: "html",
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+     }
+
+     function searchOrg() {
+        UnitPricePanel.OpenPanel();
+         var searchString = $("#orgSearchString").val();
+         $.ajax({
+             type: "GET",
+             url: "/Privilege/PrivOrganizationAdd",
+             data: { orgSearchString: searchString },
+             datatype: "html",
+             success: function (data) {
+                 UnitPricePanel.EditPageHtml(data);
+             },
+             error: function () {
+                 alert("@LiveAzure.Resource.Common.OperationFailed");
+             }
+         });
+     }
+
+     $(document).ready(function () {
+         if ('@(ViewBag.pStatus)' == 1) {
+             $("#oPstatus").attr('checked', true);
+             $("#oadd").attr("disabled", false);
+             $("#delOrg").attr("disabled", false);
+         }
+         else {
+             $("#oPstatus").attr('checked', false);
+             $("#oadd").attr("disabled", true);
+             $("#delOrg").attr("disabled", true);
+         }
+     });
+</script>

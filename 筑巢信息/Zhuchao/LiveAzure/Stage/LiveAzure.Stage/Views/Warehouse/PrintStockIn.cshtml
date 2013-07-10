@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "StockInTemplate";
+}
+@model List<LiveAzure.Stage.Controllers.StockInBill>
+
+@using LiveAzure.Resource.Model.Warehouse
+@using LiveAzure.Resource.Model.Order
+
+<style type="text/css" media="print">
+    div.page 
+    {
+	    page-break-after: auto;
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(
+            printDo(1)
+        );
+
+    function printDo(oper) {
+        if (oper < 10) {
+            bdhtml = window.document.body.innerHTML;
+            sprnstr = "<!--startprint" + oper + "-->";
+            eprnstr = "<!--endprint" + oper + "-->";
+            prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18);
+            prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+            window.document.body.innerHTML = prnhtml;
+            window.print();
+            PrintComplete();
+        }
+        else {
+            window.print();
+        }
+    }
+
+    function PrintComplete() {
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/StockIn",
+            data: {},
+            success:
+            function (html) {
+                $("#body_frame").html(html);
+            }
+        });
+    }
+</script>
+
+<div style="display:none">
+<!--startprint1-->
+@{
+    foreach (var item in Model)
+    {
+        <div class=page>
+            
+        <table cellspacing="0" cellpadding="0" width="100%" border="0">
+            <tbody>
+                <tr>
+                    <td width="30%" align="left">
+                    www.zhuchao.com
+                    </td>
+                    <td rowspan="2" align="left">
+                    <span style="font-size:xx-large; font-weight:bolder">入库单信息</span>
+                    </td>
+                    <td rowspan="2" align="right"><span style="font-family:C39HrP36DmTt; font-size:60px">@item.StockIn.Code</span></td>
+                </tr>
+                <tr>
+                    <td>@WarehouseStockIn.Code：@item.StockIn.Code</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <table width="100%" height="">
+            <tbody>
+                <tr>
+                    <td>
+                        @WarehouseStockIn.InType:&nbsp @if(item.StockIn.StockInType!=null)
+                                                       {
+                                                           @item.StockIn.StockInType.Name.Matter
+                                                        }
+                    </td>
+                    <td>
+                        @WarehouseStockIn.RefID: &nbsp @if(item.Order!=null)
+                                                       {
+                                                           <span>@item.Order.Code</span>   
+                                                       }
+                                                       @if(item.Purchase!=null)
+                                                       {
+                                                            <span>@item.Purchase.Code</span>   
+                                                       }
+                    </td>
+                    <td>
+                        @if(item.Order!=null)
+                        {
+                            <span>订购人: &nbsp @item.Order.User.NickName</span>   
+                        }
+                        @if(item.Purchase!=null)
+                        {
+                            <span>@LiveAzure.Resource.Model.Purchase.PurchaseInformation.Supplier: &nbsp @item.Purchase.Supplier.FullName.Matter</span>   
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @OrderInformation.Telephone: &nbsp
+                        @if (item.Order != null)
+                        {
+                            <span>@item.Order.Telephone</span>
+                        }
+                        @if (item.Purchase != null)
+                        {
+                            <span>@item.Purchase.Supplier.WorkPhone</span>
+                        }
+                    </td>
+                    <td>
+                        @OrderInformation.Currency: &nbsp
+                        @if (item.Order != null)
+                        {
+                            <span>@item.Order.Currency.Name.Matter</span>
+                        }
+                        @if (item.Purchase != null)
+                        {
+                            <span>@item.Purchase.Currency.Name.Matter</span>
+                        }
+                    </td>
+                    <td>@LiveAzure.Resource.Model.ModelBase.Remark:&nbsp @item.StockIn.Remark</td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="100%" border="1" style="border-top-color: rgb(0,0,0); border-collapse: collapse; border-bottom-color: rgb(0,0,0); border-right-color: rgb(0,0,0); border-left-color: rgb(0,0,0)">
+            <tbody>
+                <tr align="center">
+                    <td bgcolor="#cccccc">@WarehouseStockIn.Warehouse</td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Warehouse.WarehouseOutItem.Shelf</td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Warehouse.WarehouseOutItem.TrackLot</td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode</td>
+                    <td bgcolor="#cccccc">@OrderItem.Name</td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Order.OrderItem.Quantity</td>
+                    <td bgcolor="#cccccc">@OrderItem.ExecutePrice <!-- 商品单价 --></td>
+                    <td bgcolor="#cccccc">@LiveAzure.Resource.Model.Purchase.PurchaseInformation.Amount <!-- 价格小计 --></td>
+                </tr>
+                @{
+                  if (item.StockInSkus!=null)
+                  {
+                      foreach (var itemIn in item.StockInSkus)
+                      {
+                          decimal i = itemIn.InItem.Quantity * itemIn.OderItem.ExecutePrice;
+                            <tr>
+                                <td>@item.StockIn.Warehouse.FullName.Matter</td>
+                                <td>@itemIn.InItem.Shelf.Name</td>
+                                <td>@itemIn.InItem.TrackLot</td>
+                                <td>@itemIn.InItem.SkuItem.Barcode</td>
+                                <td>@itemIn.InItem.SkuItem.FullName.Matter</td>
+                                <td>@itemIn.InItem.Quantity.ToString("#.##", null)</td>
+                                <td>@itemIn.OderItem.ExecutePrice.ToString("#.##", null)</td>
+                                <td>@i.ToString("#.##", null)</td>
+                            </tr>
+                      }
+                  }
+
+                  if (item.InSkuAndPurchase!=null)
+                  {
+                      foreach (var itemIn in item.InSkuAndPurchase)
+                      {
+                            decimal i = itemIn.PurchaseItem.Price * itemIn.InItem.Quantity;
+                            <tr>
+                                <td>@item.StockIn.Warehouse.FullName.Matter</td>
+                                <td>@itemIn.InItem.Shelf.Name</td>
+                                <td>@itemIn.InItem.TrackLot</td>
+                                <td>@itemIn.InItem.SkuItem.Barcode</td>
+                                <td>@itemIn.InItem.SkuItem.FullName.Matter</td>
+                                <td>@itemIn.InItem.Quantity.ToString("#.##", null)</td>
+                                <td>@itemIn.PurchaseItem.Price.ToString("#.##", null)</td>
+                                <td>@i.ToString("#.##", null)</td>
+                            </tr>
+                      }
+                  }
+                    }
+            </tbody>
+        </table>
+        </div>
+    }
+}
+<!--endprint1-->
+</div>

@@ -1,0 +1,155 @@
+﻿@model LiveAzure.Models.Member.MemberUser
+@using MVC.Controls;
+@using MVC.Controls.Tab;
+@{
+    ViewBag.Title = "UserInformation";
+    Layout = null;
+}
+
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
+
+<script type ="text/javascript">
+    
+</script>
+
+<div id = "divUserinformation">
+@using (Html.BeginForm())
+{
+    @*@Html.ValidationSummary(true)*@
+    <div class="down_AddorEdit">
+        <table class="DIY_table">
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.LoginName
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.LoginName)
+                    @Html.ValidationMessageFor(model => model.LoginName)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.DisplayName
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.DisplayName)
+                    @Html.ValidationMessageFor(model => model.DisplayName)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.NickName
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.NickName)
+                    @Html.ValidationMessageFor(model => model.NickName)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.LastName
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.LastName)
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.FirstName
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.FirstName)
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </td>
+    @*        <div>
+                @LiveAzure.Resource.Model.Member.MemberUser.Passcode
+                @Html.EditorFor(model => model.Passcode)
+                @Html.ValidationMessageFor(model => model.Passcode)
+            </div>*@
+
+    @*        <div>
+                @LiveAzure.Resource.Model.Member.MemberUser.Title
+                @Html.EditorFor(model => model.Title)
+                @Html.ValidationMessageFor(model => model.Title)
+            </div>*@
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.Email
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Email)
+                    @Html.ValidationMessageFor(model => model.Email)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.HeadPic
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.HeadPic)
+                    @Html.ValidationMessageFor(model => model.HeadPic)
+                </td>
+                <th>    
+                    @LiveAzure.Resource.Model.Member.MemberUser.UserSign
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.UserSign)
+                    @Html.ValidationMessageFor(model => model.UserSign)
+                </td>   
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.Ustatus
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Ustatus, (List<SelectListItem>)ViewBag.ouserstatuslist, new { type = "width:150px" })
+                    @Html.ValidationMessageFor(model => model.Ustatus)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.Gender
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Gender, (List<SelectListItem>)ViewBag.ousergenderlist, new { type = "width:150px" })
+                    @Html.ValidationMessageFor(model => model.Gender)
+                </td>       
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.Birthday
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.Birthday).AsDatePicker(new DatePicker())
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.Channel           
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.ChlID, (List<SelectListItem>)ViewBag.ochalist, new { type = "width:150px" })
+                    @Html.ValidationMessageFor(model => model.Channel)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberOrganization.Cultures          
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.aCulture, (List<SelectListItem>)ViewBag.ocullist, new { type = "width:150px" })
+                    @Html.ValidationMessageFor(model => model.Culture)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Member.MemberUser.Role          
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.RoleID, (List<SelectListItem>)ViewBag.orolelist, new { type = "width:150px" })
+                    @Html.ValidationMessageFor(model => model.Role)
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset"  />
+        </div>
+    </div>
+}
+</div>
+
+
+
+

@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+@Html.Grid(new GridControl()
+        .SetName("Itemgridnew")
+        .SetPageSize(10)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Optional/OptionalItemList")
+            //.SetIsAutoSize(true)
+        .SetWidth("800")
+        .SetColumns<LiveAzure.Models.General.GeneralOptItem>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetEditable(false).SetHidden(true);
+            cs.Add(x => x.Optional);
+            cs.Add(x => x.Code);
+            cs.Add(x => x.Name);
+            cs.Add(x => x.Sorting);
+        }))
+<input type="button" value="delete" onclick="RemoveOptionalItem()" />
+<script type="text/javascript">
+    function RemoveOptionalItem() {
+        var itemrowid = $("#Itemgridnew").jqGrid("getGridParam", "selrow");
+
+        $.ajax({
+            type: "POST",
+            url: "/Optional/RemoveOptionalItems",
+            data: { optItemGid: itemrowid },
+            success: function (data) {
+                $("#OptionalItemTable").html(data);
+            }
+        });
+    }
+</script>

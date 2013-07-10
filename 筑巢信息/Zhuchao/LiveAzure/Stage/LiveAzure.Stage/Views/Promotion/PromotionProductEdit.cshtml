@@ -1,0 +1,90 @@
+﻿@{
+    Layout = null;
+}
+@using LiveAzure.Models.Order
+@model PromotionProduct
+<script type="text/javascript">
+    $("#OnSkuItem_FullName_Matter").attr("disabled", true);
+    $("#OnSkuItem_SkuItem_Code").attr("disabled", true);
+    $("#OnSkuItem_OnSale_Code").attr("disabled", true);
+    function showPromotionSKUList() {
+        promotionSKUPanel.OpenPanel();
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/PromotionOnSKUList",
+            success: function (html) {
+                promotionSKUPanel.EditPageHtml(html);
+            }
+        });
+    }
+
+    function savePromotionProductSuccess(data) {
+        if (data == "exist") {
+            var templateConfirm = window.confirm("@LiveAzure.Resource.Stage.PromotionController.PromotionProductCoverTips");
+            if (templateConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Promotion/SetbCoverProductExist",
+                    success: function () {
+                        $("#PromotionONSKUForm").submit();
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+        }
+        else if (data == "fail") {
+            alert("@LiveAzure.Resource.Common.OperationFailed");
+        }
+        else {
+            $("#PromotionProductEditPage").html("");
+            $("#PromotionProductGrid").trigger('reloadGrid');
+        }
+    }
+</script>
+<div>
+    @using (Ajax.BeginForm("SavePromotionProduct", "Promotion", new AjaxOptions { HttpMethod = "POST", OnSuccess = "savePromotionProductSuccess" }, new { id = "PromotionONSKUForm" }))
+    {
+        @Html.HiddenFor(model => model.Gid)
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionProduct.Promotion
+            @ViewBag.oPromotionCode
+        </div>
+        <div>
+            @Html.HiddenFor(model => model.OnSkuItem.Gid)
+            <div>
+                @LiveAzure.Resource.Model.Order.PromotionProduct.OnSkuItem
+                @Html.EditorFor(model => model.OnSkuItem.FullName.Matter)
+            </div>
+            <div>
+                @LiveAzure.Resource.Model.Product.ProductInfoItem.Code
+                @Html.EditorFor(model => model.OnSkuItem.SkuItem.Code)
+            </div>
+            <div>
+                @LiveAzure.Resource.Model.Product.ProductOnSale.Code
+                @Html.EditorFor(model => model.OnSkuItem.OnSale.Code)
+            </div>
+            @if (ViewBag.bEdit == false)
+            {
+                <input type="button" value="@LiveAzure.Resource.Stage.PromotionController.PromotionOnsaleAdd" onclick="showPromotionSKUList();" />
+            }
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionProduct.Quantity
+            @Html.EditorFor(model => model.Quantity)
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.Order.PromotionProduct.Price
+            @Html.EditorFor(model => model.Price, "Cash")
+        </div>
+        <div>
+            @LiveAzure.Resource.Model.ModelBase.Remark
+            @Html.TextAreaFor(model => model.Remark)
+        </div>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    }
+</div>

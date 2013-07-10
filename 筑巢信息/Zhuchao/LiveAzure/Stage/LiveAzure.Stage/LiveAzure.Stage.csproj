@@ -1,0 +1,960 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1D467082-7C20-4373-843F-8A2D5CDB5264}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LiveAzure.Stage</RootNamespace>
+    <AssemblyName>LiveAzure.Stage</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\ConfigController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\ExchangeController.cs" />
+    <Compile Include="Controllers\FinanceController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MallController.cs" />
+    <Compile Include="Controllers\OptionalController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\OrganizationController.cs" />
+    <Compile Include="Controllers\PrivilegeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProgramController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
+    <Compile Include="Controllers\PurchaseController.cs" />
+    <Compile Include="Controllers\RegionController.cs" />
+    <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\ShippingController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WarehouseController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\PortalViewEngine.cs" />
+    <Compile Include="Helpers\PrintForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\LiveSelector\ImageSelector.css" />
+    <Content Include="Content\LiveSelector\SkuSelector.css" />
+    <Content Include="Content\MVCControls\Grid\ellipsis-xbl.xml" />
+    <Content Include="Content\MVCControls\Grid\paging_bg.gif" />
+    <Content Include="Content\MVCControls\Grid\paging_bg.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-anim_basic_16x16.gif" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_flat_55_fbec88_40x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_75_d0e5f5_1x400.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_85_dfeffc_1x400.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_217bc0_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_469bdd_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_6da8d5_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_d8e7f3_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_f9bd01_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\MVCControls\Grid\ui-lightness\jquery-ui-1.8.2.custom.css" />
+    <Content Include="Content\MVCControls\Grid\ui.jqgrid.css" />
+    <Content Include="Content\MVCControls\mvc.controls.css" />
+    <Content Include="Content\themes\base\css\Layout.css" />
+    <Content Include="Content\themes\base\css\new_grid.css" />
+    <Content Include="Content\themes\base\css\redmond.css" />
+    <Content Include="Content\themes\base\images\button.jpg" />
+    <Content Include="Content\themes\base\images\click_left.gif" />
+    <Content Include="Content\themes\base\images\click_right.gif" />
+    <Content Include="Content\themes\base\images\close.gif" />
+    <Content Include="Content\themes\base\images\culture_1031.jpg" />
+    <Content Include="Content\themes\base\images\culture_1033.jpg" />
+    <Content Include="Content\themes\base\images\culture_1036.jpg" />
+    <Content Include="Content\themes\base\images\culture_2052.jpg" />
+    <Content Include="Content\themes\base\images\culture_2057.jpg" />
+    <Content Include="Content\themes\base\images\culture_2067.jpg" />
+    <Content Include="Content\themes\base\images\elbow-end-minus.gif" />
+    <Content Include="Content\themes\base\images\elbow-end-plus.gif" />
+    <Content Include="Content\themes\base\images\elbow-end.gif" />
+    <Content Include="Content\themes\base\images\elbow-line.gif" />
+    <Content Include="Content\themes\base\images\elbow-minus.gif" />
+    <Content Include="Content\themes\base\images\elbow-plus.gif" />
+    <Content Include="Content\themes\base\images\elbow.gif" />
+    <Content Include="Content\themes\base\images\e_header_part_02.jpg" />
+    <Content Include="Content\themes\base\images\e_logo.gif" />
+    <Content Include="Content\themes\base\images\e_logo.jpg" />
+    <Content Include="Content\themes\base\images\folder-open.gif" />
+    <Content Include="Content\themes\base\images\folder.gif" />
+    <Content Include="Content\themes\base\images\leaf.gif" />
+    <Content Include="Content\themes\base\images\Login_back.jpg" />
+    <Content Include="Content\themes\base\images\Login_content.jpg" />
+    <Content Include="Content\themes\base\images\name_1031.jpg" />
+    <Content Include="Content\themes\base\images\name_1033.jpg" />
+    <Content Include="Content\themes\base\images\name_1036.jpg" />
+    <Content Include="Content\themes\base\images\name_2052.jpg" />
+    <Content Include="Content\themes\base\images\name_2057.jpg" />
+    <Content Include="Content\themes\base\images\name_2067.jpg" />
+    <Content Include="Content\themes\base\images\shortcut_button.gif" />
+    <Content Include="Content\themes\base\images\submit.jpg" />
+    <Content Include="Content\themes\base\images\submit_mouseon.jpg" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Scripts\CKEditor\adapters\jquery.js" />
+    <Content Include="Scripts\CKEditor\ckeditor.js" />
+    <Content Include="Scripts\CKEditor\ckeditor_basic.js" />
+    <Content Include="Scripts\CKEditor\ckeditor_basic_source.js" />
+    <Content Include="Scripts\CKEditor\ckeditor_source.js" />
+    <Content Include="Scripts\CKEditor\config.js" />
+    <Content Include="Scripts\CKEditor\contents.css" />
+    <Content Include="Scripts\CKEditor\images\spacer.gif" />
+    <Content Include="Scripts\CKEditor\lang\af.js" />
+    <Content Include="Scripts\CKEditor\lang\ar.js" />
+    <Content Include="Scripts\CKEditor\lang\bg.js" />
+    <Content Include="Scripts\CKEditor\lang\bn.js" />
+    <Content Include="Scripts\CKEditor\lang\bs.js" />
+    <Content Include="Scripts\CKEditor\lang\ca.js" />
+    <Content Include="Scripts\CKEditor\lang\cs.js" />
+    <Content Include="Scripts\CKEditor\lang\cy.js" />
+    <Content Include="Scripts\CKEditor\lang\da.js" />
+    <Content Include="Scripts\CKEditor\lang\de.js" />
+    <Content Include="Scripts\CKEditor\lang\el.js" />
+    <Content Include="Scripts\CKEditor\lang\en-au.js" />
+    <Content Include="Scripts\CKEditor\lang\en-ca.js" />
+    <Content Include="Scripts\CKEditor\lang\en-gb.js" />
+    <Content Include="Scripts\CKEditor\lang\en.js" />
+    <Content Include="Scripts\CKEditor\lang\eo.js" />
+    <Content Include="Scripts\CKEditor\lang\es.js" />
+    <Content Include="Scripts\CKEditor\lang\et.js" />
+    <Content Include="Scripts\CKEditor\lang\eu.js" />
+    <Content Include="Scripts\CKEditor\lang\fa.js" />
+    <Content Include="Scripts\CKEditor\lang\fi.js" />
+    <Content Include="Scripts\CKEditor\lang\fo.js" />
+    <Content Include="Scripts\CKEditor\lang\fr-ca.js" />
+    <Content Include="Scripts\CKEditor\lang\fr.js" />
+    <Content Include="Scripts\CKEditor\lang\gl.js" />
+    <Content Include="Scripts\CKEditor\lang\gu.js" />
+    <Content Include="Scripts\CKEditor\lang\he.js" />
+    <Content Include="Scripts\CKEditor\lang\hi.js" />
+    <Content Include="Scripts\CKEditor\lang\hr.js" />
+    <Content Include="Scripts\CKEditor\lang\hu.js" />
+    <Content Include="Scripts\CKEditor\lang\is.js" />
+    <Content Include="Scripts\CKEditor\lang\it.js" />
+    <Content Include="Scripts\CKEditor\lang\ja.js" />
+    <Content Include="Scripts\CKEditor\lang\ka.js" />
+    <Content Include="Scripts\CKEditor\lang\km.js" />
+    <Content Include="Scripts\CKEditor\lang\ko.js" />
+    <Content Include="Scripts\CKEditor\lang\lt.js" />
+    <Content Include="Scripts\CKEditor\lang\lv.js" />
+    <Content Include="Scripts\CKEditor\lang\mn.js" />
+    <Content Include="Scripts\CKEditor\lang\ms.js" />
+    <Content Include="Scripts\CKEditor\lang\nb.js" />
+    <Content Include="Scripts\CKEditor\lang\nl.js" />
+    <Content Include="Scripts\CKEditor\lang\no.js" />
+    <Content Include="Scripts\CKEditor\lang\pl.js" />
+    <Content Include="Scripts\CKEditor\lang\pt-br.js" />
+    <Content Include="Scripts\CKEditor\lang\pt.js" />
+    <Content Include="Scripts\CKEditor\lang\ro.js" />
+    <Content Include="Scripts\CKEditor\lang\ru.js" />
+    <Content Include="Scripts\CKEditor\lang\sk.js" />
+    <Content Include="Scripts\CKEditor\lang\sl.js" />
+    <Content Include="Scripts\CKEditor\lang\sr-latn.js" />
+    <Content Include="Scripts\CKEditor\lang\sr.js" />
+    <Content Include="Scripts\CKEditor\lang\sv.js" />
+    <Content Include="Scripts\CKEditor\lang\th.js" />
+    <Content Include="Scripts\CKEditor\lang\tr.js" />
+    <Content Include="Scripts\CKEditor\lang\uk.js" />
+    <Content Include="Scripts\CKEditor\lang\vi.js" />
+    <Content Include="Scripts\CKEditor\lang\zh-cn.js" />
+    <Content Include="Scripts\CKEditor\lang\zh.js" />
+    <Content Include="Scripts\CKEditor\lang\_languages.js" />
+    <Content Include="Scripts\CKEditor\lang\_translationstatus.txt" />
+    <Content Include="Scripts\CKEditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="Scripts\CKEditor\plugins\a11yhelp\lang\en.js" />
+    <Content Include="Scripts\CKEditor\plugins\a11yhelp\lang\he.js" />
+    <Content Include="Scripts\CKEditor\plugins\about\dialogs\about.js" />
+    <Content Include="Scripts\CKEditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="Scripts\CKEditor\plugins\adobeair\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\ajax\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\autogrow\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\bbcode\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="Scripts\CKEditor\plugins\colordialog\dialogs\colordialog.js" />
+    <Content Include="Scripts\CKEditor\plugins\devtools\lang\en.js" />
+    <Content Include="Scripts\CKEditor\plugins\devtools\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="Scripts\CKEditor\plugins\div\dialogs\div.js" />
+    <Content Include="Scripts\CKEditor\plugins\docprops\dialogs\docprops.js" />
+    <Content Include="Scripts\CKEditor\plugins\docprops\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\find\dialogs\find.js" />
+    <Content Include="Scripts\CKEditor\plugins\flash\dialogs\flash.js" />
+    <Content Include="Scripts\CKEditor\plugins\flash\images\placeholder.png" />
+    <Content Include="Scripts\CKEditor\plugins\forms\dialogs\button.js" />
+    <Content Include="Scripts\CKEditor\plugins\forms\dialogs\checkbox.js" />
+    <Content Include="Scripts\CKEditor\plugins\forms\dialogs\form.js" />
+    <Content Include="Scripts\CKEditor\plugins\forms\dialogs\hiddenfield.js" />
+    <Content Include="Scripts\CKEditor\plugins\forms\dialogs\radio.js" />
+    <Content Include="Scripts\CKEditor\plugins\forms\dialogs\select.js" />
+    <Content Include="Scripts\CKEditor\plugins\forms\dialogs\textarea.js" />
+    <Content Include="Scripts\CKEditor\plugins\forms\dialogs\textfield.js" />
+    <Content Include="Scripts\CKEditor\plugins\forms\images\hiddenfield.gif" />
+    <Content Include="Scripts\CKEditor\plugins\iframedialog\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\iframe\dialogs\iframe.js" />
+    <Content Include="Scripts\CKEditor\plugins\iframe\images\placeholder.png" />
+    <Content Include="Scripts\CKEditor\plugins\image\dialogs\image.js" />
+    <Content Include="Scripts\CKEditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="Scripts\CKEditor\plugins\link\dialogs\link.js" />
+    <Content Include="Scripts\CKEditor\plugins\link\images\anchor.gif" />
+    <Content Include="Scripts\CKEditor\plugins\liststyle\dialogs\liststyle.js" />
+    <Content Include="Scripts\CKEditor\plugins\pagebreak\images\pagebreak.gif" />
+    <Content Include="Scripts\CKEditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="Scripts\CKEditor\plugins\pastetext\dialogs\pastetext.js" />
+    <Content Include="Scripts\CKEditor\plugins\placeholder\dialogs\placeholder.js" />
+    <Content Include="Scripts\CKEditor\plugins\placeholder\lang\en.js" />
+    <Content Include="Scripts\CKEditor\plugins\placeholder\lang\he.js" />
+    <Content Include="Scripts\CKEditor\plugins\placeholder\placeholder.gif" />
+    <Content Include="Scripts\CKEditor\plugins\placeholder\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="Scripts\CKEditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_address.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_blockquote.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_div.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_h1.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_h2.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_h3.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_h4.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_h5.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_h6.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_p.png" />
+    <Content Include="Scripts\CKEditor\plugins\showblocks\images\block_pre.png" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\dialogs\smiley.js" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\angel_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\angry_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\broken_heart.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\confused_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\cry_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\devil_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\embaressed_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\envelope.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\heart.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\kiss.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\lightbulb.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\omg_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\regular_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\sad_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\shades_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\teeth_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\thumbs_down.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\thumbs_up.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\tounge_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\whatchutalkingabout_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\smiley\images\wink_smile.gif" />
+    <Content Include="Scripts\CKEditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="Scripts\CKEditor\plugins\specialchar\lang\en.js" />
+    <Content Include="Scripts\CKEditor\plugins\stylesheetparser\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\styles\styles\default.js" />
+    <Content Include="Scripts\CKEditor\plugins\tableresize\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="Scripts\CKEditor\plugins\table\dialogs\table.js" />
+    <Content Include="Scripts\CKEditor\plugins\templates\dialogs\templates.js" />
+    <Content Include="Scripts\CKEditor\plugins\templates\templates\default.js" />
+    <Content Include="Scripts\CKEditor\plugins\templates\templates\images\template1.gif" />
+    <Content Include="Scripts\CKEditor\plugins\templates\templates\images\template2.gif" />
+    <Content Include="Scripts\CKEditor\plugins\templates\templates\images\template3.gif" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\dialogs\uicolor.js" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\lang\en.js" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\lang\he.js" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\plugin.js" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\uicolor.gif" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\yui\assets\hue_bg.png" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\yui\assets\hue_thumb.png" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\yui\assets\picker_mask.png" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\yui\assets\picker_thumb.png" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\yui\assets\yui.css" />
+    <Content Include="Scripts\CKEditor\plugins\uicolor\yui\yui.js" />
+    <Content Include="Scripts\CKEditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="Scripts\CKEditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="Scripts\CKEditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="Scripts\CKEditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="Scripts\CKEditor\plugins\xml\plugin.js" />
+    <Content Include="Scripts\CKEditor\skins\kama\dialog.css" />
+    <Content Include="Scripts\CKEditor\skins\kama\editor.css" />
+    <Content Include="Scripts\CKEditor\skins\kama\icons.png" />
+    <Content Include="Scripts\CKEditor\skins\kama\icons_rtl.png" />
+    <Content Include="Scripts\CKEditor\skins\kama\images\dialog_sides.gif" />
+    <Content Include="Scripts\CKEditor\skins\kama\images\dialog_sides.png" />
+    <Content Include="Scripts\CKEditor\skins\kama\images\dialog_sides_rtl.png" />
+    <Content Include="Scripts\CKEditor\skins\kama\images\mini.gif" />
+    <Content Include="Scripts\CKEditor\skins\kama\images\noimage.png" />
+    <Content Include="Scripts\CKEditor\skins\kama\images\sprites.png" />
+    <Content Include="Scripts\CKEditor\skins\kama\images\sprites_ie6.png" />
+    <Content Include="Scripts\CKEditor\skins\kama\images\toolbar_start.gif" />
+    <Content Include="Scripts\CKEditor\skins\kama\skin.js" />
+    <Content Include="Scripts\CKEditor\skins\kama\templates.css" />
+    <Content Include="Scripts\CKEditor\skins\office2003\dialog.css" />
+    <Content Include="Scripts\CKEditor\skins\office2003\editor.css" />
+    <Content Include="Scripts\CKEditor\skins\office2003\icons.png" />
+    <Content Include="Scripts\CKEditor\skins\office2003\icons_rtl.png" />
+    <Content Include="Scripts\CKEditor\skins\office2003\images\dialog_sides.gif" />
+    <Content Include="Scripts\CKEditor\skins\office2003\images\dialog_sides.png" />
+    <Content Include="Scripts\CKEditor\skins\office2003\images\dialog_sides_rtl.png" />
+    <Content Include="Scripts\CKEditor\skins\office2003\images\mini.gif" />
+    <Content Include="Scripts\CKEditor\skins\office2003\images\noimage.png" />
+    <Content Include="Scripts\CKEditor\skins\office2003\images\sprites.png" />
+    <Content Include="Scripts\CKEditor\skins\office2003\images\sprites_ie6.png" />
+    <Content Include="Scripts\CKEditor\skins\office2003\skin.js" />
+    <Content Include="Scripts\CKEditor\skins\office2003\templates.css" />
+    <Content Include="Scripts\CKEditor\skins\v2\dialog.css" />
+    <Content Include="Scripts\CKEditor\skins\v2\editor.css" />
+    <Content Include="Scripts\CKEditor\skins\v2\icons.png" />
+    <Content Include="Scripts\CKEditor\skins\v2\icons_rtl.png" />
+    <Content Include="Scripts\CKEditor\skins\v2\images\dialog_sides.gif" />
+    <Content Include="Scripts\CKEditor\skins\v2\images\dialog_sides.png" />
+    <Content Include="Scripts\CKEditor\skins\v2\images\dialog_sides_rtl.png" />
+    <Content Include="Scripts\CKEditor\skins\v2\images\mini.gif" />
+    <Content Include="Scripts\CKEditor\skins\v2\images\noimage.png" />
+    <Content Include="Scripts\CKEditor\skins\v2\images\sprites.png" />
+    <Content Include="Scripts\CKEditor\skins\v2\images\sprites_ie6.png" />
+    <Content Include="Scripts\CKEditor\skins\v2\images\toolbar_start.gif" />
+    <Content Include="Scripts\CKEditor\skins\v2\skin.js" />
+    <Content Include="Scripts\CKEditor\skins\v2\templates.css" />
+    <Content Include="Scripts\CKEditor\themes\default\theme.js" />
+    <Content Include="Scripts\Commen\Panel.js" />
+    <Content Include="Scripts\jquery-1.6.2.js" />
+    <Content Include="Scripts\jquery-1.6.2.min.js" />
+    <Content Include="Scripts\LiveSelector\ImageSelector.js" />
+    <Content Include="Scripts\LiveSelector\PrivateCategorySelector.js" />
+    <Content Include="Scripts\LiveSelector\ProgramSelector.js" />
+    <Content Include="Scripts\LiveSelector\RefIDSelector.js" />
+    <Content Include="Scripts\LiveSelector\RegionSelector.js" />
+    <Content Include="Scripts\LiveSelector\SKUSelector.js" />
+    <Content Include="Scripts\LiveSelector\StandardCategorySelector.js" />
+    <Content Include="Scripts\MVCControls\Grid\grid.jqueryui.js" />
+    <Content Include="Scripts\MVCControls\Grid\grid.locale-en.js" />
+    <Content Include="Scripts\MVCControls\Grid\jquery.jqGrid.min.js" />
+    <Content Include="Scripts\MVCControls\jquery-ui-1.8.2.custom.min.js" />
+    <Content Include="Scripts\MVCControls\mvc.controls.manager.js" />
+    <Content Include="Scripts\LiveTree\jquery-1.4.2.js" />
+    <Content Include="Scripts\LiveTree\jquery.ztree-2.6.js" />
+    <Content Include="Scripts\LiveTree\jquery.ztree-2.6.min.js" />
+    <Content Include="Content\LiveTree\rightMenuStyle\rightMenu.css" />
+    <Content Include="Scripts\LiveTree\treeObject.js" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\checkbox.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\edit.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\10.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\1_close.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\1_open.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\2.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\3.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\4.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\5.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\6.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\7.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\8.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\flag\9.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\folder_Close.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\folder_Open.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\line_bottom.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\line_center.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\line_conn.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\line_top.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\loading.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\minus_bottom.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\minus_center.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\minus_noLine.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\minus_root.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\minus_top.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\moveArrow.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\page.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\plus_bottom.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\plus_center.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\plus_noLine.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\plus_root.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\plus_top.gif" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\radio.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\remove.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\10.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\1_close.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\1_open.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\2.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\3.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\4.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\5.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\6.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\7.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\8.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\img\sim\9.png" />
+    <Content Include="Content\LiveTree\zTreeStyle\zTreeIcons.css" />
+    <Content Include="Content\LiveTree\zTreeStyle\zTreeStyle.css" />
+    <Content Include="Content\wbox\close.png" />
+    <Content Include="Content\wbox\close0.png" />
+    <Content Include="Content\wbox\loading.gif" />
+    <Content Include="Content\wbox\titleBG.png" />
+    <Content Include="Content\wbox\titleBG0.png" />
+    <Content Include="Content\wbox\titleBG1.png" />
+    <Content Include="Content\wbox\wbox-min.css" />
+    <Content Include="Content\wbox\wbox.css" />
+    <Content Include="Content\wbox\wbox.gif" />
+    <Content Include="Content\wbox\wbox.png" />
+    <Content Include="Content\wbox\wbox2.gif" />
+    <Content Include="Views\Config\MeasureUnitListTable.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Privilege\PrivProgramDropList.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Privilege\PrivProgramEditBox.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Privilege\PrivProgramNodeList.cshtml" />
+    <Content Include="Views\Privilege\PrivProgramNode.cshtml" />
+    <Content Include="Views\Product\ChoosePu.cshtml" />
+    <Content Include="Views\Product\EditProductSKU.cshtml" />
+    <Content Include="Views\Product\Grid.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\OnSaleIndex.cshtml" />
+    <Content Include="Views\Product\OnSaleTab.cshtml" />
+    <Content Include="Views\Product\PriceUnit.cshtml" />
+    <Content Include="Views\Product\ProductBaseInfo.cshtml" />
+    <Content Include="Views\Product\ProductCategoryAttribute.cshtml" />
+    <Content Include="Views\Product\ProductDetailInfo.cshtml" />
+    <Content Include="Views\Product\ProductExtendAttributeOptionalResult.cshtml" />
+    <Content Include="Views\Product\ProductExtendAttributes.cshtml" />
+    <Content Include="Views\Product\ProductExtendCategories.cshtml" />
+    <Content Include="Views\Product\ProductOnSaleBaseInfo.cshtml" />
+    <Content Include="Views\Product\ProductOnsalePayment.cshtml" />
+    <Content Include="Views\Product\ProductOnsalePaymentAddOrEdit.cshtml" />
+    <Content Include="Views\Product\ProductOnsalePriceUnitAddOrEdit.cshtml" />
+    <Content Include="Views\Product\ProductOnsaleShipping.cshtml" />
+    <Content Include="Views\Product\ProductOnsaleShippingAddOrEdit.cshtml" />
+    <Content Include="Views\Product\ProductOnshipArea.cshtml" />
+    <Content Include="Views\Product\ProductSKU.cshtml" />
+    <Content Include="Views\Product\ProductSKUGrid.cshtml" />
+    <Content Include="Views\Product\ProductSKUOnsale.cshtml" />
+    <Content Include="Views\Product\ProductTab.cshtml" />
+    <Content Include="Views\Product\ShowPUList.cshtml" />
+    <Content Include="Views\Product\SKUCheckBox.cshtml" />
+    <Content Include="Views\Product\SKUOnsaleAdd.cshtml" />
+    <Content Include="Views\Product\SKUOnsaleEdit.cshtml" />
+    <Content Include="Views\Product\SKUOnsaleGrid.cshtml" />
+    <Content Include="Views\Product\testindex.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Cash.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Config\Message.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Library\LiveAzure.BLL\LiveAzure.BLL.csproj">
+      <Project>{939DE2FA-7F49-468A-81BA-3B149972574E}</Project>
+      <Name>LiveAzure.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\LiveAzure.Controls\LiveAzure.Controls.csproj">
+      <Project>{A52B5C01-3629-451B-A1D4-6F52A2C4C57D}</Project>
+      <Name>LiveAzure.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\LiveAzure.Models\LiveAzure.Models.csproj">
+      <Project>{CE38881A-6DA3-42BD-A336-488761B6747E}</Project>
+      <Name>LiveAzure.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\LiveAzure.Resource\LiveAzure.Resource.csproj">
+      <Project>{B2DD90AD-939C-434D-A2D1-989BCBD87BBF}</Project>
+      <Name>LiveAzure.Resource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\LiveAzure.Utility\LiveAzure.Utility.csproj">
+      <Project>{0C6E60FD-A7DD-491A-8309-01D373E0B07C}</Project>
+      <Name>LiveAzure.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\MVC.Controls\MVC.Controls.csproj">
+      <Project>{1ADB25C4-9475-4B7D-B016-EBBB66403215}</Project>
+      <Name>MVC.Controls</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Resource\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Config\Culture.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Config\MeasureUnit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Config\Action.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Config\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Config\MessagePending.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\HomePage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Temp\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Program\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Config\MessageReceive.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Logoff.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Navigation.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Resource\TestEditMatter.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Resource\TestEditCash.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Program\NodeAdd.cshtml" />
+    <Content Include="Views\Program\NodeList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Region\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Program\NodeEdit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Region\RegionAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Region\RegionEdit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\ControlManager.cshtml" />
+    <None Include="Content\Files\ImportWarehouseShelf.xls" />
+    <None Include="Content\Files\ImportWarehouseShelf.xlsx" />
+    <None Include="Scripts\CKEditor\.htaccess" />
+    <None Include="Scripts\CKEditor\ckeditor.pack" />
+    <Content Include="Views\Resource\TestHTMLEditor.cshtml" />
+    <Content Include="Views\Config\MessageTemplate.cshtml" />
+    <Content Include="Views\Config\MessageTemplateEdit.cshtml" />
+    <Content Include="Views\Privilege\PrivChannel.cshtml" />
+    <Content Include="Views\Privilege\PrivOrganization.cshtml" />
+    <Content Include="Views\Privilege\PrivProduct.cshtml" />
+    <Content Include="Views\Privilege\PrivProgram.cshtml" />
+    <Content Include="Views\Privilege\PrivSupplier.cshtml" />
+    <Content Include="Views\Privilege\PrivWarehouse.cshtml" />
+    <Content Include="Views\Organization\Index.cshtml" />
+    <Content Include="Views\Organization\OrgAttribute.cshtml" />
+    <Content Include="Views\Organization\OrgChannel.cshtml" />
+    <Content Include="Views\Organization\OrgDetail.cshtml" />
+    <Content Include="Views\Organization\RegionTree.cshtml" />
+    <Content Include="Views\Organization\TabPage.cshtml" />
+    <Content Include="Views\Optional\Index.cshtml" />
+    <Content Include="Views\Program\Tree.cshtml" />
+    <Content Include="Views\Organization\ChannelTabPage.cshtml" />
+    <Content Include="Views\Organization\WarehouseTabpage.cshtml" />
+    <Content Include="Views\Privilege\Index.cshtml" />
+    <Content Include="Views\User\UserAddress.cshtml" />
+    <Content Include="Views\User\UserAttribute.cshtml" />
+    <Content Include="Views\User\UserDefination.cshtml" />
+    <Content Include="Views\User\UserEvent.cshtml" />
+    <Content Include="Views\User\UserInformation.cshtml" />
+    <Content Include="Views\User\UserSubscribe.cshtml" />
+    <Content Include="Views\User\UserTabpage.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Privilege\PrivProductTree.cshtml" />
+    <Content Include="Views\User\MemberRole.cshtml" />
+    <Content Include="Views\Home\ErrorPage.cshtml" />
+    <Content Include="Views\User\MemberRoleTree.cshtml" />
+    <Content Include="Views\User\MemberRoleEdit.cshtml" />
+    <Content Include="Views\User\MemberRoleAdd.cshtml" />
+    <Content Include="Views\Config\Shortcut.cshtml" />
+    <Content Include="Views\Config\UrlShortcut.cshtml" />
+    <Content Include="Views\Product\AddProductSKU.cshtml" />
+    <Content Include="Views\Config\ProgramShortcut.cshtml" />
+    <Content Include="Views\Organization\setOrgforId.cshtml" />
+    <Content Include="Views\Organization\ShippingTabpage.cshtml" />
+    <Content Include="Views\Organization\SupplierTabpage.cshtml" />
+    <Content Include="Views\Optional\OptionalListTable.cshtml" />
+    <Content Include="Views\Shipping\RegionTree.cshtml" />
+    <Content Include="Views\Shipping\Region.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Matter.cshtml" />
+    <Content Include="Views\Config\MeasureUnitEdit.cshtml" />
+    <Content Include="Views\Optional\OptionalItemListTable.cshtml" />
+    <Content Include="Views\Optional\EditOptional.cshtml" />
+    <Content Include="Views\Config\CultureListTable.cshtml" />
+    <Content Include="Views\Program\ProgramEdit.cshtml" />
+    <Content Include="Views\Program\ProgramNew.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\RegionSelect.cshtml" />
+    <Content Include="Views\Optional\AddOptionalItem.cshtml" />
+    <Content Include="Views\Config\CultureEdit.cshtml" />
+    <Content Include="Views\Resource\TestPrivateCategorySelector.cshtml" />
+    <Content Include="Views\Resource\TestProgramSelector.cshtml" />
+    <Content Include="Views\Resource\TestRegionSelector.cshtml" />
+    <Content Include="Views\Resource\TestStandardCategorySelector.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\PrivateCategorySelect.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\EditorTemplates\ProgramSelect.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\StandardCategorySelect.cshtml" />
+    <Content Include="Views\User\AddUser.cshtml" />
+    <Content Include="Views\User\DetailUser.cshtml" />
+    <Content Include="Views\User\EditUser.cshtml" />
+    <Content Include="Views\Product\RelationPU.cshtml" />
+    <Content Include="Views\Product\RelationOnsalePu.cshtml" />
+    <Content Include="Views\Privilege\UserInfomation.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ImageSelect.cshtml" />
+    <Content Include="Views\Resource\TestImageSelector.cshtml" />
+    <Content Include="Views\Config\AddProgramShortcut.cshtml" />
+    <Content Include="Views\Config\AddUrlShortcut.cshtml" />
+    <Content Include="Views\Optional\AddNewOptional.cshtml" />
+    <Content Include="Views\Product\CodePolicy.cshtml" />
+    <Content Include="Views\Product\EditCodePolicy.cshtml" />
+    <Content Include="Views\Organization\ShippingIndex.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\HTML.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\LargeMatter.cshtml" />
+    <Content Include="Views\Resource\TestEditLargeMatter.cshtml" />
+    <Content Include="Views\Home\ProgramShortCutList.cshtml" />
+    <Content Include="Views\Finance\Invoice.cshtml" />
+    <Content Include="Views\Config\EditProgramShortcut.cshtml" />
+    <Content Include="Views\Config\EditUrlShortcut.cshtml" />
+    <Content Include="Views\Purchase\PurchaseHistory.cshtml" />
+    <Content Include="Views\Purchase\PurchaseHistoryDefination.cshtml" />
+    <Content Include="Views\Purchase\PurchaseHistoryDetail.cshtml" />
+    <Content Include="Views\Finance\InvoiceListTable.cshtml" />
+    <Content Include="Views\Finance\AddInvoice.cshtml" />
+    <Content Include="Views\Finance\EditInvoice.cshtml" />
+    <Content Include="Views\Finance\Index.cshtml" />
+    <Content Include="Views\Finance\AddPayType.cshtml" />
+    <Content Include="Views\Finance\EditPayType.cshtml" />
+    <Content Include="Views\Purchase\AddPurchaseDetail.cshtml" />
+    <Content Include="Views\Purchase\AddpurItem.cshtml" />
+    <Content Include="Views\Purchase\EditPurchaseDetail.cshtml" />
+    <Content Include="Views\Purchase\Index.cshtml" />
+    <Content Include="Views\Purchase\SetPurId.cshtml" />
+    <Content Include="Views\Organization\ChannelIndex.cshtml" />
+    <Content Include="Views\Organization\WarehouseIndex.cshtml" />
+    <Content Include="Views\Product\ProOnLevelDiscount.cshtml" />
+    <Content Include="Views\Product\ProductOnLevelDiscountEdit.cshtml" />
+    <Content Include="Views\User\Level.cshtml" />
+    <Content Include="Views\User\LevelEdit.cshtml" />
+    <Content Include="Views\Shipping\RegionAttribute.cshtml" />
+    <Content Include="Views\Organization\Edit.cshtml" />
+    <Content Include="Views\Organization\OrganizationChannel.cshtml" />
+    <Content Include="Views\Warehouse\RegionEdit.cshtml" />
+    <Content Include="Views\Warehouse\Index.cshtml" />
+    <Content Include="Views\Warehouse\ShelfEdit.cshtml" />
+    <Content Include="Views\Warehouse\Shipping.cshtml" />
+    <Content Include="Views\Warehouse\StockIn.cshtml" />
+    <Content Include="Views\Warehouse\StockInAdd.cshtml" />
+    <Content Include="Views\Finance\Payable.cshtml" />
+    <Content Include="Views\Finance\AddPayable.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\OrderAdd.cshtml" />
+    <Content Include="Views\Order\OrderConsigneeInfo.cshtml" />
+    <Content Include="Views\Finance\EditPayable.cshtml" />
+    <Content Include="Views\Organization\SupplierIndex.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Category\PrivateCategoryIndex.cshtml" />
+    <Content Include="Views\Category\PrivateCategoryListTable.cshtml" />
+    <Content Include="Views\Category\PrivateCategoryNodeAdd.cshtml" />
+    <Content Include="Views\Category\PrivateCategoryNodeEdit.cshtml" />
+    <Content Include="Views\Category\PrivateCategoryTree.cshtml" />
+    <Content Include="Views\Category\StandardCategoryIndex.cshtml" />
+    <Content Include="Views\Category\StandardCategoryListTable.cshtml" />
+    <Content Include="Views\Category\StandardCategoryNodeAdd.cshtml" />
+    <Content Include="Views\Category\StandardCategoryNodeEdit.cshtml" />
+    <Content Include="Views\Category\StandardCategoryTree.cshtml" />
+    <Content Include="Views\Warehouse\InItem.cshtml" />
+    <Content Include="Views\Warehouse\InItemAdd.cshtml" />
+    <Content Include="Views\Resource\TestSKUSelector.cshtml" />
+    <Content Include="Views\Warehouse\StockOut.cshtml" />
+    <Content Include="Views\Warehouse\StockOutAdd.cshtml" />
+    <Content Include="Views\Order\OrderItemtoAdd.cshtml" />
+    <Content Include="Views\Order\OrderList.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SKUSelect.cshtml" />
+    <Content Include="Views\Mall\Index.cshtml" />
+    <Content Include="Views\Mall\ArtPositionAddOrEdit.cshtml" />
+    <Content Include="Views\Order\CashInformation.cshtml" />
+    <Content Include="Views\Order\OrderProcessList.cshtml" />
+    <Content Include="Views\Order\OrderEdit.cshtml" />
+    <Content Include="Views\Warehouse\Region.cshtml" />
+    <Content Include="Views\Order\OrderItemAddPage.cshtml" />
+    <Content Include="Views\Order\OrderSupportShippingList.cshtml" />
+    <Content Include="Views\Warehouse\OutItem.cshtml" />
+    <Content Include="Views\Warehouse\ShippingEdit.cshtml" />
+    <Content Include="Views\Warehouse\OutScan.cshtml" />
+    <Content Include="Views\Mall\ArticleIndex.cshtml" />
+    <Content Include="Views\Mall\ArticleList.cshtml" />
+    <Content Include="Views\Config\ErrorReport.cshtml" />
+    <Content Include="Views\Warehouse\Inventory.cshtml" />
+    <Content Include="Views\Warehouse\Moving.cshtml" />
+    <Content Include="Views\Warehouse\MovingAdd.cshtml" />
+    <Content Include="Views\Order\ShippingListShow.cshtml" />
+    <Content Include="Views\Warehouse\MoveItem.cshtml" />
+    <Content Include="Views\Warehouse\MoveItemAdd.cshtml" />
+    <Content Include="Views\Warehouse\MovingEdit.cshtml" />
+    <Content Include="Views\Warehouse\MoveItemEdit.cshtml" />
+    <Content Include="Views\Mall\ArticleAddOrEdit.cshtml" />
+    <Content Include="Views\Mall\ArticleReplay.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Order\PriceMessageDisplayPage.cshtml" />
+    <Content Include="Views\Order\PriceMessageEditPage.cshtml" />
+    <Content Include="Views\Order\OrderEditInfo.cshtml" />
+    <Content Include="Views\Warehouse\InItemEdit.cshtml" />
+    <Content Include="Views\Mall\ArticlePublish.cshtml" />
+    <Content Include="Views\Mall\ArtPublishAddOrEdit.cshtml" />
+    <Content Include="Views\Warehouse\InventoryAdd.cshtml" />
+    <Content Include="Views\Warehouse\InventoryEdit.cshtml" />
+    <Content Include="Views\Order\OrderHangedAlert.cshtml" />
+    <Content Include="Views\Warehouse\ShelfSKU.cshtml" />
+    <Content Include="Views\Warehouse\InvItem.cshtml" />
+    <Content Include="Views\Warehouse\InvItemEdit.cshtml" />
+    <Content Include="Views\Warehouse\InvItemAdd.cshtml" />
+    <Content Include="Views\Finance\ShowNotice.cshtml" />
+    <Content Include="Views\Finance\ShowCurrency.cshtml" />
+    <Content Include="Views\Home\HomePageIndex.cshtml" />
+    <Content Include="Views\Warehouse\WarehouseOrgSelect.cshtml" />
+    <Content Include="Views\Warehouse\WarehouseSelect.cshtml" />
+    <Content Include="Views\Warehouse\ShelfAdd.cshtml" />
+    <Content Include="Views\Organization\OrganizationCultureAdd.cshtml" />
+    <Content Include="Views\Product\OnTemplate.cshtml" />
+    <Content Include="Views\Organization\AddOrgCulturePage.cshtml" />
+    <Content Include="Views\Organization\EditOrgCulturePage.cshtml" />
+    <Content Include="Views\Product\ProductOnsaleTemplateAdd.cshtml" />
+    <Content Include="Views\Product\ProductTemplateOnsale.cshtml" />
+    <Content Include="Views\Privilege\PrivOrganizationAdd.cshtml" />
+    <Content Include="Views\Privilege\PrivChannelAdd.cshtml" />
+    <Content Include="Views\Privilege\PrivWarehouseAdd.cshtml" />
+    <Content Include="Views\Warehouse\StockOutEdit.cshtml" />
+    <Content Include="Views\Warehouse\StockInEdit.cshtml" />
+    <Content Include="Views\Warehouse\OutItemAdd.cshtml" />
+    <Content Include="Views\Warehouse\OutItemEdit.cshtml" />
+    <Content Include="Views\Order\OrderTalkAlert.cshtml" />
+    <Content Include="Views\Mall\DisableIP.cshtml" />
+    <Content Include="Views\Mall\DisableIPList.cshtml" />
+    <Content Include="Views\Mall\DisableIPAddOrEdit.cshtml" />
+    <Content Include="Views\Organization\AddOrgChannelPage.cshtml" />
+    <Content Include="Views\Organization\EditOrgChannelPage.cshtml" />
+    <Content Include="Views\Order\LogAction.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\RefIDSelect.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\EnumName.cshtml" />
+    <Content Include="Views\Resource\EnumName.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\StandardCategory.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\RefID.cshtml" />
+    <Content Include="Views\Warehouse\InItemGrid.cshtml" />
+    <Content Include="Views\Warehouse\OutItemGrid.cshtml" />
+    <Content Include="Views\Warehouse\Shelf.cshtml" />
+    <Content Include="Views\Warehouse\ShelfGrid.cshtml" />
+    <Content Include="Views\Warehouse\StockInGrid.cshtml" />
+    <Content Include="Views\Organization\ChannelSupportOrg.cshtml" />
+    <Content Include="Views\Organization\ChannelEdit.cshtml" />
+    <Content Include="Views\Warehouse\StockOutGrid.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\UserName.cshtml" />
+    <Content Include="Views\Warehouse\MovingGrid.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Time.cshtml" />
+    <Content Include="Views\Warehouse\MoveItemGrid.cshtml" />
+    <Content Include="Views\Warehouse\InventoryGrid.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\LocaleMatter.cshtml" />
+    <Content Include="Views\Warehouse\InvItemGrid.cshtml" />
+    <Content Include="Views\Config\ShowCultureName.cshtml" />
+    <Content Include="Views\Promotion\Index.cshtml" />
+    <Content Include="Views\Organization\MemberOrgChannelEditPage.cshtml" />
+    <Content Include="Views\Promotion\PromotionList.cshtml" />
+    <Content Include="Views\Privilege\PrivSupplierTree.cshtml" />
+    <Content Include="Views\Config\ChangePassword.cshtml" />
+    <Content Include="Views\Promotion\PromotionTab.cshtml" />
+    <Content Include="Views\Promotion\PromotionInfoEditPage.cshtml" />
+    <Content Include="Views\Mall\SensitiveWord.cshtml" />
+    <Content Include="Views\Mall\SensitiveWordAddOrEdit.cshtml" />
+    <Content Include="Views\Organization\OrgIntroduction.cshtml" />
+    <Content Include="Views\Promotion\PromotionMutexEdit.cshtml" />
+    <Content Include="Views\Promotion\PromotionProductIndex.cshtml" />
+    <Content Include="Views\Promotion\PromotionProductEdit.cshtml" />
+    <Content Include="Views\Warehouse\LedgerEdit.cshtml" />
+    <Content Include="Views\Warehouse\SKUDetail.cshtml" />
+    <Content Include="Views\Warehouse\LedgerEdit.cshtml" />
+    <Content Include="Views\Warehouse\WarehouseError.cshtml" />
+    <Content Include="Views\Promotion\PromotionOnSKUList.cshtml" />
+    <Content Include="Views\Promotion\PromotionMutexIndex.cshtml" />
+    <Content Include="Views\Region\RegionImport.cshtml" />
+    <Content Include="Views\Privilege\SavePrivilegeTemplatePage.cshtml" />
+    <Content Include="Views\Purchase\Quality.cshtml" />
+    <Content Include="Views\Promotion\PromotionCouponIndex.cshtml" />
+    <Content Include="Views\Purchase\PurchaseFinance.cshtml" />
+    <Content Include="Views\Privilege\ChoosePrivilegeTemplatePage.cshtml" />
+    <Content Include="Views\Promotion\PromotionCouponAdd.cshtml" />
+    <Content Include="Views\Warehouse\PrintStockOut.cshtml" />
+    <Content Include="Views\Product\Gallery.cshtml" />
+    <Content Include="Views\Privilege\TabPage.cshtml" />
+    <Content Include="Views\Warehouse\PrintStockIn.cshtml" />
+    <Content Include="Views\Privilege\SearchUser.cshtml" />
+    <Content Include="Views\Finance\PayablesToClose.cshtml" />
+    <Content Include="Views\Order\OrderItemtoEdit.cshtml" />
+    <Content Include="Views\Order\Search.cshtml" />
+    <Content Include="Views\Warehouse\SKUSearch.cshtml" />
+    <Content Include="Views\Warehouse\PrintLedger.cshtml" />
+    <Content Include="Views\Shipping\Index.cshtml" />
+    <Content Include="Views\Mall\Click.cshtml" />
+    <Content Include="Views\Mall\Setting.cshtml" />
+    <Content Include="Views\User\Point.cshtml" />
+    <Content Include="Views\Product\Import.cshtml" />
+    <Content Include="Views\Product\Validation.cshtml" />
+    <Content Include="Views\Order\Merge.cshtml" />
+    <Content Include="Views\Order\Split.cshtml" />
+    <Content Include="Views\Order\Policy.cshtml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2342</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

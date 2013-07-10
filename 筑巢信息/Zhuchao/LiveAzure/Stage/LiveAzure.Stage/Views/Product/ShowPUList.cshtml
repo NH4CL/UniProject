@@ -1,0 +1,44 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models;
+@model LiveAzure.Models.Product.ProductOnSale
+<script type="text/javascript">
+    function PUSelected() {
+        var id = $("#grid4").jqGrid("getGridParam", "selrow");
+        $("#PUGrid").fadeOut("fast");
+        $("#SKUShow").fadeIn("fast");
+        $.ajax({
+            type: "POST",
+            url: "/Product/SKUCheckBox",
+            data: { PUSelected: id },
+            success: function (html) {
+                $("#SKUShow").html(html);
+            }
+        });
+    }
+</script>
+<div>
+    <span>@LiveAzure.Resource.Model.Product.ProductOnSale.Code :</span> <span style="font-weight: bold">@Html.DisplayFor(model => model.Code)</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+    <span>@LiveAzure.Resource.Model.Product.ProductOnSale.Name :</span> <span style="font-weight: bold">@ViewBag.OnsaleSKUName</span>
+</div>
+<div id="PU">
+    @Html.Grid(new GridControl()
+            .SetName("grid4")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Product/ListProductInformation")
+
+            .SetHeight("'100%'")
+            .SetWidth("200")
+            .SetColumns<LiveAzure.Models.Product.ProductInformation>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Code);
+                cs.Add(x => x.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Name);
+            })
+                   .SetOnSelectedRowEvent("PUSelected")
+    )
+</div>

@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+@using LiveAzure.Stage.Controllers
+@using LiveAzure.Models
+@using System.Globalization
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/themes/base/css/Layout.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/LiveTree/rightMenuStyle/rightMenu.css")" rel="Stylesheet", type="text/css" />
+    <link href="@Url.Content("~/Content/LiveTree/zTreeStyle/zTreeStyle.css")" rel="Stylesheet", type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/css/redmond.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/css/new_grid.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.6.2.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/LiveTree/treeObject.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/LiveTree/jquery.ztree-2.6.js")" type="text/javascript"></script>
+    @MVC.Controls.MVCControlsScriptManager.Instance.SetUseJqCustom(true, "1.8.2").RegisterScriptsAndStyles()
+@*    <script src="@Url.Content("~/Scripts/jquery-ui-dragguable.js")" type="text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/Commen/Panel.js")" type="text/javascript"></script>
+
+</head>
+<body id="body_frame">
+<div id="frame_index_div">
+<script type="text/javascript">
+    document.getElementById('frame_index_div').style.minHeight = window.parent.document.getElementById("frame_page").style.minHeight;
+</script>
+    <div class="content_header">
+        <div class="content_header_top">
+        </div>
+
+	    <p>@Session["CurrentPath"]</p>
+        <div class="content_header_bottom">
+        </div>
+    </div>
+	@RenderBody()
+</div>
+</body>
+</html> 

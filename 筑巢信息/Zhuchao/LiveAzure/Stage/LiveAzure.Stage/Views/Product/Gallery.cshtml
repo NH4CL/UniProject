@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "SKUImages";
+}
+组织
+@Html.DropDownList("ddlOrg", (IEnumerable<SelectListItem>)ViewBag.OrgList)
+
+尺寸
+@Html.DropDownList("ddlSize", (IEnumerable<SelectListItem>)ViewBag.SizeList)
+
+PU/SKU 代码
+@Html.TextBox("code")
+
+<input type="button" id="btnGenerate" value="@LiveAzure.Resource.Stage.ProductController.CreatePicture" />
+
+<script type="text/javascript">
+    $("#btnGenerate").click(function () {
+        if (confirm("@LiveAzure.Resource.Stage.ProductController.ConfirmCover？")) {
+            var orgID = $("#ddlOrg").val();
+            var sizeName = $("#ddlSize").val();
+            var code = $("#code").val();
+            $.ajax({
+                type: "post",
+                url: "/Product/GenerateResizedImages",
+                data: { orgID: orgID, sizeName: sizeName, code: code },
+                async: false,
+                success:
+                function (result) {
+                    if (result) {
+                        alert("@LiveAzure.Resource.Common.OperationSucceed!");
+                    } else {
+                        alert("@LiveAzure.Resource.Common.OperationFailed!");
+                    }
+                }
+            });
+        }
+    });
+</script>

@@ -1,0 +1,11 @@
+﻿.SKUSelect ul
+{
+    background-color:White;
+    list-style:none;
+}
+
+.SKUSelect ul li:hover
+{
+    background-color:Lime;
+    cursor:pointer;
+}

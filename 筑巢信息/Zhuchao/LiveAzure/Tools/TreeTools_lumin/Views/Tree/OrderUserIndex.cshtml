@@ -1,0 +1,13 @@
+﻿<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "/Tree/OrderConsignee",
+        data: { bSelectAddress: false },
+        success: function (html) {
+            $("#orderConsigneePage").html(html);
+        }
+    });
+</script>
+<div id="orderConsigneePage">
+    
+</div>

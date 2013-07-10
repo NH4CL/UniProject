@@ -1,0 +1,119 @@
+﻿@model List<LiveAzure.Models.Warehouse.WarehouseLedger>
+@using LiveAzure.Resource.Model.Warehouse
+
+
+<!--startprint1-->
+<style type="text/css" media="print">
+    div.page 
+    {
+	    page-break-after: auto;
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(
+            printDo(1)
+        );
+
+    function printDo(oper) {
+        if (oper < 10) {
+            bdhtml = window.document.body.innerHTML;
+            sprnstr = "<!--startprint" + oper + "-->";
+            eprnstr = "<!--endprint" + oper + "-->";
+            prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18);
+            prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+            window.document.body.innerHTML = prnhtml;
+            window.print();
+            PrintLedgerComplete();
+        }
+        else {
+            window.print();
+        }
+    }
+
+    function PrintLedgerComplete() {
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/Index",
+            data: {},
+            success:
+            function (html) {
+                $("#body_frame").html(html);
+            }
+        });
+    }
+</script>
+
+<table width="100%" border="1">
+    <tr>
+        <td>
+            @WarehouseLedger.WhID
+        </td>
+        <td>
+            @LiveAzure.Resource.Model.Product.ProductInfoItem.Code
+        </td>
+        <td>
+            @LiveAzure.Resource.Model.Product.ProductInfoItem.FullName
+        </td>
+        <td>
+            @LiveAzure.Resource.Model.Product.ProductInfoItem.Barcode
+        </td>
+        <td>
+            @WarehouseLedger.RealQty
+        </td>
+        <td>
+            @WarehouseLedger.LockQty
+        </td>
+        <td>
+            @WarehouseLedger.CanSaleQty
+        </td>
+        <td>
+            @WarehouseLedger.CanDelivery
+        </td>
+        <td>
+            @WarehouseLedger.TobeDelivery
+        </td>
+        <td>
+            @WarehouseLedger.Arranged
+        </td>
+    </tr>
+
+    @{
+        foreach (LiveAzure.Models.Warehouse.WarehouseLedger item in Model)
+        {
+         <tr>
+            <td>
+                @item.Warehouse.FullName.Matter
+            </td>
+            <td>
+                @item.SkuItem.Code
+            </td>
+            <td>
+                @item.SkuItem.FullName.Matter
+            </td>
+            <td>
+                @item.SkuItem.Barcode
+            </td>
+            <td>
+                @item.RealQty
+            </td>
+            <td>
+                @item.LockQty
+            </td>
+            <td>
+                @item.CanSaleQty
+            </td>
+            <td>
+                @item.CanDelivery
+            </td>
+            <td>
+                @item.TobeDelivery
+            </td>
+            <td>
+                @item.Arranged
+            </td>
+        </tr>
+        }
+    }
+</table>
+<!--endprint1-->

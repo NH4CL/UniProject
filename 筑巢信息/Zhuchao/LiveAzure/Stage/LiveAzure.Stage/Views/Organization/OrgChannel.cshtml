@@ -1,0 +1,107 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    Layout = null;
+    }
+<span>@LiveAzure.Resource.Model.Member.MemberOrgChannel.Organization :</span>
+<span style="margin-left:5px;">@ViewBag.OrganizationName</span>
+@Html.Grid(new GridControl()
+        .SetName("gridOrgChannel")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Organization/OrgChannelList")
+        .SetHeight("'100%'")
+        .SetWidth("600")
+        .SetColumns<LiveAzure.Models.Member.MemberOrgChannel>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Channel).SetCaption(LiveAzure.Resource.Model.Member.MemberOrgChannel.Channel);
+            cs.Add(x => x.ChannelStatusName).SetName("Cstatus").SetCaption(LiveAzure.Resource.Model.Member.MemberOrgChannel.Cstatus);
+            if (ViewBag.privChannelSecretKey == "1")
+            {
+                cs.Add(x => x.RemoteUrl).SetName("RemoteUrl").SetCaption(LiveAzure.Resource.Model.Member.MemberOrgChannel.RemoteUrl);
+                cs.Add(x => x.ConfigKey).SetName("ConfigKey").SetCaption(LiveAzure.Resource.Model.Member.MemberOrgChannel.ConfigKey);
+                cs.Add(x => x.SecretKey).SetName("SecretKey").SetCaption(LiveAzure.Resource.Model.Member.MemberOrgChannel.SecretKey);
+                cs.Add(x => x.SessionKey).SetName("SessionKey").SetCaption(LiveAzure.Resource.Model.Member.MemberOrgChannel.SessionKey);
+            }
+            cs.Add(x => x.Remark).SetName("Remark").SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+        })
+       )
+    @if (ViewBag.privChannelSecretKey == "1")
+    {
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.add" onclick="AddOrgChannel()" />
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.edit" id="edit" onclick="EditOrgChannel()" />
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.delete" id="del" onclick="DeleteOrgChannel()" />
+    }
+    else
+    { 
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.add" disabled="disabled"/>
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.edit" disabled="disabled" />
+        <input type="button" value="@LiveAzure.Resource.Stage.OrganizationController.delete" disabled="disabled" />
+    }
+<script type="text/javascript">
+    var OrgChannelPanel = new OpenPanel();
+    OrgChannelPanel.bLoading = true;
+    OrgChannelPanel.width = 500;
+    OrgChannelPanel.height = 600;
+    OrgChannelPanel.title = "@LiveAzure.Resource.Common.Add";
+    OrgChannelPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+    function AddOrgChannel() {
+        OrgChannelPanel.OpenPanel();
+        $.ajax({
+            type: "POST",
+            url: "/Organization/AddOrgChannelPage",
+            data: {},
+            success: function (data) {
+                OrgCulturePanel.EditPageHtml(data);
+            }
+        });
+    }
+
+    function EditOrgChannel() {
+        OrgChannelPanel.OpenPanel();
+        var uRowId = $("#gridOrgChannel").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+            return false;
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Organization/EditOrgChannelPage",
+                data: { oChannelGid: uRowId },
+                success: function (data) {
+                 OrgChannelPanel.EditPageHtml(data);
+                }
+            });
+        }
+    }
+
+    function DeleteOrgChannel() {
+        var uRowId = $("#gridOrgChannel").jqGrid("getGridParam", "selrow");
+        if (uRowId == null) {
+            alert("No Focus");
+            return false;
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Organization/RemoveOrgChannel",
+                    data: { oChannelGid: uRowId },
+                    success: function (data) {
+                        $('#gridOrgChannel').trigger('reloadGrid');
+                    }
+                });
+            } 
+        }
+    }
+
+    function CompleteSumbitOrgChannel()
+    {
+        $('#gridOrgChannel').trigger('reloadGrid');
+        OrgChannelPanel.CloseEditPanel();
+    }
+</script>

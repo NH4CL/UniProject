@@ -1,0 +1,44 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@Html.Grid(new GridControl()
+                .SetName("chooseOnsalePu")
+                .SetPageSize(15)
+                .SetIsAutoSize(true)
+                .SetHttpVerb(HttpVerbs.Get)
+                .SetListUrl("/Product/ListOnsalePU")
+                .SetHeight("'100%'")
+                .SetWidth("200")
+                     .SetColumns<LiveAzure.Models.Product.ProductOnSale>(ps =>
+                    {
+                        ps.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                        ps.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Code);
+                        ps.Add(x => x.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Name);
+                    })
+                )
+<span>
+    <label>@LiveAzure.Resource.Model.Product.ProductOnRelation.Rtype</label>@*<select id="Rtype" name="Rtype"><option value=""></option></select>*@<input
+        type="text" id="Rtype" name="Rtype" /></span> <span>
+            <label>@LiveAzure.Resource.Model.Product.ProductOnRelation.Sorting</label><input
+                type="text" id="Sorting" name="Sorting" /></span>
+<input type="button" id="ChooseThisPu" value="@LiveAzure.Resource.Common.Submit" onclick="selectPu();" />
+<script type="text/javascript">
+    function selectPu() {
+        var selectedRowId = $("#chooseOnsalePu").jqGrid("getGridParam", "selrow");
+        var Rtype = document.getElementById("Rtype").value ? document.getElementById("Rtype").value : 0;
+        var Sorting = document.getElementById("Sorting").value ? document.getElementById("Sorting").value : 1;
+        if (selectedRowId != null) {
+            $.post("/Product/RelationPUSave", { pOnRelation: selectedRowId, pRtype: Rtype, pSorting: Sorting }, chooseback);
+        }
+        else {
+            alert("@Html.Raw(LiveAzure.Resource.Common.PleaseSelectRow)");
+            return false;
+        }
+    }
+    function chooseback(html) {
+        UnitPricePanel.CloseEditPanel();
+        $('#gridRelationPU').trigger('reloadGrid');
+    };
+</script>

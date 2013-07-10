@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "ProductCategory";
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml";
+}
+
+<h2>ProductCategory</h2>
+<script type="text/javascript">
+    $(document).ready(function () {
+        for (var i = 0; i < '@ViewData["nFirstCategory"]'; i++) {
+
+            var tbl = document.getElementById("tb");
+            var row = tbl.insertRow('@ViewData["nFirstCategory"]');
+
+            var cell1 = row.insertCell(row.cells.length);
+            cell1.innerHTML ='@ViewData["Flist"]'.charAt(i);
+
+            cell1.setAttribute("width", "150px");
+//            //row.style.setAttribute("backgroundColor","#e0e0e0");
+//            row.style["backgroundColor"] = "#e0e0e0"; //第二种设置样式的方法
+//            tbl.style.setAttribute("backgroundColor", "olive");
+            tbl.setAttribute("width", "500px");
+            //alert(row.style["backgroundColor"]);
+
+        }
+    });
+</script>
+
+
+
+
+<table id="tb">
+</table>

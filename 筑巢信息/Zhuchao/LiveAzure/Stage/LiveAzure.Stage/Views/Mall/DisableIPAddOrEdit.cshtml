@@ -1,0 +1,76 @@
+﻿@model LiveAzure.Models.Mall.MallDisabledIp
+@{
+    ViewBag.Title = "DisableIPAddOrEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function SaveIP(data) {
+        if (data == "ERROR") {
+            alert("@LiveAzure.Resource.Common.OperationFailed");
+        }
+        else {
+            id = $("#Gid").val;
+            alert(id);
+            window.location.href = "/Mall/DisableIP?id="+id;
+        }
+    } 
+</script>
+<h2>DisableIPAddOrEdit</h2>
+@using (Ajax.BeginForm("DisableIPSave", "Mall", new AjaxOptions { OnSuccess="SaveIP()"}))
+{
+    @Html.HiddenFor(model => model.Gid)
+<table>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallDisabledIp.Organization
+            </td>
+            <td>
+               @Html.HiddenFor(model => model.OrgID)
+               @Html.HiddenFor(model => model.Organization.aFullName)
+               @Html.DisplayFor(model => model.Organization.FullName.Matter)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallDisabledIp.Channel
+            </td>
+            <td>
+               @Html.HiddenFor(model => model.ChlID)
+               @Html.HiddenFor(model => model.Channel.aFullName)
+               @Html.DisplayFor(model => model.Channel.FullName.Matter)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallDisabledIp.IpAddress
+            </td>
+            <td>
+               @Html.EditorFor(model => model.IpAddress)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallDisabledIp.Istatus
+            </td>
+            <td>
+               @Html.DropDownListFor(model => model.Istatus, (List<SelectListItem>)ViewBag.StatusList)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallDisabledIp.Remark
+            </td>
+            <td>
+               @Html.TextAreaFor(model => model.Remark)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            </td>
+            <td>
+               <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+            </td>
+         </tr>
+    </table>
+}

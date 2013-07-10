@@ -1,0 +1,54 @@
+请直接启动Stage
+
+浏览器查看 ~/Resource/Index
+(http://localhost:xxxx/Resource/Index)
+点击第一个“测试多语言输入框”
+有详细说明
+
+
+多数调用方法请参见示例页面源代码。
+具体疑问请与我直接联系。
+
+
+多语言文本输入框，请参阅ProgramController中的方法
+
+1. 增加前
+  GeneralProgram oProgram = new GeneralProgram
+  {
+     Name = NewResource(ModelEnum.ResourceType.STRING, OrgID)
+     // NewLargeObject(OrgID)
+  };
+  必须先new一个资源文件
+
+
+2. 增加后保存
+  GeneralProgram oProgram = new GeneralProgram
+  {
+      Name = new GeneralResource(ModelEnum.ResourceType.STRING, program.Name)
+      // new GeneralLargeObject(program.Name)
+  };
+  使用new方法将页面传回的资源文件保存
+
+
+3. 编辑前
+  var oProgram = dbEntity.GeneralPrograms.Include("Parent").Include("Name").Where(s => s.Gid == id).Single();
+  oProgram.Name = RefreshResource(ModelEnum.ResourceType.STRING, oProgram.Name);
+  // RefreshLargeObject(oProgram.Name)
+  读取Model后，必须刷新资源项，如果有多个资源项，都需要刷新
+
+
+4. 编辑后保存
+  var oProgram = dbEntity.GeneralPrograms.Where(s => s.Gid == program.Gid).Single();
+  oProgram.Name.SetResource(ModelEnum.ResourceType.STRING, program.Name);
+  // SetLargeObject(program.Name)
+  请用SetResource取回页面的model并保存资源内容
+
+
+3. Razor页面写法
+   <td>
+       @LiveAzure.Resource.Model.General.GeneralProgram.Name
+   </td>
+   <td>
+       @Html.EditorFor(model => model.Name, "Matter")
+   </td>
+   字符型资源文件用Matter模板，金额型资源文件用Cash模板

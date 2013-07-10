@@ -1,0 +1,88 @@
+﻿@{
+    Layout = null;
+}
+@model List<LiveAzure.Models.Member.MemberUsePoint>
+<div class="my_middle_category">
+    <div class="acc_body">
+          <div class="Accleft"> </div>
+
+           <div class="acc_right">
+                <div class="page_root">
+                    <div class="page_root_pic">
+                         <img alt="" src="@Url.Content("/Content/img/root.png")" />
+                     </div>
+                    <div class="page_root_content">
+                     当前位置：
+                     </div>
+                </div>
+                <div class="Cash">
+                <div class="Order_title"><b>我的积分</b></div>
+                <ul style="list-style:none">
+                    <li class="user_tab_02" id="d1" onmousedown="funds(1)">我的积分</li>
+                    <li class="user_tab_02" id="d2" onmousedown="funds(2)">积分日志</li>
+                </ul>
+                <div class="tab_container">
+                    <div id="Cash_1" class="tab_content">
+                       <table cellpadding="0" cellspacing="0" border="0" style="width:780px; height:20px; line-height:20px;">
+                        	<tr>
+                                <td>目前您的积分</td>
+                                <td>等级积分：100<br/>消费积分：@ViewBag.pointTotal</td>
+							</tr>
+                        </table>
+                    </div>
+
+                    <div id="Cash_2" class="tab_content">
+                    <div class="Title_list">
+                         <table cellpadding="0" cellspacing="0" border="0" width="803" align="right">
+			                <tr>
+				                <th width="170">操作时间</th>
+				                <th width="100">类型</th>
+				                <th width="50">积分</th>
+				                <th>备注</th>                                
+				             </tr>
+                             @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.CreateTime</td>
+                                        <td>@item.RefTypeName</td>
+                                        <td>@item.Score</td>
+                                        <td>@item.Remark</td>
+                                    </tr>
+                                }
+                                <tr align="center">
+                                <td colspan="4">@Html.Raw(ViewBag.pageDown)</td>
+                                </tr>
+				        </table>
+                        </div>
+                        <div class="Order_bottom"></div>
+                   </div>
+
+                </div>
+
+                </div>
+
+          </div>
+          
+    </div>
+    </div>
+
+<script language="javascript" type="text/javascript">
+
+    document.getElementById('d1').className = 'user_tab_01';
+    document.getElementById('Cash_1').style.display = '';
+    document.getElementById('Cash_2').style.display = 'none';
+    var fundsID = '1';
+    function funds(id) {
+        var fundsObj = document.getElementById('Cash_' + fundsID);
+        if (fundsObj) {
+            fundsObj.style.display = 'none';
+            document.getElementById('d' + fundsID).className = 'user_tab_02';
+        }
+        var obj1 = document.getElementById('Cash_' + id);
+        document.getElementById('d' + id).className = 'user_tab_01';
+        obj1.style.display = '';
+        fundsID = id;        
+    }
+</script>
+
+

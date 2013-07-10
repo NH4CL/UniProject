@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "MemberRole";
+    //Layout = null;
+}
+@model LiveAzure.Models.Member.MemberRole
+@*<link href="@Url.Content("~/Content/LiveTree/rightMenuStyle/rightMenu.css")" rel="Stylesheet", type="text/css" />
+<link href="@Url.Content("~/Content/LiveTree/zTreeStyle/zTreeStyle.css")" rel="Stylesheet", type="text/css" />*@
+<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "../User/MemberRoleTree",
+        data: {},
+        success: function (html) {
+            $("#Role").html(html);
+        }
+    });
+
+    function changeOrgID() {
+        id = $("#OrgId option:selected").val();
+        $.ajax({
+
+            type: "POST",
+
+            url: "/User/GetID",
+
+            data: { id: id },
+
+            success: function (data) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "../User/MemberRoleTree",
+                    data: {},
+                    success: function (html) {
+                        $("#Role").html(html);
+                    }
+                });
+            }
+
+        });
+    }
+</script>
+<div id="ChooseOrg">
+    @Html.Label("", @LiveAzure.Resource.Stage.UserController.organization)
+    @Html.DropDownListFor(model=>model.OrgID, (List<SelectListItem>)ViewBag.organization, new { id="OrgId", onchange="changeOrgID()"})
+</div>
+<div id="Role">
+</div>
+<div id="hidden">
+</div>

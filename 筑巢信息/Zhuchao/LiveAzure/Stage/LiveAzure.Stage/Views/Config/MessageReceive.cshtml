@@ -1,0 +1,23 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@Html.Grid(new GridControl()
+            .SetName("receive")
+            .SetPageSize(20)
+            .SetHttpVerb(HttpVerbs.Get)
+            .SetIsAutoSize(false)
+            .SetListUrl("/Config/MessageReceiveList")
+            .SetWidth("821")
+            .SetHeight("'100%'")
+            .SetColumns<LiveAzure.Models.General.GeneralMessageReceive>(receive =>
+            {
+                receive.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                receive.Add(p => p.SendFrom).SetCaption(LiveAzure.Resource.Model.General.GeneralMessageReceive.SendFrom);
+                receive.Add(p => p.Matter).SetCaption(LiveAzure.Resource.Model.General.GeneralMessageReceive.Matter);
+                receive.Add(p => p.SentTime).SetCaption(LiveAzure.Resource.Model.General.GeneralMessageReceive.SentTime);
+                receive.Add(p => p.GetFrom).SetCaption(LiveAzure.Resource.Model.General.GeneralMessageReceive.GetFrom); 
+            })
+                .UpdateDefaultPager(pager=>pager
+                    .ShowSearch(false,false)
+                )
+            )

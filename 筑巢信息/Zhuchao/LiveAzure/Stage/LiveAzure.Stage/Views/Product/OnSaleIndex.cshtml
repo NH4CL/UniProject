@@ -1,0 +1,178 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Controls.LiveEditor
+@ControlManager.LiveEditor()
+@model LiveAzure.Models.Product.ProductOnSale
+<div id="PuOnSaleGrid">
+    <table id="orgChoose">
+        <tr>
+            <th>
+                @LiveAzure.Resource.Stage.ProductController.Organization :
+            </th>
+            <td>
+                @Html.DropDownList("organization", ViewBag.organizationList as IEnumerable<SelectListItem>, new { id = "orgSelect", onchange = "changeOrganization()" })
+            </td>
+            <th>@LiveAzure.Resource.Stage.ProductController.SearchKey
+            </th>
+            <td>
+                <input type="text" id="PuOnSaleSearchKeyWord" />
+                <input type="button" id="PuOnSaleSearchButton" onclick="PuOnSaleSearchByKey();" value="@LiveAzure.Resource.Stage.ProductController.Search"/>
+            </td>
+        </tr>
+    </table>
+    @Html.Grid(new GridControl()
+                    .SetName("productOnSaleGrid")
+                    .SetPageSize(20)
+                    .SetIsAutoSize(true)
+                    .SetHttpVerb(HttpVerbs.Get)
+                    .SetListUrl("/Product/ProductOnSaleList")
+                    .SetHeight("'100%'")
+                    .SetWidth("600")
+                    .SetColumns<LiveAzure.Models.Product.ProductOnSale>(ps =>
+                        {
+                            ps.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                            ps.Add(p => p.Channel.FullName.Matter).SetCaption(@LiveAzure.Resource.Stage.ProductController.Channel);
+                            ps.Add(p => p.Name.Matter).SetCaption(@LiveAzure.Resource.Stage.ProductController.Name);
+                            ps.Add(p => p.Code).SetCaption(@LiveAzure.Resource.Stage.ProductController.OnSaleCode);
+                            ps.Add(p => p.Product.Code).SetCaption(@LiveAzure.Resource.Stage.ProductController.PUCode);
+                            ps.Add(p => p.OnSaleStatusName).SetCaption(@LiveAzure.Resource.Stage.ProductController.Status);
+                            ps.Add(p => p.ProductModeName).SetCaption(@LiveAzure.Resource.Stage.ProductController.Mode);
+                            ps.Add(p => p.Mode).SetCaption(@LiveAzure.Resource.Stage.ProductController.Price).SetName("Price");
+                            ps.Add(p => p.CanSplit).SetCaption(@LiveAzure.Resource.Stage.ProductController.IfSplitReturnGoods);
+
+                        })
+                    )
+    @if (ViewBag.isFromProduct)
+    { 
+        <input type="button" id="addOnSalePU_fromproduct" value="@LiveAzure.Resource.Common.Add" onclick="addOnSalePU_fromproduct();" />
+    }
+    else
+    {
+        <input type="button" id="addOnSalePU" value="@LiveAzure.Resource.Common.Add" onclick="addOnSalePU();" />
+    }
+    <input type="button" id="editOnSalePU" value="@LiveAzure.Resource.Common.Edit" onclick="editOnSalePU();" />
+    <input type="button" id="deleteOnSalePU" value="@LiveAzure.Resource.Common.Delete" onclick="deleteOnSalePU();" />
+    <input type="button" id="synchro" value="@LiveAzure.Resource.Stage.ProductController.Synchro" onclick="synchro()" />
+</div>
+<div class="redmond" id="tabControl" style="display: none">
+</div>
+<script type="text/javascript">
+    /*----------
+    上架PU同步
+    -----------*/
+    function synchro() {
+        var id = $("#productOnSaleGrid").jqGrid("getGridParam", "selrow");
+        $.ajax({
+            type: "POST",
+            url: "/Product/Sync",
+            data: { sync: id },
+            success: function (data) {
+                if (data == "True") {
+                    alert("@LiveAzure.Resource.Stage.ProductController.SynchroSuccess");
+                } else {
+                    alert("@LiveAzure.Resource.Stage.ProductController.SynchroFailed");
+                }
+            }
+        })
+    }
+    function GridSwich() {
+        if ($("#showGrid").val() == "@LiveAzure.Resource.Stage.ProductController.ShowGrid") {
+            $("#PuOnSaleGrid").fadeIn("fast");
+            $("#showGrid").val("@LiveAzure.Resource.Stage.ProductController.CloseGrid");
+        }
+        else {
+            $("#PuOnSaleGrid").fadeOut("fast");
+            $("#showGrid").val("@LiveAzure.Resource.Stage.ProductController.ShowGrid");
+        }
+    }
+    function addOnSalePU() {
+        $("#PuOnSaleGrid").fadeOut("fast");
+        $.post("/Product/OnSaleTab", {}, function (html) {
+            $("#tabControl").html("");
+            $("#tabControl").html(html);
+            setSelectProductOnSaleGuid(null);
+            $.post("/Product/ProductOnSaleBaseInfo", { GID: null, FromPU: false }, function (html) {
+                $("#tabs-PuOnSaleBaseInfo").html("");
+                $("#tabs-ProductSkuOnSale").html("");
+                $("#tabs-OnsaleShipping").html("");
+                $("#tabs-OnsalePayment").html("");
+                $("#tabs-PuOnSaleBaseInfo").html(html);
+
+                //mode=PU配件模式 显示是否可拆分退货
+                if ($("#Mode")[0].selectedIndex == 0) {
+                    $("#CanSplit")[0].selectedIndex = 1;
+                }
+                else if ($("#Mode")[0].selectedIndex == 1) {
+                    $("#CanSplit")[0].selectedIndex = 0;
+                }
+                $("#tabControl").fadeIn("fast");
+            });
+        });
+    };
+    function addOnSalePU_fromproduct() {
+        $("#PuOnSaleGrid").fadeOut("fast");
+        $.post("/Product/OnSaleTab", {}, function (html) {
+            $("#tabControl").html("");
+            $("#tabControl").html(html);
+            setSelectProductOnSaleGuid(null);
+            $.post("/Product/ProductOnSaleBaseInfo", { GID: null, FromPU: true }, function (html) {
+                $("#tabs-PuOnSaleBaseInfo").html("");
+                $("#tabs-ProductSkuOnSale").html("");
+                $("#tabs-OnsaleShipping").html("");
+                $("#tabs-OnsalePayment").html("");
+                $("#tabs-PuOnSaleBaseInfo").html(html);
+                $("#choosePU").attr("disabled", "none");
+                //mode=PU配件模式 显示是否可拆分退货
+                if ($("#Mode")[0].selectedIndex == 0) {
+                    $("#CanSplit")[0].selectedIndex = 1;
+                }
+                else if ($("#Mode")[0].selectedIndex == 1) {
+                    $("#CanSplit")[0].selectedIndex = 0;
+                }
+                $("#tabControl").fadeIn("fast");
+            });
+        });
+    };
+    function editOnSalePU() {
+        var selectedRowId = $("#productOnSaleGrid").jqGrid("getGridParam", "selrow");
+        if (selectedRowId != null) {
+            $("#PuOnSaleGrid").fadeOut("fast");
+            $.post("/Product/OnSaleTab", {}, function back(html) {
+                $("#tabControl").html(html);
+                setSelectProductOnSaleGuid(selectedRowId);
+                $.post("/Product/ProductOnSaleBaseInfo", { GID: selectedRowId, FromPU: false }, function (html) {
+                    $("#tabs-PuOnSaleBaseInfo").html("");
+                    $("#tabs-ProductSkuOnSale").html("");
+                    $("#tabs-OnsaleShipping").html("");
+                    $("#tabs-OnsalePayment").html("");
+                    $("#tabs-PuOnSaleBaseInfo").html(html);
+                    $("#choosePU").attr("disabled", "none");
+                    $("#tabControl").fadeIn("fast");
+                });
+            });
+        }
+        else alert("@Html.Raw(@LiveAzure.Resource.Common.PleaseSelectRow)");
+    };
+
+    function setSelectProductOnSaleGuid(GID) {
+        $.post("/Product/SetSelectedPuOnSaleGuid", { GID: GID });
+    }
+
+    function changeOrganization() {
+        var orgGid = document.getElementById("orgSelect").value;
+        $.post("/Product/orgSelect", { orgSelect: orgGid }, back);
+        function back() {
+            $('#productOnSaleGrid').trigger('reloadGrid');
+        }
+    }
+
+    function PuOnSaleSearchByKey() {
+        var sKeyWord = $("#PuOnSaleSearchKeyWord").val();
+        $("#productOnSaleGrid").jqGrid("setGridParam", {
+            url: "/Product/ProductOnSaleList",                               //设置表格的url
+            datatype: "json",                                     //设置数据类型
+            postData: { KeyWord: sKeyWord }
+        });
+        $("#productOnSaleGrid").trigger('reloadGrid');
+    }
+</script>

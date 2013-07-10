@@ -1,0 +1,43 @@
+﻿@model LiveAzure.Models.Member.MemberOrganization
+@{
+    ViewBag.Title = "OrganizationChannel";
+}
+
+<h2>OrganizationChannel</h2>
+@using (Html.BeginForm())
+{
+    
+  <div class="editor-label">
+       @LiveAzure.Resource.Model.Member.OrganizationBase.Channels:
+  </div>
+  <div class="editor-field">
+   
+    @foreach (var item in ViewBag.channel as SelectList)
+    {
+        @*<input type="checkbox" name="selectedChannel" value ="@item.Value"/>*@
+        @*@ViewBag.test;*@
+        
+        bool find = false;
+        foreach (var i in ViewBag.selectchannel as SelectList)
+        {
+
+            if (item.Value == i.Value)
+            {
+               @* @ViewBag.testyes*@
+               <input type="checkbox" name="selectedChannel" value ="@item.Value" checked = "true"/>
+                find = true;
+                break;
+            }
+        }
+        if (find == false)
+        {
+            @* @ViewBag.testno *@
+            <input type="checkbox" name="selectedChannel" value ="@item.Value"/>
+        }
+       @item.Text
+       <p></p>
+    }
+  </div>
+    
+     <input type="submit" value = "@LiveAzure.Resource.Stage.OrganizationController.link" />
+} 

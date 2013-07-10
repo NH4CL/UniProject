@@ -1,0 +1,121 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Member.MemberPrivilege
+           
+@{
+    ViewBag.Title = "PrivOrganization";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>PrivOrganization</h2>
+
+
+<div>
+       <input type="checkbox" name="Pstatus" value ="启用" checked="checked"/>
+       <span>启用</span>
+       <input type="button" value = "新建用户授权" onclick="newPriv()"/>
+</div>
+
+@using (Html.BeginForm("PrivOrganization", "Privilege", FormMethod.Post))
+{
+     @Html.ValidationSummary(true)
+
+    <div id = "list">
+      <input type="hidden" id="optitemCount" name="optitemCount" value="0" />
+      <input type="hidden" id="prvID" name="prvID"/>
+    @Html.Grid(new GridControl()
+        .SetName("grid1")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Privilege/ListPrivOrganization")
+        .SetHeight("200")
+        .SetColumns<LiveAzure.Models.Member.MemberOrganization>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+            cs.Add(x => x.ShortName.Matter).SetCaption(@LiveAzure.Resource.Model.Member.OrganizationBase.ShortName);
+        })
+            )
+    @{string s = @Html.GridDeleteButton(buttonText: "Delete", gridName: "grid1", actionUrl: "/Organization/Delete");          
+              var aaa =new HtmlString(s);@aaa}
+    </div>
+     <br /><br />
+    <div>
+       <table border="1">
+         <tr>
+           <td>
+             @LiveAzure.Resource.Model.Member.OrganizationBase.Code
+           </td>
+           <td>
+             @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName
+           </td>
+         </tr>
+
+         @foreach (var item in ViewBag.memOrg as SelectList)
+         { 
+            <tr>
+              <td>
+               <input type="checkbox" name="selectedOrg" id = "selectedOrg" value ="@item.Value" />
+              </td>
+              <td>
+                <input type="hidden" name="shortName" id = "shortName" value ="@item.Text"/>
+                @item.Text
+              </td>
+            </tr>
+         }
+       </table>
+    </div>
+ 
+    <div>
+      <input type="button" onclick ="showtable()" value="添加"/>
+    </div>
+
+    <div>
+      <input type="submit" value="列表保存"/>
+    </div>
+ 
+
+ <script type="text/javascript">
+     function showtable() {
+        
+         var privOrg = document.getElementById("selectedOrg").value;
+         var name = document.getElementById("shortName").value;
+         var tb = document.getElementById("grid1");
+         var optionItemCount = document.getElementById("optitemCount").value;
+         if (privOrg) {
+             var row = tb.insertRow(1);
+             var cell1 = row.insertCell();
+             var cell2 = row.insertCell();
+             cell2.innerHTML = privOrg + '<input type="hidden" name="privOrg' + optionItemCount + '" value="' + privOrg + '" />';
+             cell1.innerHTML = name + '<input type="hidden" name="shortName' + optionItemCount + '" value="' + shortName + '" />';
+             optionItemCount++;
+             $("#list").fadeIn("slow");
+         }
+         document.getElementById("optitemCount").value = optionItemCount;
+     }
+
+    
+     function newPriv() {
+         var userid = $("#UserID").val();
+         var pstatus = $("#Pstatus").attr('checked');
+         alert(userid);
+         alert(pstatus);
+         $.post("/Privilege/PrivOrgDefinition", { userID: userid }, function (data) {
+             if (data == null) {
+             }
+             else {
+                 $("#prvID").val(data);
+             }
+         });
+    }
+
+//    function save() {
+//        var optitemCount = $("#optitemCount").val();
+//        var prvID = $("#prvID").val();
+//        $.post("/Privilege/PrivOrganization", { optitemCount: optitemCount, prvID: prvID });
+//    }
+
+</script>
+}

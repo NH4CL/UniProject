@@ -1,0 +1,66 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    /*----------------------
+    organization change
+    ----------------------*/
+    function OrgChange() {
+        var OrgValue = document.getElementById("org").value;
+        $.ajax({
+            type: "POST",
+            url: "/Order/OrgChange",
+            data: { Org: OrgValue },
+            success: function (html) {
+                $("#search").html(html);
+                $("#OrderListGrid").trigger('reloadGrid');
+            }
+        })
+    }
+    /*--------------------------
+    channel change
+    --------------------------*/
+    function ChanChange() {
+        var ChanValue = document.getElementById("channel").value;
+        $.ajax({
+            type: "POST",
+            url: "/Order/ChannelChange",
+            data: { Channel: ChanValue },
+            success: function (data) {
+                $("#OrderListGrid").trigger('reloadGrid');
+            }
+        })
+    }
+    /*-------------------------
+    key search
+    -------------------------*/
+    function SearchKey() {
+        var org = document.getElementById("org").value;
+        var chan = document.getElementById("channel").value;
+        var ware = document.getElementById("warehouse").value;
+        var type = document.getElementById("searchType").value;
+        var key = document.getElementById("searchKey").value;
+        $.ajax({
+            type: "post",
+            url: "/Order/SearchKey",
+            data: {organization:org,channel:chan,warehouse:ware,stype:type,skey:key},
+            success:function(){
+                $("#OrderListGrid").trigger('reloadGrid');
+            }
+        })
+    }
+</script>
+<span>
+    <label>@LiveAzure.Resource.Stage.OrderController.Organization</label>
+    @Html.DropDownList("none", ViewBag.Org as IEnumerable<SelectListItem>, new { name = "org", id = "org", onchange = "OrgChange()" })
+    &nbsp&nbsp
+    <label>@LiveAzure.Resource.Stage.OrderController.Channel</label>
+    @Html.DropDownList("none", ViewBag.Channel as IEnumerable<SelectListItem>, new { name = "channel", id = "channel", onchange="ChanChange()"})
+    &nbsp&nbsp
+    <label>@LiveAzure.Resource.Stage.OrderController.Warehouse</label>
+    @Html.DropDownList("none", ViewBag.Warehouse as IEnumerable<SelectListItem>, new { name = "warehouse", id = "warehouse" })
+    &nbsp&nbsp
+    @Html.DropDownList("none", ViewBag.Search as IEnumerable<SelectListItem>, new { name = "searchType", id = "searchType" })
+    <input type="text" name="searchKey" id="searchKey" value="" />
+    <input type="button" value="@LiveAzure.Resource.Common.Search" onclick="SearchKey()" />
+</span>

@@ -1,0 +1,88 @@
+﻿@using System.Globalization
+@{
+    ViewBag.Title = "TestEditMatter";
+}
+@model LiveAzure.Models.General.GeneralResource
+
+<!--演示文字-->
+<h2>多语言资源编辑器测试演示页面</h2>
+
+为了测试，此页面自动在数据库生成了一个GeneralResource (res)和两个GeneralResItem作为子项(resItem1,resItem2)<br />
+<table style=" border-style:solid; border-color:Blue; border-width:thin; background-color:Silver;color:Aqua">
+    <caption style="color:Blue; font-size:larger">部分属性值</caption>
+    <tr>
+        <td>
+            <b style="color:Red">GeneralResource res:</b><br />
+            Gid:@Model.Gid<br />
+            Culture:2052(简体中文)<br />
+            Matter:“我是中文名字”<br />
+            ResItems:{resItem1,resItem2}
+        </td>
+        <td>
+            <b style="color:Orange">GeneralResItem resItem1:</b><br />
+            Culture:1036(法文)<br />
+            Matter:“我是法国名字（PS:我不会法文，囧）”<br />
+            ResID:@(Model.Gid)(指向res)<br />
+        </td>
+        <td>
+            <b style="color:Orange">GeneralResItem resItem2:</b><br />
+            Culture:1031(英语)<br />
+            Matter:“It's an English name.”<br />
+            ResID:@(Model.Gid)(指向res)<br />
+        </td>
+    </tr>
+</table>
+
+接下来就是正式介绍控件了。<br />
+多语言输入控件MatterEditor有三种重载<br />
+<div style="color:Purple; font-size:small">
+    <p>
+        @@ResourceHelper.MatterEditor(<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string resId, string name = "MatterEditor",<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string buttonText = "其他语言",<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+    </p>
+    <p>
+        @@ResourceHelper.MatterEditor(<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guid? resId, string name = "MatterEditor",<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string buttonText = "其他语言",<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+    </p>
+    <p>
+        @@ResourceHelper.MatterEditor(<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LiveAzure.Models.General.GeneralResource res, string name = "MatterEditor",<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string buttonText = "其他语言",<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool enableAdd = false, bool enableEdit = false, bool enableDelete = false)
+    </p>
+</div>
+<ul>
+    <li>其中第一个参数为主语言GeneralResource对象的三种表现形式——GUID，GUID字符串，对象本身，可根据实际情况选择调用。</li>
+    <li>
+        <b>name</b>为自动生成的名称前缀。全局唯一，不要重复。若同一页面引用多个此控件，name必须不能冲突。（可选参数）<br />
+        <b style="color:Red">(对应到具体HTML元素的ID和Name可通过查看源代码或浏览器调试看到)</b>
+    </li>
+    <li>
+        <b>buttonText</b>按钮上显示的文本。可以引用资源文件，实现多语言显示。
+    </li>
+    <li>
+        <b>enableAdd、enabelEdit、enableDelete</b>分别对应添加、修改、删除权限。调用者可指定此按钮弹出窗口具有的权限。（可选参数，默认为false）
+    </li>
+</ul>
+
+用法展示<br />
+
+@{
+    LiveAzure.Models.General.GeneralResource res = Model;
+    Guid gid = Model.Gid;
+    string sGid = gid.ToString();
+}
+
+
+<!-- 正式调用 -->
+用法一 @ResourceHelper.MatterEditor(sGid)<br />
+用法二 @ResourceHelper.MatterEditor(gid, name: "Test2", buttonText: "OtherLanguage")<br />
+用法三 @ResourceHelper.MatterEditor(res, "Test3", enableAdd: true, enableEdit: true)<br />
+
+
+<br />
+详细页面参见Stage\Views\Resource\TestEditMatter.cshtml

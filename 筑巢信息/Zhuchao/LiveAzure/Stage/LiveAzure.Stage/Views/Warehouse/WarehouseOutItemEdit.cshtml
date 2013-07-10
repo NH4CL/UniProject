@@ -1,0 +1,40 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseOutItem
+@using WarehouseOutItemResource = LiveAzure.Resource.Model.Warehouse.WarehouseOutItem
+@ControlManager.SKUSelect()
+@{
+    ViewBag.Title = "WarehouseOutItemEdit";
+}
+
+<h2>WarehouseOutItemEdit</h2>
+
+@using (Html.BeginForm("WarehouseOutItemEditDB", "Warehouse"))
+{
+    @WarehouseOutItemResource.StockOut
+    @Html.HiddenFor(model=>model.Gid)
+    @Html.HiddenFor(model => model.SkuID)
+    @Html.DisplayFor(model => model.StockOut.Code)
+    <br /><br />
+    @WarehouseOutItemResource.SkuItem
+    @Html.EditorFor(model => model.SkuID, "SKUSelect", new { ID = "SKUSelect", whID = Model.StockOut.WhID })
+    <br /><br />    
+    @WarehouseOutItemResource.Shelf
+    @Html.DropDownListFor(model => model.ShelfID, ViewBag.Shelf as IEnumerable<SelectListItem>)
+    <br /><br />
+    @WarehouseOutItemResource.TrackLot
+    @Html.TextBoxFor(model => model.TrackLot)
+    <br /><br />
+    @WarehouseOutItemResource.Quantity
+    @Html.TextBoxFor(model => model.Quantity)
+    <br /><br />
+    @LiveAzure.Resource.Model.ModelBase.Remark
+    @Html.TextAreaFor(model => model.Remark)
+
+    <input type="submit" value="Add" />
+    <input type="reset" value="Reset" />
+    <input type="button" id="btnCancel" value="Cancel" />
+}
+<script type="text/javascript">
+    $("#btnCancel").click(function () {
+        document.location.replace("/Warehouse/WarehouseOutItem");
+    });
+</script>

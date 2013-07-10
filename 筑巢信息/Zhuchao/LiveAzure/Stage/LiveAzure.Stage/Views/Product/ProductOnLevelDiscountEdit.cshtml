@@ -1,0 +1,50 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Product.ProductOnLevelDiscount
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+@using (Ajax.BeginForm("ProductOnLevelDiscountUpDate", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "document.body.removeChild(document.getElementById('newEditPageDiv'));document.body.removeChild(document.getElementById('newCoverPageDiv')); $('#ProductDiscountGrid').trigger('reloadGrid');" }))
+{
+    <div class="down_AddorEdit">
+        @Html.ValidationSummary(false)        
+        <table>
+            @Html.HiddenFor(model => model.Gid)
+            @if (Model.Gid == null || Model.Gid == Guid.Empty)
+            {
+                <tr>
+                    <th>
+                        @Html.Label(LiveAzure.Resource.Model.Product.ProductOnLevelDiscount.UserLevel)
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(model => model.aUserLevel, (List<SelectListItem>)ViewBag.UserLevel)
+                        @Html.ValidationMessageFor(model => model.UserLevel)
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <th>
+                        @Html.Label(LiveAzure.Resource.Model.Product.ProductOnLevelDiscount.UserLevel)
+                    </th>
+                    <td>
+                        @ViewBag.UserLevelName
+                    </td>
+                </tr>
+            }
+            <tr>
+                <th>
+                    @Html.Label(LiveAzure.Resource.Model.Product.ProductOnLevelDiscount.Discount)
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Discount)
+                    @Html.ValidationMessageFor(model => model.Discount)
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit"/>
+        </div>
+    </div>
+}

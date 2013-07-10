@@ -1,0 +1,17 @@
+﻿body {
+}
+
+.ui-jqgrid-hdiv { width:100% !important; padding:0; margin:0; }
+.ui-corner-bottom { width:100% !important; padding:0; margin:0; }
+.ui-jqgrid-labels { width:100% !important; padding:0; margin:0; }
+.ui-jqgrid-htable { padding:0; margin:0; width:99% !important;}
+.ui-state-default .ui-jqgrid-hdiv { margin:0 !important; padding:0 !important; }
+.ui-jqgrid .ui-jqgrid-hbox { width:100% !important; }
+#standardCategoryTree { float:left; width:20%}
+#standardCategoryTable { float:right; width:75%}
+#privateCategoryTree { float:left; width:20%}
+#privateCategoryTable { float:right; width:75%}
+.ui-jqgrid-btable { width:99% !important;}
+#ui-datepicker-div { width:auto !important}
+#gbox_gridLedgerList table { width:150% !important}
+#gbox_gridLedgerList .ui-pg-table { width:100% !important}

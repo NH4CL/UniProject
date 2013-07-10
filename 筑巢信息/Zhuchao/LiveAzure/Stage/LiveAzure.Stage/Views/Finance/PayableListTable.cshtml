@@ -1,0 +1,47 @@
+﻿<div>
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+    @Html.Grid(new GridControl()
+    .SetName("PayableGrid")
+    .SetPageSize(20)
+    .SetIsAutoSize(true)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Finance/PayableList")
+    .SetWidth("'50%'")
+    .SetHeight("'100%'")
+    .SetColumns<LiveAzure.Models.Finance.FinancePayment>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.Organization).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Organization);
+        
+        cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Code);
+
+        cs.Add(x => x.PaymentType).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Ptype);
+
+        cs.Add(x => x.PayTo).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.PayTo);
+                              //.SetColumnRenderer(new ComboColumnRenderer("/Finance/GetPayToText"));
+
+        cs.Add(x => x.Pstatus).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Pstatus)
+                              .SetColumnRenderer(new ComboColumnRenderer("/Finance/GetPstatusText"));
+        
+        cs.Add(x => x.RefTypeName).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.RefType);
+
+        cs.Add(x => x.RefID).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.RefID);
+        
+        cs.Add(x => x.PayDate).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.PayDate);
+        
+        cs.Add(x => x.Reason).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Reason);
+
+        cs.Add(x => x.Currency).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Currency);
+        
+        cs.Add(x => x.Amount).SetCaption(LiveAzure.Resource.Model.Finance.FinancePayment.Amount);
+        
+        cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+    })
+        )
+</div>
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddPayablePage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="ShowEditPayablePage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemovePayable()" />
+</div>

@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1ADB25C4-9475-4B7D-B016-EBBB66403215}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MVC.Controls</RootNamespace>
+    <AssemblyName>MVC.Controls</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accordion\AccordionControl.cs" />
+    <Compile Include="Accordion\AccordionItem.cs" />
+    <Compile Include="AttributeHelper.cs" />
+    <Compile Include="AutoComplete.cs" />
+    <Compile Include="ContextGridController.cs" />
+    <Compile Include="DatePicker.cs" />
+    <Compile Include="Dynamic.cs" />
+    <Compile Include="GridController.cs" />
+    <Compile Include="GridResponse.cs" />
+    <Compile Include="ExpressionExtensions.cs" />
+    <Compile Include="ContentType.cs" />
+    <Compile Include="Grid\ColumnRenderers\ComboColumnRenderer.cs" />
+    <Compile Include="Grid\ColumnRenderers\TextAreaColumnRenderer.cs" />
+    <Compile Include="Grid\ColumnRenderers\IColumnRenderer.cs" />
+    <Compile Include="Grid\ColumnRenderers\TextColumnRenderer.cs" />
+    <Compile Include="Grid\CustomGridPagerControl.cs" />
+    <Compile Include="Grid\GridExtensions.cs" />
+    <Compile Include="Grid\GridColumnModel.cs" />
+    <Compile Include="Grid\GridControl.cs" />
+    <Compile Include="Grid\GridData.cs" />
+    <Compile Include="Grid\GridDataExtensions.cs" />
+    <Compile Include="Grid\GridPagerControl.cs" />
+    <Compile Include="IGridController.cs" />
+    <Compile Include="IPagedList.cs" />
+    <Compile Include="MVCControlsScriptManager.cs" />
+    <Compile Include="PagedList.cs" />
+    <Compile Include="PagedListExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Manager.cs" />
+    <Compile Include="SearchModel.cs" />
+    <Compile Include="Tab\TabControl.cs" />
+    <Compile Include="Tab\TabItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Content\MVCControls\Grid\ellipsis-xbl.xml" />
+    <Content Include="Scripts\Content\MVCControls\Grid\paging_bg.gif" />
+    <Content Include="Scripts\Content\MVCControls\Grid\paging_bg.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-anim_basic_16x16.gif" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_flat_55_fbec88_40x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_75_d0e5f5_1x400.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_85_dfeffc_1x400.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_217bc0_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_469bdd_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_6da8d5_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_d8e7f3_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_f9bd01_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui-lightness\jquery-ui-1.8.2.custom.css" />
+    <Content Include="Scripts\Content\MVCControls\Grid\ui.jqgrid.css" />
+    <Content Include="Scripts\Content\MVCControls\mvc.controls.css" />
+    <Content Include="Scripts\Content\Site.css" />
+    <Content Include="Scripts\Readme.txt" />
+    <Content Include="Scripts\Scripts\jquery-1.6.2.js" />
+    <Content Include="Scripts\Scripts\jquery-1.6.2.min.js" />
+    <Content Include="Scripts\Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\Scripts\jquery.validate.js" />
+    <Content Include="Scripts\Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Scripts\Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\Scripts\MVCControls\Grid\grid.jqueryui.js" />
+    <Content Include="Scripts\Scripts\MVCControls\Grid\grid.locale-en.js" />
+    <Content Include="Scripts\Scripts\MVCControls\Grid\jquery.jqGrid.min.js" />
+    <Content Include="Scripts\Scripts\MVCControls\jquery-ui-1.8.2.custom.min.js" />
+    <Content Include="Scripts\Scripts\MVCControls\mvc.controls.manager.js" />
+    <Content Include="Readme.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

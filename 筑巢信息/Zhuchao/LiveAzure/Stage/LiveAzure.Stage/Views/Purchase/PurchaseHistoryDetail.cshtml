@@ -1,0 +1,140 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Purchase.PurchaseHistory
+@{
+    ViewBag.Title = "PurchaseHistoryDetail";
+}
+
+@using (Html.BeginForm("PurchaseDetail", "Purchase"))
+{ 
+    @Html.HiddenFor(model => model.Gid)    
+    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.DocVersion
+    @Html.EditorFor(model => model.DocVersion)
+
+    <div>
+       <table>
+            <tr>
+                
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Pstatus
+                    @Html.DropDownListFor(model => model.Pstatus, (List<SelectListItem>)ViewBag.ostatuslist, new { type = "width:150px" })
+                </td>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.etd
+                    @Html.TextBoxFor(model => model.etd).AsDatePicker(new DatePicker())
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.TrackLot
+                    @Html.EditorFor(model => model.TrackLot)
+                </td>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Supplier
+                    @Html.DropDownListFor(model => model.Supplier, (List<SelectListItem>)ViewBag.osupplierlist, new { type = "width:150px" })
+                </td>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.atd
+                    @Html.TextBoxFor(model => model.atd).AsDatePicker(new DatePicker(ViewBag.datePattern))
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <p>@LiveAzure.Resource.Stage.PurchaseController.PurchaseTime</p>
+
+                </td>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Warehouse
+                    @Html.DropDownListFor(model => model.WhID, (List<SelectListItem>)ViewBag.owarehouselist, new { type = "width:150px" })
+                </td>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.eta
+                    @Html.TextBoxFor(model => model.eta).AsDatePicker(new DatePicker(ViewBag.datePattern))
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Amount
+                    @Html.EditorFor(model => model.Amount)
+                </td>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Ptype
+                    @Html.DisplayFor(model => model.Pstatus)
+                </td>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.ata
+                    @Html.TextBoxFor(model => model.ata).AsDatePicker(new DatePicker(ViewBag.datePattern))
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Quantity
+                    @Html.EditorFor(model => model.Quantity)
+                </td>
+                 
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.PortDate
+                    @Html.TextBoxFor(model => model.PortDate).AsDatePicker(new DatePicker(ViewBag.datePattern))
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Brief
+                    @Html.EditorFor(model => model.Brief)
+                </td>
+                <td>
+                    @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Hanged
+                    @Html.DropDownListFor(model => model.Hanged, (List<SelectListItem>)ViewBag.ohangstatuslist, new { type = "width:150px" })
+                </td> 
+                       
+            </tr>
+       </table> 
+    </div>  
+}
+
+<div>
+    @Html.Grid(new GridControl()
+    .SetName("gridPurHistoryItem")
+    .SetPageSize(10)
+    .SetIsAutoSize(false)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Purchase/listPurchaseHistoryItem")
+    .SetHeight("'100%'")
+    .SetWidth("600")
+    .SetColumns<LiveAzure.Models.Purchase.PurchaseHisItem>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Quantity).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseHistory.Quantity);
+            cs.Add(x => x.Amount).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseHistory.Amount);
+        })
+    )
+</div>
+
+
+
+<script type = "text/javascript">
+    $(document).ready(function () {
+        //默认
+        $("#DocVersion").attr("disabled", true);
+        $("#TrackLot").attr("disabled", true);
+        $("#Supplier").attr("disabled", true);
+        $("#WhID").attr("disabled", true);
+        $("#Pstatus").attr("disabled", true);
+        $("#Hanged").attr("disabled", true);
+        $("#Amount").attr("disabled", true);
+        $("#Quantity").attr("disabled", true);
+
+        //信息字段
+        $("#etd").attr("disabled", true);
+        $("#atd").attr("disabled", true);
+        $("#eta").attr("disabled", true);
+        $("#ata").attr("disabled", true);
+        $("#PortDate").attr("disabled", true);
+        $("#Brief").attr("disabled", true);
+    })
+</script>

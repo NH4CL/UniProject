@@ -1,0 +1,21 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using MVC.Controls.Tab;
+
+@{
+    ViewBag.Title = "Message";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+        @Html.Tab(new TabControl()
+            .SetCacheTabs(true)
+            .SetSpinner("<b>wait...</b>")
+            .AddTabItem(new TabItem()
+                .SetContent(MVC.Controls.ContentType.RemoteAction, "MessageTemplate")
+                .SetTitle(@LiveAzure.Resource.Stage.ConfigController.Template))
+            .AddTabItem(new TabItem()
+                .SetContent(MVC.Controls.ContentType.RemoteAction, "MessagePending")
+                .SetTitle(@LiveAzure.Resource.Stage.ConfigController.Pending))
+            .AddTabItem(new TabItem()
+                .SetContent(MVC.Controls.ContentType.RemoteAction, "MessageReceive")
+                .SetTitle(@LiveAzure.Resource.Stage.ConfigController.Receive)))
+

@@ -1,0 +1,49 @@
+﻿@{
+   
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    var URLParams = new Array();
+    var aParams = document.location.search.substr(1).split('?').toString();
+    var aparams = aParams.split('*');
+    //    alert("aparams[0] = " + aparams[0]);
+    //    alert("aparams[1] = " + aparams[1]);
+//        var idparam = aparams[0].split('=');
+//        var otypeparam = aparams[1].split('=');
+//        URLParams[idparam[0]] = idparam[1];
+//        URLParams[otypeparam[0]] = otypeparam[1];
+//        var id = URLParams["id"];
+//        var otype = URLParams["otype"];
+    //    alert("id = " + id);
+    //    alert("otype = " + otype);
+    var aParam = aParams.split('=');
+    URLParams[aParam[0]] = aParam[1];
+    var id = URLParams["id"];
+    //    alert("id = " + id);
+
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Organization/GetWarehousePage",
+            data: { strId: id  },
+            datatype: "html",
+            success: function (data) {
+                $('#warehouseContent').html(data);
+            },
+            error: function () {
+                alert("处理失败!");
+            }
+        });
+    });
+
+
+</script>
+
+
+<div id='warehouseContent'>
+
+</div>

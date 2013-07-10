@@ -1,0 +1,105 @@
+﻿@model LiveAzure.Models.Finance.FinancePayType
+@using (@Ajax.BeginForm("SaveNewPayType", "Finance", new AjaxOptions { OnSuccess="RefreshGrid();ClosePanel();" }, new { id = "addPayTypeForm" }))
+{
+<div class="down_AddorEdit">
+    <table>
+            <tr>
+                <th>    
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.Orgnization
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.OrgID, (List<SelectListItem>)ViewBag.organization)
+                </td>
+            </tr>   
+            <tr>
+                <th>    
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.Code
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Code)
+                </td>
+            </tr>
+            <tr>
+                <th>   
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.Name
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Name, "Matter")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.Matter
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Matter)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.Pstatus
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.Pstatus, (List<SelectListItem>)ViewBag.payStatus)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.Sorting
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Sorting)
+                </td>
+            </tr>
+            <tr>
+                <th>    
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.IsCod
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.IsCod, (List<SelectListItem>)ViewBag.isCod)
+                </td>
+            </tr>
+            <tr>
+                <th>    
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.IsOnline
+                </th>
+                <td>
+                    @Html.DropDownListFor(model => model.IsOnline, (List<SelectListItem>)ViewBag.isOnline)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.Fee
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Fee)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Finance.FinancePayType.Config
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Config)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.ModelBase.Remark
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Remark)
+                </td>
+            </tr>
+    </table>
+    <div>
+        <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="submitaddPayTypeForm();" />
+    </div>
+    <script type="text/javascript">
+
+        function submitaddPayTypeForm() {
+            $("#addPayTypeForm").submit();
+        }
+    </script>
+</div>
+}

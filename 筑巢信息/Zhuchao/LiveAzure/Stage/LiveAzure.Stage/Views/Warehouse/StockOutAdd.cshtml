@@ -1,0 +1,74 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseStockOut
+@using NoteType = LiveAzure.Models.ModelEnum.NoteType
+@using CategoryType = LiveAzure.Models.ModelEnum.StandardCategoryType
+@using OutResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockOut
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@using CommonResource = LiveAzure.Resource.Common
+@ControlManager.StandardCategorySelect()
+@ControlManager.RefIDSelect()
+@{
+    ViewBag.Title = "WarehouseStockOutAdd";
+}
+<h2>WarehouseStockOutAdd</h2>
+@using (Html.BeginForm("StockOutAddDB", "Warehouse", FormMethod.Post, new { id = "StockOutAddForm" }))
+{
+    <table>
+        <tr>
+            <th>@OutResource.Warehouse</th>
+            <td>
+                @Html.HiddenFor(model => model.WhID)
+                @Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "WarehouseName" })
+            </td>
+            <th>@OutResource.Code</th>
+            <td>
+                <input type="text" value="@WCResource.AutoGenerate" disabled="disabled" />
+            </td>
+            <th>@OutResource.Shipping</th>
+            <td>@Html.DropDownListFor(model => model.ShipID, ViewBag.Shippings as IEnumerable<SelectListItem>)</td>
+        </tr>
+        <tr>
+            <th>@OutResource.OutType</th>
+            <td>@Html.EditorFor(model => model.OutType, "StandardCategorySelect", new { Type = CategoryType.STOCKOUT, OnClick = "setRefType" })</td>
+            <th>@OutResource.RefType</th>
+            <td>@Html.DisplayFor(model => model.RefType, "EnumName", new { ID = "RefType", EnumName = "NoteType" })</td>
+            <th>@OutResource.RefID</th>
+            <td>@Html.EditorFor(model => model.RefID, "RefIDSelect", new { ID = "RefID", OnError = "refIdError" })</td>
+        </tr>
+        <tr>
+            <th>@OutResource.Remark</th>
+            <td>@Html.TextAreaFor(model => model.Remark)</td>
+            <th>@OutResource.Ostatus</th>
+            <td>@Html.TextBoxFor(model => model.OutStatusName, new { disabled = "disabled" })</td>
+        </tr>
+    </table>
+    <input type="submit" value="@WCResource.NextStep" />
+    <input type="reset" value="@CommonResource.Reset" />
+    <input type="button" id="btnCancel" value="@CommonResource.Cancel" />
+}
+<script type="text/javascript">
+    function setRefType(typeID, typeName) {
+        $.post("/Warehouse/GetRefTypeJson", { typeID: typeID },
+            function (data) {
+                $("#RefType").val(data);
+                if (data == 7) {
+                    //不需要单据
+                    objRefID.destroy();
+                } else {
+                    //需要单据
+                    objRefID.create(parseInt($("#RefType").val()));
+                }
+            });
+    }
+    function refIdError() {
+        alert("@WCResource.Error");
+    }
+    $("#btnCancel").click(function () {
+        document.location.replace("/Warehouse/StockOut");
+    });
+    $("#StockOutAddForm").submit(function (e) {
+        if ($("#RefType").val() != "@((byte)NoteType.NONE)" && $("#RefID_val").val() == "") {
+            alert("@WCResource.RefIDRequired");
+            e.preventDefault();
+        }
+    });
+</script>

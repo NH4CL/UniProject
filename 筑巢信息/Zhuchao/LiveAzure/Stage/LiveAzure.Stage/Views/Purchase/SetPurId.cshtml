@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "SetPurId";
+}
+<script type="text/javascript">
+    var URLParams = new Array();
+    var aParams = document.location.search.substr(1).split('?').toString();
+    var aParam = aParams.split('=');
+    URLParams[aParam[0]] = aParam[1];
+    var id = URLParams["id"];
+
+
+
+    $.ajax({
+        type: "POST",
+        url: "/Purchase/setDoPurId",
+        data: { strId: id },
+        success: function (data) {
+            window.location.href = "/Purchase/EditPurchaseDetail";
+        },
+        error: function () {
+            alert('@LiveAzure.Resource.Stage.OrganizationController.errorAlert');
+        }
+    });
+</script> 
+    

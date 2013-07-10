@@ -1,0 +1,61 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("", "Mall", FormMethod.Post, new { name="ArtPos",Id="artPosition"}))
+{
+    <div>
+        @Html.Label(@LiveAzure.Resource.Model.Mall.MallArtPosition.Org)
+        @Html.DropDownList("Org", (List<SelectListItem>)ViewBag.list, "", new { onchange = "GetOrgID()" })
+    </div>
+    <div>
+    @Html.Grid(new GridControl()
+    .SetName("artPositionList")
+    .SetPageSize(10)
+    .SetIsAutoSize(true)
+    .SetHttpVerb(HttpVerbs.Get)
+            .SetListUrl("/Mall/ArtPositionList")
+            .SetHeight("'100%'")
+            .SetWidth("'30%'")
+            .SetColumns<LiveAzure.Models.Mall.MallArtPosition>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPosition.Code);
+                    cs.Add(x => x.Name.Matter).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPosition.Name);
+                    cs.Add(x => x.Width).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPosition.Width);
+                    cs.Add(x => x.Height).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPosition.Height);
+                    cs.Add(x => x.Matter).SetCaption(@LiveAzure.Resource.Model.Mall.MallArtPosition.Matter);
+
+                }
+            ))
+    </div>
+    <input type="button" id="add" value="@LiveAzure.Resource.Common.Add" onclick="Add()" />
+    <input type="button" id="edit" value ="@LiveAzure.Resource.Common.Edit" onclick="Edit()" />
+    <input type="button" id="delete" value ="@LiveAzure.Resource.Common.Delete" onclick="Delete()" />
+}
+<script type="text/javascript">
+    function GetOrgID() {
+        var id = $("#Org").val();
+        alert(id);
+        $.post("/Mall/ArtPosition", { id: id });
+    }
+    function Add() {
+        window.location.href = "/Mall/ArtPositionAddOrEdit";
+    }
+    function Edit() {
+        var id = $("#artPositionList").jqGrid("getGridParam", "selrow");
+        if (id == null) { alert("@LiveAzure.Resource.Common.PleaseSelectRow"); }
+        else {window.location.href = "/Mall/ArtPositionAddOrEdit?id="+id; }
+    }
+    function Delete() {
+        var id = $("#artPositionList").jqGrid("getGridParam", "selrow");
+        if (id == null) { alert("@LiveAzure.Resource.Common.PleaseSelectRow"); }
+        else {
+            $.post("/Mall/ArtPositionDelete", { id: id }, function (data) {
+                $("#ArtPositionList").trigger('reloadGrid');
+            });
+             }
+    }
+</script>

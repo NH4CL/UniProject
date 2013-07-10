@@ -1,0 +1,81 @@
+﻿@model LiveAzure.Models.General.GeneralOptional
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Index", "Optional", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+    <div>
+        @Html.HiddenFor(model => model.Gid)
+        @Html.HiddenFor(model => model.OrgID)
+    </div>
+    
+    <div class="display-field" id="drowdowndiv" >
+        @LiveAzure.Resource.Model.General.GeneralOptional.Otype
+        @Html.DropDownListFor(model => model.Otype, (List<SelectListItem>)ViewBag.optionalList, new { OnChange = "ShowRefID(this.value)" })
+        @Html.ValidationMessageFor(model => model.Otype)
+    </div>
+    
+    <script type="text/javascript">
+        //向控制器传回用户选中的属性类型
+        function ShowRefID(str) {
+            var xmlhttp;
+            if (str == "") {
+                document.getElementById("RefIDDiv").innerHTML = "";
+                return;
+            }
+
+            if (window.XMLHttpRequest) {
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("RefIDDiv").innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open("GET", "/Optional/ChangeRefIDList?optionalType=" + str, true);
+            xmlhttp.send();
+        }
+    </script>
+    
+    <div class="display-field">
+        @LiveAzure.Resource.Model.General.GeneralOptional.Code
+        @Html.EditorFor(model => model.Code).AsAutoComplete(new AutoComplete(valueId: "txtHidden", searchUrl: "AutoAddPrefix"))
+        @Html.ValidationMessageFor(model => model.Code)
+    </div>
+    
+    <div class="display-field" id="RefIDDiv" >
+        @Html.Action("ChangeRefIDList", new { optionalType = (byte)LiveAzure.Models.ModelEnum.OptionalType.GENERIC })
+    </div>
+   
+    <div class="display-field" >
+        @LiveAzure.Resource.Model.General.GeneralOptional.Sorting
+        @Html.EditorFor(model => model.Sorting)
+        @Html.ValidationMessageFor(model => model.Sorting)
+    </div>
+    
+    <div class="display-field" >
+        @LiveAzure.Resource.Model.General.GeneralOptional.Name
+        @Html.EditorFor(model => model.Name.Matter)
+        @Html.ValidationMessageFor(model => model.Name.Matter)
+    </div>
+@*    
+    <div>
+        @ResourceHelper.MatterIditor(Model.Name, "MatterEditor", "Lan")
+    </div>*@
+    
+    <div class="display-field" >
+        @LiveAzure.Resource.Model.General.GeneralOptional.InputMode
+        @Html.DropDownListFor(model => model.InputMode, (List<SelectListItem>)ViewBag.optionalInputMode)
+    </div>
+    
+    <div>
+        <input type="submit" value="add optional and goto edit the optitems" />   
+    </div>
+}

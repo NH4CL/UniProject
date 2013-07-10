@@ -1,0 +1,26 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseLedger
+@using CommonResource = LiveAzure.Resource.Common
+@using LedgerResource = LiveAzure.Resource.Model.Warehouse.WarehouseLedger
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("LedgerEditDB", "Warehouse"))
+{
+    @Html.HiddenFor(model => model.Gid)
+    <table>
+        <tr>
+            <th>@LedgerResource.LockQty</th>
+            <td>@Html.TextBoxFor(model => model.LockQty)</td>
+        </tr><tr>
+            <th>@LedgerResource.SafeQty</th>
+            <td>@Html.TextBoxFor(model => model.SafeQty)</td>
+        </tr>
+        <tr>
+            <th>@LedgerResource.MaxQty</th>
+            <td>@Html.TextBoxFor(model => model.MaxQty)</td>
+        </tr>
+    </table>
+    <input type="submit" value="@CommonResource.Edit" />
+    <input type="button" id="btnReset" value="@CommonResource.Reset" />
+}

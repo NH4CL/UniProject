@@ -1,0 +1,30 @@
+﻿@model LiveAzure.Models.General.GeneralResource
+<div class="name_line">
+<span class="culture_name">
+    @Html.HiddenFor(model => model.Gid)
+    @Html.HiddenFor(model => model.Culture)
+    @Html.TextBoxFor(model => model.Matter)
+    <label for="Matter">
+        <img src="@Url.Content("~/Content/themes/base/images/name_" + Model.Culture + ".jpg")"
+            alt="@(Model.CultureName)" title="@(Model.CultureName)" style="vertical-align:bottom;margin-left:-7px" />
+    </label>
+</span>
+</div>
+@{
+    int i = -1;
+    foreach (LiveAzure.Models.General.GeneralResItem item in Model.ResourceItems)
+    {
+        i++;
+        <div class="name_line">
+        <span class="culture_name">
+            @Html.Hidden(string.Format("ResourceItems[{0}].Gid", i), item.Gid)
+            @Html.Hidden(string.Format("ResourceItems[{0}].Culture", i), item.Culture)
+            @Html.TextBox(string.Format("ResourceItems[{0}].Matter", i), item.Matter)
+            <label for="ResourceItems_@(i)__Matter">
+                <img src="@Url.Content("~/Content/themes/base/images/name_" + item.Culture + ".jpg")"
+                    alt="@(item.CultureName)" title="@(item.CultureName)" style="vertical-align:bottom;margin-left:-7px"/>
+            </label>
+        </span>
+        </div>
+    }
+}

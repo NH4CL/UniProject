@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Order
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Order/Search",
+        success: function (html) {
+        $("#search").html(html)
+        }
+    })
+    function newOrderAdd() {
+        window.location = "/Order/OrderWithoutUser";
+    }
+
+    function editExistOrder() {
+        var selectGid = $("#OrderListGrid").jqGrid("getGridParam", "selrow");
+        if (selectGid == null) {
+            var strEditTip = "@Html.Raw(LiveAzure.Resource.Stage.OrderController.OrderViewTips)";
+            alert(strEditTip);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Order/SetViewOrderInfo",
+                data: { orderGid: selectGid },
+                success: function (data) {
+                    if (data == "failure") {
+                        alert("@LiveAzure.Resource.Stage.OrderController.NoOrder");
+                    }
+                    else {
+                        window.location = "/Order/OrderEdit";
+                    }
+                }
+            });
+        }
+    }
+   
+</script>
+
+<div id="search">
+</div>
+<div>
+    @Html.Grid(
+                new GridControl()
+                .SetName("OrderListGrid")
+                .SetPageSize(10)
+                .SetIsAutoSize(true)
+                .SetListUrl("/Order/ListOrderInformation")
+                .SetEditUrl("")
+                .SetHeight("'100%'")
+                .SetWidth("300")
+                .SetColumns<LiveAzure.Models.Order.OrderInformation>(cs =>
+                {
+                    cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                    cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Code);
+                    //cs.Add(x => x.Organization.FullName.Matter).SetName("Organization").SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Organization);
+                    //cs.Add(x => x.Channel.FullName.Matter).SetName("Channel").SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Channel);
+                    cs.Add(x => x.User.DisplayName).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.User);
+                    cs.Add(x => x.Consignee).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Consignee);
+                    cs.Add(x => x.CreateTime).SetCaption(@LiveAzure.Resource.Model.ModelBase.CreateTime).SetName("CreateTime");
+                    cs.Add(x => x.ExecuteAmount).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.ExecuteAmount);
+                    cs.Add(x => x.SaleAmount).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.SaleAmount);
+                    cs.Add(x => x.Pieces).SetName("Pieces").SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Pieces);
+                    cs.Add(x => x.TotalPaid).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.TotalPaid);
+                    cs.Add(x => x.OrderAmount).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.OrderAmount);
+                    cs.Add(x => x.PostComment).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.PostComment);
+                    cs.Add(x => x.LockStatusName).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Locking);
+                    cs.Add(x => x.OrderStatusName).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Ostatus);
+                    cs.Add(x => x.PayStatusName).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.PayStatus);
+                    cs.Add(x => x.HangStatusName).SetCaption(@LiveAzure.Resource.Model.Order.OrderInformation.Hanged);
+                })
+            )
+    <div>
+        <input type="button" value="@LiveAzure.Resource.Stage.OrderController.OrderAdd" onclick="newOrderAdd();" />
+        <input type="button" value="@LiveAzure.Resource.Stage.OrderController.OrderView" onclick="editExistOrder();" />
+    </div>
+</div>

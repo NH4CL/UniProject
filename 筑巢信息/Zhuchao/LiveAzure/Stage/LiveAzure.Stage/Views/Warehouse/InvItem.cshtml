@@ -1,0 +1,141 @@
+﻿@using InventoryResource = LiveAzure.Resource.Model.Warehouse.WarehouseInventory
+@using WarehouseInvItemResource =  LiveAzure.Resource.Model.Warehouse.WarehouseInvItem
+@using CommonResource = LiveAzure.Resource.Common
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@using InventoryStatus = LiveAzure.Models.ModelEnum.InventoryStatus
+@model LiveAzure.Models.Warehouse.WarehouseInventory
+@{
+    ViewBag.Title = "WarehouseInvItem";
+}
+
+<h2>WarehouseInvItem</h2>
+<table>
+    <tr>
+        <th>@InventoryResource.Organization</th>
+        <td>@Html.DisplayFor(model => model.Organization.FullName, "LocaleMatter", new { ID = "orgName" })</td>
+        <th>@InventoryResource.Warehouse</th>
+        <td>@Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "warehouseName" })</td>
+        <th>@InventoryResource.Code</th>
+        <td>@Html.TextBoxFor(model => model.Code, new { disabled = "disabled" })</td>
+    </tr>
+    <tr>
+        <th>@InventoryResource.Istatus</th>
+        <td>@Html.TextBoxFor(model => model.InventoryStatusName, new { disabled = "disabled" })</td>
+        <th>@InventoryResource.Quantity</th>
+        <td>@Html.TextBoxFor(model => model.Quantity, new { disabled = "disabled" })</td>
+        <th>@InventoryResource.Prepared</th>
+        <td>@Html.DisplayFor(model => model.Prepared, "UserName", new { ID = "PreparedName" })</td>
+    </tr>
+    <tr>
+        <th>@InventoryResource.Approved</th>
+        <td>@Html.DisplayFor(model => model.Approved, "UserName", new { ID = "ApprovedName" })</td>
+        <th>@InventoryResource.ApproveTime</th>
+        <td>@Html.DisplayFor(model => model.ApproveTime, "Time", new { ID = "ApprovedTime" })</td>
+        <th>@InventoryResource.Remark</th>
+        <td>@Html.TextAreaFor(model => model.Remark, new { disabled = "disabled" });</td>
+    </tr>
+</table>
+<div id="InvItemList"></div>
+@if (ViewBag.privEnableApprove == "1")
+{
+<input type="button" id="btnConfirm" value="@CommonResource.Confirm" />
+}
+else
+{
+<input type="button" value="@CommonResource.Confirm" disabled="disabled" />
+}
+<input type="button" id="btnBack" value="@CommonResource.Back" />
+@if (ViewBag.privEnablePrepare == "1")
+{
+<input type="button" id="btnEditStock" value="@CommonResource.Edit" />
+}
+else
+{
+<input type="button" value="@CommonResource.Edit" disabled="disabled" />
+}
+@if (ViewBag.privEnableDelete == "1")
+{
+<input type="button" id="btnDelete" value="@CommonResource.Delete" />
+}
+else
+{
+<input type="button" value="@CommonResource.Delete" disabled="disabled" />
+}
+@{
+    if (Model.Istatus == (byte)InventoryStatus.CONFIRMED)
+    {
+        <script type="text/javascript">
+            $("#btnConfirm").click(function () {
+                alert("该单据已确认");
+            });
+            $("#btnEditStock").click(function () {
+                alert("该单据已确认");
+            });
+            $("#btnDelete").click(function () {
+                alert("该单据已确认");
+            });
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            $("#btnConfirm").click(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/Warehouse/InventoryConfirm",
+                    data: { invID: "@Model.Gid" },
+                    async: false,
+                    success: function (result) {
+                        switch (result) {
+                            case 0:
+                                alert("@WCResource.ConfirmSuccess");
+                                $("#btnConfirm").attr("disabled", "disabled");
+                                $("#btnEditStock").attr("disabled", "disabled");
+                                break;
+                            case 1: alert("盘点记录不存在或已作废");
+                                break;
+                            case 2: alert("盘点记录状态不正确");
+                                break;
+                            case 3: alert("货架上没有对应的SKU");
+                                break;
+                            case 4: alert("盘点结果与实际不符，需调整货位数量或盘点结果");
+                                break;
+                            default: alert("@WCResource.Error");
+                                break;
+                        }
+                    }
+                });
+            });
+            $("#btnEditStock").click(function () {
+                document.location.replace("/Warehouse/InventoryEdit?invID=@Model.Gid");
+            });
+            $("#btnDelete").click(function () {
+                if (confirm("@WCResource.ConfirmDelete")) {
+                    $.post("/Warehouse/InventoryDeleteDB", { invID : "@Model.Gid" },
+                        function (result) {
+                            if (result) {
+                                alert("@WCResource.DeleteSuccess");
+                                document.location.replace("/Warehouse/Inventory");
+                            } else {
+                                alert("@WCResource.Error");
+                            }
+                        });
+                }
+            });
+        </script>
+    } 
+}
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Warehouse/InvItemGrid",
+        data: { invID: "@Model.Gid" },
+        async: false,
+        success: function (html) {
+            $("#InvItemList").html(html);
+        }
+    });
+    $("#btnBack").click(function () {
+        document.location.replace("/Warehouse/Inventory");
+    });
+</script>

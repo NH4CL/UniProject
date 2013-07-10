@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "setOrgforId";
+    Layout = null;
+}
+
+  <p>
+  @LiveAzure.Resource.Model.Member.MemberOrgChannel.Organization:
+  @Html.DropDownList("orgCode", ViewData["orgCode"] as SelectList, new { id = "orgCode", name = "orgCode", style = "width:270px;", onchange = "changeOrg()" })
+  </p>
+
+  <script type="text/javascript">
+      function changeOrg() {
+
+          var id = $("#orgCode option:selected").val();
+          alert(id);
+          $.ajax({
+
+              type: "POST",
+
+              url: "/Organization/SetOrgforId1",
+
+              data: { strorgforid: id },
+
+              datatype: "html",
+
+              success: function (html) {
+//                  alert("OK");
+                  if ($("#divWarehouse").css("display") == "block") {
+                      $("#gridWarehouse").trigger('reloadGrid');
+                  }
+                  else if ($("#divSupplier").css("display") == "block") {
+                      $("#gridSupplier").trigger('reloadGrid');
+                  }
+                  else if ($("#divShipping").css("display") == "block") {
+                      $("#gridShipping").trigger('reloadGrid');
+                  }
+              }
+          });
+      }
+  </script>

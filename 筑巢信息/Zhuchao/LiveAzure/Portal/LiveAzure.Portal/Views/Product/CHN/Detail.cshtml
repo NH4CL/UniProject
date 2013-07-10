@@ -1,0 +1,157 @@
+﻿@{
+    ViewBag.Title = "商品详情";
+    Layout = "~/Views/Shared/CHN/_Layout.cshtml";  
+}
+<script type="text/javascript">
+     $(function () {
+         $.ajax({
+             type: "POST",
+             url: "/Product/Left",
+             success: function (html) {
+                 $("#Listleft").html(html);
+             }
+         });
+
+     });
+
+     function imgchange() {
+         document.getElementById("detail_main_img").src = document.getElementById("detail_img_list_01").src;
+     }
+</script>
+<div class="detail_page">
+    <div id="Listleft"></div>
+    <div class="List_right">
+        <div class="page_root">
+            <div class="page_root_pic">
+                <img alt="" src="@Url.Content("/Content/img/root.png")" />
+            </div>
+            <div class="page_root_content">
+                当前位置：
+            </div>
+        </div>
+        <div class="product_info">
+            <div class="product_name">
+                <b>【年度盛典】四合地板 橡木本色 三层实木复合地板</b>
+            </div>
+            <div class="product_pic_info">
+                <div class="product_main_pic">
+                    <img id="detail_main_img" alt="" src="@Url.Content("/Content/img/detail_test.png")" />
+                </div>
+                <div class="product_samall_pic_list">
+                    <div class="product_samall_pic">
+                        <a href="javascript:;"><img id="detail_img_list_01" onclick="imgchange();" alt="" src="@Url.Content("/Content/img/detail_small_test.png")" /></a>
+                    </div>
+                    <div class="product_samall_pic">
+                        <a href="javascript:;"><img alt="" src="@Url.Content("/Content/img/detail_small_test.png")" /></a>
+                    </div>
+                    <div class="product_samall_pic">
+                        <a href="javascript:;"><img alt="" src="@Url.Content("/Content/img/detail_small_test.png")" /></a>
+                    </div>
+                    <div class="product_samall_pic">
+                        <a href="javascript:;"><img alt="" src="@Url.Content("/Content/img/detail_small_test.png")" /></a>
+                    </div>
+                    <div class="product_samall_pic">
+                        <a href="javascript:;"><img alt="" src="@Url.Content("/Content/img/detail_small_test.png")" /></a>
+                    </div>
+                </div>
+            </div>
+            <div class="product_buy_info">
+                <div class="product_buy_basic">
+                    <table>
+                        <tr>
+                            <th>价格：</th>
+                            <td>330.00元</td>
+                        </tr>
+                        <tr>
+                            <th>促销：</th>
+                            <td>330.00元</td>
+                        </tr>
+                        <tr>
+                            <th>运费：</th>
+                            <td>卖家承担运费</td>
+                        </tr>
+                        <tr>
+                            <th>30天售出：</th>
+                            <td><b>532</b>件</td>
+                        </tr>
+                        <tr>
+                            <th>送积分：</th>
+                            <td>单件送<b>53</b>商城积分</td>
+                        </tr>
+                        <tr>
+                            <th>特色服务：</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>付款方式：</th>
+                            <td>支持信用卡付款</td>
+                        </tr>
+                        <tr>
+                            <th>颜色分类: </th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>数量: </th>
+                            <td><input id="detail_buy_num" type="text" value="1" />(库存1666件)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="product_buy_button">
+                    <input type="button" value="立刻购买" />
+                    <input type="button" value="加入购物车" />
+                </div>
+            </div>
+            <div class="product_share">
+            
+            </div>
+        </div>
+            <div class="product_detail"><div class="Tab">
+
+                <!--使边框融合-->
+                <ul id="tabBorder">
+                    <li class="tabBorderActive">宝贝详情</li>
+                    <li>评价详情</li>
+                    <li>成交记录</li>
+                    <li>服务质量</li>
+                    <li>给我推荐</li>
+                    <li>售后服务</li>
+
+                </ul>
+                <div class="divBorder divContentActive">
+                    content 1 (border)
+                </div>
+                <div class="divBorder">
+                    content 2 (border)
+                </div>
+                <div class="divBorder">
+                    content 3 (border)
+                </div> 
+                <div class="divBorder">
+                    content 4 (border)
+                </div>
+                <div class="divBorder">
+                    content 5 (border)
+                </div>
+                <div class="divBorder">
+                    content 6 (border)
+                </div>
+            </div>
+                <script language="javascript" type="text/javascript">
+
+                    //融合边框的效果
+
+                    $(document).ready(function () {
+                        $("#tabBorder li").each(function (index) {
+                            $(this).click(function () {
+                                var liHeader = $(this);
+                                $("#tabBorder li.tabBorderActive").removeClass("tabBorderActive");
+                                $("div.divBorder.divContentActive").removeClass("divContentActive");
+                                liHeader.addClass("tabBorderActive");
+                                $("div.divBorder:eq(" + index + ")").addClass("divContentActive");
+                            });
+                        });
+                    });
+                </script> 
+            </div>
+        </div>
+    </div>

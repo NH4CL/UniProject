@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null; 
+}
+@model LiveAzure.Models.Member.MemberSubscribe
+<div class="acc_right">
+    <div class="page_root">
+        <div class="page_root_pic">
+                <img alt="" src="@Url.Content("/Content/img/root.png")" />
+            </div>
+        <div class="page_root_content">
+            当前位置：
+            </div>
+    </div>
+    <div class="My_Order">
+        <div class="Order_title"><b>我的订阅</b></div>        
+        @Html.EditorFor(model=>model.ShortMessage) 短信订阅
+        @Html.EditorFor(model=>model.Email) 邮件订阅
+        @Html.EditorFor(model=>model.Bulletin)简报
+        @Html.EditorFor(model=>model.OrderConfirm)订单确认提醒
+        @Html.EditorFor(model=>model.OrderDelivery)订单发货提醒
+        @Html.EditorFor(model=>model.ShortSupply)缺货的到货通知
+        @Html.EditorFor(model=>model.Promotion)促销信息
+        @Html.EditorFor(model=>model.Discount)打折信息
+        @Html.EditorFor(model=>model.UnionNotice)联盟获利通知
+    </div>
+</div>

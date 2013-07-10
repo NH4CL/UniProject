@@ -1,0 +1,54 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    Layout = null;
+    }
+    <p>
+        <br />
+        <br />
+    </p>
+<div>
+    <p>
+         @ViewBag.optionalName
+         @LiveAzure.Resource.Stage.OptionalController.OptionalItemList
+    </p>
+</div>
+@Html.Grid(new GridControl()
+        .SetName("optionalItemgrid")
+        .SetPageSize(10)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Optional/OptionalItemList")
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetColumns<LiveAzure.Models.General.GeneralOptItem>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetEditable(false).SetHidden(true);
+            cs.Add(x => x.Optional)
+                .SetCaption(LiveAzure.Resource.Model.General.GeneralOptItem.Optional);
+            cs.Add(x => x.Code)
+                .SetCaption(LiveAzure.Resource.Model.General.GeneralOptItem.Code);
+            cs.Add(x => x.Name)
+                .SetCaption(LiveAzure.Resource.Model.General.GeneralOptItem.Name);
+            cs.Add(x => x.Sorting)
+                .SetCaption(LiveAzure.Resource.Model.General.GeneralOptItem.Sorting);
+        }))
+<input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddOptionalItemPage()" />
+<input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemoveOptionalItem()" />
+<script type="text/javascript">
+    function RemoveOptionalItem() {
+        var itemrowid = $("#optionalItemgrid").jqGrid("getGridParam", "selrow");
+        if (itemrowid == null) {
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        }
+        else {
+            if (confirm('@LiveAzure.Resource.Stage.OptionalController.DeleteConfirm' + "?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Optional/RemoveOptionalItems",
+                    data: { optItemGid: itemrowid },
+                    success: RefreshOptionalItemsGrid()
+                });
+            }
+        }
+    }
+</script>

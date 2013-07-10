@@ -1,0 +1,46 @@
+﻿@model LiveAzure.Models.Member.MemberUserShortcut
+@ControlManager.ProgramSelect()
+
+@using (@Ajax.BeginForm("SaveEditShortcut", "Config", new AjaxOptions { OnSuccess = "RefreshProgramGrid()" }, new { id = "programShortcutEditForm" }))
+{
+<div class="down_AddorEdit">
+    @Html.HiddenFor(model => model.Gid)
+    @Html.HiddenFor(model => model.UserID)
+    <table>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Member.MemberUserShortcut.Program)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.ProgID, "ProgramSelect")
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Member.MemberUserShortcut.Sorting)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Sorting)
+                @Html.ValidationMessageFor(model => model.Sorting)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.Member.MemberUserShortcut.Icon)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Icon)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.Label(@LiveAzure.Resource.Model.ModelBase.Remark)
+            </th>
+            <td>
+                @Html.EditorFor(model => model.Remark)
+            </td>
+        </tr>
+    </table> 
+    <input type="submit" value="@LiveAzure.Resource.Common.Submit" onclick="ClosePanel();" />
+</div>
+}

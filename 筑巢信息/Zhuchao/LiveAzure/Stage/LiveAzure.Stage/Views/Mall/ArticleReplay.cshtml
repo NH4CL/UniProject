@@ -1,0 +1,123 @@
+﻿@using LiveAzure.Controls.LiveEditor
+@model LiveAzure.Models.Mall.MallArticle
+@ControlManager.LiveEditor()
+@{
+    ViewBag.Title = "ArticleReplay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+function saveArticle(data) {
+        if (data == "error") {
+            alert("@LiveAzure.Resource.Common.OperationFailed");
+        }
+        else {
+            window.location.href = "/Mall/ArticleIndex";
+        }
+    }
+</script>
+
+@using (Ajax.BeginForm("ArticleSave", "Mall", new AjaxOptions { HttpMethod = "POST", OnSuccess = "saveArticle" }, new { ParentId = Model.aParent, ProductId = Model.ProdID }))
+{
+    @Html.HiddenFor(model => model.Gid)
+    @Html.HiddenFor(model => model.OrgID)
+    <table>
+         <tr>
+            <td>
+                @LiveAzure.Resource.Model.Mall.MallArticle.Parent
+            </td>
+            <td>
+               @Html.HiddenFor(model => model.aParent)
+               @Html.LabelForModel(Model.Parent.Code)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArticle.ProdID
+            </td>
+            <td>
+               @Html.HiddenFor(model => model.ProdID)
+               @if (Model.ProdID != null)
+               {
+                   @Html.LabelForModel(Model.Product.Code)
+               }
+               else
+               {
+                   @Html.LabelForModel(null)
+               }
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArticle.Code
+            </td>
+            <td>
+               @Html.EditorFor(model => model.Code)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArticle.Atype
+            </td>
+            <td>
+               @Html.DropDownListFor(model => model.Atype, (List<SelectListItem>)ViewBag.list)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArticle.UserID
+            </td>
+            <td>
+               @Html.EditorFor(model => model.UserName)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArticle.Title
+            </td>
+            <td>
+               @Html.HiddenFor(model => model.aTitle)
+               @Html.EditorFor(model => model.Title.Matter)
+            </td>
+         </tr>
+         <tr>
+            <td>
+              @LiveAzure.Resource.Model.Mall.MallArticle.Matter
+            </td>
+            <td>
+               @Html.EditorFor(model => model.Matter, "LargeMatter")
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArticle.Copyright
+            </td>
+            <td>
+               @Html.EditorFor(model => model.Copyright)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArticle.Keywords
+            </td>
+            <td>
+               @Html.EditorFor(model => model.Keywords)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               @LiveAzure.Resource.Model.Mall.MallArticle.Remark
+            </td>
+            <td>
+               @Html.TextAreaFor(model => model.Remark)
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            </td>
+            <td>
+               <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+            </td>
+         </tr>
+    </table>
+}

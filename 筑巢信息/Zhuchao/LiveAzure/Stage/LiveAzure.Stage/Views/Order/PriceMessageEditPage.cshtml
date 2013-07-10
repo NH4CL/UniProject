@@ -1,0 +1,80 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Order.OrderInformation
+@using (@Ajax.BeginForm("setPriceInformation", "Order", new AjaxOptions { OnComplete = "PriceMessageSave" }, new { id = "PriceMessageEditForm" }))
+{
+<table class="DIY_table">
+    <tr>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.ShippingFee)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.ShippingFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.TaxFee)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.TaxFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Insurance)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.Insurance)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PaymentFee)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.PaymentFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PackingFee)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.PackingFee)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.ResidenceFee)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.ResidenceFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.LiftGateFee)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.LiftGateFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.InstallFee)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.InstallFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.OtherFee)
+        </th>
+        <td>
+            @Html.EditorFor(model => model.OtherFee)
+        </td>
+        <th></th><td></td>
+    </tr>
+</table>
+}
+<div style="clear:both;">
+    <input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SubmitPriceMessage();" />
+</div>
+<script type="text/javascript">
+    function SubmitPriceMessage() {
+        $("#PriceMessageEditForm").submit();
+    }
+    function PriceMessageSave() {
+        refreshPriceMessageDisplayPage();
+        refreshCashInformation();
+    }
+</script>

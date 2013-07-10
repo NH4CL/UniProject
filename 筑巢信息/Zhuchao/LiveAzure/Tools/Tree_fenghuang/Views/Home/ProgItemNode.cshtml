@@ -1,0 +1,38 @@
+﻿@using LiveAzure.Resource.Model.General;
+@using LiveAzure.Models.General;
+@model LiveAzure.Models.General.GeneralProgNode
+<script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
+@using (@Ajax.BeginForm("SaveProgramNode", "Program", new AjaxOptions { UpdateTargetId = "" }, new { id = "programItemForm" }))
+ {
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.General.GeneralProgNode.Code)
+        @Html.EditorFor(model=>model.Code)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.General.GeneralProgNode.Name)
+        @Html.EditorFor(model=>model.Name.Matter)
+    </div>
+    <div>
+        @Html.Label(LiveAzure.Resource.Model.General.GeneralProgNode.InputMode)
+        @Html.DropDownListFor(model => model.InputMode, ViewBag.modelList as IEnumerable<SelectListItem>, new { onchange="selectOption()"})
+    </div>
+    <div id="content" style="visibility:hidden">
+            @Html.Label(LiveAzure.Resource.Model.General.GeneralProgNode.Optional)
+            @Html.EditorFor(model=>model.Optional.Matter)
+    </div>
+    <div>
+    <input type="submit" value="@LiveAzure.Resource.Stage.ProgramController.ok" />
+    </div>
+    
+ }
+ <script type="text/javascript">
+     function selectOption() {
+         var mode = $("#InputMode").val();
+         if (mode == 1) {
+            
+             document.getElementById("content").style.visibility = "visible";
+         } else {
+             document.getElementById("content").style.visibility = "hidden";
+         }
+     }
+</script>

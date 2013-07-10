@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "PrivProduct";
+    Layout = null;
+}
+<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "../Privilege/PrivProductTree",
+        data: {},
+        success: function (html) {
+            $("#PrivProduct").html(html);
+        }
+    });
+    $(document).ready(function () {
+        if ('@(ViewBag.status)' == 1) {
+            $("#StatusProduct").attr('checked', true);
+            $("#PrivProduct").css("display", "block");
+            $("#Choose").css("display", "block");
+
+        }
+        else {
+            $("#StatusProduct").attr('checked', false);
+            $("#PrivProduct").css("display", "none");
+            $("#Choose").css("display","none");
+        }
+    });
+
+    function showTree() {
+        var Procheck;
+        if ($("#StatusProduct").attr('checked')) {
+            $("#PrivProduct").css("display", "block");
+            $("#Choose").css("display", "block");
+            Procheck = true;
+        }
+        else {
+            $("#PrivProduct").css("display", "none");
+            $("#Choose").css("display", "none");
+            Procheck = false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Privilege/DelAll",
+            data: { IsCheck: Procheck, ptype: 5 },
+            datatype: "html",
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+    function Confirm(){
+        id = $("#choose").val();
+        alert(id);
+        $.ajax({
+
+            type: "POST",
+
+            url: "/Privilege/GetID",
+
+            data: { id: id },
+
+            success: function (data) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "../Privilege/PrivProductTree",
+                    data: {},
+                    success: function (html) {
+                        $("#PrivProduct").html(html);
+                    }
+                });
+            }
+
+        });
+    }
+</script>
+<div class="down_AddorEdit">
+    <div>
+    <input type="checkbox" id="StatusProduct"  onclick="showTree()"/>
+    @Html.Label(@LiveAzure.Resource.Stage.PrivilegeController.on)
+
+    </div>
+
+    <div id="Choose">
+    <table>
+        <tr>
+            <th>@Html.Label("", @LiveAzure.Resource.Stage.OrganizationController.organization)</th>
+            <td>@Html.DropDownList("choose", ViewData["Orglist"] as IEnumerable<SelectListItem>, new { onchange = "Confirm()" })</td>
+        </tr>
+    </table>
+    </div>
+    <div id="PrivProduct"  >
+
+    </div>
+</div>
+

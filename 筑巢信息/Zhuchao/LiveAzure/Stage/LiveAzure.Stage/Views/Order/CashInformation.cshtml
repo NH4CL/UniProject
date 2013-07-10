@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+<style>
+fieldset p
+{
+    float:right;
+    clear:both;
+    }
+</style>
+@model LiveAzure.Models.Order.OrderInformation
+
+<fieldset>
+<legend>@LiveAzure.Resource.Stage.OrderController.CashInformation</legend>
+<p>
+@Model.ExecuteAmount (@LiveAzure.Resource.Model.Order.OrderInformation.ExecuteAmount) +
+@Model.ShippingFee (@LiveAzure.Resource.Model.Order.OrderInformation.ShippingFee) +
+@Model.TaxFee (@LiveAzure.Resource.Model.Order.OrderInformation.TaxFee) +
+@Model.Insurance (@LiveAzure.Resource.Model.Order.OrderInformation.Insurance) +
+@Model.PaymentFee (@LiveAzure.Resource.Model.Order.OrderInformation.PaymentFee) +
+@Model.PackingFee (@LiveAzure.Resource.Model.Order.OrderInformation.PackingFee) +
+@Model.ResidenceFee (@LiveAzure.Resource.Model.Order.OrderInformation.ResidenceFee) +
+@Model.LiftGateFee (@LiveAzure.Resource.Model.Order.OrderInformation.LiftGateFee) +
+@Model.InstallFee (@LiveAzure.Resource.Model.Order.OrderInformation.InstallFee) +
+@Model.OtherFee (@LiveAzure.Resource.Model.Order.OrderInformation.OtherFee) = 
+@Model.TotalFee (@LiveAzure.Resource.Model.Order.OrderInformation.TotalFee)
+</p>
+<p>
+@Model.PointPay (@LiveAzure.Resource.Model.Order.OrderInformation.PointPay) +
+@Model.CouponPay (@LiveAzure.Resource.Model.Order.OrderInformation.CouponPay) +
+@Model.BounsPay (@LiveAzure.Resource.Model.Order.OrderInformation.BounsPay) +
+@Model.MoneyPaid (@LiveAzure.Resource.Model.Order.OrderInformation.MoneyPaid) =
+@Model.TotalPaid (@LiveAzure.Resource.Model.Order.OrderInformation.TotalPaid)
+</p>
+<p>
+@Model.TotalFee (@LiveAzure.Resource.Model.Order.OrderInformation.TotalFee) -
+@Model.TotalPaid (@LiveAzure.Resource.Model.Order.OrderInformation.TotalPaid) +
+@Model.Differ (@LiveAzure.Resource.Model.Order.OrderInformation.Differ) =
+@Model.OrderAmount (@LiveAzure.Resource.Model.Order.OrderInformation.OrderAmount)
+</p>
+
+</fieldset>

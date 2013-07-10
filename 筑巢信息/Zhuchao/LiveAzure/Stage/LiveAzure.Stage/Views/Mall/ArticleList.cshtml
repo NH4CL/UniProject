@@ -1,0 +1,66 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Mall.MallArticle
+@{
+    Layout =null;
+}
+<div id="grid">
+    <table id="gridlist">
+    @Html.Grid(new GridControl()
+    .SetName("gridlist")
+    .SetPageSize(10)
+    .SetIsAutoSize(false)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Mall/ArticleGridList")
+    .SetHeight("'100%'")
+    .SetWidth("'30%'")
+    .SetColumns<LiveAzure.Models.Mall.MallArticle>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Model.Mall.MallArticle.Code);
+        cs.Add(x => x.ArticleType.Name.Matter).SetCaption(@LiveAzure.Resource.Model.Mall.MallArticle.Atype);
+        cs.Add(x => x.UserName).SetCaption(@LiveAzure.Resource.Model.Mall.MallArticle.UserID);
+        cs.Add(x => x.Title.Matter).SetCaption(@LiveAzure.Resource.Model.Mall.MallArticle.Title);
+        //if(Model.Parent!=null)
+        //{
+        //    cs.Add(x => x.Parent.Code).SetCaption("Parent");
+        //}
+        //else
+        //{
+        //    cs.Add(null);
+        //}
+    }))
+    </table>
+    <div id="pager3"></div>
+</div>
+<input type="button" id="ADD" value="@LiveAzure.Resource.Common.Add" onclick="add()" />
+<input type="button" id="REPLY" value="@LiveAzure.Resource.Common.Replay" onclick="replay()" />
+<input type="button" id="EDIT" value="@LiveAzure.Resource.Common.Edit" onclick="edit()" />
+<input type="button" id="DELETE" value="@LiveAzure.Resource.Common.Delete" onclick="del()" />
+
+<script type="text/javascript">
+    function add() {
+    window.location.href="/Mall/ArticleAddOrEdit";
+}
+function replay() {
+    var id = $("#gridlist").jqGrid("getGridParam", "selrow");
+    if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+    else {
+        window.location.href = "/Mall/ArticleReplay?id="+id;
+    }
+}
+    function edit() {
+        var id = $("#gridlist").jqGrid("getGridParam", "selrow");
+        if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Mall/ArticleAddOrEdit?id=" + id;
+        }
+    }
+    function del() {
+        var id = $("#gridlist").jqGrid("getGridParam", "selrow");
+        if (id == null) alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+        else {
+            window.location.href = "/Mall/ArticleDelete?id="+id;
+        }
+    }
+</script>

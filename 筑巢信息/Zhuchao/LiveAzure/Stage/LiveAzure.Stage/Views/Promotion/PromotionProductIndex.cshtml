@@ -1,0 +1,71 @@
+﻿@{
+    Layout = null;
+    }
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models.Order
+<script type="text/javascript">
+    function addPromotionProduct() {
+        $.ajax({
+            type: "POST",
+            url: "/Promotion/PromotionProductEdit",
+            data: { bProductEdit: false },
+            success: function (html) {
+                $("#PromotionProductEditPage").html(html);
+            }
+        });
+    }
+    function editPromotionProduct() {
+        var id = $("#PromotionProductGrid").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            var selectTips = "@LiveAzure.Resource.Common.PleaseSelectRow";
+            alert(selectTips);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Promotion/PromotionProductEdit",
+                data: { bProductEdit: true, promotionProductGid: id },
+                success: function (html) {
+                    $("#PromotionProductEditPage").html(html);
+                }
+            });
+        }
+    }
+
+    var promotionSKUPanel = new OpenPanel();
+    promotionSKUPanel.bLoading = true;
+    promotionSKUPanel.width = 500;
+    promotionSKUPanel.height = 600;
+    promotionSKUPanel.title = "@LiveAzure.Resource.Stage.PromotionController.PromotionProduct";
+    promotionSKUPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+</script>
+<div>
+     @Html.Grid(
+            new GridControl()
+            .SetName("PromotionProductGrid")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Promotion/ListPromotionProductInfomation")
+            .SetEditUrl("")
+            .SetHeight("'100%'")
+            .SetWidth("300")
+            .SetColumns<LiveAzure.Models.Order.PromotionProduct>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Promotion.Name.Matter).SetName("PromotionName").SetCaption(LiveAzure.Resource.Model.Order.PromotionProduct.Promotion);
+                cs.Add(x => x.OnSkuItem.SkuItem.Code).SetName("PromotionProductCode").SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Code + "(" + LiveAzure.Resource.Model.Product.ProductOnSale.Code + ")");
+                cs.Add(x => x.OnSkuItem.FullName.Matter).SetName("PromotionProductName").SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.FullName);
+                cs.Add(x => x.Quantity).SetCaption(LiveAzure.Resource.Model.Order.PromotionProduct.Quantity);
+                cs.Add(x => x.Price.Cash).SetName("ProductPrice").SetCaption(LiveAzure.Resource.Model.Order.PromotionProduct.Price);
+                cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+            })
+    )
+    <div>
+        <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="addPromotionProduct();" />
+        <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="editPromotionProduct();" />
+    </div>
+    <div id="PromotionProductEditPage">        
+    </div>
+</div>

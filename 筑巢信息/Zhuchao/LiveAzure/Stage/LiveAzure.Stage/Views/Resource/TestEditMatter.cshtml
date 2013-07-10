@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "TestEditMatter";
+}
+@model LiveAzure.Models.General.GeneralResource
+
+<!--演示文字-->
+<h2>多语言资源编辑器测试演示页面</h2>
+
+为了测试，此页面自动在数据库生成了一个GeneralResource (res)和两个GeneralResItem作为子项(resItem1,resItem2)<br />
+<table style=" border-style:solid; border-color:Blue; border-width:thin; background-color:Silver;color:Fuchsia">
+    <caption style="color:Blue; font-size:larger">部分属性值</caption>
+    <tr>
+        <td>
+            <b style="color:Red">GeneralResource res:</b><br />
+            Gid:@Model.Gid<br />
+            Culture:2052(简体中文)<br />
+            Matter:“我是中文名字”<br />
+            ResItems:{resItem1,resItem2}
+        </td>
+        <td>
+            <b style="color:Orange">GeneralResItem resItem1:</b><br />
+            Culture:1036(法文)<br />
+            Matter:“我是法国名字（PS:我不会法文，囧）”<br />
+            ResID:@(Model.Gid)(指向res)<br />
+        </td>
+        <td>
+            <b style="color:Orange">GeneralResItem resItem2:</b><br />
+            Culture:1031(英语)<br />
+            Matter:“It's an English name.”<br />
+            ResID:@(Model.Gid)(指向res)<br />
+        </td>
+    </tr>
+</table>
+
+接下来就是正式介绍控件了。<br />
+用法展示<br />
+
+详细页面参见Stage\Views\Resource\TestEditMatter.cshtml<br />
+
+@Html.EditorFor(model => model, "Matter")

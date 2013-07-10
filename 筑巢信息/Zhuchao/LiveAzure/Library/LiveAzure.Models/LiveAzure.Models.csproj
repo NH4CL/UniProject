@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CE38881A-6DA3-42BD-A336-488761B6747E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LiveAzure.Models</RootNamespace>
+    <AssemblyName>LiveAzure.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\LiveAzure.Model.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\LiveAzure.Model.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bases.cs" />
+    <Compile Include="ExcelData.cs" />
+    <Compile Include="Exchange\ExTaobaoLocation.cs" />
+    <Compile Include="Exchange\ExTaobaoOrder.cs" />
+    <Compile Include="Exchange\ExTaobaoOrdItem.cs" />
+    <Compile Include="Exchange\ExTaobaoPromotion.cs" />
+    <Compile Include="Exchange\ExTaobaoTradeRate.cs" />
+    <Compile Include="Exchange\ExTaobaoRefund.cs" />
+    <Compile Include="Exchange\ExTaobaoRefundRemind.cs" />
+    <Compile Include="Exchange\ExTaobaoUser.cs" />
+    <Compile Include="Exchange\ExTaobaoUserCredit.cs" />
+    <Compile Include="Exchange\ExTaobaoArea.cs" />
+    <Compile Include="Exchange\ExTaobaoLogisticsCompany.cs" />
+    <Compile Include="Exchange\ExTaobaoDeliveryPending.cs" />
+    <Compile Include="Exchange\ExTaobaoUserOrgan.cs" />
+    <Compile Include="Finance\FinanceInvoice.cs" />
+    <Compile Include="Finance\FinancePayment.cs" />
+    <Compile Include="Finance\FinancePayType.cs" />
+    <Compile Include="General\GeneralPrivTemplate.cs" />
+    <Compile Include="General\GeneralPrivItem.cs" />
+    <Compile Include="General\GeneralErrorReport.cs" />
+    <Compile Include="General\GeneralTodoList.cs" />
+    <Compile Include="LiveEntities.cs" />
+    <Compile Include="General\GeneralConfig.cs" />
+    <Compile Include="General\GeneralLargeObject.cs" />
+    <Compile Include="General\GeneralOptional.cs" />
+    <Compile Include="General\GeneralOptItem.cs" />
+    <Compile Include="General\GeneralResItem.cs" />
+    <Compile Include="General\GeneralResource.cs" />
+    <Compile Include="General\GeneralLargeItem.cs" />
+    <Compile Include="General\GeneralStandardCategory.cs" />
+    <Compile Include="General\GeneralPrivateCategory.cs" />
+    <Compile Include="General\GeneralRegion.cs" />
+    <Compile Include="General\GeneralMeasureUnit.cs" />
+    <Compile Include="General\GeneralCultureUnit.cs" />
+    <Compile Include="General\GeneralMessageTemplate.cs" />
+    <Compile Include="General\GeneralMessagePending.cs" />
+    <Compile Include="General\GeneralMessageReceive.cs" />
+    <Compile Include="General\GeneralIpBase.cs" />
+    <Compile Include="General\GeneralProgram.cs" />
+    <Compile Include="General\GeneralProgNode.cs" />
+    <Compile Include="General\GeneralAction.cs" />
+    <Compile Include="Mall\MallArticle.cs" />
+    <Compile Include="Mall\MallArtPosition.cs" />
+    <Compile Include="Mall\MallArtPublish.cs" />
+    <Compile Include="Mall\MallCart.cs" />
+    <Compile Include="Mall\MallDisabledIp.cs" />
+    <Compile Include="Mall\MallFavorite.cs" />
+    <Compile Include="Mall\MallFriendLink.cs" />
+    <Compile Include="Mall\MallHotItem.cs" />
+    <Compile Include="Mall\MallHotWord.cs" />
+    <Compile Include="Mall\MallFocusProduct.cs" />
+    <Compile Include="Mall\MallSensitiveWord.cs" />
+    <Compile Include="Mall\MallVisitClick.cs" />
+    <Compile Include="Member\MemberChannel.cs" />
+    <Compile Include="Member\MemberOrgChannel.cs" />
+    <Compile Include="Member\MemberOrganization.cs" />
+    <Compile Include="Member\MemberOrgCulture.cs" />
+    <Compile Include="Member\MemberRole.cs" />
+    <Compile Include="Member\MemberUser.cs" />
+    <Compile Include="Member\MemberAddress.cs" />
+    <Compile Include="Member\MemberOrgAttribute.cs" />
+    <Compile Include="Member\MemberUserAttribute.cs" />
+    <Compile Include="Member\MemberPoint.cs" />
+    <Compile Include="Member\MemberUsePoint.cs" />
+    <Compile Include="Member\MemberLevel.cs" />
+    <Compile Include="Member\MemberSubscribe.cs" />
+    <Compile Include="Member\MemberUserEvent.cs" />
+    <Compile Include="Member\MemberPrivilege.cs" />
+    <Compile Include="Member\MemberPrivItem.cs" />
+    <Compile Include="Member\OrganizationBase.cs" />
+    <Compile Include="Member\MemberUserShortcut.cs" />
+    <Compile Include="Order\OrderAttribute.cs" />
+    <Compile Include="Order\OrderHisItem.cs" />
+    <Compile Include="Order\OrderHistory.cs" />
+    <Compile Include="Order\OrderInformation.cs" />
+    <Compile Include="Order\OrderItem.cs" />
+    <Compile Include="Order\OrderProcess.cs" />
+    <Compile Include="Order\OrderSplitPolicy.cs" />
+    <Compile Include="Order\PromotionCoupon.cs" />
+    <Compile Include="Order\PromotionInformation.cs" />
+    <Compile Include="Order\PromotionMutex.cs" />
+    <Compile Include="Order\PromotionProduct.cs" />
+    <Compile Include="Order\OrderShipping.cs" />
+    <Compile Include="Product\ProductExtendAttribute.cs" />
+    <Compile Include="Product\ProductExtendCategory.cs" />
+    <Compile Include="Product\ProductGallery.cs" />
+    <Compile Include="Product\ProductInfoItem.cs" />
+    <Compile Include="Product\ProductInformation.cs" />
+    <Compile Include="Product\ProductOnAdjust.cs" />
+    <Compile Include="Product\ProductOnItem.cs" />
+    <Compile Include="Product\ProductOnLevelDiscount.cs" />
+    <Compile Include="Product\ProductOnPayment.cs" />
+    <Compile Include="Product\ProductOnRelation.cs" />
+    <Compile Include="Product\ProductOnSale.cs" />
+    <Compile Include="Product\ProductOnShipping.cs" />
+    <Compile Include="Product\ProductOnTemplate.cs" />
+    <Compile Include="Product\ProductOnUnitPrice.cs" />
+    <Compile Include="Product\ProductOnShipArea.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Purchase\PurchaseHisItem.cs" />
+    <Compile Include="Purchase\PurchaseHistory.cs" />
+    <Compile Include="Purchase\PurchaseInformation.cs" />
+    <Compile Include="Purchase\PurchaseInspection.cs" />
+    <Compile Include="Purchase\PurchaseInspItem.cs" />
+    <Compile Include="Purchase\PurchaseItem.cs" />
+    <Compile Include="Purchase\PurchaseSupplier.cs" />
+    <Compile Include="SessionCookie.cs" />
+    <Compile Include="Shipping\ShippingArea.cs" />
+    <Compile Include="Shipping\ShippingEnvelope.cs" />
+    <Compile Include="Shipping\ShippingInformation.cs" />
+    <Compile Include="Synchro\SynchroEntities.cs" />
+    <Compile Include="Synchro\SynchroTimestamp.cs" />
+    <Compile Include="LiveTreeNode.cs" />
+    <Compile Include="Union\UnionAdvertising.cs" />
+    <Compile Include="Union\UnionFixedPercent.cs" />
+    <Compile Include="Union\UnionLevelPercent.cs" />
+    <Compile Include="Warehouse\WarehouseInformation.cs" />
+    <Compile Include="Warehouse\WarehouseInItem.cs" />
+    <Compile Include="Warehouse\WarehouseInventory.cs" />
+    <Compile Include="Warehouse\WarehouseInvItem.cs" />
+    <Compile Include="Warehouse\WarehouseLedger.cs" />
+    <Compile Include="Warehouse\WarehouseMoveItem.cs" />
+    <Compile Include="Warehouse\WarehouseMoving.cs" />
+    <Compile Include="Warehouse\WarehouseOutDelivery.cs" />
+    <Compile Include="Warehouse\WarehouseOutItem.cs" />
+    <Compile Include="Warehouse\WarehouseOutScan.cs" />
+    <Compile Include="Warehouse\WarehouseRegion.cs" />
+    <Compile Include="Warehouse\WarehouseShelf.cs" />
+    <Compile Include="Warehouse\WarehouseShipping.cs" />
+    <Compile Include="Warehouse\WarehouseSkuShelf.cs" />
+    <Compile Include="Warehouse\WarehouseStockIn.cs" />
+    <Compile Include="Warehouse\WarehouseStockOut.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CallCenter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LiveAzure.Resource\LiveAzure.Resource.csproj">
+      <Project>{B2DD90AD-939C-434D-A2D1-989BCBD87BBF}</Project>
+      <Name>LiveAzure.Resource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LiveAzure.Utility\LiveAzure.Utility.csproj">
+      <Project>{0C6E60FD-A7DD-491A-8309-01D373E0B07C}</Project>
+      <Name>LiveAzure.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

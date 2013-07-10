@@ -1,0 +1,97 @@
+﻿@using MVC.Controls.Grid
+@{
+    Layout = null;
+}
+<div>
+    <p>
+        <span>查找的字段</span>
+        @Html.DropDownList("searchProperty", (List<SelectListItem>)ViewBag.SearchProperty, new { id = "searchProperty" })
+        <span>查找的值</span>
+        <input type="text" id="searchValue" />
+        <span>关系</span>
+        @Html.DropDownList("searchMode", (List<SelectListItem>)ViewBag.SearchMode, new { id = "searchMode" })
+        <span id="moreCondition" onclick="showMoreConditions();">more condition</span>
+    </p>
+    <div id="search_hidden" style="display:none">
+        <p>
+            <input type="radio" name="SearchRelationship_1" value="AND"/> And
+            <input type="radio" name="SearchRelationship_1" value="OR"/> Or
+            <span>查找的字段</span>
+            @Html.DropDownList("searchProperty_1", (List<SelectListItem>)ViewBag.SearchProperty, new { id = "searchProperty_1" })
+            <span>查找的值</span>
+            <input type="text" id="searchValue_1" />
+            <span>关系</span>
+            @Html.DropDownList("searchMode_1", (List<SelectListItem>)ViewBag.SearchMode, new { id = "searchMode_1" })
+        </p>
+        <p>
+            <input type="radio" name="SearchRelationship_2" value="AND"/> And
+            <input type="radio" name="SearchRelationship_2" value="OR"/> Or
+            <span>查找的字段</span>
+            @Html.DropDownList("searchProperty_2", (List<SelectListItem>)ViewBag.SearchProperty, new { id = "searchProperty_2" })
+            <span>查找的值</span>
+            <input type="text" id="searchValue_2" />
+            <span>关系</span>
+            @Html.DropDownList("searchMode_2", (List<SelectListItem>)ViewBag.SearchMode, new { id = "searchMode_2" })
+        </p>
+    </div>
+<input type="button" value="@LiveAzure.Resource.Common.Submit" onclick="SearchOrderItemSku();" />
+</div>
+
+<div id="addOrderItemGrid">
+    @Html.Grid(new GridControl()
+                    .SetName("OrderItemSearchGrid")
+                    .SetPageSize(10)
+                    .SetIsAutoSize(true)
+                    .SetHttpVerb(HttpVerbs.Get)
+                    .SetListUrl("/Order/OrderItemSearchList")
+                    .SetHeight("'100%'")
+                    .SetWidth("200")
+                    .SetColumns<LiveAzure.Models.Product.ProductOnItem>(ps =>
+                        {
+                            ps.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                            ps.Add(p => p.FullName.Matter).SetName("FullName.Matter").SetCaption(@LiveAzure.Resource.Model.Product.ProductOnItem.FullName);
+                            ps.Add(p => p.SkuItem.Code).SetCaption(@LiveAzure.Resource.Model.Product.ProductInfoItem.Code);//SKU的CODE
+                        })
+                    )
+<input type="button" value="@LiveAzure.Resource.Common.Yes" onclick="chooseOrderItemSku();" />
+</div>
+
+<div id="addOrderItemBlock"> 
+</div>
+
+<script type="text/javascript">
+    var IsShowMoreCondition = false;
+
+    function SearchOrderItemSku() {
+        var searchValue = $("#searchValue").val() + "|" + $("#searchValue_1").val() + "|" + $("#searchValue_2").val();
+        var searchProperty = $("#searchProperty").val() + "|" + $("#searchProperty_1").val() + "|" + $("#searchProperty_2").val();
+        var searchMode = $("#searchMode").val() + "|" + $("#searchMode_1").val() + "|" + $("#searchMode_2").val();
+        var searchRelationship = $("input[name='SearchRelationship_1']:checked").val() + "|" + $("input[name='SearchRelationship_2']:checked").val();
+
+        $("#OrderItemSearchGrid").jqGrid("setGridParam", {
+            url: "/Order/OrderItemSearchList",                                            //设置表格的url
+            datatype: "json",                                                           //设置数据类型
+            postData: { orderSearchValue: searchValue, orderSearchProperty: searchProperty, orderSearchMode: searchMode, orderSearchRelationship: searchRelationship }
+        });
+        $("#OrderItemSearchGrid").trigger('reloadGrid');
+    }
+    function chooseOrderItemSku() {
+        var chooseOnSkuId = $("#OrderItemSearchGrid").jqGrid("getGridParam", "selrow");
+        if (chooseOnSkuId != null) {
+            $.post("/Order/EditOrderItemtoAdd", { OnSkuId: chooseOnSkuId }, function (html) {
+                $("#addOrderItemBlock").html(html);
+            });
+        }
+        else alert("@Html.Raw(@LiveAzure.Resource.Common.PleaseSelectRow)");
+    }
+    function showMoreConditions() {
+        if (IsShowMoreCondition) {
+            $("#search_hidden").fadeOut("normal");
+            IsShowMoreCondition = false;
+        }
+        else {
+            $("#search_hidden").fadeIn("normal");
+            IsShowMoreCondition = true;
+        }
+    }
+</script>

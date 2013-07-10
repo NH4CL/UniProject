@@ -1,0 +1,40 @@
+﻿@using StandardCategoryType = LiveAzure.Models.ModelEnum.StandardCategoryType
+@using WarehouseStockOutResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockOut
+@ControlManager.StandardCategorySelect()
+@model LiveAzure.Models.Warehouse.WarehouseStockOut
+@{
+    ViewBag.Title = "WarehouseStockOutEdit";
+}
+
+<h2>WarehouseStockOutEdit</h2>
+
+@using (Html.BeginForm("WarehouseStockOutAddDB", "Warehouse"))
+{
+    @Html.HiddenFor(model => model.Gid)
+    @WarehouseStockOutResource.Code
+    @Html.TextBoxFor(model => model.Code, new { @readonly = "readonly" })
+    <br /><br />
+    @WarehouseStockOutResource.Warehouse
+    @Html.DisplayFor(model => model.Warehouse.aFullName, "LocaleMatter", new { ID = "WarehouseName" })
+    @Html.HiddenFor(model => model.WhID)
+    <br /><br />
+    @WarehouseStockOutResource.OutType
+    @Html.EditorFor(model => model.OutType, "StandardCategorySelect", new { Type = StandardCategoryType.STOCKOUT})
+    <br /><br />
+    @WarehouseStockOutResource.RefType
+    @Html.DropDownListFor(model => model.RefID, ViewBag.RefType as IEnumerable<SelectListItem>)
+    <br /><br />
+    @WarehouseStockOutResource.RefID
+    @Html.EditorFor(model => model.RefID)
+    @*//待完成*@
+    <br /><br />
+    @WarehouseStockOutResource.Shipping
+    @Html.DropDownListFor(model => model.ShipID, ViewBag.Shippings as IEnumerable<SelectListItem>)
+    <br /><br />
+    @WarehouseStockOutResource.Remark
+    @Html.TextAreaFor(model => model.Remark)
+    <br />
+    <input type="submit" value="Edit" />
+    <input type="reset" value="Reset" />
+    <input type="button" value="Cancel" />
+}

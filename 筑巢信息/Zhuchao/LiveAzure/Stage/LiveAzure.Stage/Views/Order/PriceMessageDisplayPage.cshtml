@@ -1,0 +1,75 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Order.OrderInformation
+<table class="DIY_table">
+    <tr>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.ShippingFee):
+        </th>
+        <td>
+            @Html.DisplayFor(model=>model.ShippingFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.TaxFee):
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.TaxFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.Insurance):
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.Insurance)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PaymentFee):
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.PaymentFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.PackingFee):
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.PackingFee)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.ResidenceFee):
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.ResidenceFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.LiftGateFee):
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.LiftGateFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.InstallFee):
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.InstallFee)
+        </td>
+        <th>
+            @Html.Label(LiveAzure.Resource.Model.Order.OrderInformation.OtherFee):
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.OtherFee)
+        </td>
+        <th></th><td></td>
+    </tr>
+</table>
+<div style="clear:both;">
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="PageToPriceMessageEdit();" />
+</div>
+<script type="text/javascript">
+    function PageToPriceMessageEdit() {
+        $.post("/Order/PriceMessageEditPage", {}, function (back) {
+            $("#PriceMessageBlock").html(back);
+        });
+    }
+</script>

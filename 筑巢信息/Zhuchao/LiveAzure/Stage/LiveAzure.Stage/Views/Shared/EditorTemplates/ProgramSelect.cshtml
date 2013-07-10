@@ -1,0 +1,14 @@
+﻿@model Guid?
+@{
+    string id = ViewBag.ID == null ? Guid.NewGuid().ToString() : (string)ViewBag.ID;
+    string valueID = id + "_val";
+    string txtID = id + "_txt";
+    string menuID = id + "_menu";
+}
+@Html.HiddenFor(model => model, new { id = valueID })
+<input type="text" id="@(txtID)" readonly="readonly"/>
+<div id="@menuID" class="tree" style="display:none; position:fixed; height:200px; min-width:150px; background-color:white;border:1px solid;overflow-y:auto;overflow-x:auto;">
+</div>
+<script type="text/javascript">
+    programSelector.createTree("@(menuID)", "@(txtID)", "@(valueID)");
+</script>

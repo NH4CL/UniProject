@@ -1,0 +1,113 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+<script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.ProgramController.editProgramNode";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+<!--
+    /*-----------------------
+    增加程序功能节点
+    ------------------------*/
+    function addProgItemNode() {
+         UnitPricePanel.OpenPanel();
+        var progNodeGid = $("#progNodeGid").val();        
+        document.getElementById("progItemNodeDelete").style.display = "none";
+        $.ajax({
+            type: "POST",
+            url: "/Program/NodeAdd",
+            data: { progNodeGid: progNodeGid },
+            success: function (html) {
+
+                 UnitPricePanel.EditPageHtml(html);
+            }
+        });
+    }
+    /*-----------------------
+    编辑程序功能节点
+    ------------------------*/
+    function editProgItemNode() {
+        document.getElementById("progItemNodeDelete").style.display = "none";
+        var id = $("#NodeGrid").jqGrid("getGridParam", "selrow");
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProgramController.alertDelete)";
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        }
+        else {     
+         UnitPricePanel.OpenPanel();      
+            $.ajax({
+                type: "POST",
+                url: "/Program/NodeEdit",
+                data: { progItemGid: id },
+                success: function (html) {
+
+                 UnitPricePanel.EditPageHtml(html);
+                }
+            });
+        }
+    }
+    /*-----------------------
+    删除程序功能节点
+    ------------------------*/
+    function deleteProgItemNode() {
+        document.getElementById("progItemNodeDelete").style.display = "block";
+        var id = $("#NodeGrid").jqGrid("getGridParam", "selrow");
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProgramController.alertDelete)";
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        }
+        else {
+            $("#deleteItemId").val(id);
+        }
+        var deleteInfo = $("#NodeGrid").jqGrid("getRowData", id);
+        var isDelete = confirm("@Html.Raw(LiveAzure.Resource.Stage.ProgramController.isDelete) " + deleteInfo["Name.Matter"] + "?");        
+        if (isDelete == false) {
+            return false;
+        }
+        $("#programDeleteForm").submit();
+    }
+    /*-----------------------
+    返回程序页面
+    ------------------------*/
+    function returnTree() {
+        window.location = "/Program/Index";
+    }
+//-->
+</script>
+<input id="progNodeGid" type="hidden" value="@ViewBag.progNodeGid" />
+<div id="gridpanel">
+    @Html.Grid(new GridControl()
+            .SetName("NodeGrid")
+            .SetPageSize(20)
+            .SetHeight("'100%'")
+            .SetIsAutoSize(true)
+            .SetListUrl("/Program/ListNodes")
+            .SetColumns<LiveAzure.Models.General.GeneralProgNode>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.General.GeneralProgNode.Code);
+                cs.Add(x => x.Name.Matter).SetCaption(LiveAzure.Resource.Model.General.GeneralProgNode.Name);
+                cs.Add(x => x.Optional.Matter).SetCaption(LiveAzure.Resource.Model.General.GeneralProgNode.Optional);
+            })
+    )
+    <div>
+        <input type="button" name="add" value="@LiveAzure.Resource.Common.Add" onclick="addProgItemNode()" />
+        <input type="button" name="edit" value="@LiveAzure.Resource.Common.Edit" onclick="editProgItemNode()" />
+        <input type="button" name="delete" value="@LiveAzure.Resource.Common.Delete" onclick="deleteProgItemNode()" />
+        <input type="button" name="returnTree" value="@LiveAzure.Resource.Stage.ProgramController.returnTree" onclick="returnTree()" />
+    </div>
+</div>
+
+<div id="progItemNodeDelete">
+</div>
+@using (@Ajax.BeginForm("NodeDelete", "Program", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "progDetail" }, new { id = "programDeleteForm" }))
+{
+    <input type="hidden" id="deleteItemId" name="deleteItemId" style="display: none;" />
+}

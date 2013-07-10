@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "TestStandardCategorySelector";
+}
+
+@model List<LiveAzure.Models.Member.MemberOrganization>
+
+@ControlManager.StandardCategorySelect()
+<!--StandardCategorySelect必须放在body内部或其子元素内，而且整个页面只能出现一次-->
+
+<h2>测试标准分类选择器</h2>
+注意：直接绑定StandardCategory的Guid字段（考虑到后台处理方便，以及一些表中无对应对象字段）<br />
+直接保存即可<br />
+<b style="color:Red">下面演示的是两个标准分类选择同时存在时的情况。已经过测试多个标准分类选择器不会冲突</b><br />
+
+选择器1
+@Html.EditorFor(model => model[0].ExType, "StandardCategorySelect",
+    new { ID = "Selector1", Type = LiveAzure.Models.ModelEnum.StandardCategoryType.CHANNEL })
+
+<br />
+<br />
+
+选择器2
+@Html.EditorFor(model => model[1].ExType, "StandardCategorySelect",
+    new { ID = "Selector2", Type = LiveAzure.Models.ModelEnum.StandardCategoryType.ORGANIZATION, OnClick = "ShowTest" })
+
+
+<script type="text/javascript">
+    function ShowTest(id, name) {
+        alert(id);
+        alert(name);
+    }
+</script>

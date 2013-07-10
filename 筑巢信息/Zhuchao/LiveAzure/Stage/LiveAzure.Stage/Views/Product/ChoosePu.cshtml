@@ -1,0 +1,55 @@
+﻿@using MVC.Controls.Grid
+@using MVC.Controls
+@{
+    Layout = null;
+}
+<span>@LiveAzure.Resource.Stage.ProductController.SearchKey</span>
+<input type="text" id="PuSearchKeyWord" />
+<input type="button" id="PuSearchButton" onclick="PuSearchByKey();" value="@LiveAzure.Resource.Common.Search"/>
+ @Html.Grid(new GridControl()
+                .SetName("choosePu")
+                .SetPageSize(15)
+                .SetIsAutoSize(true)
+                .SetHttpVerb(HttpVerbs.Get)
+                     .SetListUrl("/Product/PuList")
+                .SetHeight("'100%'")
+                .SetWidth("200")
+                     .SetColumns<LiveAzure.Models.Product.ProductInformation>(ps =>
+                    {
+                        ps.Add(p => p.Gid).SetAsPrimaryKey().SetHidden(true);
+                        ps.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Code);
+                        ps.Add(x => x.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Name);
+                        ps.Add(x => x.StandardCategory.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.StdCatID);
+                        ps.Add(x => x.Mode).SetCaption(LiveAzure.Resource.Model.Product.ProductInformation.Mode);
+                    })
+                )
+<input type="button" id="ChooseThisPu" value="@LiveAzure.Resource.Common.Submit" onclick="selectPu();" />
+<script type="text/javascript">
+    function selectPu() {
+        var selectedRowId = $("#choosePu").jqGrid("getGridParam", "selrow");
+        if (selectedRowId != null)
+            $.post("/Product/ProductOnSaleBaseInfo", { GID: selectedRowId, FromPU: true }, function (html) {
+                $("#tabs-PuOnSaleBaseInfo").html("");
+                $("#tabs-PuOnSaleBaseInfo").html(html);
+                //mode=PU配件模式 显示是否可拆分退货
+                if ($("#Mode")[0].selectedIndex == 0) {
+                    $("#CanSplit")[0].selectedIndex = 1;
+                }
+                else if ($("#Mode")[0].selectedIndex == 1) {
+                    $("#CanSplit")[0].selectedIndex = 0;
+                }
+            });
+            else alert("@LiveAzure.Resource.Common.PleaseSelectRow!");
+        choosePuPanel.CloseEditPanel();
+    }
+
+    function PuSearchByKey() {
+        var sKeyWord = $("#PuSearchKeyWord").val();
+        $("#choosePu").jqGrid("setGridParam", {
+            url: "/Product/PuList",                               //设置表格的url
+            datatype: "json",                                     //设置数据类型
+            postData: { KeyWord: sKeyWord }
+        });
+        $("#choosePu").trigger('reloadGrid');
+    }
+</script>

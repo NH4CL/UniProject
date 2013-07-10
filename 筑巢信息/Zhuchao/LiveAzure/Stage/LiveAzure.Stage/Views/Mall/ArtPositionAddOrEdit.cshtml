@@ -1,0 +1,83 @@
+﻿@model LiveAzure.Models.Mall.MallArtPosition 
+@{
+    ViewBag.Title = "ArtPositionAddOrEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    function saveArtPosition(data) {
+        if (data == "error") {
+            alert("@LiveAzure.Resource.Common.OperationFailed");
+        }
+        else {
+            window.location.href = "/Mall/Index";
+        }
+    }
+</script>
+<h2>
+    ArtPositionAddOrEdit</h2>
+@using (Ajax.BeginForm("ArtPositionSave", "Mall", new AjaxOptions { HttpMethod = "POST", OnSuccess = "saveArtPosition" }, new { name = "ArtPosAddEdit", Id = "artPosAddEdit" }))
+{
+    @Html.HiddenFor(model => model.Gid)
+    @Html.HiddenFor(model => model.OrgID)
+    <table>
+        <tr>
+            <td>
+                @LiveAzure.Resource.Model.Mall.MallArtPosition.Code
+            </td>
+            <td>
+                @Html.EditorFor(model => model.Code)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @LiveAzure.Resource.Model.Mall.MallArtPosition.Name
+            </td>
+            <td>
+                @*@Html.HiddenFor(model => model.aName)*@
+                @Html.EditorFor(model => model.Name, "Matter")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @LiveAzure.Resource.Model.Mall.MallArtPosition.Show
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.Show, (IEnumerable<SelectListItem>)ViewBag.ShowList)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @LiveAzure.Resource.Model.Mall.MallArtPosition.Width
+            </td>
+            <td>
+                @Html.EditorFor(model => model.Width)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @LiveAzure.Resource.Model.Mall.MallArtPosition.Height
+            </td>
+            <td>
+                @Html.EditorFor(model => model.Height)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @LiveAzure.Resource.Model.Mall.MallArtPosition.Matter
+            </td>
+            <td>
+                @Html.TextAreaFor(model => model.Matter)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            </td>
+            <td>
+                <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+            </td>
+        </tr>
+    </table>
+}

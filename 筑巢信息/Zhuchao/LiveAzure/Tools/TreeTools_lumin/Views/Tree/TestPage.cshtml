@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "TestPage";
+}
+<script type="text/javascript">
+    function getPageContent(obj) {
+        //页面数字
+        var pageNum = 0;
+        if (obj.id == "firstPage") {
+            pageNum = 1;
+        }
+        else if (obj.id == "prePage") {
+            pageNum = parseInt($("#pageNum").val()) - 1;
+        }
+        else if (obj.id == "nextPage") {
+            pageNum = parseInt($("#pageNum").val()) + 1;
+        }
+        else if (obj.id == "lastPage") {
+            pageNum = parseInt($("#lastPageNum").val());
+        }
+        else if (obj.id == "pageNum") {
+            pageNum = parseInt(obj.value);
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Tree/GetPageContent",
+            data: { pageNum: pageNum, pageCount: 10 },
+            success: function (data) {
+                var html = data.split('|');
+                $("#pageNum").val(html[0]);
+                $("#lastPageNum").val(html[1]);
+                $("#PageContent").html(html[2]);
+            }
+        });
+    }
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Tree/GetPageContent",
+            data: { pageNum: 1, pageCount: 10 },
+            success: function (data) {
+                var html = data.split('|');
+                $("#pageNum").val(html[0]);
+                $("#lastPageNum").val(html[1]);
+                $("#PageContent").html(html[2]);
+            }
+        });
+    });
+</script>
+<div>
+    <div id="PageContent">
+    
+    </div>
+    <div>
+        <input type="button" id="firstPage" value="<<" onclick="getPageContent(this);" />
+        <input type="button" id="prePage" value="<" onclick="getPageContent(this);" />
+        <input type="text" id="pageNum" name="pageNum" onblur="getPageContent(this);" />
+        <input type="button" id="nextPage" value=">" onclick="getPageContent(this);" />
+        <input type="button" id="lastPage" value=">>" onclick="getPageContent(this);" />
+    </div>
+    <div>
+        <input type="text" id="firstPageNum" disabled="disabled" value="1" />
+        <input type="text" id="lastPageNum" disabled="disabled" />
+    </div>
+</div>

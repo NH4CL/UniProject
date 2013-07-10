@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+}
+
+<div >
+<ul id="Regiontree" class="tree"> </ul>
+</div>
+<div id="Regionattribute" class="content_main_right">
+
+</div>
+<script type="text/javascript">
+    var zTree1;
+    var setting;
+
+    setting = {
+        checkable: true,
+        checkType: { "Y": "", "N": "" },
+        
+        checkedCol: "nodeChecked",                                                      //自定义勾选框状态的字段名
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "../Shipping/RegionTreeExpand", 												//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        callback: {
+            click: zTreeOnClick,
+            change: zTreeOnChange
+        }
+    };
+
+    $(document).ready(function () {
+        reloadTree();
+    });
+
+    var preSelectedNode1;
+
+
+    function zTreeOnClick(event, treeId, treeNode) {
+        if (treeNode.nodeChecked == true) {
+            id = treeNode.id;
+            $.ajax({
+                type: "GET",
+                url: "../Shipping/RegionAttribute",
+                data: {id:id},
+                success: function (html) {
+                    $("#Regionattribute").html(html);
+                }
+            });
+        }
+
+    }
+
+
+    function reloadTree() {
+        $.ajax({
+            type: "POST",
+            url: "../Shipping/RegionTreeLoad",
+            success: function (data) {
+                var testdata = jQuery.parseJSON(data);
+                zTree1 = $("#Regiontree").zTree(setting, testdata);
+            }
+        });
+    }
+    function zTreeOnChange(event, treeId, treeNode) {
+        if (treeNode.nodeChecked == true)
+            $.ajax({
+                type: "POST",
+                url: "../Shipping/AddRegion",
+                data: { id: treeNode.id }
+            });
+        else
+            $.ajax({
+                type: "POST",
+                url: "../Shipping/DeleteRegion",
+                data: { id: treeNode.id }
+            });
+            
+    }
+</script>
+

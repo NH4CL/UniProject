@@ -1,0 +1,53 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Member.MemberChannel
+@{
+    ViewBag.Title = "PrivChannelAdd";
+    Layout = null;
+    string listUrl = "/Privilege/ListmemChannel?chaSearchString=" + ViewBag.chaSearchStr;
+}
+@using (Ajax.BeginForm("PrivChannelAdd", "Privilege", new AjaxOptions { OnSuccess = "grid2Reload" }))
+{
+    <div id="ChaList">
+    @Html.Grid(new GridControl()
+        .SetName("chaList")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl(@listUrl)
+        .SetHeight("'100%'")
+        .SetColumns<LiveAzure.Models.Member.MemberChannel>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Stage.OrganizationController.channel + @LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+            cs.Add(x => x.ShortName.Matter).SetCaption(@LiveAzure.Resource.Stage.OrganizationController.channel + @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName);
+        })
+            )
+  </div>
+    <div>
+    <input type="button" id="cadd" name="cadd" value="@LiveAzure.Resource.Stage.PrivilegeController.add" onclick="add()"/>
+    </div>
+    <script type="text/javascript">
+         function add() {
+         var id = $("#chaList").jqGrid("getGridParam", "selrow");
+         if (id != null) {
+             $.ajax({
+                 type: "POST",
+                 url: "/Privilege/PrivChannel",
+                 data: { selectedOrg: id },
+                 datatype: "html",
+                 success: function (data) {
+                     showPrivChannel();
+                     UnitPricePanel.CloseEditPanel();
+                 },
+                 error: function () {
+                     alert("@LiveAzure.Resource.Common.OperationFailed");
+                 }
+             });
+         }
+         else {
+             confirm('@LiveAzure.Resource.Stage.PrivilegeController.addChaConfirm');
+         }
+     }
+     </script>
+}

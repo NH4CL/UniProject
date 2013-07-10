@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+    }
+@using (Html.BeginForm("Logoff", "Home"))
+{
+    @Html.ValidationSummary(true)
+    if (ViewBag.userNickName != null)
+    {
+        @ViewBag.userNickName
+    }
+    else
+    {
+        @ViewBag.userLoginName
+    }
+    @LiveAzure.Resource.Stage.HomeController.Welcome
+    <input type="button" value="@LiveAzure.Resource.Stage.HomeController.LogOff" class="log_off" id="logoff" onclick="LogOff();"/>
+}
+
+<script type="text/javascript">
+    window.history.forward(1); 
+    function LogOff() {
+        var logoff = document.getElementById("logoff");
+        logoff.parentNode.submit();
+    }
+</script>

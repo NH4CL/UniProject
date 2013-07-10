@@ -1,0 +1,23 @@
+﻿@{
+    Layout = null;
+    }
+@using MVC.Controls;
+@using MVC.Controls.Tab;
+@Html.Tab( new TabControl()
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "UserInformation")
+            .SetTitle(@LiveAzure.Resource.Stage.UserController.UserInformation))
+    .AddTabItem(new TabItem()         
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "UserAddress")
+            .SetTitle(@LiveAzure.Resource.Stage.UserController.UserAddress))
+    .AddTabItem(new TabItem()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "UserAttribute")
+            .SetTitle(@LiveAzure.Resource.Stage.UserController.UserAttribute))
+    .AddTabItem(new TabItem()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "UserSubscribe")
+            .SetTitle(@LiveAzure.Resource.Stage.UserController.UserSubscribe))
+    .AddTabItem(new TabItem()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "UserEvent")
+            .SetTitle(@LiveAzure.Resource.Stage.UserController.UserEvent))
+        )

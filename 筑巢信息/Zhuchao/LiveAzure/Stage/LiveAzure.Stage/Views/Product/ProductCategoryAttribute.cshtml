@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+    }
+<script src="../../Scripts/jquery-ui.min.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+    //初始化页面，显示扩展分类a
+    $(function () {
+        $("#productCateAttrTabs").tabs();
+        $.ajax({
+            type: "POST",
+            url: "/Product/ProductExtendCategories",
+            success: function (html) {
+                $("#porductCategoryPage").html(html);
+            }
+        });
+    });
+    //点击TAB页，显示扩展分类
+    function showExtendCategories() {
+        $.ajax({
+            type: "POST",
+            url: "/Product/ProductExtendCategories",
+            success: function (html) {
+                $("#porductAttributePage").html("");
+                $("#porductCategoryPage").html(html);
+            }
+        });
+    }
+    //点击TAB页，显示扩展属性
+    function showExtendAtrributes() {
+        $.ajax({
+            type: "POST",
+            url: "/Product/ProductExtendAttributes",
+            success: function (html) {
+                $("#porductCategoryPage").html("");
+                $("#porductAttributePage").html(html);
+            }
+        });
+    }
+
+</script>
+
+<div class="redmond">    
+    <div id="productCateAttrTabs">
+        <ul>
+            <li><a href="#categoryTab" onclick="showExtendCategories();">@LiveAzure.Resource.Stage.ProductController.ProductExtendCategory</a></li>
+            <li><a href="#attributeTab" onclick="showExtendAtrributes();">@LiveAzure.Resource.Stage.ProductController.ProductExtendAttribute</a></li>
+        </ul>
+        <div id="categoryTab">
+            <div id="porductCategoryPage">                
+            </div>
+        </div>
+        <div id="attributeTab">
+            <div id="porductAttributePage">                
+            </div>
+        </div>
+    </div>
+
+</div>

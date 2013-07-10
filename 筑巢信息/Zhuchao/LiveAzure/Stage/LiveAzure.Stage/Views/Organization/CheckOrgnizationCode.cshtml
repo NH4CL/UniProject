@@ -1,0 +1,10 @@
+﻿@{
+    if(ViewBag.checkResult)
+    {
+        <span>congratulations! "@ViewBag.orgCode" can be used</span>   
+    }
+    else
+    {
+        <span>sorry! "@ViewBag.orgCode" had been used,please Input another code!</span>   
+    }
+}

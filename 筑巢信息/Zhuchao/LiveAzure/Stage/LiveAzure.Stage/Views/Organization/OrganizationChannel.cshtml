@@ -1,0 +1,24 @@
+﻿@model LiveAzure.Models.Member.MemberOrganization
+@{
+    Layout = null;
+}
+
+
+@using (Html.BeginForm())
+{
+ 
+    <div class="down_AddorEdit">  
+        <div class="editor-label">
+            @LiveAzure.Resource.Model.Member.OrganizationBase.Channels:
+        </div>
+        <div class="editor-field">
+            @foreach (var item in (List<SelectListItem>)ViewBag.channel)
+            {
+               <input type="checkbox" name="selectedChannel" value ="@item.Value" />
+               @item.Text
+            }
+        </div>
+    
+        <input type="submit" value = "@LiveAzure.Resource.Stage.OrganizationController.submit" />
+    </div>
+}

@@ -1,0 +1,138 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using LiveAzure.Utility
+@using System.Globalization
+@using LiveTest.Weinan.Controllers
+
+@model LiveAzure.Models.General.GeneralResource
+@{
+    ViewBag.Title = "EditMatter";
+}
+
+@Model.CultureName
+:
+@Model.Matter
+@Html.Grid(new GridControl()
+    .SetName("EditMatterGrid")
+    .SetWidth("580")
+    .SetHeight("300")
+    .SetListUrl("/Resource/ListMatter")
+    .SetEditUrl("/Resource/UpdateMatter")
+    .SetOnSelectedRowEvent("selectMatter(id);")
+    .SetPageSize(10)
+    .UpdateDefaultPager(pager =>
+            pager.ShowDel(true, "/Resource/DeleteMatter")
+        )
+            .UseColumns(LiveTest.Weinan.Controllers.ResourceController.Columns.MatterColumns))
+
+
+@using(Html.BeginForm("AddMatter","Resource",FormMethod.Post))
+{
+    @Html.Raw(Html.GridDeleteButton(
+        buttonName: "btnDeleteMatter",
+        buttonText: "删除",
+        gridName: "EditMatterGrid",
+        actionUrl: "/Resource/DeleteMatter"))
+    @Html.DropDownList("NewCulture", (IEnumerable<SelectListItem>)ViewBag.CultureSelectList, new { id = "ddlNewCulture" })
+    <input id="btnAddItem" type="submit" value="添加" onclick="return selected();" />
+    <input id="btnRefresh" type="button" value="刷新" onclick="refreshPage()" />
+    <input id="btnClose" type="button" value="关闭" onclick="closePage()" />
+}
+
+
+
+<script type="text/javascript">
+    //判断下拉框是选择了选项
+    function selected() {
+        if ($("#ddlNewCulture").val()) {
+            return true;
+        }
+        else return false;
+    }
+    //判断下拉框是否存在选项
+    function hasOptions() {
+        if ($("#ddlNewCulture")[0].options.length) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    //刷新页面
+    function refreshPage() {
+        window.location.reload();
+    }
+    //关闭页面
+    function closePage() {    
+        window.opener = null;
+        window.open('','_self');        
+        window.close();
+    }
+    //上次选中的行
+    var lastSelected;
+    //是否处于编辑状态
+    var editing = false;
+    //选中行时进入编辑模式
+    function selectMatter(rowId) {
+        //判断是否存在权限修改
+        if (enableModify) {
+            if (rowId) {
+                if (rowId == lastSelected) {
+                    if (editing) {
+                        $("#EditMatterGrid").jqGrid("saveRow", lastSelected);
+                        editing = false;
+                    }
+                    else {
+                        $("#EditMatterGrid").jqGrid("editRow", rowId);
+                        editing = true;
+                    }
+
+                } else {
+                    if (lastSelected)
+                        if (editing)
+                            $("#EditMatterGrid").jqGrid("saveRow", lastSelected);
+                    //$("#EditMatterGrid").jqGrid("editRow", rowId);
+                    lastSelected = rowId;
+                    editing = false;
+                }
+            }
+        }
+    }
+
+    //允许添加
+    var enableAdd = false;
+    //允许修改
+    var enableModify = false;
+    //允许删除
+    var enableDelete = false;
+
+    //初始化权限操作，与后台交互获取
+    function initPriv() {
+        enableAdd = @(((bool)(ViewBag.bEnableAdd)).ToString().ToLower());
+        enableModify = @(((bool)(ViewBag.bEnableEdit)).ToString().ToLower());
+        enableDelete = @(((bool)(ViewBag.bEnableDelete)).ToString().ToLower());
+    }
+
+
+    //页面完成时执行
+    $(function () {
+        //隐藏JQueryGrid Pager
+        $("#EditMatterGridPager").hide();
+        //页面完成时若无可选新建语言文化，将选项和按钮禁用
+        if (!hasOptions()) {
+            $("#btnAddItem").attr({ "disabled": "disabled" });
+            $("#ddlNewCulture").attr({ "disabled": "disabled" });
+        }
+        //初始化权限
+        initPriv();
+        //若不存在添加权限禁止添加
+        if (!enableAdd) {
+            $("#btnAddItem").hide();
+            $("#ddlNewCulture").hide();
+        }
+        //若不存在删除权限则禁止删除
+        if (!enableDelete) {
+            $("#btnDeleteMatter").hide();
+        }
+    });
+</script>

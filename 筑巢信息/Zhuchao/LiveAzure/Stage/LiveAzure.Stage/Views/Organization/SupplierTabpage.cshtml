@@ -1,0 +1,11 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Tab;
+
+
+@Html.Tab( new TabControl()
+    .AddTabItem(new TabItem()
+        .SetSelected()
+        .SetContent(MVC.Controls.ContentType.RemoteAction, "SupplierDetail")
+        .SetTitle("SupplierDetail"))    
+    
+        )

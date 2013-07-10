@@ -1,0 +1,37 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@using LiveAzure.Resource.Stage;
+@{
+    Layout = null;
+    }
+<p>@LiveAzure.Resource.Stage.OptionalController.OptionalList</p>
+@Html.Grid(new GridControl()
+        .SetOnSelectedRowEvent("GetButton")
+        .SetName("Optionalgrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Optional/OptionalList")
+        .SetEditUrl("/Optional/EditOptional")
+        .SetWidth("600")
+        .SetHeight("'100%'")
+            .SetColumns<LiveAzure.Models.General.GeneralOptional>(cs =>
+            {
+                cs.Add(x => x.Gid)
+                    .SetAsPrimaryKey().SetEditable(false).SetHidden(true);
+                cs.Add(x => x.Otype)
+                    .SetCaption(LiveAzure.Resource.Model.General.GeneralOptional.Otype)
+                    .SetColumnRenderer(new ComboColumnRenderer("/Optional/GetOptionalType"));
+                cs.Add(x => x.Code)
+                    .SetCaption(LiveAzure.Resource.Model.General.GeneralOptional.Code);
+                cs.Add(x => x.Name)
+                    .SetCaption(LiveAzure.Resource.Model.General.GeneralOptional.Name);
+                cs.Add(x => x.Sorting)
+                    .SetCaption(LiveAzure.Resource.Model.General.GeneralOptional.Sorting);
+                cs.Add(x => x.InputMode)
+                    .SetCaption(LiveAzure.Resource.Model.General.GeneralOptional.InputMode)
+                    .SetColumnRenderer(new ComboColumnRenderer("/Optional/GetInputMode"));
+            }))
+ <script type="text/javascript">
+    
+</script>

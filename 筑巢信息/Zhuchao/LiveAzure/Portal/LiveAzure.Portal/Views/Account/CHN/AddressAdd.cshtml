@@ -1,0 +1,90 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Account/Select",
+        success: function (html) {
+            $("#select").html(html);
+        }
+    })
+    function addressAddReturn() {
+        $.ajax({
+            type: "post",
+            url: "/Account/Address",
+            success: function (html) {
+                $("#Account_right").html(html);
+            }
+        })
+    }    
+</script>
+@using (Ajax.BeginForm("AddressAddSave", "Account", new AjaxOptions { HttpMethod = "POST", OnSuccess = "addressAddReturn()" }, new { id = "AddressAddSave", name = "AddressAddSave" }))
+{
+					
+					<table class="user_rt_tb_01" cellpadding="0" cellspacing="0" border="0" width="780" align="right">
+						<tr>
+							<td width="110">收货人</td>
+							<td width="670">
+								<input class="user_t_box" type="text" name="consignee" id="consignee_1" value="" />
+								
+							</td>
+						</tr>
+                        <tr>
+                        <td>地址备注</td>
+                        <td><input type="text" name="code" id="code" value="" /></td>
+                        </tr>
+						<tr>
+							<td>配送区域</td>
+							<td id="select">
+                            
+                            </td>
+						</tr>
+						<tr>
+							<td>详细地址</td>
+							<td>
+								<input class="user_t_box" style="width:300px" type="text" name="address" id="address_1" value="" />
+								
+							</td>
+						</tr>
+						<tr>
+							<td>Email</td>
+							<td>
+								<input class="user_t_box" type="text" name="email" id="email_1" value="" />
+								<label id="checkemail_1"></label>
+						    </td>
+						</tr>
+						<tr>
+							<td>邮政编码</td>
+							<td>
+								<input class="user_t_box" type="text" name="zipcode" id="zipcode_1" value="" />
+									<label id="checkzipcode_1"></label>
+							</td>
+						</tr>
+						<tr>
+							<td>固定电话</td>
+							<td>
+								<input class="user_t_box" type="text" name="tel" id="tel_1" value="" />
+									<label id="checktel_1"></label>
+							</td>
+						</tr>
+						<tr>
+							<td>手机</td>
+							<td>
+								<input class="user_t_box" type="text" name="mobile" id="mobile_1" value="" />
+									<label id="checkmobile_1"></label>
+							</td>
+						</tr>
+						<tr>
+							<td>默认地址设置</td>
+							<td>
+								<input type="radio" id="isdefault" name="isdefault"  value="true" checked="checked" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" class="user_btn_style_01">
+							<input type="submit" name="button" id="save" value="保存"/>							
+							</td>
+						</tr>
+					</table>
+}

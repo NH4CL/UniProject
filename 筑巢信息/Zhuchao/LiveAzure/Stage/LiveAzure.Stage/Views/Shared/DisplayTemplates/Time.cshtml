@@ -1,0 +1,15 @@
+﻿@model DateTimeOffset?
+@{
+    string id = ViewBag.ID as string;
+    if (id == null)
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    string timeString = null;
+    if(Model.HasValue)
+    {
+        timeString = Model.Value.ToString(
+            System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern);
+    }
+}
+<input type="text" id="@id" value="@timeString" disabled="disabled"/>

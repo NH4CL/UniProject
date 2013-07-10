@@ -1,0 +1,86 @@
+﻿<div id="tabs">
+    <ul>
+        <li><a href="#tabs-OrganizationCultureAdd" onclick="ShowEditOrgCulturePage()">@LiveAzure.Resource.Stage.OrganizationController.EditOrgCulture</a></li>
+        <li><a href="#tabs-OrgDetail" onclick="ShowEditOrgDetailPage()" id="Tab_OrgDetail">@LiveAzure.Resource.Stage.OrganizationController.EditOrgDetail</a></li>
+        <li><a href="#tabs-OrgChannel" onclick="ShowEditOrgChannel()">@LiveAzure.Resource.Stage.OrganizationController.EditOrgChannel</a></li>
+        <li><a href="#tabs-OrgAttribute" onclick="ShowEditOrgAttribute()">@LiveAzure.Resource.Stage.OrganizationController.EditOrgAttribute</a></li>
+    </ul>
+    <div id="tabs-OrganizationCultureAdd">
+    </div>
+    <div id="tabs-OrgDetail">
+    </div>
+    <div id="tabs-OrgChannel">
+    </div>
+    <div id="tabs-OrgAttribute">
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        $("#tabs").tabs();
+        ShowEditOrgCulturePage();
+    });
+
+    function ShowEditOrgCulturePage() {
+        $.ajax({
+            type: "POST",
+            url: "/Organization/OrganizationCultureAdd",
+            data: {},
+            success: function (data) {
+                $("#tabs-OrgDetail").html("");
+                $("#tabs-OrgChannel").html("");
+                $("#tabs-OrgAttribute").html("");
+                $("#tabs-OrganizationCultureAdd").html(data);
+            }
+        });
+    };
+
+    function ShowEditOrgDetailPage() {
+        $.post("/Organization/IsAdding", {}, function (isAdding) {
+            if (isAdding == "True") {
+                alert("@LiveAzure.Resource.Stage.OrganizationController.PleaseAddOrgFirst");
+            }
+            else {
+                $.post("/Organization/OrgDetail", { OrgType: "organization" }, function (data) {
+                    $("#tabs-OrgChannel").html("");
+                    $("#tabs-OrgAttribute").html("");
+                    $("#tabs-OrganizationCultureAdd").html("");
+                    $("#tabs-OrgDetail").html(data);
+                });
+            }
+        });
+    };
+
+    function ShowEditOrgChannel() {
+        $.post("/Organization/IsAdding", {}, function (isAdding) {
+            if (isAdding == "True") {
+                alert("@LiveAzure.Resource.Stage.OrganizationController.PleaseAddOrgFirst");
+            }
+            else {
+                $.post("/Organization/OrgChannel", {}, function (data) {
+                    $("#tabs-OrgAttribute").html("");
+                    $("#tabs-OrganizationCultureAdd").html("");
+                    $("#tabs-OrgDetail").html("");
+                    $("#tabs-OrgChannel").html(data);
+                });
+            }
+        });
+    };
+
+    function ShowEditOrgAttribute() {
+        $.post("/Organization/IsAdding", {}, function (isAdding) {
+            if (isAdding == "True") {
+                alert("@LiveAzure.Resource.Stage.OrganizationController.PleaseAddOrgFirst");
+            }
+            else {
+                $.post("/Organization/OrgAttribute", {}, function (data) {
+                    $("#tabs-OrgChannel").html("");
+                    $("#tabs-OrganizationCultureAdd").html("");
+                    $("#tabs-OrgDetail").html("");
+                    $("#tabs-OrgAttribute").html(data);
+                });
+            }
+        });
+    };
+
+</script>

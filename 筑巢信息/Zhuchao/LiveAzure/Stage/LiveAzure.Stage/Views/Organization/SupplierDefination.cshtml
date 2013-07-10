@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "SupplierDefination";
+}
+
+<h2>SupplierDefination</h2>
+
+<script type="text/javascript">
+
+    var URLParams = new Array();
+    var aParams = document.location.search.substr(1).split('?').toString();
+    var aparams = aParams.split('*');
+    var aParam = aParams.split('=');
+    URLParams[aParam[0]] = aParam[1];
+    var id = URLParams["id"];
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Organization/GetSupplierPage",
+            data: { strId: id },
+            datatype: "html",
+            success: function (data) {
+                $('#supplierContent').html(data);
+            },
+            error: function () {
+                alert("处理失败!");
+            }
+        });
+    });
+
+
+</script>
+
+
+<div id='supplierContent'>
+
+</div>

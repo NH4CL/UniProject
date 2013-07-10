@@ -1,0 +1,64 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Mall.MallArticle
+@{
+    ViewBag.Title = "ArticleIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+@Html.Label(@LiveAzure.Resource.Model.Mall.MallArticle.Organization)
+@Html.DropDownList("ArticleOrg", (List<SelectListItem>)ViewBag.list, new { onchange=""})
+</div>
+<div id="article" >
+    <ul id="categoryTree" class="tree"></ul>
+</div>
+<div id="articleList"class="content_main_right">
+</div>
+<script type="text/javascript">
+
+    var zTree1;
+    var setting;
+
+    setting = {
+        checkable: false,
+        editable: true,
+        edit_renameBtn: false,
+        edit_removeBtn: false,
+        async: true, 																	//默认值，不需要用户指定
+        asyncUrl: "/Mall/CategoryTreeExpand", 									//用户指定url
+        asyncParam: ["id"], 															//用户指定参数
+        callback: {
+            click: zTreeOnClick
+        }
+    };
+
+    $(document).ready(function () {
+        reloadTree();
+    });
+
+    var preSelectedNode1;
+
+    function zTreeOnClick(event, treeId, treeNode) {
+        var id = treeNode.id;
+        if (id != "00000000-0000-0000-0000-000000000000") {
+            $.ajax({
+                type: "POST",
+                url: "/Mall/ArticleList",
+                data: { id: id },
+                success: function (html) {
+                    $("#articleList").html(html);
+                }
+            });
+        }
+    }
+    function reloadTree() {
+        $.ajax({
+            type: "POST",
+            url: "/Mall/CategoryTreeLoad",
+            success: function (data) {
+                var testdata = jQuery.parseJSON(data);
+                zTree1 = $("#categoryTree").zTree(setting, testdata);
+            }
+        });
+    }
+</script>

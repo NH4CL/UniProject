@@ -1,0 +1,16 @@
+﻿@model LiveAzure.Models.General.GeneralResource
+
+@{
+    string id = ViewBag.ID as string;
+    if(id == null)
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    int currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture.LCID;
+    string matter = string.Empty;
+    if(Model != null)
+    {
+        matter = Model.GetResource(currentCulture);
+    }
+}
+<input type="text" id="@id" value="@matter" disabled="disabled" />

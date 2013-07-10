@@ -1,0 +1,30 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model System.Web.Mvc.ViewUserControl<dynamic>
+
+@Html.Grid(new GridControl()
+            .SetName("pend")
+            .SetPageSize(20)
+            .SetIsAutoSize(false)
+            .SetHttpVerb(HttpVerbs.Get)
+            .SetListUrl("/Config/MessagePendingList")
+            .SetWidth("821")
+            .SetHeight("'100%'")
+            .SetColumns<LiveAzure.Models.General.GeneralMessagePending>(pend =>
+            {
+                pend.Add(p=>p.Gid).SetAsPrimaryKey().SetHidden(true);
+                pend.Add(p=>p.User).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.UserID);
+                pend.Add(p => p.MessageTypeName).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.Mtype);
+                pend.Add(p => p.MessageStatusName).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.Mstatus);
+                pend.Add(p => p.Name).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.Name);
+                pend.Add(p => p.Recipient).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.Recipient);
+                pend.Add(p => p.Matter).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.Matter);
+                pend.Add(p => p.RefTypeName).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.RefType);
+                pend.Add(p => p.RefID).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.RefID);
+                pend.Add(p => p.Schedule).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.Schedule);
+                pend.Add(p => p.SentTime).SetCaption(LiveAzure.Resource.Model.General.GeneralMessagePending.SentTime);                
+            })
+                .UpdateDefaultPager(pager=>pager
+                    .ShowSearch(false,false)                
+                )
+            )

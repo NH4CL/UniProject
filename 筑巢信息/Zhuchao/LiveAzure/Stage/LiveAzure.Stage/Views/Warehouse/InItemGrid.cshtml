@@ -1,0 +1,32 @@
+﻿@using MVC.Controls
+@using MVC.Controls.Grid
+@using InItemResource = LiveAzure.Resource.Model.Warehouse.WarehouseInItem
+@using SKUResource = LiveAzure.Resource.Model.Product.ProductInfoItem
+@{
+    Guid inID = (Guid)ViewBag.InID;
+}
+@Html.Grid(
+    new GridControl()
+        .SetName("InItemGrid")
+        .SetPageSize(20)
+        .SetIsAutoSize(false)
+        .SetListUrl(Url.Action("InItemList", new { inID = inID }))
+        .SetWidth("800")
+        .SetHeight("'100%'")
+        .SetIsRowNumber(true)
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseInItem>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.SkuID).SetCaption(SKUResource.Code);
+                cs.Add(p => p.SkuItem).SetCaption(InItemResource.SkuItem + SKUResource.FullName);
+                cs.Add(p => p.Shelf).SetCaption(InItemResource.Shelf);
+                cs.Add(p => p.TrackLot).SetCaption(InItemResource.TrackLot);
+                cs.Add(p => p.Quantity).SetCaption(InItemResource.Quantity);
+                cs.Add(p => p.Guarantee).SetCaption(InItemResource.Guarantee);
+                cs.Add(p => p.GenBarcode).SetCaption(InItemResource.GenBarcode);
+            })
+            .UpdateDefaultPager(pager =>
+                pager
+                    .ShowSearch(false, false)
+            )
+    )

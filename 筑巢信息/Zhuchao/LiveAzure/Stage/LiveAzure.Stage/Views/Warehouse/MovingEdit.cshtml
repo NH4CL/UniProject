@@ -1,0 +1,125 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseMoving
+@using CommonResource = LiveAzure.Resource.Common
+@using WarehouseMovingResource = LiveAzure.Resource.Model.Warehouse.WarehouseMoving
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@{
+    List<SelectListItem> ddlWarehouse = ViewBag.WarehouseList as List<SelectListItem>;
+    List<SelectListItem> ddlMtype = ViewBag.MtypeList as List<SelectListItem>;
+}
+
+@using (Html.BeginForm("MovingEditDB", "Warehouse", FormMethod.Post))
+{
+    <input type="submit" value="@CommonResource.Save" />
+    <input type="reset" value="@CommonResource.Reset" />
+    @Html.HiddenFor(model => model.OrgID)
+    <table>
+        <tr>
+            <td><b>@WarehouseMovingResource.Code</b></td>
+            <td>
+                @Html.TextBoxFor(model => model.Code, new { @readonly = "readonly" })
+                @Html.HiddenFor(model => model.Gid)    
+            </td>
+            <td><b>@WarehouseMovingResource.OldWarehouse</b></td>
+            <td>
+                @Html.DisplayFor(model => model.OldWarehouse.FullName, "LocaleMatter", new { ID = "oldWHName" })
+            </td>
+             <td><b>@WarehouseMovingResource.NewWarehouse</b></td>
+            <td>
+                @Html.DisplayFor(model => model.NewWarehouse.FullName, "LocaleMatter", new { id = "newWHName" })
+            </td>   
+       </tr>
+       <tr>
+            <td><b>@WarehouseMovingResource.Mtype</b></td>
+            <td>
+                @Html.TextBoxFor(model => model.MoveTypeName, new { id = "mtypeName", disabled = "disabled" })
+            </td>
+            <td><b>@WarehouseMovingResource.Total</b></td>
+            <td>@Html.TextBoxFor(model => model.Total, new { disabled = "disabled" })</td>
+            <td><b>@WarehouseMovingResource.Shipper</b></td>
+            <td>@Html.DropDownList("ShipID", new List<SelectListItem>(), new { id = "shipID", disabled = "disabled" })</td>
+        </tr>
+        <tr>
+            <td><b>@WarehouseMovingResource.Reason</b></td>
+            <td>@Html.TextAreaFor(model => model.Reason)</td>
+            <th>@WarehouseMovingResource.Mstatus</th>
+            <td>@Html.DisplayFor(model => model.Mstatus)</td>
+            <td><b>@LiveAzure.Resource.Model.ModelBase.Remark</b></td>
+            <td>@Html.TextAreaFor(model => model.Remark)</td>
+        </tr>
+    </table>
+}
+<br />
+<fieldset>
+    <legend>@CommonResource.EditItem</legend>
+    <div id="ItemEdit"></div>
+    <input type="button" id="btnMoveItemAdd" value="@CommonResource.Add" />
+    <input type="button" id="btnMoveItemEdit" value="@CommonResource.Edit" />
+    <input type="button" id="btnMovItemDelete" value="@CommonResource.Delete" />
+</fieldset>
+<script type="text/javascript">
+    $("#btnCancel").click(function () {
+        document.location.replace("/Warehouse/Moving");
+    });
+    $.ajax({
+        type: "post",
+        url: "/Warehouse/MoveItemGrid",
+        data: { moveID: "@Model.Gid" },
+        async: false,
+        success: function (html) {
+            $("#ItemEdit").html(html);
+        }
+    });
+    var MoveItemPanel = new OpenPanel();
+    MoveItemPanel.bLoading = true;
+    MoveItemPanel.width = 600;
+    MoveItemPanel.height = 700;
+    MoveItemPanel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+    MoveItemPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+    $("#btnMoveItemAdd").click(function () {
+        MoveItemPanel.OpenPanel();
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/MoveItemAdd",
+            data: { moveID : "@Model.Gid" },
+            async: false,
+            success: function (html) {
+                MoveItemPanel.EditPageHtml(html);
+            }
+        });
+    });
+    $("#btnMoveItemEdit").click(function () {
+        var itemID = $("#MovItemGrid").jqGrid("getGridParam", "selrow");
+        if (itemID == null) {
+            alert("@WCResource.SelectOneRow");
+        }
+        MoveItemPanel.OpenPanel();
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/MoveItemEdit",
+            data: { itemID: itemID },
+            async: false,
+            success: function (html) {
+                MoveItemPanel.EditPageHtml(html);
+            }
+        });
+    });
+    $("#btnInvItemDelete").click(function () {
+        var grid = $("#MovItemGrid");
+        var itemID = grid.jqGrid("getGridParam", "selrow");
+        if (itemID == null) {
+            alert("@WCResource.SelectOneRow");
+        } else {
+            if (confirm("@WCResource.ConfirmDelete")) {
+                $.post("/Warehouse/MovItemDeleteDB", { itemID: itemID },
+                function (result) {
+                    if (result) {
+                        grid.jqGrid("delRowData", itemID);
+                    } else {
+                        alert("@WCResource.Error");
+                    }
+                });
+            }
+        }
+    });
+</script>

@@ -1,0 +1,148 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseStockIn
+@using NoteType = LiveAzure.Models.ModelEnum.NoteType
+@using CategoryType = LiveAzure.Models.ModelEnum.StandardCategoryType
+@using CommonResource = LiveAzure.Resource.Common
+@using InResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockIn
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@ControlManager.StandardCategorySelect()
+@ControlManager.RefIDSelect()
+
+@using (Html.BeginForm("StockInEditDB", "Warehouse", FormMethod.Post, new { id = "StockInEditForm" }))
+{
+    <input type="submit" value="@CommonResource.Save" />
+    <input type="button" value="@CommonResource.Reset" />
+    <table>
+        <tr>
+            <th>@InResource.Warehouse</th>
+            <td>
+                @Html.HiddenFor(model => model.WhID)
+                @Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { id = "WarehouseName" })
+            </td>
+            <th>@InResource.Code</th>
+            <td>
+                @Html.HiddenFor(model => model.Gid)
+                @Html.TextBoxFor(model => model.Code, new { disabled = "disabled" })
+            </td>
+            <th>@InResource.InType</th>
+            <td>@Html.EditorFor(model => model.InType, "StandardCategorySelect", new { Type = CategoryType.STOCKIN, OnClick = "setRefType" })</td>
+        </tr>
+        <tr>           
+            <th>@InResource.RefType</th>
+            <td>@Html.DisplayFor(model => model.RefType, "EnumName", new { ID = "RefType", EnumName = "NoteType" })</td>
+            <th>@InResource.RefID</th>
+            <td>@Html.EditorFor(model => model.RefID, "RefIDSelect", new { ID = "RefID", RefType = Model.RefType, OnError = "refIdError" })</td>
+            <th>@InResource.Istatus</th>
+            <td>@Html.TextBoxFor(model => model.InStatusName, new { disabled = "disabled" })</td>
+        </tr>
+        <tr>
+            <th>@InResource.Prepared</th>
+            <td>@Html.DisplayFor(model => model.Prepared, "UserName", new { ID = "PreparedName" })</td>
+            <th>@LiveAzure.Resource.Model.ModelBase.Remark</th>
+            <td>@Html.TextAreaFor(model => model.Remark)</td>
+        </tr>
+    </table>
+}
+<br />
+<fieldset>
+    <legend>@CommonResource.EditItem</legend>
+    <div id="ItemEdit"></div>
+    <input type="button" id="btnAddInItem" value="@CommonResource.Add" />
+    <input type="button" id="btnEditInItem" value="@CommonResource.Edit" />
+    <input type="button" id="btnDeleteInItem" value="@CommonResource.Delete" />
+</fieldset>
+<script type="text/javascript">
+    function setRefType(typeID, typeName) {
+        $.post("/Warehouse/GetRefTypeJson", { typeID: typeID },
+            function (data) {
+                $("#RefType").val(data);
+                if (data == 7) {
+                    //不需要单据
+                    objRefID.destroy();
+                } else {
+                    //需要单据
+                    objRefID.create(parseInt($("#RefType").val()));
+                }
+            });
+    }
+    function refIdError() {
+        alert("Error!");
+    }
+    $("#btnCancel").click(function () {
+        document.location.replace("/Warehouse/StockIn");
+    });
+</script>
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Warehouse/InItemGrid",
+        data: { inID: "@Model.Gid" },
+        async: false,
+        success: function (html) {
+            $("#ItemEdit").html(html);
+        }
+    });
+    var StockInItemPanel = new OpenPanel();
+    StockInItemPanel.bLoading = true;
+    StockInItemPanel.width = 600;
+    StockInItemPanel.height = 700;
+    StockInItemPanel.title = "@LiveAzure.Resource.Stage.ProductController.RelationPU";
+    StockInItemPanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+
+    $("#btnAddInItem").click(function () {
+        StockInItemPanel.OpenPanel();
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/InItemAdd",
+            data: { inID: "@Model.Gid" },
+            async: false,
+            success: function (html) {
+                StockInItemPanel.EditPageHtml(html);
+            }
+        });
+    });
+    $("#btnEditInItem").click(function () {
+        var itemID = $("#InItemGrid").jqGrid("getGridParam", "selrow");
+        if (itemID == null) {
+            alert("@WCResource.SelectOneRow");
+            return;
+        }
+        StockInItemPanel.OpenPanel();
+        $.ajax({
+            type: "post",
+            url: "/Warehouse/InItemEdit",
+            data: { itemID: itemID },
+            async: false,
+            success: function (html) {
+                StockInItemPanel.EditPageHtml(html);
+            }
+        });
+    });
+    $("#btnDeleteInItem").click(function () {
+        var grid = $("#InItemGrid");
+        var itemID = grid.jqGrid("getGridParam", "selrow");
+        if (itemID == null) {
+            alert("@WCResource.SelectOneRow");
+        } else {
+            if(confirm("@WCResource.ConfirmDelete")) {
+                $.post("/Warehouse/InItemDeleteDB", { itemID: itemID },
+                    function (result) {
+                    if(result == "NoPrivilege"){
+                        alert("@LiveAzure.Resource.Common.NoPermission");
+                    }
+                    else if (result) {
+                            alert("@WCResource.DeleteSuccess");
+                            grid.jqGrid("delRowData", itemID);
+                        } else {
+                            alert("@WCResource.Error");
+                        }
+                    });
+            }
+        }
+    });
+    $("#StockInEditForm").submit(function(e) {
+        if ($("#RefType").val() != "@((byte)NoteType.NONE)" && $("#RefID_val").val() == "") {
+            alert("@WCResource.RefIDRequired");
+            e.preventDefault();
+        }
+    });
+</script>

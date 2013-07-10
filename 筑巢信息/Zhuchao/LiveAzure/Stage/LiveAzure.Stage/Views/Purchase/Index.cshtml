@@ -1,0 +1,142 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Purchase.PurchaseInformation
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+<div>
+    <table class="DIY_table" border="0">
+        <tr>
+            <th>
+                @LiveAzure.Resource.Stage.UserController.organization:
+            </th>
+            <td>
+                @Html.DropDownList("orgCode", ViewData["orgCode"] as SelectList, new { id = "orgCode", name = "orgCode", style = "width:200px;", onchange = "changeOrg()" })
+                &nbsp;
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Warehouse
+            </th>
+            <td>
+                @Html.DropDownList("Warehouse", ViewBag.WarehouseList as IEnumerable<SelectListItem>, new { id = "Warehouse", name = "Warehouse", style = "width:200px", onchange = "" })
+                &nbsp;
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Locking:
+            </th>
+            <td>
+                @Html.DropDownList("plockinglist", ViewBag.plockinglist as SelectList, new { id = "plockinglist", name = "plockinglist", style = "width:100px;", onchange = "" })
+                &nbsp;
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Pstatus:
+            </th>
+            <td>
+                @Html.DropDownList("pstatuslist", ViewBag.pstatuslist as SelectList, new { id = "pstatuslist", name = "pstatuslist", style = "width:100px;", onchange = "" })
+                &nbsp;
+            </td>
+            <th>
+                @LiveAzure.Resource.Model.Purchase.PurchaseInformation.Hanged:
+            </th>
+            <td>
+                @Html.DropDownList("hstatuslist", ViewBag.hstatuslist as SelectList, new { id = "hstatuslist", name = "hstatuslist", style = "width:100px;", onchange = "" })
+            </td>
+        </tr>
+    </table>
+    <div>
+        @LiveAzure.Resource.Stage.UserController.keyword:@Html.TextBox("SearchString")
+        <input type="button" id="search" name="search" value="@LiveAzure.Resource.Common.Search" onclick="searchPurchase()" />
+    </div>
+</div>
+<div id="divPur">
+    @Html.Grid(new GridControl()
+        .SetName("gridPur")
+        .SetPageSize(10)
+        .SetIsAutoSize(false)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Purchase/listPur")
+        .SetHeight("'100%'")
+        .SetWidth("600")
+        .SetColumns<LiveAzure.Models.Purchase.PurchaseInformation>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Warehouse.ShortName.Matter).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseInformation.Warehouse).SetName("Warehouse");
+                cs.Add(x => x.Supplier.FullName.Matter).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseInformation.Supplier).SetName("Supplier");
+                cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseInformation.Code);
+                cs.Add(x => x.LockStatusName).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseInformation.Locking);
+                cs.Add(x => x.PurchaseStatusName).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseInformation.Pstatus);
+                cs.Add(x => x.HangStatusName).SetCaption(LiveAzure.Resource.Model.Purchase.PurchaseInformation.Hanged);
+            })
+       )
+    <br />
+    @if (ViewBag.EnablePrepare)
+    {
+        <input type="button" value="@LiveAzure.Resource.Common.Add"   onclick="addPur()" />
+    }
+    <input type="button" value="@LiveAzure.Resource.Common.Edit"  onclick="editPur()" />
+    <input type="button" value="@LiveAzure.Resource.Stage.PurchaseController.AllPurchase" onclick="showAllPur()" />
+</div>
+<script type="text/javascript">
+    function addPur() {
+        window.location.href = "/Purchase/AddPurchaseDetail";
+    }
+
+    function editPur() {
+        var id = $("#gridPur").jqGrid("getGridParam", "selrow");
+        if (id == null) {
+            alert('@LiveAzure.Resource.Stage.OrganizationController.selRowAlert');
+        }
+        else {
+            window.location.href = "/Purchase/SetPurId?id=" + id;
+        }
+    }
+
+    function searchPurchase() {
+        var orgId = $("#orgCode").val();
+        var plocking = $("#plockinglist").val();
+        var pstatus = $("#pstatuslist").val();
+        var hstatus = $("#hstatuslist").val();
+        var searchStr = $("#SearchString").val();
+
+        $.ajax({
+            tyep: "GET",
+            url: "/Purchase/searchPurchase",
+            data: { orgId: orgId, pstatus: pstatus, hstatus: hstatus, searchStr: searchStr, plocking: plocking },
+            datatype: "html",
+            success: function (data) {
+                $("#gridPur").trigger('reloadGrid');
+            },
+            error: function () {
+                confirm("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+
+    function showAllPur() {
+        $.ajax({
+            tyep: "POST",
+            url: "/Purchase/showAllPur",
+            success: function (data) {
+                $("#gridPur").trigger('reloadGrid');
+            },
+            error: function () {
+                confirm("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+    }
+    /*-------------------------------------
+    组织改变关联仓库
+    -------------------------------------*/
+    function changeOrg() {
+        var SelectOrg = document.getElementById("orgCode").value;        
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/Index",
+            data: { OrgId: SelectOrg},
+            success: function (html) {                
+                $("#frame_index_div").html(html);
+            }
+        })
+    }
+</script>

@@ -1,0 +1,180 @@
+﻿@model LiveAzure.Models.Warehouse.WarehouseStockOut
+@using CommonResource = LiveAzure.Resource.Common
+@using StockOutResource = LiveAzure.Resource.Model.Warehouse.WarehouseStockOut
+@using WCResource = LiveAzure.Resource.Stage.WarehouseController
+@using StockOutStatus = LiveAzure.Models.ModelEnum.StockOutStatus
+@{
+    ViewBag.Title = "WarehouseOutItem";
+}
+
+<h2>WarehouseOutItem</h2>
+<table>
+    <tr>
+        <th>@StockOutResource.Warehouse</th>
+        <td>@Html.DisplayFor(model => model.Warehouse.FullName, "LocaleMatter", new { ID = "warehouseName" })</td>
+        <th>@StockOutResource.Code</th>
+        <td>@Html.TextBoxFor(model => model.Code, new { disabled = "disabled" })</td>
+        <th>@StockOutResource.Ostatus</th>
+        <td>@Html.TextBoxFor(model => model.OutStatusName, new { disabled = "disabled" })</td>
+    </tr>
+    <tr>
+        <th>@StockOutResource.OutType</th>
+        <td>@Html.DisplayFor(model => model.OutType, "StandardCategory", new { ID = "OutType" })</td>
+        <th>@StockOutResource.RefType</th>
+        <td>@Html.TextBoxFor(model => model.RefTypeName, new { disabled = "disabled" })</td>
+        <th>@StockOutResource.RefID</th>
+        <td>@Html.DisplayFor(model => model.RefID, "RefID", new { ID = "RefCode", RefType = Model.RefType })</td>
+    </tr>
+    <tr>
+        <th>@StockOutResource.TakeMan</th>
+        <td>@Html.DisplayFor(model => model.TakeMan, "UserName", new { ID = "TakeManName" })</td>
+        <th>@StockOutResource.SendMan</th>
+        <td>@Html.DisplayFor(model => model.SendMan, "UserName", new { ID = "SendManName" })</td>
+        <th>@StockOutResource.SortMan</th>
+        <td>@Html.DisplayFor(model => model.SortMan, "UserName", new { ID = "SortManName" })</td>
+    </tr>
+    <tr>
+        <th>@StockOutResource.PrintOutSheet</th>
+        <td>@Html.TextBoxFor(model => model.PrintOutSheet, new { disabled = "disabled" })</td>
+        <th>@StockOutResource.PrintEnvelope</th>
+        <td>@Html.TextBoxFor(model => model.PrintEnvelope, new { disabled = "disabled" })</td>
+        <th>@StockOutResource.Total</th>
+        <td>@Html.TextBoxFor(model => model.Total, new { disabled = "disabled" })</td>
+    </tr>
+    <tr>
+        <th>@StockOutResource.Package</th>
+        <td>@Html.TextBoxFor(model => model.Package, new { disabled = "disabled" })</td>
+        <th>@StockOutResource.Prepared</th>
+        <td>@Html.DisplayFor(model => model.Prepared, "UserName", new { ID = "PreparedName" })</td>
+        <th>@StockOutResource.Approved</th>
+        <td>@Html.DisplayFor(model => model.Approved, "UserName", new { ID = "ApprovedName" })</td>
+    </tr>
+    <tr>
+        <th>@StockOutResource.ApproveTime</th>
+        <td>@Html.DisplayFor(model => model.ApproveTime, "Time", new { ID = "ApproveTime" })</td>
+        <th>@StockOutResource.Remark</th>
+        <td>@Html.TextAreaFor(model => model.Remark, new { disabled = "disabled" })</td>
+    </tr>
+</table>
+<div id="OutItemList"></div>
+@if (Model.Ostatus == (byte)StockOutStatus.DELIVERIED)
+{//已确认
+    <input type="button" value="@CommonResource.Confirm" disabled="disabled" />
+    <input type="button" value="@CommonResource.Edit" disabled="disabled" />
+    <input type="button" value="@CommonResource.Delete" disabled="disabled" />
+}
+else
+{
+    if (ViewBag.privEnableApprove == "1")
+    {//允许确认
+        <input type="button" id="btnConfirm" value="@CommonResource.Confirm" />
+    }
+    else
+    {
+        <input type="button" value="@CommonResource.Confirm" disabled="disabled" />
+    }
+    if (ViewBag.privEnablePrepare == "1")
+    {//允许制表
+        <input type="button" id="btnEditStock" value="@CommonResource.Edit" />
+    }
+    else
+    {
+        <input type="button" value="@CommonResource.Edit" disabled="disabled" />
+    }
+    if (ViewBag.privEnableDelete == "1")
+    {//允许删除
+    <input type="button" id="btnDelete" value="@CommonResource.Delete" />
+    }
+    else
+    {
+    <input type="button" value="@CommonResource.Delete" disabled="disabled"/>
+    }
+}
+<input type="button" id="btnBack" value="@CommonResource.Back" />
+@{
+    if (Model.Ostatus == (byte)StockOutStatus.DELIVERIED)
+    {
+        <script type="text/javascript">
+            $("#btnConfirm").click(function () {
+                alert("@WCResource.HasConfirm");
+            });
+            $("#btnEditStock").click(function () {
+                alert("@WCResource.HasConfirm");
+            });
+            $("#btnDelete").click(function () {
+                alert("@WCResource.HasConfirm");
+            });
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            $("#btnConfirm").click(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/Warehouse/StockOutConfirmDB",
+                    data: { outID: "@Model.Gid" },
+                    async: false,
+                    success: function (result) {
+                        switch (result) {
+                            case "NoPrivilege": alert("@LiveAzure.Resource.Common.NoPermission"); break;
+                            case 0:
+                                alert("@WCResource.ConfirmSuccess");
+                                $("#btnConfirm").attr("disabled", "disabled");
+                                $("#btnEditStock").attr("disabled", "disabled");
+                                break;
+                            case 1: alert("@WCResource.NotExistOrStateError");
+                                break;
+                            case 2: alert("@WCResource.OrderStateError");
+                                break;
+                            case 3: alert("出库单货位尚未明确!");
+                                break;
+                            case 4: alert("@WCResource.ShelfNotExist");
+                                break;
+                            case 5: alert("还没有添加任何明细");
+                                break;
+                            case 11: alert("@WCResource.NoSubscribe");
+                                break;
+                            case 12: alert("@WCResource.EmailPendingError");
+                                break;
+                            case 13: alert("@WCResource.SmsPendingError");
+                                break;
+                            default: alert("@WCResource.Error");
+                                break;
+                        }
+                    }
+                });
+            });
+            $("#btnEditStock").click(function () {
+                document.location.replace("/Warehouse/StockOutEdit?outID=@Model.Gid");
+            });
+            $("#btnDelete").click(function () {
+                if (confirm("@WCResource.ConfirmDelete")) {
+                    $.post("/Warehouse/StockOutDeleteDB", { outID : "@Model.Gid" },
+                        function (result) {
+                            if (result) {
+                                alert("@WCResource.DeleteSuccess");
+                                document.location.replace("/Warehouse/StockOut");
+                            } else {
+                                alert("@WCResource.Error");
+                            }
+                        });
+                }
+            });
+        </script>
+    } 
+}
+<script type="text/javascript">
+    $.ajax({
+        type: "post",
+        url: "/Warehouse/OutItemGrid",
+        data: { outID: "@Model.Gid" },
+        async: false,
+        success: function (html) {
+            $("#OutItemList").html(html);
+        }
+    });
+    $("#btnBack").click(function () {
+        document.location.replace("/Warehouse/StockOut");
+    });
+</script>

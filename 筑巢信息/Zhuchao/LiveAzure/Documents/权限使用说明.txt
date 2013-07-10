@@ -1,0 +1,38 @@
+权限使用示例：
+
+（一）
+全局变量  public Dictionary<string, string> oProgramNodes;
+记录每个程序节点的授权值
+
+
+（二）程序和程序功能节点（按钮）权限
+string strProgramCode = Request.RequestContext.RouteData.Values["Controller"].ToString() +
+    Request.RequestContext.RouteData.Values["Action"].ToString();
+if (!base.Permission(strProgramCode))
+    return RedirectToAction("ErrorPage", "Home", new { message = "Sorry you have no privilege to visit the Page" });
+
+允许编辑按钮
+ViewBag.EnableEdit = (base.GetProgramNode("EnableEdit") == "1") ? true : false;
+
+
+说明：除Supervisor是系统固定的程序节点代码外，其他代码例如EnableConfim，按程序需要定义
+
+
+（三）组织、渠道、仓库、商品类别授权等
+请参阅：public List<Guid> Permission(ModelEnum.UserPrivType privType)
+
+使用方法举例：
+1. 某组织的仓库下拉列表
+  List<Guid> list = base.Permission(ModelEnum.UserPrivType.WAREHOUSE);
+  var warehouses = from w in dbEntity.WarehouseInformations
+                   join p in list on w.Gid equals p
+                   where w.Deleted == false && w.aParent == organID
+                   select w;
+
+2. 用户使用私有类别树
+  List<Guid> list = base.Permission(ModelEnum.UserPrivType.PRODUCT_CATEGORY);
+  var categories = from c in dbEntity.GeneralPrivateCategories
+                   join p in list on c.Gid equals p
+                   where c.Deleted == false && c.aParent == null
+                   select c;
+

@@ -1,0 +1,173 @@
+﻿@model LiveAzure.Models.Member.MemberPrivilege
+
+@{
+    ViewBag.Title = "PrivProgram";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/jquery-1.4.2.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/jquery.ztree-2.6.js")"></script>
+
+@*<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/treeObject.js")"></script>*@
+
+<h2>PrivProgram</h2>
+
+<div>
+<input type="checkbox"  onclick="ablebutton()" id="StatusProg"/>
+@Html.Label("启用")
+</div>
+
+
+    <div id="PrivProgram" >
+        <ul id ="Programtree" class="tree" style="width:230px; overflow:auto;" >
+        </ul>
+        <input type="button" value="submit" id="AddProg" onclick="strcat()"/>
+    </div>
+     <div id="SubPrivProgram">
+      <ul id ="SubProgTree" class="tree"  >
+        </ul>
+        <input type="button" value="DeleteProg" onclick="del()" />
+      </div>
+
+<script type="text/javascript">
+
+        var zTree1, zTree2;
+        var setting;
+
+        setting = {
+            checkable: true,
+            editable: true,
+            edit_renameBtn: false,
+            edit_removeBtn: false,
+            async: true, 																	//默认值，不需要用户指定
+            asyncUrl: "../Privilege/PrivProgramExpand", 												//用户指定url
+            asyncParam: ["id"], 															//用户指定参数
+            callback: {
+                click: zTreeOnClick
+            }
+        };
+        subsetting = {
+            checkable: true,
+            editable: true,
+            edit_renameBtn: false,
+            edit_removeBtn: false,
+            async: true, 																	//默认值，不需要用户指定
+            asyncUrl: "../Privilege/SubProgramExpand", 												//用户指定url
+            asyncParam: ["id"], 															//用户指定参数
+            callback: {
+                click: zTreeOnClick
+            }
+        };
+
+
+        $(document).ready(function () {
+            reloadTree();
+        });
+
+        var preSelectedNode1;
+        var preSelectedNode2;
+
+        function zTreeOnClick(event, treeId, treeNode) {
+            
+        }
+
+
+        function reloadTree() {
+            $.ajax({
+                type: "POST",
+                url: "../Privilege/PrivProgramLoad",
+                success: function (data) {
+                    var testdata = jQuery.parseJSON(data);
+                    zTree1 = $("#Programtree").zTree(setting, testdata);
+                    $.ajax({
+                        type: "POST",
+                        url: "../Privilege/SubProgramLoad",
+                        success: function (data1) {
+                            var testdata1 = jQuery.parseJSON(data1);
+                            zTree2 = $("#SubProgTree").zTree(subsetting, testdata1);
+                        }
+                    });
+                }
+            });
+        }
+        function getCount() {
+            var tmp = zTree1.getCheckedNodes(true);
+            for (var i = 0; i < tmp.length; i++) {
+                alert(tmp[i].name + ",open:" + tmp[i].open+",Gid"+tmp[i].id);
+            }
+        }
+        function strcat() {
+            var result = "";
+            var open = "";
+            var tmp = zTree1.getCheckedNodes(true);
+            for (var i = 0; i < tmp.length; i++) {
+                result += tmp[i].id + ",";
+                open += tmp[i].open + ",";
+
+            }
+            alert(result);
+            alert(open);
+            $.post("/Privilege/PrivProgram", { Result: result, Open: open }, function (data) {
+            });
+        }
+        function del() {
+            var result = "";
+            var open = "";
+            var tmp = zTree2.getCheckedNodes(true);
+            for (var i = 0; i < tmp.length; i++) {
+                result += tmp[i].id + ",";
+                open += tmp[i].open + ",";
+
+            }
+            alert(result);
+            alert(open);
+            $.post("/Privilege/DeleteProgrom", { Result: result, Open: open }, function (data) {
+            });
+        }
+        function ablebutton() {
+            if ($("#StatusProg").attr('checked')) {
+                $("#AddProg").attr("disabled", false);
+                $("#DeleteProg").attr("disabled", false);
+            }
+            else {
+                $("#AddProg").attr("disabled", true);
+                $("#DeleteProg").attr("disabled", true);
+            }
+            $.ajax({
+
+                type: "POST",
+
+                url: "/Privilege/DelAllProg",
+
+                data: {},
+
+                datatype: "html",
+
+                success: function (data) {
+
+                    //$("#gridPrivWare").trigger('reloadGrid');
+
+                },
+
+                error: function () {
+
+                    alert("处理失败!");
+
+                }
+
+            });
+        }
+
+        $(document).ready(function () {
+            if ('@(ViewBag.status)' == 1) {
+                $("#StatusProg").attr('checked', true);
+                $("#AddProg").attr("disabled", false);
+                $("#DeleteProg").attr("disabled", false);
+            }
+            else {
+                $("#StatusProg").attr('checked', false);
+                $("#AddProg").attr("disabled", true);
+                $("#DeleteProg").attr("disabled", true);
+            }
+        });
+</script>

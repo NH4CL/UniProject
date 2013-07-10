@@ -1,0 +1,32 @@
+﻿
+<div>
+@using MVC.Controls;
+@using MVC.Controls.Grid;
+    @Html.Grid(new GridControl()
+    .SetName("InvoiceGrid")
+    .SetPageSize(20)
+    .SetIsAutoSize(true)
+    .SetHttpVerb(HttpVerbs.Get)
+    .SetListUrl("/Finance/InvoiceList")
+    .SetWidth("'50%'")
+    .SetHeight("'100%'")
+    .SetColumns<LiveAzure.Models.Finance.FinanceInvoice>(cs =>
+    {
+        cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+        cs.Add(x => x.OrderInfo).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.OrderInfo);
+        cs.Add(x => x.Code).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Code);
+        cs.Add(x => x.Title).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Title);
+        cs.Add(x => x.Matter).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Matter);
+        cs.Add(x => x.Istatus).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Istatus)
+                              .SetColumnRenderer(new ComboColumnRenderer("/Finance/GetIstatusText"));
+        cs.Add(x => x.Amount).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.Amount);
+        cs.Add(x => x.SendNote).SetCaption(LiveAzure.Resource.Model.Finance.FinanceInvoice.SendNote);
+    })
+)
+</div>
+<div>
+    <input type="button" value="@LiveAzure.Resource.Common.Add" onclick="ShowAddInvoicePage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Edit" onclick="ShowEditInvoicePage()" />
+    <input type="button" value="@LiveAzure.Resource.Common.Delete" onclick="RemoveInvoice()" />
+</div>
+

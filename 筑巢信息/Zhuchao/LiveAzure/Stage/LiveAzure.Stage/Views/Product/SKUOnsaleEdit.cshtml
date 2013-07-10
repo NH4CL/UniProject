@@ -1,0 +1,125 @@
+﻿@{
+    Layout = null;
+}
+@model LiveAzure.Models.Product.ProductOnItem
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    function editSKUSaveSuccess() {
+        $("#SKUOnsaleAdd").fadeOut("fast");
+        $("#SKUOnsaleEdit").fadeOut("fast");
+        $("#grid3").trigger('reloadGrid');
+        $("#SKUOnsaleGrid").fadeIn("fast");
+    }
+</script>
+<div>
+    <span>@LiveAzure.Resource.Model.Product.ProductOnSale.Code :</span> <span style="font-weight: bold">@ViewBag.OnsaleCode</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+    <span>@LiveAzure.Resource.Model.Product.ProductOnSale.Name :</span> <span style="font-weight: bold">@ViewBag.OnsaleSKUName</span>
+</div>
+@using (@Ajax.BeginForm("editSKUOnsaleSave", "Product", new AjaxOptions { OnSuccess = "editSKUSaveSuccess" }, new { id = "editSKUOnsaleSave" }))
+{
+    <div class="down_AddorEdit">
+        <div>
+            <span>@Html.HiddenFor(model => model.Gid)</span>
+        </div>
+        <table class="DIY_table">            
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.FullName
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.FullName, "Matter")
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.ShortName
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.ShortName, "Matter")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.Sorting
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Sorting)
+                    @Html.ValidationMessageFor(model => model.Sorting)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.SetQuantity
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.SetQuantity)
+                    @Html.ValidationMessageFor(model => model.SetQuantity)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.MaxQuantity
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.MaxQuantity)
+                    @Html.ValidationMessageFor(model => model.MaxQuantity)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.OnTheWay
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.OnTheWay)
+                    @Html.ValidationMessageFor(model => model.OnTheWay)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.Overflow
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.Overflow)
+                    @Html.ValidationMessageFor(model => model.Overflow)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.DependTag
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.DependTag)
+                    @Html.ValidationMessageFor(model => model.DependTag)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.DependRate
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.DependRate)
+                    @Html.ValidationMessageFor(model => model.DependRate)
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.UseScore
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.UseScore)
+                    @Html.ValidationMessageFor(model => model.UseScore)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.ScoreDeduct
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.ScoreDeduct, "Cash")
+                </td>
+                <th>
+                    @LiveAzure.Resource.Model.Product.ProductOnItem.GetScore
+                </th>
+                <td>
+                    @Html.EditorFor(model => model.GetScore)
+                    @Html.ValidationMessageFor(model => model.GetScore)
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="submit" value="@LiveAzure.Resource.Common.Submit" />
+            <input type="reset" value="@LiveAzure.Resource.Common.Reset" />
+        </div>
+    </div>
+}

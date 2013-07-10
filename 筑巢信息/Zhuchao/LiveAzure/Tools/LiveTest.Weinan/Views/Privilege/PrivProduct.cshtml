@@ -1,0 +1,62 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+
+@{
+    ViewBag.Title = "PrivSupplier";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/jquery.ztree-2.6.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/LiveTree/treeObject.js")"></script>
+<h2>PrivProduct</h2>
+<script type="text/javascript">
+    var nTreeObject = new treeObject();
+    nTreeObject.createTree("Producttree", "/Privilege/PrivProductLoad", "/Privilege/PrivProductExpand", "", "", true);
+    function showTree() {
+        target = document.getElementById("PrivProduct");
+        
+        if (target.style.display == "none") {
+           
+        target.style.display="block"}
+}
+function ablebutton() {
+    
+    target = document.getElementById("able");
+    if (target.disabled == true) {
+        
+        target.disabled = false;
+    }
+</script>
+
+<div>
+<input type="checkbox"  onclick="ablebutton()"/>
+@Html.Label("启用")
+
+</div>
+<div>
+@Html.Grid(new GridControl()
+        .SetName("Productgrid")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Privilege/ProductList")
+        .SetHeight("200")
+        .SetColumns<LiveAzure.Models.Product.ProductInformation>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.Code).SetCaption("代码");
+                cs.Add(x => x.Name.Matter).SetCaption("名称");
+                
+            })
+       )
+      
+</div>
+
+<input type="button" value="Add" id="able" onclick="showTree()" disabled="disabled"/>
+@{string s = @Html.GridDeleteButton(buttonText: "Delete", gridName: "Productgrid", actionUrl: "/Privilege/Delete");          
+              var aaa =new HtmlString(s);@aaa}
+    <div id="PrivProduct" style="display:none" >
+        <ul id ="Producttree" class="tree" style="width:230px; overflow:auto;" >
+        </ul>
+        <input type="submit" value="submit" />
+    </div>

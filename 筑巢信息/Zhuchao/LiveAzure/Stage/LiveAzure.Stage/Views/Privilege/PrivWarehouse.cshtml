@@ -1,0 +1,148 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@model LiveAzure.Models.Member.MemberPrivilege
+           
+@{
+    ViewBag.Title = "PrivWarehouse";
+    Layout = null;
+}
+
+<div id="privWarehouse">
+
+@using (Ajax.BeginForm("PrivWarehouse", "Privilege", new AjaxOptions { OnSuccess = "grid3Reload" }))
+{
+     @Html.ValidationSummary(true)
+     <div>
+       <input type="checkbox" id="wPstatus" name="wPstatus" onclick="onShow()"/>
+       <span>@LiveAzure.Resource.Stage.PrivilegeController.on</span>
+    </div>
+
+    <div id = "listPrivWare">
+      <input type="hidden" id="optitemCount" name="optitemCount" value="0" />
+      <input type="hidden" id="prvID" name="prvID"/>
+      @{
+    string listUrl = "/Privilege/ListmemWarehouse?wareSearchString=" + ViewBag.wareSearchStr;
+          }
+    @Html.Grid(new GridControl()
+        .SetName("gridPrivWare")
+        .SetPageSize(10)
+        .SetIsAutoSize(true)
+        .SetHttpVerb(HttpVerbs.Get)
+        .SetListUrl("/Privilege/ListPrivWarehouse")
+        .SetHeight("'100%'")
+        .SetColumns<LiveAzure.Models.Warehouse.WarehouseInformation>(cs =>
+        {
+            cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+            cs.Add(x => x.Code).SetCaption(@LiveAzure.Resource.Stage.OrganizationController.warehouse + @LiveAzure.Resource.Model.Member.OrganizationBase.Code);
+            cs.Add(x => x.ShortName.Matter).SetCaption(@LiveAzure.Resource.Stage.OrganizationController.warehouse + @LiveAzure.Resource.Model.Member.OrganizationBase.ShortName);
+        })
+            )
+    <input type="button" id="delWare" name="delWare" value="@LiveAzure.Resource.Stage.PrivilegeController.delete" onclick="DeletePriWare()"/>
+    </div>
+     <br />
+    
+    <table>
+        <tr>
+            <th>
+                @LiveAzure.Resource.Stage.PrivilegeController.keyword: 
+            </th>
+            <td>
+                @Html.TextBox("wareSearchString") &nbsp;
+            </td>
+            <td>
+                <input type="button" id="wareSearch" name="wareSearch" value="@LiveAzure.Resource.Stage.PrivilegeController.search" onclick="searchWare()"/>
+            </td>
+        </tr>
+    </table>
+   
+
+
+ <script type="text/javascript">
+    var UnitPricePanel = new OpenPanel();
+    UnitPricePanel.bLoading = true;
+    UnitPricePanel.width = 500;
+    UnitPricePanel.height = 600;
+    UnitPricePanel.title = "@LiveAzure.Resource.Stage.PrivilegeController.warehousePriv";
+    UnitPricePanel.closeurl = "@Url.Content("~/Content/themes/base/images/close.gif")";
+     function grid3Reload() {
+         $("#gridPrivWare").trigger('reloadGrid');
+     }
+
+     function DeletePriWare() {
+         var id = $("#gridPrivWare").jqGrid("getGridParam", "selrow");
+         if (confirm('@LiveAzure.Resource.Stage.PrivilegeController.delConfirm')) {
+             $.post("/Privilege/DeletePriWare", { Gid: id }, function (data) {
+                 $("#gridPrivWare").trigger('reloadGrid');
+             });
+         }
+     }
+
+     function onShow() {
+         var IsCheck;
+         if ($("#wPstatus").attr('checked')) {
+             $("#wadd").attr("disabled", false);
+             $("#delWare").attr("disabled", false);
+             IsCheck = true;
+         }
+         else {
+             $("#wadd").attr("disabled", true);
+             $("#delWare").attr("disabled", true);
+             IsCheck = false;
+         }
+         $.ajax({
+            type: "POST",
+            url: "/Privilege/DelAll",
+            data: { IsCheck: IsCheck, ptype: 4 },
+            datatype: "html",
+            error: function () {
+                alert("@LiveAzure.Resource.Common.OperationFailed");
+            }
+        });
+     }
+
+     function searchWare() {
+
+         UnitPricePanel.OpenPanel();
+         var searchString = $("#wareSearchString").val();
+         $.ajax({
+
+             type: "POST",
+
+             url: "/Privilege/PrivWarehouseAdd",
+
+             data: { wareSearchString: searchString },
+
+             datatype: "html",
+
+             success: function (data) {
+
+                 UnitPricePanel.EditPageHtml(data);
+
+             },
+
+             error: function () {
+
+                 alert("@LiveAzure.Resource.Common.OperationFailed");
+
+             }
+
+         });
+     }
+
+    
+
+     $(document).ready(function () {
+         if ('@(ViewBag.pStatusW)' == 1) {
+             $("#wPstatus").attr('checked', true);
+             $("#wadd").attr("disabled", false);
+             $("#delWare").attr("disabled", false);
+         }
+         else {
+             $("#wPstatus").attr('checked', false);
+             $("#wadd").attr("disabled", true);
+             $("#delWare").attr("disabled", true);
+         }
+     });
+</script>
+}
+</div>

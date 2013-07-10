@@ -1,0 +1,133 @@
+﻿@{
+    Layout = null;
+}
+@using MVC.Controls.Grid
+@using MVC.Controls
+@using LiveAzure.Models
+@model LiveAzure.Models.Product.ProductOnSale
+<script type="text/javascript">
+/*------------------------
+弹出窗口初始化
+------------------------*/
+var addSKUOnsalePanel = new OpenPanel();
+addSKUOnsalePanel.width = 500;
+addSKUOnsalePanel.height = 600;
+addSKUOnsalePanel.title = "@Html.Raw(LiveAzure.Resource.Common.Add)";
+addSKUOnsalePanel.closeurl = "@Html.Raw(Url.Content("~/Content/themes/base/images/close.gif"))";
+    function addProductSKUOnsale() {
+        $("#SKUOnsaleGrid").fadeOut("fast");
+        addSKUOnsalePanel.OpenPanel();
+        $.ajax({
+            type: "POST",
+            url: "/Product/SKUOnsaleAdd",
+            success: function (html) {
+            addSKUOnsalePanel.EditPageHtml(html);                
+            }
+        });
+        $("#SKUOnsaleAdd").fadeIn("fast");
+        $("#SKUOnsaleEdit").fadeOut("fast");
+    }
+    function editProductSKUOnsale() {
+        var id = $("#grid3").jqGrid("getGridParam", "selrow");
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProgramController.alertDelete)";
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        }
+        else {
+            $("#SKUOnsaleGrid").fadeOut("fast");
+            $.ajax({
+                type: "POST",
+                url: "/Product/SKUOnsaleEdit",
+                data: { ProductSKUOnsaleGid: id },
+                success: function (html) {
+                    $("#SKUOnsaleEdit").html(html);
+                }
+            });
+        }
+        $("#SKUOnsaleEdit").fadeIn("fast");
+        $("#SKUOnsaleAdd").fadeOut("fast");
+    }
+    function deleteProductSKUOnsale() {
+        var id = $("#grid3").jqGrid("getGridParam", "selrow");
+        var alertMessage = "@Html.Raw(LiveAzure.Resource.Stage.ProgramController.alertDelete)";
+        if (id == null) {
+            alert(alertMessage);
+            return false;
+        }
+        else {
+            $("#deleteItemId").val(id);
+        }
+        var deleteInfo = $("#grid3").jqGrid("getRowData", id);
+        var isDelete = confirm("@Html.Raw(LiveAzure.Resource.Stage.ProgramController.isDelete) " + deleteInfo["ShortName.Matter"] + "?");
+        if (isDelete == false) {
+            return false;
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/Product/SKUOnsaleDelete",
+                data: { SKUOnsaleGuid: id },
+                success: function () {
+                    $("#grid3").trigger('reloadGrid');
+                }
+            });
+        }
+    }
+
+    function showUnitPrice() {
+        var RowId = $("#grid3").jqGrid("getGridParam", "selrow");
+        if (RowId != null) {
+            var Rowdata = $("#grid3").jqGrid("getRowData", RowId);
+            $.post("/Product/PriceUnit", { SkuId: Rowdata["SkuID"], SkuOnSaleId: RowId }, function back(html) {
+                $("#tabs-OnsaleShipping").html("");
+                $("#tabs-OnsalePayment").html("");
+                $("#tabs-ProductSkuOnSale").html(html);
+            });
+        }
+        else
+            alert("@LiveAzure.Resource.Common.PleaseSelectRow");
+    }
+        
+</script>
+<div id="gridpanelSKUOnsale">
+    <div>
+        <span>@LiveAzure.Resource.Model.Product.ProductOnSale.Code :</span> <span style="font-weight: bold">@Html.DisplayFor(model => model.Code)</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+        <span>@LiveAzure.Resource.Model.Product.ProductOnSale.Name :</span> <span style="font-weight: bold">@ViewBag.OnsaleSKUName</span>
+    </div>
+    @Html.Grid(new GridControl()
+            .SetName("grid3")
+            .SetPageSize(10)
+            .SetIsAutoSize(true)
+            .SetListUrl("/Product/ListProductSKUOnsale")
+            .SetHeight("'100%'")
+            .SetWidth("200")
+            .SetColumns<LiveAzure.Models.Product.ProductOnItem>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.SkuID).SetHidden(true);
+                cs.Add(x => x.SkuItem.Code).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.Code).SetName("Code");
+                cs.Add(x => x.FullName.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.FullName);
+                cs.Add(x => x.ShortName.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.ShortName);
+                //cs.Add(x => x.Sorting).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.Sorting);
+                cs.Add(x => x.SkuItem.StandardUnit.Name.Matter).SetCaption(LiveAzure.Resource.Model.Product.ProductInfoItem.StdUnit).SetName("SUName");
+                cs.Add(x => x.SetQuantity).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.SetQuantity);
+                cs.Add(x => x.SetQuantity).SetCaption(LiveAzure.Resource.Model.Product.ProductOnUnitPrice.SalePrice).SetName("Price");
+                //cs.Add(x => x.MaxQuantity).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.MaxQuantity);
+                //cs.Add(x => x.OnTheWay).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.OnTheWay);
+                //cs.Add(x => x.Overflow).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.Overflow);
+                //cs.Add(x => x.DependTag).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.DependTag);
+                //cs.Add(x => x.DependRate).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.DependRate);
+                //cs.Add(x => x.UseScore).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.UseScore);
+                //cs.Add(x => x.ScoreDeduct).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.ScoreDeduct);
+                cs.Add(x => x.GetScore).SetCaption(LiveAzure.Resource.Model.Product.ProductOnItem.GetScore);
+                //cs.Add(x => x.Remark).SetCaption(LiveAzure.Resource.Model.ModelBase.Remark);
+            })
+
+            )
+    <div>
+        <input type="button" name="add" value="@LiveAzure.Resource.Common.Add" onclick="addProductSKUOnsale();" />
+        <input type="button" name="edit" value="@LiveAzure.Resource.Common.Edit" onclick="editProductSKUOnsale();" />
+        <input type="button" name="delete" value="@LiveAzure.Resource.Common.Delete" onclick="deleteProductSKUOnsale();" />
+        <input type="button" value="@LiveAzure.Resource.Stage.ProductController.PriceUnit" onclick="showUnitPrice();" />
+    </div>
+</div>

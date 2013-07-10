@@ -1,0 +1,30 @@
+﻿@using MVC.Controls;
+@using MVC.Controls.Grid;
+@{
+    ViewBag.Title = "Action";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+        @Html.Grid(new GridControl()
+            .SetName("Actions")
+            .SetPageSize(20)
+            .SetIsAutoSize(false)
+            .SetHttpVerb(HttpVerbs.Get)
+            .SetListUrl("/Config/ActionList")
+            .SetHeight("'100%'")
+            .SetColumns<LiveAzure.Models.General.GeneralAction>(cs =>
+            {
+                cs.Add(x => x.Gid).SetAsPrimaryKey().SetHidden(true);
+                cs.Add(x => x.ActID).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.ActID);
+                cs.Add(x => x.ActionSourceName).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.Source);
+                cs.Add(x => x.ClassName).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.Program);
+                cs.Add(x => x.RefTypeName).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.RefType);
+                cs.Add(x => x.RefID).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.RefID);
+                cs.Add(x => x.ActionLevelName).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.Grade);
+                cs.Add(x => x.Matter).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.Matter);
+                cs.Add(x => x.Keyword).SetCaption(LiveAzure.Resource.Model.General.GeneralAction.KeyWord);
+            })
+            .UpdateDefaultPager(pager=>pager
+                .ShowSearch(false,false)  
+            )
+        )
